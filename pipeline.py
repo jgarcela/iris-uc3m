@@ -13,33 +13,40 @@ import uuid
 import seaborn as sns
 import matplotlib.pyplot as plt
 import os
+from collections import Counter
 
 
-def preparar_datos_train(data, column_name, test_size=0.2, random_state=42):
+def preparar_datos_train(data, target_column_name, contenido_column_name, test_size=0.2, random_state=42):
     """Divide los datos en entrenamiento y prueba."""
     X_train, X_test, y_train, y_test = train_test_split(
-        data['contenido_clean'], data[column_name], test_size=test_size, random_state=random_state, stratify=data[column_name]
+        data[contenido_column_name], data[target_column_name], test_size=test_size, random_state=random_state, stratify=data[target_column_name]
     )
     return X_train, X_test, y_train, y_test
 
 
 def balancear_datos_train(X_train, y_train, strategy="none"):
-    """Aplica balanceo de datos si es necesario."""
+    """Aplica balanceo de datos si es necesario e imprime los conteos antes y después."""
+    
+    print("Distribución antes del balanceo:", Counter(y_train))
+    
     if strategy == "smote":
         smote = SMOTE(random_state=42)
-        X_train, y_train = smote.fit_resample(X_train, y_train)  # No es necesario convertir a denso
-    elif strategy == "undersampling":
+        X_train, y_train = smote.fit_resample(X_train, y_train)
+    elif strategy == "downsampling":
         rus = RandomUnderSampler(random_state=42)
         X_train, y_train = rus.fit_resample(X_train, y_train)
+    
+    print("Distribución después del balanceo:", Counter(y_train))
+    
     return X_train, y_train
 
 
-def save_results_to_excel(X_test, y_test, y_pred, id2label, vectorizer_name, classifier_name, balance, column_name):
+def save_results_to_excel(X_test, y_test, y_pred, id2label, vectorizer_name, classifier_name, balance, target_column_name):
     """
     Guarda los resultados de cada ejecución en un archivo Excel sin sobrescribir los datos anteriores.
     """
     # Crear filename
-    filename = f"results/results_{column_name}.xlsx"
+    filename = f"results/results_{target_column_name}.xlsx"
 
     # Generar un ID único para la ejecución
     execution_id = str(uuid.uuid4())
@@ -94,13 +101,13 @@ def save_results_to_excel(X_test, y_test, y_pred, id2label, vectorizer_name, cla
     return execution_id
 
 
-def save_model_and_vectorizer(model, vectorizer, column_name, execution_id):
+def save_model_and_vectorizer(model, vectorizer, target_column_name, execution_id):
     """Guarda el modelo y el vectorizador en sus respectivas carpetas."""
     os.makedirs("models", exist_ok=True)
     os.makedirs("vectorizers", exist_ok=True)
 
-    model_path = f"models/{column_name}/model_{execution_id}.joblib"
-    vectorizer_path = f"vectorizers/{column_name}/vectorizer_{execution_id}.joblib"
+    model_path = f"models/{target_column_name}/model_{execution_id}.joblib"
+    vectorizer_path = f"vectorizers/{target_column_name}/vectorizer_{execution_id}.joblib"
 
     joblib.dump(model, model_path)
     joblib.dump(vectorizer, vectorizer_path)
@@ -111,7 +118,7 @@ def save_model_and_vectorizer(model, vectorizer, column_name, execution_id):
 
 
 # Integrar la función en el flujo de entrenamiento y evaluación
-def train_and_evaluate(column_name, X_train, X_test, y_train, y_test, id2label, label2id,
+def train_and_evaluate(target_column_name, X_train, X_test, y_train, y_test, id2label, label2id,
                         vectorizer_name="tfidf", classifier_name="logistic", balance="none"):
     """Entrena y evalúa un modelo de clasificación de texto con opción de balanceo y guarda resultados en Excel."""
     
@@ -131,9 +138,9 @@ def train_and_evaluate(column_name, X_train, X_test, y_train, y_test, id2label, 
 
     # Seleccionar modelo
     classifiers = {
-        "logistic": LogisticRegression(max_iter=1000),
-        "svm": SVC(),
-        "random_forest": RandomForestClassifier()
+        "logistic": LogisticRegression(max_iter=1000, class_weight="balanced"),
+        "svm": SVC(class_weight="balanced"),
+        "random_forest": RandomForestClassifier(class_weight="balanced")
     }
     model = classifiers.get(classifier_name, LogisticRegression(max_iter=1000))  # Logistic por defecto
 
@@ -144,10 +151,10 @@ def train_and_evaluate(column_name, X_train, X_test, y_train, y_test, id2label, 
     y_pred = model.predict(X_test_vec)
 
     # Guardar resultados en Excel sin sobrescribir los datos previos
-    execution_id = save_results_to_excel(X_test, y_test, y_pred, id2label, vectorizer_name, classifier_name, balance, column_name)
+    execution_id = save_results_to_excel(X_test, y_test, y_pred, id2label, vectorizer_name, classifier_name, balance, target_column_name)
 
     # Guardar el modelo y el vectorizador
-    save_model_and_vectorizer(model, vectorizer, column_name, execution_id)
+    save_model_and_vectorizer(model, vectorizer, target_column_name, execution_id)
 
     return model, vectorizer
 
