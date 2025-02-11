@@ -1,3 +1,4 @@
+import joblib
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.feature_extraction.text import TfidfVectorizer, CountVectorizer
@@ -13,12 +14,14 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 import os
 
-def preparar_datos_train(data, test_size=0.2, random_state=42):
+
+def preparar_datos_train(data, column_name, test_size=0.2, random_state=42):
     """Divide los datos en entrenamiento y prueba."""
     X_train, X_test, y_train, y_test = train_test_split(
-        data['contenido_clean'], data['Tema'], test_size=test_size, random_state=random_state, stratify=data['Tema']
+        data['contenido_clean'], data[column_name], test_size=test_size, random_state=random_state, stratify=data[column_name]
     )
     return X_train, X_test, y_train, y_test
+
 
 def balancear_datos_train(X_train, y_train, strategy="none"):
     """Aplica balanceo de datos si es necesario."""
@@ -31,10 +34,13 @@ def balancear_datos_train(X_train, y_train, strategy="none"):
     return X_train, y_train
 
 
-def save_results_to_excel(X_test, y_test, y_pred, id2label, vectorizer_name, classifier_name, balance, filename):
+def save_results_to_excel(X_test, y_test, y_pred, id2label, vectorizer_name, classifier_name, balance, column_name):
     """
     Guarda los resultados de cada ejecución en un archivo Excel sin sobrescribir los datos anteriores.
     """
+    # Crear filename
+    filename = f"results/results_{column_name}.xlsx"
+
     # Generar un ID único para la ejecución
     execution_id = str(uuid.uuid4())
 
@@ -85,9 +91,28 @@ def save_results_to_excel(X_test, y_test, y_pred, id2label, vectorizer_name, cla
 
     print(f"Resultados guardados en {filename} con Execution ID: {execution_id}")
 
+    return execution_id
+
+
+def save_model_and_vectorizer(model, vectorizer, column_name, execution_id):
+    """Guarda el modelo y el vectorizador en sus respectivas carpetas."""
+    os.makedirs("models", exist_ok=True)
+    os.makedirs("vectorizers", exist_ok=True)
+
+    model_path = f"models/{column_name}/model_{execution_id}.joblib"
+    vectorizer_path = f"vectorizers/{column_name}/vectorizer_{execution_id}.joblib"
+
+    joblib.dump(model, model_path)
+    joblib.dump(vectorizer, vectorizer_path)
+
+    print(f"Modelo guardado en {model_path}")
+    print(f"Vectorizador guardado en {vectorizer_path}")
+
+
+
 # Integrar la función en el flujo de entrenamiento y evaluación
-def train_and_evaluate(X_train, X_test, y_train, y_test, id2label, label2id,
-                        vectorizer_name="tfidf", classifier_name="logistic", balance="none", excel_filename="results/results_tema.xlsx"):
+def train_and_evaluate(column_name, X_train, X_test, y_train, y_test, id2label, label2id,
+                        vectorizer_name="tfidf", classifier_name="logistic", balance="none"):
     """Entrena y evalúa un modelo de clasificación de texto con opción de balanceo y guarda resultados en Excel."""
     
     # Seleccionar vectorizador
@@ -119,7 +144,10 @@ def train_and_evaluate(X_train, X_test, y_train, y_test, id2label, label2id,
     y_pred = model.predict(X_test_vec)
 
     # Guardar resultados en Excel sin sobrescribir los datos previos
-    save_results_to_excel(X_test, y_test, y_pred, id2label, vectorizer_name, classifier_name, balance, excel_filename)
+    execution_id = save_results_to_excel(X_test, y_test, y_pred, id2label, vectorizer_name, classifier_name, balance, column_name)
+
+    # Guardar el modelo y el vectorizador
+    save_model_and_vectorizer(model, vectorizer, column_name, execution_id)
 
     return model, vectorizer
 
