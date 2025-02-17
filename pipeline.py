@@ -119,7 +119,7 @@ def save_model_and_vectorizer(model, vectorizer, target_column_name, execution_i
 
 # Integrar la función en el flujo de entrenamiento y evaluación
 def train_and_evaluate(target_column_name, X_train, X_test, y_train, y_test, id2label, label2id,
-                        vectorizer_name="tfidf", classifier_name="logistic", balance="none"):
+                        vectorizer_name="tfidf", classifier_name="logistic", balance="none", ngram_range=(1,1)):
     """Entrena y evalúa un modelo de clasificación de texto con opción de balanceo y guarda resultados en Excel."""
     
     # Seleccionar vectorizador
