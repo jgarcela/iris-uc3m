@@ -14,6 +14,9 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 import os
 from collections import Counter
+from gensim.models import Word2Vec
+import numpy as np
+from transformers import AutoTokenizer
 
 
 def preparar_datos_train(data, target_column_name, contenido_column_name, test_size=0.2, random_state=42):
@@ -117,6 +120,21 @@ def save_model_and_vectorizer(model, vectorizer, target_column_name, execution_i
 
 
 
+def vectorize_text_word2vec(text, model, vector_size=100):
+            words = text.split()
+            word_vectors = [model.wv[word] for word in words if word in model.wv]
+            if len(word_vectors) > 0:
+                return np.mean(word_vectors, axis=0)
+            else:
+                return np.zeros(vector_size)
+
+def vectorize_text_salamandra(text, tokenizer):
+    """Tokeniza un texto usando el tokenizer de Salamandra."""
+    tokens = tokenizer(text, padding="max_length", truncation=True, return_tensors="pt")
+    return tokens.input_ids.squeeze().tolist()  # Devolver solo los IDs de los tokens
+
+
+
 # Integrar la función en el flujo de entrenamiento y evaluación
 def train_and_evaluate(target_column_name, X_train, X_test, y_train, y_test, id2label, label2id,
                         vectorizer_name="tfidf", classifier_name="logistic", balance="none", ngram_range=(1,1)):
@@ -125,16 +143,38 @@ def train_and_evaluate(target_column_name, X_train, X_test, y_train, y_test, id2
     # Seleccionar vectorizador
     vectorizers = {
         "tfidf": TfidfVectorizer(max_features=5000),
-        "count": CountVectorizer(max_features=5000)
+        "count": CountVectorizer(max_features=5000),
+        "word2vec": None
     }
-    vectorizer = vectorizers.get(vectorizer_name, TfidfVectorizer(max_features=5000))
-    
-    # Vectorizar datos
-    X_train_vec = vectorizer.fit_transform(X_train)
-    X_test_vec = vectorizer.transform(X_test)
 
-    # Aplicar balanceo si es necesario
-    X_train_vec, y_train = balancear_datos_train(X_train_vec, y_train, balance)
+    if vectorizer_name == "word2vec":
+        # Tokenizar textos
+        tokenized_X_train = [text.split() for text in X_train]
+        tokenized_X_test = [text.split() for text in X_test]
+
+        # Entrenar Word2Vec
+        vectorizer = Word2Vec(sentences=tokenized_X_train, vector_size=100, window=5, min_count=1, workers=4)
+
+        # Vectorizar con Word2Vec
+        X_train_vec = np.array([vectorize_text_word2vec(text, vectorizer) for text in X_train])
+        X_test_vec = np.array([vectorize_text_word2vec(text, vectorizer) for text in X_test])
+    
+    elif vectorizer_name == "salamandra":
+        model_id = "BSC-LT/salamandra-2b-instruct"
+        vectorizer = AutoTokenizer.from_pretrained(model_id)
+
+        X_train_vec = [vectorize_text_salamandra(text, vectorizer) for text in X_train]
+        X_test_vec = [vectorize_text_salamandra(text, vectorizer) for text in X_test]
+
+    else:
+        vectorizer = vectorizers.get(vectorizer_name, TfidfVectorizer(max_features=5000))
+        
+        # Vectorizar datos
+        X_train_vec = vectorizer.fit_transform(X_train)
+        X_test_vec = vectorizer.transform(X_test)
+
+        # Aplicar balanceo si es necesario
+        X_train_vec, y_train = balancear_datos_train(X_train_vec, y_train, balance)
 
     # Seleccionar modelo
     classifiers = {

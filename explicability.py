@@ -4,19 +4,39 @@ import seaborn as sns
 from lime.lime_text import LimeTextExplainer
 from collections import Counter, defaultdict
 from wordcloud import WordCloud
+from gensim.models import Word2Vec
+import pipeline
+from transformers import PreTrainedTokenizerBase
+
 
 def create_explainer(class_names):
     return LimeTextExplainer(class_names=class_names)
 
 
 def predict_proba_lime(texts, vectorizer, model):
-    text_vectorized = vectorizer.transform(texts) # Convertimos el texto a la representación vectorizada
+    # Verificar si el vectorizer es Word2Vec
+    if isinstance(vectorizer, Word2Vec):
+        text_vectorized = np.array([pipeline.vectorize_text_word2vec(text, vectorizer) for text in texts])  # Vectorizar manualmente
+    elif isinstance(vectorizer, PreTrainedTokenizerBase):
+        text_vectorized = np.array([pipeline.vectorize_text_salamandra(text, vectorizer) for text in texts])  # Vectorizar manualmente
+    else:
+        text_vectorized = vectorizer.transform(texts)  # Usar el método transform en otros casos
+
+
+    # text_vectorized = vectorizer.transform(texts) # Convertimos el texto a la representación vectorizada
     return model.predict_proba(text_vectorized) # Devolvemos la probabilidad de cada clase
 
 
 def explain_instance_predicted_class(text, vectorizer, model, explainer, id2label, num_words=10):
+    # Verificar si el vectorizer es Word2Vec
+    if isinstance(vectorizer, Word2Vec):
+        text_vectorized = np.array([pipeline.vectorize_text_word2vec(text, vectorizer)])  # Vectorizar manualmente
+    elif isinstance(vectorizer, PreTrainedTokenizerBase):
+        text_vectorized = np.array([pipeline.vectorize_text_salamandra(text, vectorizer)])  # Vectorizar manualmente
+    else:
+        text_vectorized = vectorizer.transform([text])  # Usar el método transform en otros casos
+    
     # Predecir la clase para el texto
-    text_vectorized = vectorizer.transform([text]) # Vectorizamos el texto
     predicted_class = model.predict(text_vectorized)[0] # Obtenemos las probabilidades
     print(f"Clase predicha: {id2label[predicted_class]}")
 
@@ -32,7 +52,14 @@ def explain_instance_predicted_class(text, vectorizer, model, explainer, id2labe
 
 
 def explain_instance_all_classes_heatmap(text, vectorizer, model, explainer, id2label, num_words=5):
-    text_vectorized = vectorizer.transform([text]) # Vectorizamos el texto
+    # Verificar si el vectorizer es Word2Vec
+    if isinstance(vectorizer, Word2Vec):
+        text_vectorized = np.array([pipeline.vectorize_text_word2vec(text, vectorizer)])  # Vectorizar manualmente
+    elif isinstance(vectorizer, PreTrainedTokenizerBase):
+        text_vectorized = np.array([pipeline.vectorize_text_salamandra(text, vectorizer)])  # Vectorizar manualmente
+    else:
+        text_vectorized = vectorizer.transform([text])  # Usar el método transform en otros casos
+    
     proba = model.predict_proba(text_vectorized)[0] # Obtenemos las probabilidades
     predicted_class = np.argmax(proba) # Clase predicha
 
@@ -89,7 +116,15 @@ def explain_top_confidence_texts(X, vectorizer, model, explainer, id2label, top_
         top_n (int): Número de textos con mayor confianza a explicar.
     """
     # Obtener las predicciones de todo X (vectorizado)
-    X_vec = vectorizer.transform(X)  # Convertimos el texto en su representación numérica
+    # Verificar si el vectorizer es Word2Vec
+    if isinstance(vectorizer, Word2Vec):
+        X_vec = np.array([pipeline.vectorize_text_word2vec(text, vectorizer) for text in X])  # Vectorizar manualmente
+    elif isinstance(vectorizer, PreTrainedTokenizerBase):
+        X_vec = np.array([pipeline.vectorize_text_salamandra(text, vectorizer) for text in X])  # Vectorizar manualmente
+    else:
+        X_vec = vectorizer.transform(X)  # Usar el método transform en otros casos
+
+    # X_vec = vectorizer.transform(X)  # Convertimos el texto en su representación numérica
     probs = model.predict_proba(X_vec)  # Obtenemos las probabilidades de cada clase
 
     # Obtener la confianza más alta por cada texto
@@ -107,7 +142,13 @@ def explain_top_confidence_texts(X, vectorizer, model, explainer, id2label, top_
 
 def explain_classes_global(X, y, vectorizer, model, explainer, id2label, num_samples=10, num_words=10):
     class_word_importance = defaultdict(lambda: defaultdict(float)) # {clase: {palabra: importancia}}
-    X_vec = vectorizer.transform(X) # Vectorizamos el conjunto de prueba
+    # Verificar si el vectorizer es Word2Vec
+    if isinstance(vectorizer, Word2Vec):
+        X_vec = np.array([pipeline.vectorize_text_word2vec(text, vectorizer) for text in X])  # Vectorizar manualmente
+    elif isinstance(vectorizer, PreTrainedTokenizerBase):
+        X_vec = np.array([pipeline.vectorize_text_salamandra(text, vectorizer) for text in X])  # Vectorizar manualmente
+    else:
+        X_vec = vectorizer.transform(X)  # Usar el método transform en otros casos
     y_pred = model.predict(X_vec) # Predicciones del modelo
 
     # Seleccionar muestras representativas para cada clase
@@ -154,7 +195,13 @@ def explain_classes_global(X, y, vectorizer, model, explainer, id2label, num_sam
 
 def explain_classes_summary(X, y, vectorizer, model, explainer, id2label, num_samples=10, num_words=10):
     class_word_importance = {label: Counter() for label in id2label.keys()} # Diccionario para almacenar palabras clave por clase
-    X_vec = vectorizer.transform(X) # Convertimos el texto en su representación numérica
+    # Verificar si el vectorizer es Word2Vec
+    if isinstance(vectorizer, Word2Vec):
+        X_vec = np.array([pipeline.vectorize_text_word2vec(text, vectorizer) for text in X])  # Vectorizar manualmente
+    elif isinstance(vectorizer, PreTrainedTokenizerBase):
+        X_vec = np.array([pipeline.vectorize_text_salamandra(text, vectorizer) for text in X])  # Vectorizar manualmente
+    else:
+        X_vec = vectorizer.transform(X)  # Usar el método transform en otros casos
     y_pred = model.predict(X_vec) # Predicciones del modelo en los datos de entrenamiento
 
     # Recorrer cada clase y encontrar sus palabras clave
@@ -183,7 +230,13 @@ def explain_classes_summary(X, y, vectorizer, model, explainer, id2label, num_sa
 
 def generate_wordclouds(X, y, vectorizer, model, explainer, id2label, num_samples=10, num_words=20):
     class_word_importance = {label: Counter() for label in id2label.keys()}
-    X_vec = vectorizer.transform(X) # Convertimos el texto en su representación numérica
+    # Verificar si el vectorizer es Word2Vec
+    if isinstance(vectorizer, Word2Vec):
+        X_vec = np.array([pipeline.vectorize_text_word2vec(text, vectorizer) for text in X])  # Vectorizar manualmente
+    elif isinstance(vectorizer, PreTrainedTokenizerBase):
+        X_vec = np.array([pipeline.vectorize_text_salamandra(text, vectorizer) for text in X])  # Vectorizar manualmente
+    else:
+        X_vec = vectorizer.transform(X)  # Usar el método transform en otros casos
     y_pred = model.predict(X_vec) # Predicciones del modelo en los datos de entrenamiento
 
     # Recorrer cada clase y encontrar sus palabras clave
