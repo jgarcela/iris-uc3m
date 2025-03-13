@@ -4,3 +4,4 @@ data
 *.joblib
 *.pyc
 bbdd.ipynb
+*.ini

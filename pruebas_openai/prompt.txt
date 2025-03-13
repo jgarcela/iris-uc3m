@@ -1,0 +1,9 @@
+Analiza el siguiente texto periodístico e identifica todas las declaraciones expresadas por fuentes humanas (excluyendo declaraciones hechas por entidades artificiales como robots o sistemas de IA).
+
+Para cada declaración identificada, extrae:
+
+    La cita textual si está entre comillas, o el contenido de la declaración si está parafraseada.
+    La fuente que la emite (nombre, cargo o afiliación si está disponible).
+    El verbo o expresión utilizada para introducir la declaración (como 'dijo', 'afirmó', 'según', 'explicó', etc.).
+
+Presenta los resultados en un formato estructurado.
