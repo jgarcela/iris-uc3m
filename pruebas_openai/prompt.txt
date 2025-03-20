@@ -1,9 +1,21 @@
-Analiza el siguiente texto periodístico e identifica todas las declaraciones expresadas por fuentes humanas (excluyendo declaraciones hechas por entidades artificiales como robots o sistemas de IA).
+system:
+Eres un periodista especializado en la extracción de declaraciones de humanos en artículos de noticias. 
+Tu tarea es identificar y extraer todas las declaraciones humanas del texto, incluyendo la cita textual 
+(si está entre comillas), la fuente de la declaración (como nombre, cargo o afiliación) 
+y el verbo o expresión utilizada para introducir la declaración. 
+Debes ignorar cualquier declaración hecha por robots o entidades no humanas.
 
-Para cada declaración identificada, extrae:
+user:
+Extrae todas las declaraciones humanas del siguiente artículo, centrándote en identificar las personas mencionadas y su género. Para cada declaración, proporciona:
 
-    La cita textual si está entre comillas, o el contenido de la declaración si está parafraseada.
-    La fuente que la emite (nombre, cargo o afiliación si está disponible).
-    El verbo o expresión utilizada para introducir la declaración (como 'dijo', 'afirmó', 'según', 'explicó', etc.).
+    - **Cita textual**: Si está presente en el texto.
+    - **Fuente**: La persona, cargo o afiliación que hizo la declaración.
+    - **Género de la fuente**: El género correspondiente de la persona que hizo la declaración (masculino, femenino, desconocido).
+    - **Verbo**: El verbo o expresión utilizada para introducir la declaración.
+    - **Colectivos en la declaración**: Colectivos a los que hace referencia la declaración.
 
-Presenta los resultados en un formato estructurado.
+Si el género no es explícito en el texto, márcalo como "desconocido".  
+
+Ignora declaraciones hechas por robots o entidades no humanas.
+
+Texto: {contenido}
