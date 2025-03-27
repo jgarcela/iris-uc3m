@@ -1,0 +1,100 @@
+[
+    {
+        "lenguaje_sexista": {
+            "etiqueta": 0,
+            "explicacion": "El texto no utiliza un lenguaje denigrante o despectivo hacia las mujeres ni presenta actitudes que refuercen la discriminación de género."
+        },
+        "hombre_humanidad": {
+            "etiqueta": 0,
+            "explicacion": "No se hace uso de 'hombre' como un término que englobe a toda la humanidad, se menciona el término 'mujer' de manera explícita y sin exclusiones."
+        },
+        "dual_aparente": {
+            "etiqueta": 1,
+            "explicacion": "El texto presenta un uso de términos que, a primera vista, podrían considerarse neutros pero que al analizar el contexto, se observa que refuerzan la visión de que la maternidad es un tema exclusivamente femenino, sin considerar la implicación de los padres."
+        },
+        "cargos_mujeres": {
+            "etiqueta": 0,
+            "explicacion": "No se mencionan cargos o posiciones que indiquen un sesgo en la representación del trabajo de las mujeres."
+        },
+        "sexismo_social": {
+            "etiqueta": 1,
+            "explicacion": "El texto aborda la hostilidad de la sociedad hacia la maternidad y la crianza, lo que evidencia un contexto de desigualdad de género, además de mencionar el feminismo de clase y la relación entre maternidad y desigualdades sociales."
+        },
+        "androcentrismo": {
+            "etiqueta": 1,
+            "explicación": "A lo largo del texto se muestran perspectivas centradas en experiencias y vivencias de mujeres, sin embargo, contrasta con el modelo de feminidad tradicional que ha sido impuesto por el patriarcado, lo que implica un reconocimiento de una historia androcentrista."
+        },
+        "asimetria": {
+            "etiqueta": 1,
+            "explicacion": "El texto menciona la desigualdad entre hombres y mujeres, especialmente en el contexto del mercado laboral y la maternidad, lo que sugiere una asimetría en la valoración de roles de género."
+        },
+        "infantilizacion": {
+            "etiqueta": 0,
+            "explicacion": "No hay evidencia de infantilización hacia las mujeres o cualquier grupo mencionado en el texto."
+        },
+        "denominacion_sexualizada": {
+            "etiqueta": 0,
+            "explicacion": "No se detectan denominaciones que sexualicen o descontextualicen a las mujeres en el contenido presentado."
+        },
+        "denominacion_redundante": {
+            "etiqueta": 0,
+            "explicacion": "No hay uso de denominaciones que resulten redundantes o innecesarias en el texto."
+        },
+        "denominacion_dependiente": {
+            "etiqueta": 0,
+            "explicacion": "No se observan términos que impliquen dependencia de las mujeres a otros grupos o individuos en el texto."
+        },
+        "indice": 9,
+        "N": 129,
+        "n_periodico": 129
+    },
+    {
+        "lenguaje_sexista": {
+            "etiqueta": 0,
+            "explicacion": "El texto utiliza un lenguaje inclusivo y se enfoca en la equidad de género, sin recurrir a expresiones que denoten un sexismo explícito."
+        },
+        "hombre_humanidad": {
+            "etiqueta": 0,
+            "explicacion": "No se observa el uso del término 'hombre' para referirse a la humanidad en general, sino que se hace mención directa a mujeres y hombres en contextos relevantes."
+        },
+        "dual_aparente": {
+            "etiqueta": 0,
+            "explicacion": "El texto no cae en la dualidad aparente; se aboga explícitamente por la igualdad entre mujeres y hombres en la ciencia."
+        },
+        "cargos_mujeres": {
+            "etiqueta": 1,
+            "explicacion": "Se mencionan cargos como 'directora del CNIO' y 'doctoranda', reconociendo explícitamente la ocupación de mujeres en posiciones de liderazgo y especialización."
+        },
+        "sexismo_social": {
+            "etiqueta": 1,
+            "explicacion": "El texto aborda las desigualdades de género en el ámbito científico, reflejando un contexto social donde persiste el sexismo y se analizan sus causas."
+        },
+        "androcentrismo": {
+            "etiqueta": 0,
+            "explicación": "El enfoque del texto está en resaltar las contribuciones y retos de las mujeres en la ciencia, en vez de centrar la narrativa en los hombres."
+        },
+        "asimetria": {
+            "etiqueta": 1,
+            "explicacion": "Se menciona que la igualdad no está presente en la agenda política, evidenciando una asimetría en la atención y oportunidades que reciben hombres y mujeres."
+        },
+        "infantilizacion": {
+            "etiqueta": 0,
+            "explicacion": "El texto no incluye elementos que infravaloren o infantilicen a las mujeres; más bien, se les da voz y se aborda su capacidad profesional."
+        },
+        "denominacion_sexualizada": {
+            "etiqueta": 0,
+            "explicacion": "No hay denominaciones sexualizadas; las referencias a las científicas se hacen desde una perspectiva profesional y académica."
+        },
+        "denominacion_redundante": {
+            "etiqueta": 0,
+            "explicacion": "No se utilizan denominaciones redundantes en las referencias al personal científico."
+        },
+        "denominacion_dependiente": {
+            "etiqueta": 0,
+            "explicacion": "No se observa el uso de términos que sugieran que las mujeres dependen de los hombres en el contexto laboral o científico."
+        },
+        "indice": 10,
+        "N": 133,
+        "n_periodico": 133
+    }
+]
