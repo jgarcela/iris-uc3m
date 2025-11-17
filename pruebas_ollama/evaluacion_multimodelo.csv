@@ -1,0 +1,268 @@
+﻿modelo,texto,timestamp,error,model_errors,raw_response,cita_textual_titular__codigo,cita_textual_titular__evidencia,genero_nombre_propio_titular__codigo,genero_nombre_propio_titular__evidencia,genero_periodista__codigo,genero_periodista__evidencia,genero_personas_mencionadas__codigo,genero_personas_mencionadas__evidencia,nombre_propio_titular__codigo,nombre_propio_titular__evidencia,personas_mencionadas__codigo,personas_mencionadas__evidencia,tema__codigo,tema__evidencia
+ollama/qwen3:8b,"María López presentó un estudio. ""Hemos encontrado resultados prometedores"" dijo la investigadora. El reportaje fue redactado por Laura García.",2025-11-12 09:59:56,,[],"{
+  ""cita_textual_titular"": {
+    ""codigo"": ""0"",
+    ""evidencia"": []
+  },
+  ""genero_nombre_propio_titular"": {
+    ""codigo"": ""2"",
+    ""evidencia"": [""María López""]
+  },
+  ""genero_periodista"": {
+    ""codigo"": ""2"",
+    ""evidencia"": [""Laura García""]
+  },
+  ""genero_personas_mencionadas"": {
+    ""codigo"": ""4"",
+    ""evidencia"": [""María López"", ""Laura García""]
+  },
+  ""nombre_propio_titular"": {
+    ""codigo"": ""2"",
+    ""evidencia"": [""María López""]
+  },
+  ""personas_mencionadas"": {
+    ""codigo"": ""4"",
+    ""evidencia"": [""María López"", ""Laura García""]
+  },
+  ""tema"": {
+    ""codigo"": ""15"",
+    ""evidencia"": [""presentó un estudio"", ""resultados prometedores""]
+  }
+}",0,[],2,"[""María López""]",2,"[""Laura García""]",4,"[""María López"", ""Laura García""]",2,"[""María López""]",4,"[""María López"", ""Laura García""]",15,"[""presentó un estudio"", ""resultados prometedores""]"
+ollama/qwen3:8b,El entrenador aseguró que el equipo trabajará duro. El columnista Juan Pérez destacó el esfuerzo de los jugadores.,2025-11-12 10:00:33,,[],"{
+  ""cita_textual_titular"": {""codigo"": ""0"", ""evidencia"": []},
+  ""genero_nombre_propio_titular"": {""codigo"": ""4"", ""evidencia"": []},
+  ""genero_periodista"": {""codigo"": ""1"", ""evidencia"": [""El columnista Juan Pérez destacó el esfuerzo de los jugadores""]},
+  ""genero_personas_mencionadas"": {""codigo"": ""4"", ""evidencia"": [""el entrenador"", ""Juan Pérez""]},
+  ""nombre_propio_titular"": {""codigo"": ""4"", ""evidencia"": []},
+  ""personas_mencionadas"": {""codigo"": ""4"", ""evidencia"": [""el entrenador"", ""Juan Pérez""]},
+  ""tema"": {""codigo"": ""8"", ""evidencia"": [""equipo"", ""jugadores"", ""esfuerzo""]}
+}",0,[],4,[],1,"[""El columnista Juan Pérez destacó el esfuerzo de los jugadores""]",4,"[""el entrenador"", ""Juan Pérez""]",4,[],4,"[""el entrenador"", ""Juan Pérez""]",8,"[""equipo"", ""jugadores"", ""esfuerzo""]"
+ollama/qwen3:8b,"La presidenta anunció nuevas medidas económicas junto a su gabinete, conformado por hombres y mujeres.",2025-11-12 10:01:29,,[],"{
+  ""cita_textual_titular"": {
+    ""codigo"": ""1"",
+    ""evidencia"": [""La presidenta anunció nuevas medidas económicas junto a su gabinete, conformado por hombres y mujeres.""]
+  },
+  ""genero_nombre_propio_titular"": {
+    ""codigo"": ""4"",
+    ""evidencia"": []
+  },
+  ""genero_periodista"": {
+    ""codigo"": ""7"",
+    ""evidencia"": []
+  },
+  ""genero_personas_mencionadas"": {
+    ""codigo"": ""4"",
+    ""evidencia"": [""hombres y mujeres""]
+  },
+  ""nombre_propio_titular"": {
+    ""codigo"": ""4"",
+    ""evidencia"": []
+  },
+  ""personas_mencionadas"": {
+    ""codigo"": ""4"",
+    ""evidencia"": [""presidenta"", ""gabinete""]
+  },
+  ""tema"": {
+    ""codigo"": ""8"",
+    ""evidencia"": [""medidas económicas""]
+  }
+}",1,"[""La presidenta anunció nuevas medidas económicas junto a su gabinete, conformado por hombres y mujeres.""]",4,[],7,[],4,"[""hombres y mujeres""]",4,[],4,"[""presidenta"", ""gabinete""]",8,"[""medidas económicas""]"
+ollama/deepseek-r1:8b,"María López presentó un estudio. ""Hemos encontrado resultados prometedores"" dijo la investigadora. El reportaje fue redactado por Laura García.",2025-11-12 10:01:57,No JSON válido en ollama/deepseek-r1:8b,,"{
+  'cita_textual_titular': {'codigo': '1', 'evidencia': [""'Hemos encontrado resultados prometedors' dijo la investigadora""]},
+  'genero_nombre_propio_titular': {'codigo': '2', 'evidencia': ['María López']},
+  'genero_periodista': {'codigo': '0', 'evidencia': []},
+  'genero_personas_mencionadas': {'codigo': '4', 'evidencia': ['María López', ""Laura García""]},
+  'nombre_propio_titular': {'codigo': '2', 'evidencia': ['María López']},
+  'personas_mencionadas': {'codigo': [], 'evidencia': [""María López"", ""Laura García""]},
+  'tema': {'codigo': '4', 'evidencia': []}
+}",,,,,,,,,,,,,,
+ollama/deepseek-r1:8b,El entrenador aseguró que el equipo trabajará duro. El columnista Juan Pérez destacó el esfuerzo de los jugadores.,2025-11-12 10:02:13,,['Código inválido 5 en personas_mencionadas'],"```json
+{
+  ""cita_textual_titular"": {""codigo"": ""0"", ""evidencia"": []},
+  ""genero_nombre_propio_titular"": {""codigo"": ""3"", ""evidencia"": [""Juan Pérez""]},
+  ""genero_periodista"": {""codigo"": ""1"", ""evidencia"": [""El columnista Juan Pérez destacó el esfuerzo de los jugadores.""]},
+  ""genero_personas_mencionadas"": {""codigo"": ""1"", ""evidencia"": [""El entrenador aseguró que el equipo trabajará duro."", ""los jugadores""]},
+  ""nombre_propio_titular"": {""codigo"": ""3"", ""evidencia"": [""Juan Pérez""]},
+  ""personas_mencionadas"": {""codigo"": ""5"", ""evidencia"": []},
+  ""tema"": {""codigo"": ""5"", ""evidencia"": []}
+}
+```",0,[],3,"[""Juan Pérez""]",1,"[""El columnista Juan Pérez destacó el esfuerzo de los jugadores.""]",1,"[""El entrenador aseguró que el equipo trabajará duro."", ""los jugadores""]",3,"[""Juan Pérez""]",5,[],5,[]
+ollama/deepseek-r1:8b,"La presidenta anunció nuevas medidas económicas junto a su gabinete, conformado por hombres y mujeres.",2025-11-12 10:02:31,No JSON válido en ollama/deepseek-r1:8b,,"```json
+{
+  'cita_textual_titular': {'codigo': '0', 'evidencia': []},
+  'genero_nombre_propio_titular': {'codigo': '2', 'evidencia': ['La presidenta']},
+  'genero_periodista': {'codigo': '6', 'evidencia': []},
+  'genero_personas_mencionadas': {'codigo': '3', 'evidencia': ['junto a su gabinete, conformado por hombres y mujeres']},
+  'nombre_propio_titular': {'codigo': '', 'evidencia': []},
+  'personas_mencionadas': {'codigo': '', 'evidencia': []},
+  'tema': {'codigo': '17', 'evidencia': ['medidas económicas']}
+}
+```",,,,,,,,,,,,,,
+ollama/gemma3:12b,"María López presentó un estudio. ""Hemos encontrado resultados prometedores"" dijo la investigadora. El reportaje fue redactado por Laura García.",2025-11-12 10:02:45,,[],"```json
+{
+  ""cita_textual_titular"": {""codigo"": ""1"", ""evidencia"": [""\""Hemos encontrado resultados prometedores\""""]},
+  ""genero_nombre_propio_titular"": {""codigo"": ""2"", ""evidencia"": [""María López""]},
+  ""genero_periodista"": {""codigo"": ""6"", ""evidencia"": [""Laura García""]},
+  ""genero_personas_mencionadas"": {""codigo"": ""2"", ""evidencia"": [""María López""]},
+  ""nombre_propio_titular"": {""codigo"": ""2"", ""evidencia"": [""María López""]},
+  ""personas_mencionadas"": {""codigo"": ""2"", ""evidencia"": [""María López"", ""Laura García""]},
+  ""tema"": {""codigo"": ""16"", ""evidencia"": [""estudio"", ""investradora"", ""resultados""]}
+}
+```",1,"[""\""Hemos encontrado resultados prometedores\""""]",2,"[""María López""]",6,"[""Laura García""]",2,"[""María López""]",2,"[""María López""]",2,"[""María López"", ""Laura García""]",16,"[""estudio"", ""investradora"", ""resultados""]"
+ollama/gemma3:12b,El entrenador aseguró que el equipo trabajará duro. El columnista Juan Pérez destacó el esfuerzo de los jugadores.,2025-11-12 10:02:53,,"['Código inválido 0 en genero_nombre_propio_titular', 'Código inválido 0 en genero_periodista', 'Código inválido 0 en nombre_propio_titular', 'Código inválido 0 en personas_mencionadas']","```json
+{
+  ""cita_textual_titular"": {""codigo"": ""0"", ""evidencia"": []},
+  ""genero_nombre_propio_titular"": {""codigo"": ""0"", ""evidencia"": []},
+  ""genero_periodista"": {""codigo"": ""0"", ""evidencia"": []},
+  ""genero_personas_mencionadas"": {""codigo"": ""1"", ""evidencia"": [""El entrenador"", ""Juan Pérez""]},
+  ""nombre_propio_titular"": {""codigo"": ""0"", ""evidencia"": []},
+  ""personas_mencionadas"": {""codigo"": ""0"", ""evidencia"": []},
+  ""tema"": {""codigo"": ""1"", ""evidencia"": [""El entrenador"", ""equipo"", ""jugadores""]}
+}
+```",0,[],0,[],0,[],1,"[""El entrenador"", ""Juan Pérez""]",0,[],0,[],1,"[""El entrenador"", ""equipo"", ""jugadores""]"
+ollama/gemma3:12b,"La presidenta anunció nuevas medidas económicas junto a su gabinete, conformado por hombres y mujeres.",2025-11-12 10:03:01,,[],"```json
+{
+  ""cita_textual_titular"": {""codigo"": ""0"", ""evidencia"": []},
+  ""genero_nombre_propio_titular"": {""codigo"": ""2"", ""evidencia"": [""presidenta""]},
+  ""genero_periodista"": {""codigo"": ""7"", ""evidencia"": []},
+  ""genero_personas_mencionadas"": {""codigo"": ""2"", ""evidencia"": [""presidenta""]},
+  ""nombre_propio_titular"": {""codigo"": ""4"", ""evidencia"": []},
+  ""personas_mencionadas"": {""codigo"": ""4"", ""evidencia"": []},
+  ""tema"": {""codigo"": ""6"", ""evidencia"": [""medidas económicas""]}
+}
+```",0,[],2,"[""presidenta""]",7,[],2,"[""presidenta""]",4,[],4,[],6,"[""medidas económicas""]"
+ollama/gemma3:4b,"María López presentó un estudio. ""Hemos encontrado resultados prometedores"" dijo la investigadora. El reportaje fue redactado por Laura García.",2025-11-12 10:03:01,"Error al llamar al modelo ollama/gemma3:4b: litellm.APIConnectionError: OllamaException - {""error"":""model 'gemma3:4b' not found""}",,,,,,,,,,,,,,,,
+ollama/gemma3:4b,El entrenador aseguró que el equipo trabajará duro. El columnista Juan Pérez destacó el esfuerzo de los jugadores.,2025-11-12 10:03:02,"Error al llamar al modelo ollama/gemma3:4b: litellm.APIConnectionError: OllamaException - {""error"":""model 'gemma3:4b' not found""}",,,,,,,,,,,,,,,,
+ollama/gemma3:4b,"La presidenta anunció nuevas medidas económicas junto a su gabinete, conformado por hombres y mujeres.",2025-11-12 10:03:02,"Error al llamar al modelo ollama/gemma3:4b: litellm.APIConnectionError: OllamaException - {""error"":""model 'gemma3:4b' not found""}",,,,,,,,,,,,,,,,
+ollama/llama3.1:8b,"María López presentó un estudio. ""Hemos encontrado resultados prometedores"" dijo la investigadora. El reportaje fue redactado por Laura García.",2025-11-12 10:03:23,,"['Falta personas_mencionadas', 'Falta tema']","Para clasificar el texto periodístico según las variables de CONTENIDO_GENERAL, puedo identificar las siguientes etiquetas:
+
+### Código:
+```json
+{
+  ""cita_textual_titular"": {""codigo"": ""1"", ""evidencia"": [""María López presentó un estudio""]},
+  ""genero_nombre_propio_titular"": {""codigo"": ""3"", ""evidencia"": [""María López"", ""Laura García""]},
+  ""genero_periodista"": {""codigo"": ""2"", ""evidencia"": [""Laura García""]},
+  ""genero_personas_mencionadas"": {""codigo"": ""4"", ""evidencia"": [""María López"", ""Juan Pérez""]},
+  ""nombre_propio_titular"": {""codigo"": ""3"", ""evidencia"": [""Ejercicio""]}
+}
+```
+### Justificación:
+
+- **Cita textual titular:** El texto del título menciona el nombre de una persona, lo que justifica la etiqueta '1' según la variable CITA_TITULAR.
+- **Género nombre propio titular:** Los nombres ""María López"" y ""Laura García"" se encuentran en el título, indicando que son personajes masculinos o femeninos mencionados como autoras del estudio. Esto justifica la etiqueta '3' según la variable GENERO_NOMBRE_PROPIO_TITULAR.
+- **Género periodista:** El nombre de la persona ""Laura García"" se encuentra en el texto, lo que indica que ella es una persona y también el reportero/a mencionado en la noticia. Esto justifica la etiqueta '2' según la variable GENERO_PERIODISTA.
+- **Género personas mencionadas:** Los nombres ""María López"" se encuentran en el título. Para cada nombre que se encuentra, identificamos el género como 4 según la variable GENERO_PERSONAS_MENCIONADAS.
+- **Tema:** El texto no proporciona suficiente información para clasificarlo bajo alguna categoría del tema.",1,"[""María López presentó un estudio""]",3,"[""María López"", ""Laura García""]",2,"[""Laura García""]",4,"[""María López"", ""Juan Pérez""]",3,"[""Ejercicio""]",,[],,[]
+ollama/llama3.1:8b,El entrenador aseguró que el equipo trabajará duro. El columnista Juan Pérez destacó el esfuerzo de los jugadores.,2025-11-12 10:03:41,,['Código inválido  en personas_mencionadas'],"¡Claro! Según el texto periodístico proporcionado, podemos clasificarlo según las variables de CONTENIDO_GENERAL. A continuación, se muestra la respuesta en el formato exacto solicitado.
+
+```json
+{
+  ""cita_textual_titular"": {""codigo"": ""1"", ""evidencia"": [""El entrenador aseguró que el equipo trabajará duro."", ""El columnista Juan Pérez destacó el esfuerzo de los jugadores.""]},
+  ""genero_nombre_propio_titular"": {""codigo"": ""4"", ""evidencia"": [""Juan Pérez""]},
+  ""genero_periodista"": {""codigo"": ""7"", ""evidencia"": [""El columnista Juan Pérez destacó el esfuerzo de los jugadores.""]},
+  ""genero_personas_mencionadas"": {""codigo"": ""4"", ""evidencia"": [""Juan Pérez"", ""los jugadores""]},
+  ""nombre_propio_titular"": {""codigo"": ""1"", ""evidencia"": [""El entrenador aseguró que el equipo trabajará duro."", ""El columnista Juan Pérez destacó el esfuerzo de los jugadores.""]},
+  ""personas_mencionadas"": {""codigo"": """", ""evidencia"": []},
+  ""tema"": {""codigo"": ""16"", ""evidencia"": [""El entrenador aseguró que el equipo trabajará duro."", ""El columnista Juan Pérez destacó el esfuerzo de los jugadores.""]}
+}
+```
+
+En esta respuesta, se ha utilizado la variable `CITA_TITULAR = ['0', '1']` para codificar la cita textual titular como `'1'`, ya que ambos fragmentos del texto contienen afirmaciones o declaraciones directas.
+
+Para el `GENERO_NOMBRE_PROPIO_TITULAR`, se considera que el nombre propio ""Juan Pérez"" corresponde a un varón, por lo que la etiqueta utilizada es `""4""`.
+
+Se ha utilizado `GENERO_PERIODISTA = ['1', '2', '3', '4']` para codificar la presencia de un periodista en el texto; específicamente, al columnista Juan Pérez. Se asigna el código `""7""`, correspondiente a una mujer o persona no especificada.
+
+Se ha utilizado `GENERO_PERSONAS_MENCIONADAS = ['1', '2', '3', '4']` para codificar las personas mencionadas en el texto; específicamente, a ""Juan Pérez"" y a los jugadores. Se asigna el código `""4""`.
+
+Para la variable `nombre_propio_titular`, se utiliza `""1""` ya que ambos fragmentos del texto contienen nombres propios directamente relacionados con el titular o título principal de la noticia.
+
+Por último, se ha utilizado `TEMA = ['1', '2', '3', '4']` para codificar el tema de la noticia. El código asignado es `""16""`, correspondiente a deportes o actividades físicas, dada la presencia del entrenador y los jugadores en el texto.
+
+Se ha utilizado `personas_mencionadas = []` ya que no hay evidencia de personas mencionadas en el texto que no sean periodistas o nombres propios directamente relacionados con el titular.",1,"[""El entrenador aseguró que el equipo trabajará duro."", ""El columnista Juan Pérez destacó el esfuerzo de los jugadores.""]",4,"[""Juan Pérez""]",7,"[""El columnista Juan Pérez destacó el esfuerzo de los jugadores.""]",4,"[""Juan Pérez"", ""los jugadores""]",1,"[""El entrenador aseguró que el equipo trabajará duro."", ""El columnista Juan Pérez destacó el esfuerzo de los jugadores.""]",,[],16,"[""El entrenador aseguró que el equipo trabajará duro."", ""El columnista Juan Pérez destacó el esfuerzo de los jugadores.""]"
+ollama/llama3.1:8b,"La presidenta anunció nuevas medidas económicas junto a su gabinete, conformado por hombres y mujeres.",2025-11-12 10:04:07,No JSON válido en ollama/llama3.1:8b,,"### Clasificación del texto periodístico
+#### Código:
+```python
+# Definir las variables para el análisis de contenido
+CITA_TITULAR = ['0', '1']
+GENERO_NOMBRE_PROPIO_TITULAR = ['1', '2', '3', '4']
+GENERO_PERIODISTA = ['1', '2', '3', '4', '5', '6', '7']
+GENERO_PERSONAS_MENCIONADAS = ['1', '2', '3', '4']
+TEMA = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17']
+
+# Definir la función de clasificación del contenido
+def clasificar_contenido(texto):
+    # Inicializar el diccionario vacío para almacenar los resultados
+    resultado = {
+        'cita_textual_titular': {'codigo': '', 'evidencia': []},
+        'genero_nombre_propio_titular': {'codigo': '', 'evidencia': []},
+        'genero_periodista': {'codigo': '', 'evidencia': []},
+        'genero_personas_mencionadas': {'codigo': '', 'evidencia': []},
+        'nombre_propio_titular': {'codigo': '', 'evidencia': []},
+        'personas_mencionadas': {'codigo': '', 'evidencia': []},
+        'tema': {'codigo': '', 'evidencia': []}
+    }
+
+    # Clasificar el contenido según las variables
+    resultado['cita_textual_titular']['codigo'] = '1'  # Se considerará que la titular incluye cita textual
+    resultado['cita_textual_titular']['evidencia'].append('La presidenta anunció nuevas medidas económicas junto a su gabinete, conformado por hombres y mujeres.')
+
+    resultado['genero_nombre_propio_titular']['codigo'] = '3'  # Se considerará que el titular incluye un nombre propio de género neutro o no aplicable
+    resultado['genero_nombre_propio_titular']['evidencia'].append('presidente')
+
+    resultado['genero_periodista']['codigo'] = ''  # No se encontró información sobre el género del periodista
+
+    resultado['genero_personas_mencionadas']['codigo'] = '4'  # Se considerará que las personas mencionadas incluyen un grupo diverso
+    resultado['genero_personas_mencionadas']['evidencia'].append('la presidenta')
+    resultado['genero_personas_mencionadas']['evidencia'].append('hombres y mujeres')
+
+    resultado['nombre_propio_titular']['codigo'] = '2'  # Se considerará que el titular incluye un nombre propio de una persona
+    resultado['nombre_propio_titular']['evidencia'].append('presidente')
+
+    resultado['personas_mencionadas']['codigo'] = ''  # No se encontró información sobre personas mencionadas en el texto
+    resultado['tema']['codigo'] = '2'  # Se considerará que el tema del artículo es económico
+
+    return resultado
+
+# Ejecutar la función de clasificación del contenido con el texto dado como parámetro
+texto_periodistico = ""La presidenta anunció nuevas medidas económicas junto a su gabinete, conformado por hombres y mujeres.""
+print(clasificar_contenido(texto_periodistico))
+```
+#### Respuesta:
+```json
+{
+  'cita_textual_titular': {'codigo': '1', 'evidencia': ['La presidenta anunció nuevas medidas económicas junto a su gabinete, conformado por hombres y mujeres.']},
+  'genero_nombre_propio_titular': {'codigo': '3', 'evidencia': ['presidente']},
+  'genero_periodista': {'codigo': '', 'evidencia': []},
+  'genero_personas_mencionadas': {'codigo': '4', 'evidencia': ['la presidenta', 'hombres y mujeres']},
+  'nombre_propio_titular': {'codigo': '2', 'evidencia': ['presidente']},
+  'personas_mencionadas': {'codigo': '', 'evidencia': []},
+  'tema': {'codigo': '2', 'evidencia': []}
+}
+```",,,,,,,,,,,,,,
+ollama/mistral:7b,"María López presentó un estudio. ""Hemos encontrado resultados prometedores"" dijo la investigadora. El reportaje fue redactado por Laura García.",2025-11-12 10:04:20,,"['Falta nombre_propio_titular', 'Falta personas_mencionadas']"," {
+  ""cita_textual_titular"": {""codigo"": ""1"", ""evidencia"": [""María López presentó un estudio.""]},
+  ""genero_nombre_propio_titular"": {""codigo"": ""3"", ""evidencia"": [""María López""]},
+  ""genero_periodista"": {""codigo"": ""5"", ""evidencia"": [""Laura García""]},
+  ""genero_personas_mencionadas"": {""codigo"": ""4"", ""evidencia"": [""María López""]},
+  ""tema"": {""codigo"": ""10"", ""evidencia"": [""estudio""]}
+}",1,"[""María López presentó un estudio.""]",3,"[""María López""]",5,"[""Laura García""]",4,"[""María López""]",,[],,[],10,"[""estudio""]"
+ollama/mistral:7b,El entrenador aseguró que el equipo trabajará duro. El columnista Juan Pérez destacó el esfuerzo de los jugadores.,2025-11-12 10:04:25,,"['Código inválido  en nombre_propio_titular', 'Código inválido  en personas_mencionadas']"," {
+  ""cita_textual_titular"": {""codigo"": ""1"", ""evidencia"": [""El entrenador aseguró que el equipo trabajará duro.""]},
+  ""genero_nombre_propio_titular"": {""codigo"": ""3"", ""evidencia"": [""Juan Pérez""]},
+  ""genero_periodista"": {""codigo"": ""1"", ""evidencia"": []},
+  ""genero_personas_mencionadas"": {""codigo"": ""4"", ""evidencia"": [""El entrenador"", ""Juan Pérez""]},
+  ""nombre_propio_titular"": {""codigo"": """", ""evidencia"": []},
+  ""personas_mencionadas"": {""codigo"": """", ""evidencia"": []},
+  ""tema"": {""codigo"": ""3"", ""evidencia"": [""El equipo trabajará duro""]}
+}",1,"[""El entrenador aseguró que el equipo trabajará duro.""]",3,"[""Juan Pérez""]",1,[],4,"[""El entrenador"", ""Juan Pérez""]",,[],,[],3,"[""El equipo trabajará duro""]"
+ollama/mistral:7b,"La presidenta anunció nuevas medidas económicas junto a su gabinete, conformado por hombres y mujeres.",2025-11-12 10:04:31,,['Código inválido  en nombre_propio_titular']," {
+  ""cita_textual_titular"": {""codigo"": ""0"", ""evidencia"": [""La presidenta anunció nuevas medidas económicas""]},
+  ""genero_nombre_propio_titular"": {""codigo"": ""2"", ""evidencia"": [""presidenta""]},
+  ""genero_periodista"": {""codigo"": ""7"", ""evidencia"": []},
+  ""genero_personas_mencionadas"": {""codigo"": ""4"", ""evidencia"": [""La presidenta""]},
+  ""nombre_propio_titular"": {""codigo"": """", ""evidencia"": []},
+  ""personas_mencionadas"": {""codigo"": ""1"", ""evidencia"": [""La presidenta""]},
+  ""tema"": {""codigo"": ""4"", ""evidencia"": [""nuevas medidas económicas""]}
+}",0,"[""La presidenta anunció nuevas medidas económicas""]",2,"[""presidenta""]",7,[],4,"[""La presidenta""]",,[],1,"[""La presidenta""]",4,"[""nuevas medidas económicas""]"
