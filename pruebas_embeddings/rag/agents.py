@@ -1,9 +1,12 @@
 # agents.py
 """
-Agentes configurables desde config.ini — versión SIN tools / SIN ReAct.
-Importar desde notebook:
-    from agents import create_agents_from_config
-    agents = create_agents_from_config("config.ini")
+Agentes configurables - Versión Final Pulida.
+
+CORRECCIONES APLICADAS:
+1. MATCH INTELIGENTE: Ignora puntuación y espacios para encontrar evidencias.
+   - Soluciona: Encuentra "María López" aunque en el texto sea "María López,".
+   - Soluciona: Elimina "Sí, mujer" o "Científica" porque esas palabras no están en el texto.
+2. Lógica de Dependencias y Negativos mantenida.
 """
 
 import configparser
@@ -11,6 +14,7 @@ import ast
 import json
 import os
 import re
+import string
 from typing import List, Dict, Any, Tuple, Optional
 from dataclasses import dataclass
 
@@ -27,6 +31,17 @@ from langchain.output_parsers import StructuredOutputParser, ResponseSchema
 from langchain.prompts import PromptTemplate
 
 # -----------------------
+# DEPENDENCIAS (Padre -> Hijos)
+# -----------------------
+DEPENDENCY_MAP = {
+    "nombre_propio_titular": ["genero_nombre_propio_titular"],
+    "personas_mencionadas": ["genero_personas_mencionadas"],
+    # Cadena Fuentes:
+    "declaracion_fuente": ["nombre_fuente"], 
+    "nombre_fuente": ["genero_fuente", "tipo_fuente"]
+}
+
+# -----------------------
 # Config loader
 # -----------------------
 def load_config(path: str = "config.ini") -> Dict[str, Dict[str, Any]]:
@@ -35,6 +50,7 @@ def load_config(path: str = "config.ini") -> Dict[str, Dict[str, Any]]:
     cp = configparser.ConfigParser()
     cp.read(path, encoding="utf-8")
     out: Dict[str, Dict[str, Any]] = {}
+    
     for section in cp.sections():
         out[section] = {}
         for k, v in cp.items(section):
@@ -43,325 +59,349 @@ def load_config(path: str = "config.ini") -> Dict[str, Dict[str, Any]]:
                 val = ast.literal_eval(v_str)
             except Exception:
                 try:
-                    val = ast.literal_eval(v_str.replace("’", "'").replace("“", '"').replace("”", '"'))
+                    clean_str = v_str.replace("’", "'").replace("“", '"').replace("”", '"')
+                    val = ast.literal_eval(clean_str)
                 except Exception:
                     val = v_str
-            out[section][k] = val
+            out[section][k.upper()] = val 
     return out
 
 # -----------------------
-# Schema & parser builders
+# Helper: Detect Negative Key
 # -----------------------
-def make_response_schemas(variable_names: List[str]) -> List[ResponseSchema]:
-    return [
+def get_negative_key_for_map(mapping: Dict[str, str]) -> str:
+    """Busca la clave que significa 'No', 'False', 'Ninguno', '0', etc."""
+    NEGATIVE_TERMS = {"no", "no hay", "none", "falso", "false", "no aplica", "ninguno", "nan"}
+    
+    # 1. Buscar coincidencia en valores
+    for k, v in mapping.items():
+        if str(v).lower().strip() in NEGATIVE_TERMS:
+            return k
+    # 2. Preferencia por '0'
+    if '0' in mapping: return '0'
+    # 3. Fallback a '1' si parece binario
+    if '1' in mapping:
+        return '1'
+    return '1'
+
+# -----------------------
+# Helper: Text Cleaning for Matching
+# -----------------------
+def clean_string_for_matching(text: str) -> str:
+    """Elimina puntuación y espacios, y convierte a minúsculas."""
+    if not text: return ""
+    # Mantiene solo caracteres alfanuméricos
+    return re.sub(r'[\W_]+', '', text.lower())
+
+# -----------------------
+# Schema & Parser
+# -----------------------
+def create_output_parser(variable_names: List[str]) -> Tuple[StructuredOutputParser, str]:
+    schemas = [
         ResponseSchema(
             name=var,
-            description="Objeto con 'evidencia' (lista de fragmentos textuales que justifican el valor)."
+            description="Objeto con 'codigo' (string) y 'evidencia' (lista de strings)."
         )
         for var in variable_names
     ]
-
-def create_output_parser(variable_names: List[str]) -> Tuple[StructuredOutputParser, str]:
-    schemas = make_response_schemas(variable_names)
     parser = StructuredOutputParser.from_response_schemas(schemas)
     return parser, parser.get_format_instructions()
 
 # -----------------------
-# Prompt builder — NO tools, agent must return final JSON directly
+# Prompt Builder
 # -----------------------
 def build_prompt_template_for_section(
     section_name: str,
     variable_names: List[str],
-    allowed_maps: Dict[str, Any],
+    variable_maps: Dict[str, Dict[str, str]], 
     format_instructions: str,
     titular_only_vars: Optional[List[str]] = None,
 ) -> PromptTemplate:
+    
     lines: List[str] = []
-    lines.append(f"Analiza el siguiente artículo y extrae las EVIDENCIAS necesarias para clasificar las variables de la sección: {section_name}.")
+    lines.append(f"Actúa como un analista de datos periodísticos riguroso. CLASIFICA las variables de la sección: {section_name}.")
+    
+    if "FUENTES" in section_name.upper():
+        lines.append("")
+        lines.append("=== LÓGICA PARA FUENTES ===")
+        lines.append("1. ¿Hay cita textual? -> 'declaracion_fuente'.")
+        lines.append("2. ¿Quién lo dice? -> 'nombre_fuente'.")
+        lines.append("3. Género y Tipo de esa persona -> 'genero_fuente', 'tipo_fuente'.")
+        lines.append("NOTA: Si no hay cita, todo es 'No hay'/'No aplica'.")
+
     if titular_only_vars:
         lines.append("")
-        lines.append("Variables que deben valorarse exclusivamente desde el TITULAR (no usar el cuerpo para estas variables):")
-        lines.append(str(titular_only_vars))
+        lines.append("ATENCIÓN: Variables EXCLUSIVAS del TITULAR:")
+        lines.append(f"{str(titular_only_vars)}")
+    
     lines.append("")
-    lines.append("NO se usarán herramientas externas. Devuelve al final UN ÚNICO OBJETO JSON con las variables y sus evidencias.")
-    lines.append("La salida NO debe contener 'Thought', 'Action', 'Observation' ni texto explicativo — SOLO el JSON.")
+    lines.append("=== CÓDIGOS DISPONIBLES ===")
+    
+    sorted_vars = list(variable_names)
+    sorted_vars.sort(key=lambda x: 0 if not x.startswith("genero") else 1)
+    
+    for var in sorted_vars:
+        v_map = variable_maps.get(var, {'1': 'No', '2': 'Sí'})
+        json_str = json.dumps(v_map, ensure_ascii=False)
+        json_escaped = json_str.replace("{", "{{").replace("}", "}}")
+        lines.append(f"- Variable '{var}': {json_escaped}")
+
+    lines.append("")
+    lines.append("=== REGLAS ===")
+    lines.append("1. **EXHAUSTIVIDAD**: Busca todas las frases relevantes.")
+    lines.append("2. **LITERALIDAD**: Copia texto del artículo. NO uses las etiquetas (ej: no escribas 'Sí, mujer' en evidencia).")
+    lines.append("3. **NEGATIVOS**: Si es 'No', evidencia = [].")
+    
+    lines.append("")
+    lines.append("JSON de salida:")
+    lines.append('   "nombre_variable": {{ "codigo": "X", "evidencia": ["..."] }}')
+    
     lines += [
         "",
-        "Titular:",
-        "{titular}",
+        "--- INICIO ARTÍCULO ---",
+        "Titular: {titular}",
+        "Texto: {texto}",
+        "--- FIN ARTÍCULO ---",
         "",
-        "Texto de la noticia:",
-        "{texto}",
-        "",
-        "Devuelve SOLO el JSON final con la forma (ejemplo):",
-        ""
+        "Respuesta JSON:"
     ]
 
-    # Example JSON with escaped braces
-    example_lines = ["{{"]
-    for i, var in enumerate(variable_names):
-        comma = "," if i < len(variable_names) - 1 else ""
-        example_lines.append(f'  "{var}": {{{{ "evidencia": ["..."] }}}}{comma}')
-    example_lines.append("}}")
-    lines += example_lines
-
-    lines += [
-        "",
-        "RECUERDA: la última respuesta debe ser exactamente el JSON (ningún 'Thought', 'Action', 'Observation' ni texto explicativo).",
-        "",
-        "{format_instructions}"
-    ]
-
-    template = "\n".join(lines)
-    return PromptTemplate(template=template, input_variables=["titular", "texto"], partial_variables={"format_instructions": format_instructions})
+    return PromptTemplate(
+        template="\n".join(lines), 
+        input_variables=["titular", "texto"], 
+        partial_variables={"format_instructions": format_instructions}
+    )
 
 # -----------------------
-# Utilities
-# -----------------------
-def _normalize_evidence_field(evid_any):
-    if evid_any is None:
-        return []
-    if isinstance(evid_any, list):
-        return evid_any
-    if isinstance(evid_any, str):
-        try:
-            parsed = json.loads(evid_any)
-            if isinstance(parsed, list):
-                return parsed
-        except Exception:
-            return [evid_any]
-    return []
-
-def evidence_in_text(evidence: List[str], source_text: str) -> List[str]:
-    if not evidence:
-        return []
-    src = (source_text or "").lower()
-    return [e for e in evidence if e and e.strip() and e.lower() in src]
-
-# -----------------------
-# Simple name extraction & heuristics (no external APIs)
-# -----------------------
-def extract_name_candidates(evidence: List[str]) -> List[str]:
-    candidates = []
-    name_re = re.compile(r"\b([A-ZÁÉÍÓÚÑ][a-záéíóúñ]+(?:\s+[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+)?)\b")
-    for ev in evidence or []:
-        if not ev:
-            continue
-        for m in name_re.findall(ev):
-            tok = m.strip()
-            if tok and tok not in candidates:
-                candidates.append(tok)
-            if len(candidates) >= 6:
-                break
-        if len(candidates) >= 6:
-            break
-    return candidates
-
-def infer_gender_code_heuristic(evidence: List[str]) -> str:
-    """
-    Heurística simple basada en pronombres y cargos:
-      '1' = No hay info
-      '2' = Masculino
-      '3' = Femenino
-      '4' = Mixto
-    """
-    txt = " ".join(evidence or []).lower()
-    female_markers = [" ella ", "ella,", "investigadora", "coautora", "autora", "profesora", "sra.", "señora", "la investigadora", "la profesora"]
-    male_markers = [" él ", "el investigador", "coautor", "autor", "profesor", "sr.", "señor", "el investigador"]
-    f = any(m in txt for m in female_markers)
-    m = any(m in txt for m in male_markers)
-
-    if f and m:
-        return "4"
-    if f:
-        return "3"
-    if m:
-        return "2"
-
-    # fallback: if names exist, try naive last-letter heuristic on first names (not reliable)
-    names = extract_name_candidates(evidence)
-    if names:
-        male = 0
-        female = 0
-        for n in names:
-            n0 = n.split()[0].lower()
-            if n0.endswith("a") or n0.endswith("á") or n0.endswith("e"):  # generous guess
-                female += 1
-            else:
-                male += 1
-        if male > 0 and female > 0:
-            return "4"
-        if female > male:
-            return "3"
-        if male > female:
-            return "2"
-
-    return "1"
-
-# -----------------------
-# Extract JSON helper
+# Utils
 # -----------------------
 def extract_json_from_agent_output(text: str) -> Optional[str]:
-    if not text:
-        return None
+    if not text: return None
     m = re.search(r"```json\s*(\{[\s\S]*?\})\s*```", text, re.IGNORECASE)
-    if m:
-        return m.group(1)
+    if m: return m.group(1)
     m2 = re.search(r"```[\s\S]*?(\{[\s\S]*?\})[\s\S]*?```", text)
-    if m2:
-        return m2.group(1)
-    m3 = re.search(r"Final Answer\s*[:\-]*\s*(\{[\s\S]*?\})", text, re.IGNORECASE)
-    if m3:
-        return m3.group(1)
+    if m2: return m2.group(1)
     start = text.find("{")
-    if start == -1:
-        return None
+    if start == -1: return None
     depth = 0
     for i in range(start, len(text)):
-        if text[i] == "{":
-            depth += 1
+        if text[i] == "{": depth += 1
         elif text[i] == "}":
             depth -= 1
-            if depth == 0:
-                return text[start:i+1]
+            if depth == 0: return text[start:i+1]
     return None
 
+def normalize_evidence_list(evidence_raw: Any, source_text: str) -> List[str]:
+    """
+    Intenta encontrar la coincidencia en el texto.
+    Usa 'Smart Matching' (ignora puntuación) para encontrar frases aunque tengan comas/puntos diferentes.
+    DESCARTA lo que no esté en el texto (elimina etiquetas alucinadas).
+    """
+    if not evidence_raw: return []
+    if isinstance(evidence_raw, str):
+        try: evidence_raw = json.loads(evidence_raw)
+        except: evidence_raw = [evidence_raw]
+    if not isinstance(evidence_raw, list): return []
+
+    final_list = []
+    source_lower = (source_text or "").lower()
+    source_clean = clean_string_for_matching(source_text) # Texto sin puntos ni espacios
+    
+    for snippet in evidence_raw:
+        if not isinstance(snippet, str) or not snippet.strip(): continue
+        clean_snippet = snippet.strip().strip('"').strip("'").strip("...")
+        if not clean_snippet: continue
+
+        # 1. Match Exacto (Ideal para web)
+        if clean_snippet in source_text:
+            final_list.append(clean_snippet)
+            continue
+        
+        # 2. Match Case Insensitive
+        snippet_lower = clean_snippet.lower()
+        if snippet_lower in source_lower:
+            start_idx = source_lower.find(snippet_lower)
+            if start_idx != -1:
+                final_list.append(source_text[start_idx : start_idx + len(clean_snippet)])
+                continue
+        
+        # 3. SMART FUZZY MATCH (Ignora puntuación y espacios)
+        # Esto permite encontrar "Maria Lopez" aunque en el texto sea "María López,"
+        # Pero rechaza "Sí mujer" porque esas letras no están juntas en el texto.
+        snippet_super_clean = clean_string_for_matching(clean_snippet)
+        if snippet_super_clean and snippet_super_clean in source_clean:
+            # Si coincide "limpio", aceptamos el snippet original del LLM.
+            # (No podemos reconstruir el original exacto fácilmente, pero sabemos que el contenido ES válido)
+            final_list.append(clean_snippet)
+            continue
+        
+        # 4. Si no coincide ni limpiando -> SE DESCARTA.
+        # Esto elimina las etiquetas tipo "Sí, mujer" o "Científica".
+        pass
+
+    return list(set(final_list))
+
 # -----------------------
-# AgentAnalyzer (no tools)
+# AgentAnalyzer
 # -----------------------
 @dataclass
 class AgentAnalyzer:
     name: str
     variables: List[str]
-    allowed_maps: Dict[str, Any]
+    variable_maps: Dict[str, Dict[str, Any]]
     parser: StructuredOutputParser
     prompt: PromptTemplate
-    model: Any  # Ollama client
+    model: Any
     titular_only_vars: List[str]
 
     def _invoke_model(self, prompt_text: str) -> str:
-        """
-        Robust invocation of the LLM client. Tries .invoke, .run, or call.
-        Returns the raw textual response.
-        """
-        if not self.model:
-            raise RuntimeError("No LLM client available on this agent.")
-        # Try various invocation styles
+        if not self.model: raise RuntimeError("No LLM client.")
         try:
-            # prefer .invoke if available
             if hasattr(self.model, "invoke"):
                 resp = self.model.invoke(prompt_text)
-                content = getattr(resp, "content", None) or str(resp)
-                return content
-            # fallback to .run
-            if hasattr(self.model, "run"):
-                return self.model.run(prompt_text)
-            # last fallback: call directly
+                return getattr(resp, "content", None) or str(resp)
+            if hasattr(self.model, "run"): return self.model.run(prompt_text)
             return self.model(prompt_text)
-        except Exception as e:
-            # wrap exception as string to be consumed by analyze_text
-            return f"__LLM_INVOCATION_ERROR__:{e}"
+        except Exception as e: return f"__LLM_INVOCATION_ERROR__:{e}"
 
     def analyze_text(self, titular: str, texto: str, return_raw: bool = False) -> Dict[str, Any]:
-        """
-        Ejecuta el LLM (sin tools), extrae el JSON con evidencias que devuelva el modelo,
-        normaliza evidencias (aplica enforcement titular-only) y devuelve para cada variable:
-            { "codigo": "<codigo>", "evidencia": [ ... ] }
-        También rellena out['errors'] y out['raw_output'].
-        """
         out: Dict[str, Any] = {"parsed": None, "errors": [], "raw_output": None}
-
-        # 1) Formatear prompt
-        prompt_value = self.prompt.format_prompt(titular=(titular or ""), texto=(texto or ""))
-
-        # 2) Invocar LLM de forma robusta
-        agent_response = self._invoke_model(prompt_value.to_string())
-        out["raw_output"] = agent_response
-
-        if return_raw:
+        
+        try:
+            prompt_value = self.prompt.format_prompt(titular=(titular or ""), texto=(texto or ""))
+        except KeyError as e:
+            out["errors"].append(f"Prompt error: {e}")
             return out
 
-        # 3) Extraer el JSON (el LLM debe devolver evidencias por variable)
+        agent_response = self._invoke_model(prompt_value.to_string())
+        out["raw_output"] = agent_response
+        if return_raw: return out
+
         json_str = extract_json_from_agent_output(agent_response)
         if not json_str:
-            out["errors"].append("No JSON found in model output.")
+            out["errors"].append("No JSON found.")
             return out
 
         try:
             parsed_obj = json.loads(json_str)
         except Exception as e:
-            out["errors"].append(f"Invalid JSON extracted: {e}")
-            out["errors"].append(f"Extracted string: {json_str}")
+            out["errors"].append(f"Invalid JSON: {e}")
             return out
 
-        # 4) Normalizar evidencias y aplicar enforcement de titular-only
-        parsed_with_codes: Dict[str, Dict[str, Any]] = {}
+        parsed_clean: Dict[str, Dict[str, Any]] = {}
+        NEGATIVE_LABEL_TERMS = {"no", "no hay", "none", "falso", "false", "0", "nan", "no aplica", "ninguno"}
+        full_context = f"{titular or ''}\n{texto or ''}"
+
+        # 1. Primera pasada
         for var in self.variables:
-            raw_val = parsed_obj.get(var, {}) or {}
-            evid = _normalize_evidence_field(raw_val.get("evidencia"))
-            if var in self.titular_only_vars:
-                evid = evidence_in_text(evid, titular or "")
+            raw_val = parsed_obj.get(var, {})
+            if not isinstance(raw_val, dict): raw_val = {"codigo": str(raw_val), "evidencia": []}
 
-            # 5) Inferir código según tipo de variable
-            if "genero" in var.lower() or "género" in var.lower():
-                codigo = infer_gender_code_heuristic(evid)
-            else:
-                # regla binaria: 2 = Sí (hay evidencia), 1 = No (vacío)
-                codigo = "2" if evid else "1"
+            code = str(raw_val.get("codigo", "")).strip().replace('"', '').replace("'", "")
+            allowed_map = self.variable_maps.get(var, {})
+            neg_key = get_negative_key_for_map(allowed_map)
 
-            parsed_with_codes[var] = {
-                "codigo": str(codigo),
-                "evidencia": evid
+            # Validar código
+            if allowed_map and code not in allowed_map:
+                found = next((k for k, v in allowed_map.items() if str(v).lower() == code.lower()), None)
+                code = found if found else neg_key
+            if not code: code = neg_key
+
+            # Obtener evidencia cruda
+            raw_evid = raw_val.get("evidencia")
+            scope = titular if var in self.titular_only_vars else full_context
+            
+            # FILTRAR ETIQUETAS EXPLÍCITAS EN EVIDENCIA (Seguridad extra)
+            label_text = str(allowed_map.get(code, "")).lower()
+            if isinstance(raw_evid, list):
+                # Eliminar si la evidencia es exactamente igual a la etiqueta (ej: "Sí, mujer")
+                raw_evid = [e for e in raw_evid if isinstance(e, str) and clean_string_for_matching(e) != clean_string_for_matching(label_text)]
+
+            # Normalizar (Match inteligente)
+            final_evid = normalize_evidence_list(raw_evid, scope)
+
+            label = str(allowed_map.get(code, "Unknown"))
+            is_neg_label = label.lower().strip() in NEGATIVE_LABEL_TERMS
+
+            # Limpieza Lógica
+            if is_neg_label:
+                final_evid = []
+            elif not final_evid:
+                 # Si no es negativa, pero no encontramos evidencia en el texto:
+                 # Si es categórica (>5 opciones, como Tema), permitimos que se quede sin evidencia (es una clasificación abstracta).
+                 # Si es binaria (Sí/No), forzamos a No.
+                 is_categorical = len(allowed_map) > 5
+                 if not is_categorical:
+                    code = neg_key
+                    label = str(allowed_map.get(code, "No"))
+
+            parsed_clean[var] = {
+                "codigo": code,
+                "evidencia": final_evid,
+                "etiqueta": label
             }
 
-        out["parsed"] = parsed_with_codes
-        return out 
+        # 2. Segunda pasada: DEPENDENCIAS
+        for _ in range(2): 
+            for parent, children in DEPENDENCY_MAP.items():
+                if parent not in parsed_clean: continue
+                parent_label = parsed_clean[parent]["etiqueta"]
+                
+                if parent_label.lower().strip() in NEGATIVE_LABEL_TERMS:
+                    for child in children:
+                        if child in parsed_clean:
+                            child_map = self.variable_maps.get(child, {})
+                            child_neg_key = get_negative_key_for_map(child_map)
+                            
+                            parsed_clean[child]["codigo"] = child_neg_key
+                            parsed_clean[child]["etiqueta"] = str(child_map.get(child_neg_key, "No"))
+                            parsed_clean[child]["evidencia"] = []
 
+        out["parsed"] = parsed_clean
+        return out 
 
     def analyze_batch(self, pairs: List[Tuple[str, str]]) -> List[Dict[str, Any]]:
         return [self.analyze_text(t, x) for t, x in pairs]
 
 # -----------------------
-# Factory: create agents from config.ini (no tools)
+# Factory
 # -----------------------
-def create_agents_from_config(
-    config_path: str = "config.ini",
-    model_kwargs: Optional[Dict[str, Any]] = None,
-) -> Dict[str, AgentAnalyzer]:
+def create_agents_from_config(config_path: str = "config.ini", model_kwargs: Optional[Dict[str, Any]] = None) -> Dict[str, AgentAnalyzer]:
     cfg = load_config(config_path)
-    model_kwargs = model_kwargs or {"model": "gemma3:4b", "base_url": "http://localhost:11434"}
-
-    if OllamaClient is None:
-        raise RuntimeError("No Ollama client available. Install langchain-ollama or langchain_community.llms.")
-
+    model_kwargs = model_kwargs or {"model": "gemma2:9b", "temperature": 0.0}
+    if OllamaClient is None: raise RuntimeError("No Ollama client.")
     base_llm = OllamaClient(**model_kwargs)
+    agents = {}
 
-    agents: Dict[str, AgentAnalyzer] = {}
     for section, items in cfg.items():
-        variables = items.get("variables")
-        if not isinstance(variables, (list, tuple)):
-            continue
+        variables = items.get("VARIABLES")
+        if not isinstance(variables, (list, tuple)): continue
+        
+        var_maps = {}
+        section_default_map = next((v for k, v in items.items() if k.endswith("_VARS") and isinstance(v, dict)), None)
+
+        for var in variables:
+            var_upper = var.upper()
+            if var_upper in items and isinstance(items[var_upper], dict):
+                var_maps[var] = items[var_upper]
+            elif section_default_map:
+                var_maps[var] = section_default_map
+            else:
+                var_maps[var] = {'1': 'No', '2': 'Sí'}
+
         parser, fmt = create_output_parser(list(variables))
-        allowed_maps = {k.upper(): v for k, v in items.items() if isinstance(v, dict)}
         titular_only = [v for v in variables if "titular" in v.lower()]
 
         prompt = build_prompt_template_for_section(
             section_name=section,
             variable_names=list(variables),
-            allowed_maps=allowed_maps,
+            variable_maps=var_maps,
             format_instructions=fmt,
             titular_only_vars=titular_only,
         )
 
         agents[section] = AgentAnalyzer(
-            name=section,
-            variables=list(variables),
-            allowed_maps=allowed_maps,
-            parser=parser,
-            prompt=prompt,
-            model=base_llm,
-            titular_only_vars=titular_only,
+            name=section, variables=list(variables), variable_maps=var_maps,
+            parser=parser, prompt=prompt, model=base_llm, titular_only_vars=titular_only,
         )
-
     return agents
-
