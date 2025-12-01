@@ -1,0 +1,13 @@
+Clasifica el siguiente texto basándote en las variables proporcionadas.
+
+VARIABLES Y CÓDIGOS:
+{definiciones}
+
+TAREA:
+1. Asigna el código numérico correspondiente a cada variable.
+2. Extrae la evidencia textual.
+3. Devuelve solo JSON.
+
+NOTICIA:
+Titular: {titular}
+Texto: {texto}
