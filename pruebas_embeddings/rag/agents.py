@@ -1,12 +1,11 @@
 # agents.py
 """
-Agentes configurables - Versión Final Pulida.
+Agentes configurables - Versión Final + FIX LLM LITERALITY.
 
-CORRECCIONES APLICADAS:
-1. MATCH INTELIGENTE: Ignora puntuación y espacios para encontrar evidencias.
-   - Soluciona: Encuentra "María López" aunque en el texto sea "María López,".
-   - Soluciona: Elimina "Sí, mujer" o "Científica" porque esas palabras no están en el texto.
-2. Lógica de Dependencias y Negativos mantenida.
+CORRECCIÓN CRÍTICA:
+- El ejemplo JSON del prompt ahora se construye DINÁMICAMENTE con los nombres
+  reales de las variables (ej: "tema", "genero...").
+- Esto evita que el LLM devuelva claves genéricas como "variable_1" o "variable_A".
 """
 
 import configparser
@@ -36,7 +35,6 @@ from langchain.prompts import PromptTemplate
 DEPENDENCY_MAP = {
     "nombre_propio_titular": ["genero_nombre_propio_titular"],
     "personas_mencionadas": ["genero_personas_mencionadas"],
-    # Cadena Fuentes:
     "declaracion_fuente": ["nombre_fuente"], 
     "nombre_fuente": ["genero_fuente", "tipo_fuente"]
 }
@@ -72,16 +70,11 @@ def load_config(path: str = "config.ini") -> Dict[str, Dict[str, Any]]:
 def get_negative_key_for_map(mapping: Dict[str, str]) -> str:
     """Busca la clave que significa 'No', 'False', 'Ninguno', '0', etc."""
     NEGATIVE_TERMS = {"no", "no hay", "none", "falso", "false", "no aplica", "ninguno", "nan"}
-    
-    # 1. Buscar coincidencia en valores
     for k, v in mapping.items():
         if str(v).lower().strip() in NEGATIVE_TERMS:
             return k
-    # 2. Preferencia por '0'
     if '0' in mapping: return '0'
-    # 3. Fallback a '1' si parece binario
-    if '1' in mapping:
-        return '1'
+    if '1' in mapping: return '1'
     return '1'
 
 # -----------------------
@@ -90,7 +83,6 @@ def get_negative_key_for_map(mapping: Dict[str, str]) -> str:
 def clean_string_for_matching(text: str) -> str:
     """Elimina puntuación y espacios, y convierte a minúsculas."""
     if not text: return ""
-    # Mantiene solo caracteres alfanuméricos
     return re.sub(r'[\W_]+', '', text.lower())
 
 # -----------------------
@@ -108,7 +100,7 @@ def create_output_parser(variable_names: List[str]) -> Tuple[StructuredOutputPar
     return parser, parser.get_format_instructions()
 
 # -----------------------
-# Prompt Builder
+# Prompt Builder (DYNAMIC EXAMPLE)
 # -----------------------
 def build_prompt_template_for_section(
     section_name: str,
@@ -116,10 +108,16 @@ def build_prompt_template_for_section(
     variable_maps: Dict[str, Dict[str, str]], 
     format_instructions: str,
     titular_only_vars: Optional[List[str]] = None,
+    custom_instructions: Optional[str] = None
 ) -> PromptTemplate:
     
     lines: List[str] = []
-    lines.append(f"Actúa como un analista de datos periodísticos riguroso. CLASIFICA las variables de la sección: {section_name}.")
+
+    if custom_instructions:
+        lines.append(custom_instructions)
+    else:
+        lines.append(f"Actúa como un analista de datos periodísticos riguroso. CLASIFICA las variables de la sección: {section_name}.")
+        lines.append("Analiza el texto buscando objetividad y precisión.")
     
     if "FUENTES" in section_name.upper():
         lines.append("")
@@ -149,12 +147,29 @@ def build_prompt_template_for_section(
     lines.append("")
     lines.append("=== REGLAS ===")
     lines.append("1. **EXHAUSTIVIDAD**: Busca todas las frases relevantes.")
-    lines.append("2. **LITERALIDAD**: Copia texto del artículo. NO uses las etiquetas (ej: no escribas 'Sí, mujer' en evidencia).")
+    lines.append("2. **LITERALIDAD**: Copia texto del artículo. NO uses las etiquetas.")
     lines.append("3. **NEGATIVOS**: Si es 'No', evidencia = [].")
+    lines.append("4. **CLAVES EXACTAS**: Usa SOLAMENTE los nombres de variables listados arriba.")
     
     lines.append("")
-    lines.append("JSON de salida:")
-    lines.append('   "nombre_variable": {{ "codigo": "X", "evidencia": ["..."] }}')
+    # --- FIX: Generar ejemplo DINÁMICO con las variables reales ---
+    lines.append("JSON de salida (Formato esperado):")
+    lines.append("{{")
+    
+    # Tomamos las primeras variables reales para el ejemplo
+    example_vars = variable_names[:3] if len(variable_names) > 3 else variable_names
+    
+    for i, var in enumerate(example_vars):
+        comma = "," if i < len(example_vars) - 1 else ("," if len(variable_names) > len(example_vars) else "")
+        # Usamos 4 llaves {{{{ para que salgan 2 {{ en el prompt final (que es lo que Langchain necesita para imprimir 1 { real)
+        # Es confuso, pero necesario: PromptTemplate -> Literal text
+        lines.append(f'  "{var}": {{{{ "codigo": "...", "evidencia": [...] }}}}{comma}')
+    
+    if len(variable_names) > len(example_vars):
+        lines.append('  ... resto de variables ...')
+        
+    lines.append("}}")
+    # --------------------------------------------------------------
     
     lines += [
         "",
@@ -173,7 +188,7 @@ def build_prompt_template_for_section(
     )
 
 # -----------------------
-# Utils
+# Utils: JSON Extraction & Text Matching
 # -----------------------
 def extract_json_from_agent_output(text: str) -> Optional[str]:
     if not text: return None
@@ -192,11 +207,6 @@ def extract_json_from_agent_output(text: str) -> Optional[str]:
     return None
 
 def normalize_evidence_list(evidence_raw: Any, source_text: str) -> List[str]:
-    """
-    Intenta encontrar la coincidencia en el texto.
-    Usa 'Smart Matching' (ignora puntuación) para encontrar frases aunque tengan comas/puntos diferentes.
-    DESCARTA lo que no esté en el texto (elimina etiquetas alucinadas).
-    """
     if not evidence_raw: return []
     if isinstance(evidence_raw, str):
         try: evidence_raw = json.loads(evidence_raw)
@@ -205,14 +215,14 @@ def normalize_evidence_list(evidence_raw: Any, source_text: str) -> List[str]:
 
     final_list = []
     source_lower = (source_text or "").lower()
-    source_clean = clean_string_for_matching(source_text) # Texto sin puntos ni espacios
+    source_clean = clean_string_for_matching(source_text)
     
     for snippet in evidence_raw:
         if not isinstance(snippet, str) or not snippet.strip(): continue
         clean_snippet = snippet.strip().strip('"').strip("'").strip("...")
         if not clean_snippet: continue
 
-        # 1. Match Exacto (Ideal para web)
+        # 1. Match Exacto
         if clean_snippet in source_text:
             final_list.append(clean_snippet)
             continue
@@ -225,18 +235,12 @@ def normalize_evidence_list(evidence_raw: Any, source_text: str) -> List[str]:
                 final_list.append(source_text[start_idx : start_idx + len(clean_snippet)])
                 continue
         
-        # 3. SMART FUZZY MATCH (Ignora puntuación y espacios)
-        # Esto permite encontrar "Maria Lopez" aunque en el texto sea "María López,"
-        # Pero rechaza "Sí mujer" porque esas letras no están juntas en el texto.
+        # 3. Smart Fuzzy Match
         snippet_super_clean = clean_string_for_matching(clean_snippet)
         if snippet_super_clean and snippet_super_clean in source_clean:
-            # Si coincide "limpio", aceptamos el snippet original del LLM.
-            # (No podemos reconstruir el original exacto fácilmente, pero sabemos que el contenido ES válido)
             final_list.append(clean_snippet)
             continue
         
-        # 4. Si no coincide ni limpiando -> SE DESCARTA.
-        # Esto elimina las etiquetas tipo "Sí, mujer" o "Científica".
         pass
 
     return list(set(final_list))
@@ -284,6 +288,11 @@ class AgentAnalyzer:
 
         try:
             parsed_obj = json.loads(json_str)
+            # Auto-unwrap logic: Si la respuesta es {"nombre_variable": {...}}, entramos un nivel.
+            if len(parsed_obj) == 1:
+                first_key = list(parsed_obj.keys())[0]
+                if isinstance(parsed_obj[first_key], dict) and first_key not in self.variables:
+                    parsed_obj = parsed_obj[first_key]
         except Exception as e:
             out["errors"].append(f"Invalid JSON: {e}")
             return out
@@ -295,41 +304,33 @@ class AgentAnalyzer:
         # 1. Primera pasada
         for var in self.variables:
             raw_val = parsed_obj.get(var, {})
+            # Fix: si el LLM usó claves inventadas, raw_val será {} y el código abajo se encarga.
             if not isinstance(raw_val, dict): raw_val = {"codigo": str(raw_val), "evidencia": []}
 
             code = str(raw_val.get("codigo", "")).strip().replace('"', '').replace("'", "")
             allowed_map = self.variable_maps.get(var, {})
             neg_key = get_negative_key_for_map(allowed_map)
 
-            # Validar código
             if allowed_map and code not in allowed_map:
                 found = next((k for k, v in allowed_map.items() if str(v).lower() == code.lower()), None)
                 code = found if found else neg_key
             if not code: code = neg_key
 
-            # Obtener evidencia cruda
             raw_evid = raw_val.get("evidencia")
             scope = titular if var in self.titular_only_vars else full_context
             
-            # FILTRAR ETIQUETAS EXPLÍCITAS EN EVIDENCIA (Seguridad extra)
             label_text = str(allowed_map.get(code, "")).lower()
             if isinstance(raw_evid, list):
-                # Eliminar si la evidencia es exactamente igual a la etiqueta (ej: "Sí, mujer")
                 raw_evid = [e for e in raw_evid if isinstance(e, str) and clean_string_for_matching(e) != clean_string_for_matching(label_text)]
 
-            # Normalizar (Match inteligente)
             final_evid = normalize_evidence_list(raw_evid, scope)
 
             label = str(allowed_map.get(code, "Unknown"))
             is_neg_label = label.lower().strip() in NEGATIVE_LABEL_TERMS
 
-            # Limpieza Lógica
             if is_neg_label:
                 final_evid = []
             elif not final_evid:
-                 # Si no es negativa, pero no encontramos evidencia en el texto:
-                 # Si es categórica (>5 opciones, como Tema), permitimos que se quede sin evidencia (es una clasificación abstracta).
-                 # Si es binaria (Sí/No), forzamos a No.
                  is_categorical = len(allowed_map) > 5
                  if not is_categorical:
                     code = neg_key
@@ -341,7 +342,7 @@ class AgentAnalyzer:
                 "etiqueta": label
             }
 
-        # 2. Segunda pasada: DEPENDENCIAS
+        # 2. Dependencias
         for _ in range(2): 
             for parent, children in DEPENDENCY_MAP.items():
                 if parent not in parsed_clean: continue
@@ -366,9 +367,16 @@ class AgentAnalyzer:
 # -----------------------
 # Factory
 # -----------------------
-def create_agents_from_config(config_path: str = "config.ini", model_kwargs: Optional[Dict[str, Any]] = None) -> Dict[str, AgentAnalyzer]:
+def create_agents_from_config(
+    config_path: str = "config.ini", 
+    model_kwargs: Optional[Dict[str, Any]] = None,
+    prompt_overrides: Optional[Dict[str, str]] = None
+) -> Dict[str, AgentAnalyzer]:
+    
     cfg = load_config(config_path)
     model_kwargs = model_kwargs or {"model": "gemma2:9b", "temperature": 0.0}
+    prompt_overrides = prompt_overrides or {}
+
     if OllamaClient is None: raise RuntimeError("No Ollama client.")
     base_llm = OllamaClient(**model_kwargs)
     agents = {}
@@ -391,6 +399,7 @@ def create_agents_from_config(config_path: str = "config.ini", model_kwargs: Opt
 
         parser, fmt = create_output_parser(list(variables))
         titular_only = [v for v in variables if "titular" in v.lower()]
+        custom_instr = prompt_overrides.get(section, None)
 
         prompt = build_prompt_template_for_section(
             section_name=section,
@@ -398,6 +407,7 @@ def create_agents_from_config(config_path: str = "config.ini", model_kwargs: Opt
             variable_maps=var_maps,
             format_instructions=fmt,
             titular_only_vars=titular_only,
+            custom_instructions=custom_instr
         )
 
         agents[section] = AgentAnalyzer(
