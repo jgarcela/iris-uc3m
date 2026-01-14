@@ -1,0 +1,9 @@
+langchain
+langchain-ollama
+langgraph
+pydantic
+configparser
+newspaper
+pandas
+openpyxl
+tqdm
