@@ -1,0 +1,15 @@
+====================================================================================================
+🔬 REPORTE CIENTÍFICO (LLM: gemma3:4b | EMB: embeddinggemma:300m)
+====================================================================================================
+| Modo    | Variable                       | Accuracy   | Precision   | Recall   | F1-Score   |
+|---------|--------------------------------|------------|-------------|----------|------------|
+| SIN_RAG | tema_id                        | 1.0%       | 1.4%        | 1.0%     | 1.2%       |
+| SIN_RAG | genero_periodista_id           | 2.0%       | 20.5%       | 2.0%     | 3.6%       |
+| SIN_RAG | cita_titular_id                | 0.0%       | 0.0%        | 0.0%     | 0.0%       |
+| SIN_RAG | genero_personas_mencionadas_id | 0.0%       | 0.0%        | 0.0%     | 0.0%       |
+| SIN_RAG | nombre_propio_titular          | 5.0%       | 3.1%        | 5.0%     | 3.8%       |
+| CON_RAG | tema_id                        | 36.0%      | 51.0%       | 36.0%    | 41.1%      |
+| CON_RAG | genero_periodista_id           | 37.0%      | 41.9%       | 37.0%    | 38.2%      |
+| CON_RAG | cita_titular_id                | 71.0%      | 83.2%       | 71.0%    | 75.8%      |
+| CON_RAG | genero_personas_mencionadas_id | 42.0%      | 52.4%       | 42.0%    | 44.3%      |
+| CON_RAG | nombre_propio_titular          | 37.0%      | 80.9%       | 37.0%    | 46.8%      |

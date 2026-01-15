@@ -6,7 +6,12 @@ VARIABLES Y CÓDIGOS:
 TAREA:
 1. Asigna el código numérico correspondiente a cada variable.
 2. Extrae la evidencia textual.
-3. Devuelve solo JSON.
+3. Devuelve un JSON estrictamente con este formato:
+{{
+    "nombre_variable": {{ "codigo": "...", "etiqueta": "...", "evidencia": ["..."]  }}
+}}
+
+
 
 NOTICIA:
 Titular: {titular}

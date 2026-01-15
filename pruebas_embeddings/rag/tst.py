@@ -113,4 +113,4 @@ if __name__ == "__main__":
     """
 
     # Ejecutar la comparativa
-    comparar_prompts(titular_test, texto_test, "CONTENIDO_GENERAL")
+    comparar_prompts(titular_test, texto_test, "LENGUAJE")

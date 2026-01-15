@@ -10,7 +10,7 @@ INSTRUCCIONES:
    - REGLA IMPORTANTE: Si el código elegido significa "No", "No hay", "Falso" o "No aplica", la evidencia DEBE ser una lista vacía [].
 3. Devuelve un JSON estrictamente con este formato:
 {{
-    "nombre_variable": {{ "codigo": "...", "evidencia": ["..."] }}
+    "nombre_variable": {{ "codigo": "...", "etiqueta": "...", "evidencia": ["..."]  }}
 }}
 
 NOTICIA:
