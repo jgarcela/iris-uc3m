@@ -9,28 +9,58 @@ CONFIG = cargar_config_ini()
 MODEL_NAME = "gemma3:4b"
 llm = ChatOllama(model=MODEL_NAME, temperature=0).with_structured_output(AnalisisContenidoGeneral)
 
+def formatear_codigos_para_prompt(codigos_dict):
+    """Formatea un diccionario de códigos como texto plano para evitar que LangChain lo interprete como variables"""
+    if not codigos_dict:
+        return "No disponible"
+    lines = []
+    for codigo, descripcion in sorted(codigos_dict.items()):
+        lines.append(f"  - Código '{codigo}': {descripcion}")
+    return "\n".join(lines)
+
 def nodo_analista(state: AgentState):
     # Codebook (Siempre presente)
     instrucciones = generar_instrucciones_codebook(CONFIG, "CONTENIDO_GENERAL")
+    
+    # Obtener los códigos específicos del config y formatearlos como texto
+    contenido_general = CONFIG.get("CONTENIDO_GENERAL", {})
+    tema_codes_str = formatear_codigos_para_prompt(contenido_general.get("TEMA", {}))
+    genero_periodista_codes_str = formatear_codigos_para_prompt(contenido_general.get("GENERO_PERIODISTA", {}))
+    cita_titular_codes_str = formatear_codigos_para_prompt(contenido_general.get("CITA_TITULAR", {}))
+    genero_personas_codes_str = formatear_codigos_para_prompt(contenido_general.get("GENERO_PERSONAS_MENCIONADAS", {}))
+    genero_nombre_propio_codes_str = formatear_codigos_para_prompt(contenido_general.get("GENERO_NOMBRE_PROPIO_TITULAR", {}))
+    personas_mencionadas_codes_str = formatear_codigos_para_prompt(contenido_general.get("PERSONAS_MENCIONADAS", {}))
 
     prompt_txt = f"""Eres un clasificador experto de noticias.
     
     {instrucciones}
     
+    ### INSTRUCCIONES ESPECÍFICAS
+    
+    IMPORTANTE: Debes devolver SOLO el código numérico (ID) que corresponda. NO devuelvas el texto descriptivo.
+    
+    Para cada variable, usa estos códigos exactos:
+    
+    **CITA_TITULAR**:
+    {cita_titular_codes_str}
+    
+    **GENERO_PERIODISTA**:
+    {genero_periodista_codes_str}
+    
+    **GENERO_PERSONAS_MENCIONADAS**:
+    {genero_personas_codes_str}
+    
+    **GENERO_NOMBRE_PROPIO_TITULAR**:
+    {genero_nombre_propio_codes_str}
+    
+    **PERSONAS_MENCIONADAS**:
+    {personas_mencionadas_codes_str}
+    
+    **TEMA**:
+    {tema_codes_str}
+    
     ### TU TAREA
-    Analiza la noticia actual y extrae los códigos.
-    
-    Tienes la siguiente información:
-    - TITULAR: {state.get('titular', '')}
-    - AUTOR: {state.get('autor', '')}
-    - CONTENIDO: {state.get('texto_noticia', '')}
-    
-    Extrae:
-    1. Nombre propio titular: El nombre propio que aparece en el titular (si no hay, pon 'No aplica')
-    2. Cita titular: Si hay cita en el titular (0 = No, 1 = Sí)
-    3. Género periodista: El género del periodista basado en el autor
-    4. Género personas noticias: El género de las personas mencionadas en la noticia
-    5. Temática noticias: La temática principal de la noticia según el libro de códigos
+    Analiza la noticia y devuelve SOLO los códigos numéricos según el libro de códigos.
     """
     
     prompt = ChatPromptTemplate.from_messages([

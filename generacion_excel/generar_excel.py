@@ -6,16 +6,48 @@ from tqdm import tqdm
 
 # --- IMPORTS DINÁMICOS ---
 from graph import app_graph, MODEL_NAME 
-from utils import extraer_datos_newspaper
+from utils import extraer_datos_newspaper, cargar_config_ini
 
 # --- CONFIGURACIÓN ---
 LLM_MODEL_NAME = MODEL_NAME
+CONFIG = cargar_config_ini()
 
 FILE_PATH = "/home/jggomez/Desktop/IRIS/iris-uc3m/data/Base de datos Noticias 27102025.xlsx - Noticias_scrape.csv"
 OUTPUT_EXCEL = "resultados_extraccion_noticias.xlsx"
 
 # Limitar número de noticias a procesar (None = todas, o un número para pruebas)
 NUM_NOTICIAS_PRUEBA = 10  # Cambiar a None para procesar todas
+
+def validar_codigo(variable, codigo, config_data):
+    """Valida que un código sea válido según el config.ini"""
+    contenido_general = config_data.get("CONTENIDO_GENERAL", {})
+    
+    # Mapeo de variables a sus diccionarios en el config
+    mapeo_variables = {
+        'tema_id': 'TEMA',
+        'genero_periodista_id': 'GENERO_PERIODISTA',
+        'cita_titular_id': 'CITA_TITULAR',
+        'genero_personas_mencionadas_id': 'GENERO_PERSONAS_MENCIONADAS',
+        'genero_nombre_propio_titular_id': 'GENERO_NOMBRE_PROPIO_TITULAR',
+        'personas_mencionadas_id': 'PERSONAS_MENCIONADAS'
+    }
+    
+    nombre_config = mapeo_variables.get(variable)
+    if not nombre_config:
+        return codigo  # Si no está en el mapeo, devolver tal cual
+    
+    codigos_validos = contenido_general.get(nombre_config, {})
+    
+    # Convertir código a string para comparar
+    codigo_str = str(codigo).strip()
+    
+    # Verificar si el código es válido
+    if codigo_str in codigos_validos:
+        return codigo_str
+    else:
+        # Si no es válido, devolver el código por defecto más común (Ns/Nc o '1')
+        print(f"⚠️  Código inválido '{codigo_str}' para {variable}, usando valor por defecto")
+        return '4' if 'GENERO' in nombre_config else '1'
 
 def cargar_datos():
     """Carga el archivo CSV con las noticias"""
@@ -70,6 +102,15 @@ def procesar_noticia(row, idx):
         try:
             out = app_graph.invoke(inputs)
             res_dict = out['resultado'].model_dump() if out.get('resultado') else {}
+            
+            # Validar y corregir códigos según config.ini
+            if res_dict:
+                res_dict['tema_id'] = validar_codigo('tema_id', res_dict.get('tema_id', ''), CONFIG)
+                res_dict['genero_periodista_id'] = validar_codigo('genero_periodista_id', res_dict.get('genero_periodista_id', ''), CONFIG)
+                res_dict['cita_titular_id'] = validar_codigo('cita_titular_id', res_dict.get('cita_titular_id', ''), CONFIG)
+                res_dict['genero_personas_mencionadas_id'] = validar_codigo('genero_personas_mencionadas_id', res_dict.get('genero_personas_mencionadas_id', ''), CONFIG)
+                res_dict['genero_nombre_propio_titular_id'] = validar_codigo('genero_nombre_propio_titular_id', res_dict.get('genero_nombre_propio_titular_id', ''), CONFIG)
+                res_dict['personas_mencionadas_id'] = validar_codigo('personas_mencionadas_id', res_dict.get('personas_mencionadas_id', ''), CONFIG)
         except Exception as e:
             print(f"⚠️  Error en análisis gemma para fila {idx}: {e}")
             res_dict = {}
@@ -89,7 +130,7 @@ def procesar_noticia(row, idx):
             'textonoticia': datos_newspaper.get('textonoticia', ''),
             'nombre_periodista': datos_newspaper.get('nombre_periodista', ''),
             
-            # Datos de gemma
+            # Datos de gemma (validados)
             'Nombre propio titular': res_dict.get('nombre_propio_titular', ''),
             'Cita titular': res_dict.get('cita_titular_id', ''),
             'Género periodista': res_dict.get('genero_periodista_id', ''),
