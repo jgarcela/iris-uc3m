@@ -1,10 +1,9 @@
 
 
 from urllib.parse import urlparse
-from typing import Optional, List
 from newspaper import Article
 from pydantic import BaseModel, Field, ValidationError
-from typing import Optional
+from typing import Optional, Any, List
 import re
 import json
 
@@ -269,6 +268,128 @@ def clasificar_var_nombre_propio_titular(valores: list[int]) -> int:
 
     # Si todo falla (ej: llegó un código desconocido)
     return 0
+
+
+# =====================================================================================
+# 8. Cita Titular
+# =====================================================================================
+from utils import CitaTitularValidada
+
+def clasificar_var_cita_titular(titulo: str) -> CitaTitularValidada:
+    """
+    Analiza si el titular contiene una cita o declaración de alguien.
+    Distingue entre directa (textual) e indirecta (parafraseada).
+    """
+    
+    if not titulo:
+        return CitaTitularValidada(cita="N/A", tipo=1)
+
+    prompt = f"""
+    Analiza el siguiente TITULAR de noticia y detecta si contiene una CITA o DECLARACIÓN de una persona o entidad.
+
+    TITULAR: "{titulo}"
+
+    CLASIFICACIÓN:
+    1 = No hay cita. Es un hecho, una descripción del periodista o usa comillas solo para resaltar una palabra (ej: El "caso Koldo").
+    2 = Cita Directa. Reproduce palabras textuales. 
+        - Pistas: Usa comillas para una frase completa ("Me voy", dijo X) o dos puntos (Sánchez: No dimitiré).
+    3 = Cita Indirecta. Parafrasea lo que alguien dijo sin usar comillas para la frase entera.
+        - Pistas: Usa verbos de habla (asegura que, dice que, pide, advierte, niega) seguidos de la idea.
+
+    INSTRUCCIONES:
+    - En el campo "cita", extrae SOLO el contenido de lo que se ha dicho. Si es tipo 1, pon "N/A".
+    - Sé estricto: "Madrid aprueba la ley" es 1 (hecho). "Ayuso dice que Madrid aprobará la ley" es 3 (indirecta).
+
+    Responde SOLO con este JSON:
+    {{
+        "cita": "texto de la declaración",
+        "tipo": numero
+    }}
+    """
+
+    # Llamada al LLM (asumiendo que tienes tu función consultar_ollama)
+    respuesta = consultar_ollama(prompt)
+    
+    try:
+        # Limpieza básica para extraer JSON
+        json_str = respuesta[respuesta.find('{'):respuesta.rfind('}')+1]
+        data = json.loads(json_str)
+        
+        return CitaTitularValidada(**data)
+        
+    except Exception:
+        # Fallback en caso de error
+        return CitaTitularValidada(cita="Error al procesar", tipo=1)
+
+
+# =====================================================================================
+# 9a. Protagonistas que aparecen en la información
+# =====================================================================================
+def clasificar_var_cla_genero_prota_list(texto_noticia: str) -> ProtagonistasDetectados:
+    """
+    Analiza el cuerpo de la noticia para extraer los protagonistas principales.
+    Devuelve listas sincronizadas de nombres únicos y sus códigos.
+    """
+    
+    # Validación básica
+    if not texto_noticia or len(texto_noticia) < 10:
+        return ProtagonistasDetectados(nombres=[], valores=[])
+
+    # --- PROMPT ---
+    prompt = f"""
+    Analiza el siguiente TEXTO DE NOTICIA y extrae los protagonistas (personas, entidades, lugares clave).
+    
+    TEXTO (Fragmento):
+    "{texto_noticia}..."
+
+    TABLA DE CÓDIGOS ESTRICTA:
+    1  = Hombre (Ej: "Pedro Sánchez", "El Papa", "Carlos")
+    2  = Mujer (Ej: "María", "Isabel Díaz Ayuso", "Alessandra")
+    3  = Grupo Mixto (Ej: "La pareja", "Los vecinos", "Padres")
+    4  = Institución/Empresa (Ej: "Gobierno", "Reuters", "Vatican Media", "PSOE")
+    41 = Lugares: Países, Regiones, Ciudades (ej: "España", "Madrid", "Europa")
+    42 = Tecnología: Apps, Modelos de IA, Robots, Software (ej: "ChatGPT", "Gemini", "Sora", "TikTok")
+
+    REGLAS OBLIGATORIAS:
+    1. Si el nombre es de una sola persona, JAMÁS uses códigos 3, 32 o 33.
+    2. Agencias de noticias (Reuters, EFE, Europa Press) son SIEMPRE código 4.
+    3. Nombres femeninos (María, Alessandra) son código 2.
+    4. Nombres masculinos (Pedro, Francisco) son código 1.
+    
+    FORMATO JSON EXACTO:
+    {{
+        "nombres": ["Nombre1", "Nombre2"],
+        "valores": [Codigo1, Codigo2]
+    }}
+    """
+
+    # --- LLAMADA AL MODELO ---
+    # Asumiendo que usas tu función 'consultar_ollama'
+    # Se recomienda un modelo con buena capacidad de contexto (ej: llama3, mistral, gemma:7b)
+    respuesta_texto = consultar_ollama(prompt)
+
+    # --- PARSEO Y VALIDACIÓN ---
+    try:
+        inicio = respuesta_texto.find('{')
+        fin = respuesta_texto.rfind('}') + 1
+        
+        if inicio == -1:
+            return ProtagonistasDetectados(nombres=[], valores=[])
+            
+        json_str = respuesta_texto[inicio:fin]
+        data = json.loads(json_str)
+        
+        resultado = ProtagonistasDetectados(**data)
+        
+        # Sincronización de seguridad
+        min_len = min(len(resultado.nombres), len(resultado.valores))
+        resultado.nombres = resultado.nombres[:min_len]
+        resultado.valores = resultado.valores[:min_len]
+            
+        return resultado
+
+    except (json.JSONDecodeError, ValidationError):
+        return ProtagonistasDetectados(nombres=[], valores=[])
 
 
 # =====================================================================================
@@ -1230,43 +1351,159 @@ def clasificar_var_mujeres_generacionalidad_noticias(titulo: str, texto_cuerpo: 
             explicacion=f"Error técnico al procesar la respuesta: {str(e)}"
         )
 
+
 # =====================================================================================
 # 21. Tiene Fotografías y 22. Número de fotografías
 # =====================================================================================
 from utils import FotografiasValidadas
 
-def clasificar_var_fotografias(articulo: Article) -> FotografiasValidadas:
+def clasificar_var_fotografias(articulo: Any) -> FotografiasValidadas:
     """
-    Analiza las imágenes de una noticia usando Newspaper3k y devuelve
-    tanto si tiene fotos (1/2) como la cantidad exacta.
+    Analiza las imágenes del artículo (Top Image + Cuerpo).
+    Filtra iconos, basura y publicidad.
+    
+    Args:
+        articulo: Objeto 'Article' de la librería newspaper3k ya descargado y parseado.
     """
     
-    # 1. Obtenemos el set de imágenes (URLs únicas)
-    imagenes_set = articulo.images if articulo.images else set()
-    num_imagenes = len(imagenes_set)
+    # Usamos un set para evitar duplicados (ej: si la top_image también sale en el texto)
+    imagenes_reales = set()
     
-    # 2. Verificamos si hay una imagen principal (top_image)
-    # A veces newspaper detecta la imagen principal en los metadatos 
-    # aunque falle al parsear las imágenes del cuerpo.
-    tiene_top_image = bool(articulo.top_image)
-    
-    # 3. Lógica combinada
-    if num_imagenes > 0:
-        # Caso A: Encontró imágenes en el cuerpo
-        codigo = 2
-        total = num_imagenes
-    elif tiene_top_image:
-        # Caso B: No encontró en el cuerpo, pero sí hay imagen principal (miniatura/cabecera)
-        codigo = 2
-        total = 1 # Asumimos al menos 1
-    else:
-        # Caso C: Nada
-        codigo = 1
-        total = 0
+    # --- 1. IMAGEN DE PORTADA (TOP IMAGE) ---
+    if articulo.top_image and len(articulo.top_image) > 10:
+        # Filtro básico: que sea una URL válida y no vacía
+        imagenes_reales.add(articulo.top_image)
 
-    # 4. Retorno del modelo unificado
+    # --- 2. IMÁGENES DEL CUERPO ---
+    # Usamos clean_top_node (lxml object) que contiene solo el texto principal limpio
+    nodo_texto = articulo.clean_top_node 
+    
+    if nodo_texto is not None:
+        # Buscamos todas las etiquetas <img>
+        imgs_en_texto = nodo_texto.xpath('.//img')
+        
+        for img in imgs_en_texto:
+            src = img.get('src')
+            if not src:
+                continue
+            
+            # Normalizamos a minúsculas para chequear
+            src_lower = src.lower()
+            
+            # --- FILTROS ANTI-BASURA (Heurística) ---
+            
+            # A. Descartar formatos que suelen ser de interfaz (iconos, spacers)
+            if src_lower.endswith(('.svg', '.gif', '.ico')):
+                continue
+                
+            # B. Palabras prohibidas (indican publicidad, tracking o diseño web)
+            palabras_prohibidas = [
+                'logo', 'icon', 'avatar', 'profile', 'pixel', 'spacer', 
+                'doubleclick', 'adserver', 'banner', 'button', 'social',
+                'facebook', 'twitter', 'whatsapp', 'share', 'sprite',
+                'author', 'comment'
+            ]
+            
+            if any(palabra in src_lower for palabra in palabras_prohibidas):
+                continue
+
+            # C. Descartar por dimensiones diminutas (si el HTML las tiene)
+            # Muchos "pixels" de tracking son de 1x1
+            width = img.get('width')
+            height = img.get('height')
+            
+            # Si tiene width/height y es menor a 100px, seguramente no es una foto editorial
+            if width and width.isdigit() and int(width) < 100:
+                continue
+            if height and height.isdigit() and int(height) < 100:
+                continue
+
+            # Si pasa los filtros, añadimos la URL
+            imagenes_reales.add(src)
+
+    # --- 3. CONSTRUCCIÓN DE RESPUESTA ---
+    lista_urls = list(imagenes_reales)
+    cantidad_final = len(lista_urls)
+    
+    # Lógica de código: 2 si hay fotos, 1 si no
+    codigo_final = 2 if cantidad_final > 0 else 1
+
     return FotografiasValidadas(
-        tiene_fotos_codigo=codigo,
-        cantidad=total
+        codigo=codigo_final,
+        cantidad=cantidad_final,
+        evidencias=lista_urls
     )
+
+
+# =====================================================================================
+# 23. Tiene Fuentes y 24. Número de Fuentes
+# =====================================================================================
+from utils import FuentesValidadas
+
+def clasificar_var_tiene_fuentes(texto_noticia: str) -> FuentesDetectadas:
+    """
+    Determina si la noticia tiene fuentes.
+    Retorna codigo=2 si encuentra al menos una, codigo=1 si no encuentra nada.
+    """
+    
+    # 1. Validación inicial
+    if not texto_noticia or len(texto_noticia) < 50:
+        return FuentesDetectadas(codigo=1, evidencias=[], cantidad=0)
+
+    # 2. Recorte (Analizamos el principio del texto donde se atribuyen las fuentes)
+    texto_analisis = texto_noticia[:3500]
+
+    # 3. Prompt: Solo pedimos la lista de nombres
+    prompt = f"""
+    Analiza el texto y extrae una lista de las FUENTES de información explícitas (personas, entidades, documentos) a las que se atribuyen los datos.
+
+    TEXTO: "{texto_analisis}..."
+
+    INSTRUCCIONES:
+    - Busca verbos de atribución: "según X", "dijo Y", "informó Z", "fuentes de...", "el informe de...".
+    - Si es un artículo de opinión sin datos externos, la lista debe estar vacía.
+
+    Responde SOLO con este JSON:
+    {{
+        "fuentes": ["Nombre Fuente 1", "Nombre Fuente 2"]
+    }}
+    """
+
+    # 4. Llamada al LLM
+    respuesta_texto = consultar_ollama(prompt)
+
+    # 5. Lógica Python (Determinista)
+    try:
+        inicio = respuesta_texto.find('{')
+        fin = respuesta_texto.rfind('}') + 1
+        
+        if inicio == -1:
+            return FuentesDetectadas(codigo=1, evidencias=[], cantidad=0)
+            
+        json_str = respuesta_texto[inicio:fin]
+        data = json.loads(json_str)
+        
+        # Extraemos la lista limpia
+        lista_fuentes = data.get("fuentes", [])
+        cantidad = len(lista_fuentes)
+        
+        # --- AQUÍ ESTÁ EL CAMBIO ---
+        if cantidad > 0:
+            # Si hay elementos -> Código 2 (Sí)
+            return FuentesDetectadas(
+                codigo=2,
+                evidencias=lista_fuentes,
+                cantidad=cantidad
+            )
+        else:
+            # Si la lista está vacía -> Código 1 (No)
+            return FuentesDetectadas(
+                codigo=1,
+                evidencias=[],
+                cantidad=0
+            )
+
+    except Exception:
+        return FuentesDetectadas(codigo=1, evidencias=[], cantidad=0)
+
 

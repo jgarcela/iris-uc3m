@@ -14,6 +14,27 @@ class NombresDetectados(BaseModel):
 
 
 # =====================================================================================
+# 8. Cita Titular
+# =====================================================================================
+class CitaTitularValidada(BaseModel):
+    # La parte del texto que corresponde a la cita
+    cita: str = Field(..., description="El fragmento exacto de la declaración. Si es 1 (No), dejar vacío o poner 'N/A'.")
+    
+    # El código de clasificación
+    tipo: int = Field(..., description="1=No, 2=Directa, 3=Indirecta")
+
+
+# =====================================================================================
+# 9a. Protagonistas que aparecen en la información
+# =====================================================================================
+class ProtagonistasDetectados(BaseModel):
+    # Lista de cadenas con los nombres extraídos
+    nombres: List[str] = Field(default_factory=list, description="Lista de nombres únicos detectados en la noticia")
+    # Lista de enteros con los códigos correspondientes
+    valores: List[int] = Field(default_factory=list, description="Lista de valores clasificados según la tabla")
+
+
+# =====================================================================================
 # 11. Género Periodista (Autoría)
 # =====================================================================================
 class GeneroPeriodistaValidado(BaseModel):
@@ -121,8 +142,26 @@ class MujeresGeneracionalidadConExplicacion(BaseModel):
 # 21. Tiene Fotografías y 22. Número de fotografías
 # =====================================================================================
 class FotografiasValidadas(BaseModel):
-    # Variable 1: ¿Tiene fotos? (1=No, 2=Sí)
-    tiene_fotos_codigo: int = Field(..., ge=1, le=2, description="1=No, 2=Sí")
+    # Código: 1=No, 2=Sí
+    codigo: int = Field(..., description="1 = No tiene fotos, 2 = Sí tiene fotos.")
     
-    # Variable 2: Número exacto de fotos
-    cantidad: int = Field(..., ge=0, description="Número total de fotografías detectadas")
+    # Cantidad total
+    cantidad: int = Field(..., ge=0, description="Número total de fotografías editoriales detectadas.")
+    
+    # Lista de links (URLs)
+    evidencias: List[str] = Field(default_factory=list, description="Lista de URLs de las imágenes encontradas.")
+
+# =====================================================================================
+# 23. Tiene Fuentes y 24. Número de Fuentes
+# =====================================================================================
+class FuentesValidadas(BaseModel):
+    # Un solo número entero: 2 si hay fuentes, 1 si no hay
+    codigo: int = Field(..., description="1 = No tiene fuentes, 2 = Sí tiene fuentes.")
+    
+    # La lista de evidencias (nombres de las fuentes)
+    evidencias: List[str] = Field(default_factory=list, description="Lista de nombres de las fuentes detectadas.")
+    
+    # Cantidad total
+    cantidad: int = Field(..., description="Número total de fuentes.")
+
+
