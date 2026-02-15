@@ -1,7 +1,30 @@
 
 from pydantic import BaseModel, Field, ValidationError
-from typing import Optional
+from typing import Optional, Any, List
 import re
+import ollama
+
+# =====================================================================================
+# 0. Ollama
+# =====================================================================================
+def consultar_ollama(prompt: str, modelo: str = "gemma3:4b") -> str:
+    """
+    Función genérica para enviar cualquier prompt a Ollama.
+    Devuelve la respuesta del modelo como texto limpio.
+    """
+    try:
+        response = ollama.chat(model=modelo, messages=[
+            {
+                'role': 'user',
+                'content': prompt,
+            },
+        ])
+        return response['message']['content'].strip()
+    
+    except Exception as e:
+        print(f"Error conectando con el modelo {modelo}: {e}")
+        return ""
+
 
 # =====================================================================================
 # 7a. Nombre Propio Titular

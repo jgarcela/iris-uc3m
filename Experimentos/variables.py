@@ -6,7 +6,7 @@ from pydantic import BaseModel, Field, ValidationError
 from typing import Optional, Any, List
 import re
 import json
-
+from utils import consultar_ollama
 
 
 # =====================================================================================
@@ -325,6 +325,8 @@ def clasificar_var_cita_titular(titulo: str) -> CitaTitularValidada:
 # =====================================================================================
 # 9a. Protagonistas que aparecen en la información
 # =====================================================================================
+from utils import ProtagonistasDetectados
+
 def clasificar_var_cla_genero_prota_list(texto_noticia: str) -> ProtagonistasDetectados:
     """
     Analiza el cuerpo de la noticia para extraer los protagonistas principales.
@@ -393,9 +395,83 @@ def clasificar_var_cla_genero_prota_list(texto_noticia: str) -> ProtagonistasDet
 
 
 # =====================================================================================
+# 9b. Génerop Protagonistas que aparecen en la información
+# =====================================================================================
+def clasificar_var_cla_genero_prota(valores: list[int]) -> int:
+    """
+    Calcula el valor único de los protagonistas en el CUERPO de la noticia.
+    Toma la lista de códigos detectados y decide el código dominante.
+    """
+    
+    if not valores:
+        return 0
+
+    # 1. CONTEO DE CÓDIGOS HUMANOS
+    cnt_hombres = valores.count(1)
+    cnt_mujeres = valores.count(2)
+    
+    # Contamos grupos mixtos detectados por el LLM
+    cnt_mixtos_neutro = valores.count(3)
+    cnt_mixtos_hombres = valores.count(32)
+    cnt_mixtos_mujeres = valores.count(33)
+
+    # Suma total de indicadores humanos (Individuales + Grupos)
+    total_humanos = cnt_hombres + cnt_mujeres + cnt_mixtos_neutro + cnt_mixtos_hombres + cnt_mixtos_mujeres
+
+    # --- FASE 1: FILTRO HUMANO (Prioridad Absoluta) ---
+    if total_humanos > 0:
+        
+        # CASO A: Solo Hombres (Sin mujeres individuales NI grupos mixtos)
+        # Es estricto: si aparece un grupo "33" o "3", ya no es solo hombres.
+        if (cnt_hombres > 0 and cnt_mujeres == 0 and 
+            cnt_mixtos_neutro == 0 and cnt_mixtos_hombres == 0 and cnt_mixtos_mujeres == 0):
+            return 1
+            
+        # CASO B: Solo Mujeres (Sin hombres individuales NI grupos mixtos)
+        if (cnt_mujeres > 0 and cnt_hombres == 0 and 
+            cnt_mixtos_neutro == 0 and cnt_mixtos_hombres == 0 and cnt_mixtos_mujeres == 0):
+            return 2
+
+        # CASO C: Mixto (Hay presencia de ambos o hay grupos mixtos)
+        # Comparamos cantidades para determinar la mayoría
+        
+        # C1. Comparación directa de individuos
+        if cnt_hombres > cnt_mujeres:
+            return 32  # Mixto más hombres
+        elif cnt_mujeres > cnt_hombres:
+            return 33  # Mixto más mujeres
+        
+        # C2. Empate de individuos (ej: 0 vs 0, o 2 vs 2). Desempate por grupos.
+        else:
+            if cnt_mixtos_hombres > cnt_mixtos_mujeres:
+                return 32
+            elif cnt_mixtos_mujeres > cnt_mixtos_hombres:
+                return 33
+            else:
+                # Empate total (ej: 1 hombre, 1 mujer) o solo grupos neutros (3)
+                return 3
+
+    # --- FASE 2: NO HUMANOS (Solo si no hay NINGÚN humano) ---
+    
+    # Prioridad: Tecnología (42) > Institución (4) > Lugar (41)
+    
+    if 42 in valores:
+        return 42 # IA, Robots, Apps
+    
+    if 4 in valores:
+        return 4  # Empresas, Partidos, Organismos
+        
+    if 41 in valores:
+        return 41 # Países, Ciudades (Fondo)
+
+    # Si llega aquí, es un código desconocido o lista vacía
+    return 0
+
+
+# =====================================================================================
 # 10. Nombre Periodista
 # =====================================================================================
-def clasificar_var_nombre_periodista(articulo: articulo) -> str:
+def clasificar_var_nombre_periodista(articulo: Article) -> str:
     """
     Extrae autores y limpia textos basura como 'Ver Biografía', 'Redacción', etc.
     """
@@ -991,7 +1067,7 @@ def clasificar_var_referencia_politicas_genero(titulo: str, texto_cuerpo: str) -
 # =====================================================================================
 from utils import DenunciaDesigualdadConExplicacion
 
-def clasificar_var_denuncia_desigualdad_genero(titulo: str, texto_cuerpo: str) -> DenunciaDesigualdadValidada:
+def clasificar_var_denuncia_desigualdad_genero(titulo: str, texto_cuerpo: str) -> DenunciaDesigualdadConExplicacion:
     """
     Detecta si la noticia DENUNCIA desigualdad y explica por qué.
     Devuelve objeto con .codigo (1/2) y .explicacion (str).
@@ -1010,7 +1086,7 @@ def clasificar_var_denuncia_desigualdad_genero(titulo: str, texto_cuerpo: str) -
     
     # Si NO hay palabras clave, retornamos 1 directamente con explicación automática
     if not any(p in texto_completo for p in palabras_activadoras):
-        return DenunciaDesigualdadValidada(
+        return DenunciaDesigualdadConExplicacion(
             codigo=1, 
             explicacion="El texto no contiene términos relacionados con género, desigualdad o violencia machista."
         )
@@ -1048,7 +1124,7 @@ def clasificar_var_denuncia_desigualdad_genero(titulo: str, texto_cuerpo: str) -
         
         if inicio == -1 or fin == 0:
             # Fallback si el modelo no devuelve JSON
-            return DenunciaDesigualdadValidada(
+            return DenunciaDesigualdadConExplicacion(
                 codigo=1, 
                 explicacion="Error: El modelo no devolvió un formato válido."
             )
@@ -1057,11 +1133,11 @@ def clasificar_var_denuncia_desigualdad_genero(titulo: str, texto_cuerpo: str) -
         data = json.loads(json_str)
 
         # Validación Pydantic
-        return DenunciaDesigualdadValidada(**data)
+        return DenunciaDesigualdadConExplicacion(**data)
 
     except (json.JSONDecodeError, ValidationError) as e:
         # Si algo falla en el parseo, devolvemos un objeto seguro
-        return DenunciaDesigualdadValidada(
+        return DenunciaDesigualdadConExplicacion(
             codigo=1, 
             explicacion=f"Error técnico al procesar la respuesta: {str(e)}"
         )
@@ -1141,7 +1217,7 @@ def clasificar_var_mujeres_racializadas_noticias(titulo: str, texto_cuerpo: str)
     """
 
     # --- 3. LLAMADA AL MODELO ---
-    respuesta_texto = consultar_ollama(prompt, modelo="gemma:4b")
+    respuesta_texto = consultar_ollama(prompt)
 
     # --- 4. EXTRACCIÓN Y VALIDACIÓN ---
     try:
@@ -1171,10 +1247,9 @@ def clasificar_var_mujeres_racializadas_noticias(titulo: str, texto_cuerpo: str)
 # =====================================================================================
 from utils import MujeresConDiscapacidadConExplicacion
 
-def clasificar_var_mujeres_generacionalidad_noticias(titulo: str, texto_cuerpo: str) -> MujeresGeneracionalidadConExplicacion:
+def clasificar_var_mujeres_con_discapacidad_noticias(titulo: str, texto_cuerpo: str) -> MujeresConDiscapacidadConExplicacion:
     """
-    Detecta si en la noticia aparecen mujeres de **distintas generaciones** o de 
-    **edades no hegemónicas** (niñas, adolescentes o ancianas).
+    Detecta la presencia o mención explícita de mujeres con discapacidad o diversidad funcional.
     Devuelve objeto con .codigo (1/2) y .explicacion (str).
     """
     
@@ -1182,58 +1257,56 @@ def clasificar_var_mujeres_generacionalidad_noticias(titulo: str, texto_cuerpo: 
     texto_completo = (titulo + " " + texto_cuerpo).lower()
 
     # --- 1. FILTRO DE EFICIENCIA (Heurística) ---
-    # Buscamos marcadores de edad extremos o relaciones intergeneracionales.
-    # Si no aparecen, asumimos que son adultos estándar (lo más común en noticias).
+    # Palabras clave que sugieren discapacidad, diversidad funcional o condiciones específicas.
+    # Si no aparece ninguna, descartamos la noticia.
     
-    terminos_edad = [
-        # Infancia / Juventud
-        "niña", "adolescente", "joven", "menor", "escolar", "alumna", "estudiante", 
-        "chica", "hija", "infantil", "bebé", "generación z",
-        # Vejez / Tercera Edad
-        "anciana", "abuela", "jubilada", "mayor", "tercera edad", "senior", 
-        "vejez", "pensionista", "octogenaria", "nonagenaria", "vieja", "residencia",
-        # Relacional
-        "madre", "nieta", "familia", "generaciones", "intergeneracional"
+    terminos_clave = [
+        "discapacidad", "diversidad funcional", "silla de ruedas", "movilidad reducida",
+        "ciega", "sorda", "sordomuda", "invidente", "autis", " tea ", "asperger",
+        "síndrome de down", "parálisis", "cerebral", "amputada", "prótesis",
+        "salud mental", "trastorno", "bipolar", "esquizofren", "depresio", # En contextos de discapacidad psicosocial
+        "dependencia", "capacitism", "paralímpic", "once", "cermi"
     ]
     
-    if not any(t in texto_completo for t in terminos_edad):
-        return MujeresGeneracionalidadConExplicacion(
+    if not any(t in texto_completo for t in terminos_clave):
+        return MujeresConDiscapacidadConExplicacion(
             codigo=1,
-            explicacion="El texto no contiene términos que sugieran diversidad de edades (niñas, ancianas) o relaciones intergeneracionales."
+            explicacion="El texto no contiene términos relacionados con la discapacidad o diversidad funcional."
         )
 
     # --- 2. PROMPT CON SOLICITUD DE JSON ---
     texto_recortado = texto_cuerpo[:2000]
     
     prompt = f"""
-    Analiza la edad y las generaciones de las mujeres en esta noticia:
+    Analiza la representación de las personas en esta noticia:
     Título: "{titulo}"
     Extracto: "{texto_recortado}..."
 
-    Tu tarea: Determinar si hay **DIVERSIDAD GENERACIONAL** en la representación femenina.
+    Tu tarea: Determinar si en la noticia aparecen, se mencionan o protagonizan **MUJERES CON DISCAPACIDAD**.
 
     Criterios de clasificación:
     
-    1 = No (Representación Estándar):
-        - Solo aparecen mujeres adultas en edad laboral típica (aprox 25-60 años). Ej: Políticas, profesionales, empresarias.
-        - Se menciona "madre" solo como dato biográfico sin relevancia en la historia (ej: "es madre de dos hijos").
-        - No se especifica la edad y se asume adultez.
+    1 = No:
+        - Se menciona discapacidad, pero en HOMBRES (ej: "El atleta paralímpico ganó el oro").
+        - Se usan términos metafóricos (ej: "La justicia es ciega", "parálisis política").
+        - Son lesiones temporales (ej: "La jugadora se rompió la pierna y estará baja un mes").
+        - Se habla de discapacidad en general (leyes, barreras) sin mencionar a ninguna mujer o colectivo femenino específico.
 
-    2 = Sí (Diversidad / Edades no hegemónicas):
-        - Aparecen **Niñas o Adolescentes** con voz propia o como protagonistas.
-        - Aparecen **Mujeres Mayores / Ancianas / Jubiladas** (Visibilidad de la tercera edad).
-        - Hay un enfoque **Intergeneracional**: Se habla de madres e hijas, abuelas y nietas, o el impacto de un tema en distintas generaciones de mujeres.
+    2 = Sí:
+        - Aparece una mujer (o niña) con discapacidad física, sensorial, intelectual o psicosocial.
+        - Se habla de colectivos específicos (ej: "Las mujeres con discapacidad sufren más violencia").
+        - Se menciona a deportistas paralímpicas, activistas con diversidad funcional, etc.
 
     FORMATO DE RESPUESTA (JSON):
     Responde ÚNICAMENTE con un objeto JSON válido:
     {{
         "codigo": (1 o 2),
-        "explicacion": "(Indica qué edades o relación generacional se ha detectado)"
+        "explicacion": "(Indica quién es la mujer y cuál es su discapacidad o contexto)"
     }}
     """
 
     # --- 3. LLAMADA AL MODELO ---
-    # Usamos Gemma 4b (o tu modelo preferido)
+    # Gemma 4b suele ser bueno distinguiendo género en estos contextos
     respuesta_texto = consultar_ollama(prompt)
 
     # --- 4. EXTRACCIÓN Y VALIDACIÓN ---
@@ -1242,7 +1315,7 @@ def clasificar_var_mujeres_generacionalidad_noticias(titulo: str, texto_cuerpo: 
         fin = respuesta_texto.rfind('}') + 1
         
         if inicio == -1 or fin == 0:
-            return MujeresGeneracionalidadConExplicacion(
+            return MujeresConDiscapacidadConExplicacion(
                 codigo=1, 
                 explicacion="Error: El modelo no devolvió un formato JSON válido."
             )
@@ -1250,10 +1323,10 @@ def clasificar_var_mujeres_generacionalidad_noticias(titulo: str, texto_cuerpo: 
         json_str = respuesta_texto[inicio:fin]
         data = json.loads(json_str)
 
-        return MujeresGeneracionalidadConExplicacion(**data)
+        return MujeresConDiscapacidadConExplicacion(**data)
 
     except (json.JSONDecodeError, ValidationError) as e:
-        return MujeresGeneracionalidadConExplicacion(
+        return MujeresConDiscapacidadConExplicacion(
             codigo=1, 
             explicacion=f"Error técnico al procesar la respuesta: {str(e)}"
         )
@@ -1440,7 +1513,7 @@ def clasificar_var_fotografias(articulo: Any) -> FotografiasValidadas:
 # =====================================================================================
 from utils import FuentesValidadas
 
-def clasificar_var_tiene_fuentes(texto_noticia: str) -> FuentesDetectadas:
+def clasificar_var_tiene_fuentes(texto_noticia: str) -> FuentesValidadas:
     """
     Determina si la noticia tiene fuentes.
     Retorna codigo=2 si encuentra al menos una, codigo=1 si no encuentra nada.
@@ -1448,7 +1521,7 @@ def clasificar_var_tiene_fuentes(texto_noticia: str) -> FuentesDetectadas:
     
     # 1. Validación inicial
     if not texto_noticia or len(texto_noticia) < 50:
-        return FuentesDetectadas(codigo=1, evidencias=[], cantidad=0)
+        return FuentesValidadas(codigo=1, evidencias=[], cantidad=0)
 
     # 2. Recorte (Analizamos el principio del texto donde se atribuyen las fuentes)
     texto_analisis = texto_noticia[:3500]
@@ -1478,7 +1551,7 @@ def clasificar_var_tiene_fuentes(texto_noticia: str) -> FuentesDetectadas:
         fin = respuesta_texto.rfind('}') + 1
         
         if inicio == -1:
-            return FuentesDetectadas(codigo=1, evidencias=[], cantidad=0)
+            return FuentesValidadas(codigo=1, evidencias=[], cantidad=0)
             
         json_str = respuesta_texto[inicio:fin]
         data = json.loads(json_str)
@@ -1490,20 +1563,20 @@ def clasificar_var_tiene_fuentes(texto_noticia: str) -> FuentesDetectadas:
         # --- AQUÍ ESTÁ EL CAMBIO ---
         if cantidad > 0:
             # Si hay elementos -> Código 2 (Sí)
-            return FuentesDetectadas(
+            return FuentesValidadas(
                 codigo=2,
                 evidencias=lista_fuentes,
                 cantidad=cantidad
             )
         else:
             # Si la lista está vacía -> Código 1 (No)
-            return FuentesDetectadas(
+            return FuentesValidadas(
                 codigo=1,
                 evidencias=[],
                 cantidad=0
             )
 
     except Exception:
-        return FuentesDetectadas(codigo=1, evidencias=[], cantidad=0)
+        return FuentesValidadas(codigo=1, evidencias=[], cantidad=0)
 
 
