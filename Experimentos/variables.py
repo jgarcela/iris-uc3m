@@ -57,14 +57,14 @@ def clasificar_var_medio(articulo):
 def clasificar_var_fecha(articulo: Article) -> Optional[str]:
     """
     Recibe un objeto Article.
-    Devuelve la fecha como texto en formato 'dd/mm/aa' o None.
+    Devuelve la fecha como texto en formato 'dd/mm/aaaa' o None.
     """
     # Verificamos si existe la fecha
     if articulo.publish_date:
         # %d = día (01-31)
         # %m = mes (01-12)
-        # %y = año (dos últimos dígitos, ej: 26)
-        return articulo.publish_date.strftime("%d/%m/%y")
+        # %Y = año (cuatro dígitos, ej: 2026)
+        return articulo.publish_date.strftime("%d/%m/%Y")
     
     return None
 
@@ -395,7 +395,7 @@ def clasificar_var_cla_genero_prota_list(texto_noticia: str) -> ProtagonistasDet
 
 
 # =====================================================================================
-# 9b. Génerop Protagonistas que aparecen en la información
+# 9b. Género Protagonistas que aparecen en la información
 # =====================================================================================
 def clasificar_var_cla_genero_prota(valores: list[int]) -> int:
     """
