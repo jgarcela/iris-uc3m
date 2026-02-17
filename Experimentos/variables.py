@@ -1580,3 +1580,845 @@ def clasificar_var_tiene_fuentes(texto_noticia: str) -> FuentesValidadas:
         return FuentesValidadas(codigo=1, evidencias=[], cantidad=0)
 
 
+# =====================================================================================
+# 25. Tiene Lenguaje Sexista
+# =====================================================================================
+from utils import BloqueAnalisisLenguajeSexista
+
+def clasificar_var_lenguaje_sexista(
+    texto_articulo: str, 
+    ruta_json: str = "variables.json",
+    ruta_template: str = "prompts/prompt_clara.md"
+) -> BloqueAnalisisLenguajeSexista:
+    
+    # A. Carga Configuración
+    try:
+        vars_data = cargar_variables_desde_json(ruta_json)
+        config = obtener_config_variable(vars_data, "25") 
+    except Exception as e:
+        return BloqueAnalisisLenguajeSexista(codigo=1, explicacion=f"Error config: {e}", evidencias=[])
+
+    # ✅ CAMBIO 2: Limpieza preventiva del texto ANTES del prompt
+    # Si el artículo tiene comillas dobles ("), las convertimos a simples (')
+    # para que no confundan al modelo al generar el JSON.
+    texto_seguro = texto_articulo.replace('"', "'")
+
+    # B. Generación del Prompt (pasamos el texto seguro)
+    prompt = generar_prompt_dinamico(config, texto_seguro, ruta_template)
+
+    # C. Llamada a Ollama
+    print(f"--- Analizando {config['nombre']} con template dinámico ---")
+    respuesta_raw = consultar_ollama(prompt, temperature=0.1) 
+
+    # D. Parsing y Validación ROBUSTA
+    try:
+        # ✅ CAMBIO 3: Usar json_repair en lugar de json.loads
+        # json_repair hace tres cosas automáticamente:
+        # 1. Quita los bloques Markdown (```json)
+        # 2. Arregla comillas dobles rotas dentro de los textos
+        # 3. Cierra llaves faltantes
+        data = json_repair.loads(respuesta_raw)
+        
+        return BloqueAnalisisLenguajeSexista(**data)
+
+    except ValidationError as e:
+        print(f"⚠️ Error de validación Pydantic: {e}")
+        # Retorno de seguridad si faltan campos obligatorios
+        return BloqueAnalisisLenguajeSexista(
+            codigo=1, 
+            explicacion=f"El modelo no devolvió los campos correctos. Raw: {str(e)}", 
+            evidencias=[]
+        )
+    except Exception as e:
+        print(f"❌ Error fatal: {e}")
+        return BloqueAnalisisLenguajeSexista(
+            codigo=1, 
+            explicacion=f"Error técnico irrecuperable: {str(e)}", 
+            evidencias=[]
+        )
+
+
+# =====================================================================================
+# 26. Uso del Masculino Genérico
+# =====================================================================================
+from utils import BloqueAnalisisBinario
+
+def clasificar_var_masc_generico(
+    texto_articulo: str, 
+    ruta_json: str = "variables.json",
+    ruta_template: str = "prompts/prompt_clara.md"
+) -> BloqueAnalisisBinario:
+    
+    # A. Carga Configuración
+    try:
+        vars_data = cargar_variables_desde_json(ruta_json)
+        config = obtener_config_variable(vars_data, "26") 
+    except Exception as e:
+        return BloqueAnalisisLenguajeSexista(codigo=1, explicacion=f"Error config: {e}", evidencias=[])
+
+    # ✅ CAMBIO 2: Limpieza preventiva del texto ANTES del prompt
+    # Si el artículo tiene comillas dobles ("), las convertimos a simples (')
+    # para que no confundan al modelo al generar el JSON.
+    texto_seguro = texto_articulo.replace('"', "'")
+
+    # B. Generación del Prompt (pasamos el texto seguro)
+    prompt = generar_prompt_dinamico(config, texto_seguro, ruta_template)
+
+    # C. Llamada a Ollama
+    print(f"--- Analizando {config['nombre']} con template dinámico ---")
+    respuesta_raw = consultar_ollama(prompt, temperature=0.1) 
+
+    # D. Parsing y Validación ROBUSTA
+    try:
+        # ✅ CAMBIO 3: Usar json_repair en lugar de json.loads
+        # json_repair hace tres cosas automáticamente:
+        # 1. Quita los bloques Markdown (```json)
+        # 2. Arregla comillas dobles rotas dentro de los textos
+        # 3. Cierra llaves faltantes
+        data = json_repair.loads(respuesta_raw)
+        
+        return BloqueAnalisisLenguajeSexista(**data)
+
+    except ValidationError as e:
+        print(f"⚠️ Error de validación Pydantic: {e}")
+        # Retorno de seguridad si faltan campos obligatorios
+        return BloqueAnalisisLenguajeSexista(
+            codigo=1, 
+            explicacion=f"El modelo no devolvió los campos correctos. Raw: {str(e)}", 
+            evidencias=[]
+        )
+    except Exception as e:
+        print(f"❌ Error fatal: {e}")
+        return BloqueAnalisisLenguajeSexista(
+            codigo=1, 
+            explicacion=f"Error técnico irrecuperable: {str(e)}", 
+            evidencias=[]
+        )
+
+
+# =====================================================================================
+# 27. Uso de "hombre" para denominar a la humanidad
+# =====================================================================================
+def clasificar_var_hombre_denominar_humanidad(
+    texto_articulo: str, 
+    ruta_json: str = "variables.json",
+    ruta_template: str = "prompts/prompt_clara.md"
+) -> BloqueAnalisisLenguajeSexista:
+    
+    # A. Carga Configuración
+    try:
+        vars_data = cargar_variables_desde_json(ruta_json)
+        config = obtener_config_variable(vars_data, "27") 
+    except Exception as e:
+        return BloqueAnalisisLenguajeSexista(codigo=1, explicacion=f"Error config: {e}", evidencias=[])
+
+    # ✅ CAMBIO 2: Limpieza preventiva del texto ANTES del prompt
+    # Si el artículo tiene comillas dobles ("), las convertimos a simples (')
+    # para que no confundan al modelo al generar el JSON.
+    texto_seguro = texto_articulo.replace('"', "'")
+
+    # B. Generación del Prompt (pasamos el texto seguro)
+    prompt = generar_prompt_dinamico(config, texto_seguro, ruta_template)
+
+    # C. Llamada a Ollama
+    print(f"--- Analizando {config['nombre']} con template dinámico ---")
+    respuesta_raw = consultar_ollama(prompt, temperature=0.1) 
+
+    # D. Parsing y Validación ROBUSTA
+    try:
+        # ✅ CAMBIO 3: Usar json_repair en lugar de json.loads
+        # json_repair hace tres cosas automáticamente:
+        # 1. Quita los bloques Markdown (```json)
+        # 2. Arregla comillas dobles rotas dentro de los textos
+        # 3. Cierra llaves faltantes
+        data = json_repair.loads(respuesta_raw)
+        
+        return BloqueAnalisisLenguajeSexista(**data)
+
+    except ValidationError as e:
+        print(f"⚠️ Error de validación Pydantic: {e}")
+        # Retorno de seguridad si faltan campos obligatorios
+        return BloqueAnalisisLenguajeSexista(
+            codigo=1, 
+            explicacion=f"El modelo no devolvió los campos correctos. Raw: {str(e)}", 
+            evidencias=[]
+        )
+    except Exception as e:
+        print(f"❌ Error fatal: {e}")
+        return BloqueAnalisisLenguajeSexista(
+            codigo=1, 
+            explicacion=f"Error técnico irrecuperable: {str(e)}", 
+            evidencias=[]
+        )
+
+
+# =====================================================================================
+# 28. Uso dual aparente
+# =====================================================================================
+def clasificar_var_uso_dual_zorr(
+    texto_articulo: str, 
+    ruta_json: str = "variables.json",
+    ruta_template: str = "prompts/prompt_clara.md"
+) -> BloqueAnalisisLenguajeSexista:
+    
+    # A. Carga Configuración
+    try:
+        vars_data = cargar_variables_desde_json(ruta_json)
+        config = obtener_config_variable(vars_data, "28") 
+    except Exception as e:
+        return BloqueAnalisisLenguajeSexista(codigo=1, explicacion=f"Error config: {e}", evidencias=[])
+
+    # ✅ CAMBIO 2: Limpieza preventiva del texto ANTES del prompt
+    # Si el artículo tiene comillas dobles ("), las convertimos a simples (')
+    # para que no confundan al modelo al generar el JSON.
+    texto_seguro = texto_articulo.replace('"', "'")
+
+    # B. Generación del Prompt (pasamos el texto seguro)
+    prompt = generar_prompt_dinamico(config, texto_seguro, ruta_template)
+
+    # C. Llamada a Ollama
+    print(f"--- Analizando {config['nombre']} con template dinámico ---")
+    respuesta_raw = consultar_ollama(prompt, temperature=0.1) 
+
+    # D. Parsing y Validación ROBUSTA
+    try:
+        # ✅ CAMBIO 3: Usar json_repair en lugar de json.loads
+        # json_repair hace tres cosas automáticamente:
+        # 1. Quita los bloques Markdown (```json)
+        # 2. Arregla comillas dobles rotas dentro de los textos
+        # 3. Cierra llaves faltantes
+        data = json_repair.loads(respuesta_raw)
+        
+        return BloqueAnalisisLenguajeSexista(**data)
+
+    except ValidationError as e:
+        print(f"⚠️ Error de validación Pydantic: {e}")
+        # Retorno de seguridad si faltan campos obligatorios
+        return BloqueAnalisisLenguajeSexista(
+            codigo=1, 
+            explicacion=f"El modelo no devolvió los campos correctos. Raw: {str(e)}", 
+            evidencias=[]
+        )
+    except Exception as e:
+        print(f"❌ Error fatal: {e}")
+        return BloqueAnalisisLenguajeSexista(
+            codigo=1, 
+            explicacion=f"Error técnico irrecuperable: {str(e)}", 
+            evidencias=[]
+        )
+
+
+# =====================================================================================
+# 29. No usa cargos, profesiones y oficios para denominar a las mujeres
+# =====================================================================================
+def clasificar_var_uso_cargo_mujer(
+    texto_articulo: str, 
+    ruta_json: str = "variables.json",
+    ruta_template: str = "prompts/prompt_clara.md"
+) -> BloqueAnalisisLenguajeSexista:
+    
+    # A. Carga Configuración
+    try:
+        vars_data = cargar_variables_desde_json(ruta_json)
+        config = obtener_config_variable(vars_data, "29") 
+    except Exception as e:
+        return BloqueAnalisisLenguajeSexista(codigo=1, explicacion=f"Error config: {e}", evidencias=[])
+
+    # ✅ CAMBIO 2: Limpieza preventiva del texto ANTES del prompt
+    # Si el artículo tiene comillas dobles ("), las convertimos a simples (')
+    # para que no confundan al modelo al generar el JSON.
+    texto_seguro = texto_articulo.replace('"', "'")
+
+    # B. Generación del Prompt (pasamos el texto seguro)
+    prompt = generar_prompt_dinamico(config, texto_seguro, ruta_template)
+
+    # C. Llamada a Ollama
+    print(f"--- Analizando {config['nombre']} con template dinámico ---")
+    respuesta_raw = consultar_ollama(prompt, temperature=0.1) 
+
+    # D. Parsing y Validación ROBUSTA
+    try:
+        # ✅ CAMBIO 3: Usar json_repair en lugar de json.loads
+        # json_repair hace tres cosas automáticamente:
+        # 1. Quita los bloques Markdown (```json)
+        # 2. Arregla comillas dobles rotas dentro de los textos
+        # 3. Cierra llaves faltantes
+        data = json_repair.loads(respuesta_raw)
+        
+        return BloqueAnalisisLenguajeSexista(**data)
+
+    except ValidationError as e:
+        print(f"⚠️ Error de validación Pydantic: {e}")
+        # Retorno de seguridad si faltan campos obligatorios
+        return BloqueAnalisisLenguajeSexista(
+            codigo=1, 
+            explicacion=f"El modelo no devolvió los campos correctos. Raw: {str(e)}", 
+            evidencias=[]
+        )
+    except Exception as e:
+        print(f"❌ Error fatal: {e}")
+        return BloqueAnalisisLenguajeSexista(
+            codigo=1, 
+            explicacion=f"Error técnico irrecuperable: {str(e)}", 
+            evidencias=[]
+        )
+
+
+# =====================================================================================
+# 30. Sexismo Social
+# =====================================================================================
+def clasificar_var_sexismo_discurso(
+    texto_articulo: str, 
+    ruta_json: str = "variables.json",
+    ruta_template: str = "prompts/prompt_clara.md"
+) -> BloqueAnalisisLenguajeSexista:
+    
+    # A. Carga Configuración
+    try:
+        vars_data = cargar_variables_desde_json(ruta_json)
+        config = obtener_config_variable(vars_data, "30") 
+    except Exception as e:
+        return BloqueAnalisisLenguajeSexista(codigo=1, explicacion=f"Error config: {e}", evidencias=[])
+
+    # ✅ CAMBIO 2: Limpieza preventiva del texto ANTES del prompt
+    # Si el artículo tiene comillas dobles ("), las convertimos a simples (')
+    # para que no confundan al modelo al generar el JSON.
+    texto_seguro = texto_articulo.replace('"', "'")
+
+    # B. Generación del Prompt (pasamos el texto seguro)
+    prompt = generar_prompt_dinamico(config, texto_seguro, ruta_template)
+
+    # C. Llamada a Ollama
+    print(f"--- Analizando {config['nombre']} con template dinámico ---")
+    respuesta_raw = consultar_ollama(prompt, temperature=0.1) 
+
+    # D. Parsing y Validación ROBUSTA
+    try:
+        # ✅ CAMBIO 3: Usar json_repair en lugar de json.loads
+        # json_repair hace tres cosas automáticamente:
+        # 1. Quita los bloques Markdown (```json)
+        # 2. Arregla comillas dobles rotas dentro de los textos
+        # 3. Cierra llaves faltantes
+        data = json_repair.loads(respuesta_raw)
+        
+        return BloqueAnalisisLenguajeSexista(**data)
+
+    except ValidationError as e:
+        print(f"⚠️ Error de validación Pydantic: {e}")
+        # Retorno de seguridad si faltan campos obligatorios
+        return BloqueAnalisisLenguajeSexista(
+            codigo=1, 
+            explicacion=f"El modelo no devolvió los campos correctos. Raw: {str(e)}", 
+            evidencias=[]
+        )
+    except Exception as e:
+        print(f"❌ Error fatal: {e}")
+        return BloqueAnalisisLenguajeSexista(
+            codigo=1, 
+            explicacion=f"Error técnico irrecuperable: {str(e)}", 
+            evidencias=[]
+        )
+
+
+# =====================================================================================
+# 31. Androcentrismo
+# =====================================================================================
+def clasificar_var_androcentrismo(
+    texto_articulo: str, 
+    ruta_json: str = "variables.json",
+    ruta_template: str = "prompts/prompt_clara.md"
+) -> BloqueAnalisisLenguajeSexista:
+    
+    # A. Carga Configuración
+    try:
+        vars_data = cargar_variables_desde_json(ruta_json)
+        config = obtener_config_variable(vars_data, "31") 
+    except Exception as e:
+        return BloqueAnalisisLenguajeSexista(codigo=1, explicacion=f"Error config: {e}", evidencias=[])
+
+    # ✅ CAMBIO 2: Limpieza preventiva del texto ANTES del prompt
+    # Si el artículo tiene comillas dobles ("), las convertimos a simples (')
+    # para que no confundan al modelo al generar el JSON.
+    texto_seguro = texto_articulo.replace('"', "'")
+
+    # B. Generación del Prompt (pasamos el texto seguro)
+    prompt = generar_prompt_dinamico(config, texto_seguro, ruta_template)
+
+    # C. Llamada a Ollama
+    print(f"--- Analizando {config['nombre']} con template dinámico ---")
+    respuesta_raw = consultar_ollama(prompt, temperature=0.1) 
+
+    # D. Parsing y Validación ROBUSTA
+    try:
+        # ✅ CAMBIO 3: Usar json_repair en lugar de json.loads
+        # json_repair hace tres cosas automáticamente:
+        # 1. Quita los bloques Markdown (```json)
+        # 2. Arregla comillas dobles rotas dentro de los textos
+        # 3. Cierra llaves faltantes
+        data = json_repair.loads(respuesta_raw)
+        
+        return BloqueAnalisisLenguajeSexista(**data)
+
+    except ValidationError as e:
+        print(f"⚠️ Error de validación Pydantic: {e}")
+        # Retorno de seguridad si faltan campos obligatorios
+        return BloqueAnalisisLenguajeSexista(
+            codigo=1, 
+            explicacion=f"El modelo no devolvió los campos correctos. Raw: {str(e)}", 
+            evidencias=[]
+        )
+    except Exception as e:
+        print(f"❌ Error fatal: {e}")
+        return BloqueAnalisisLenguajeSexista(
+            codigo=1, 
+            explicacion=f"Error técnico irrecuperable: {str(e)}", 
+            evidencias=[]
+        )
+
+
+# =====================================================================================
+# 32. Mención mujeres sin uso del nombre
+# =====================================================================================
+def clasificar_var_mencion_nombre_investigadora(
+    texto_articulo: str, 
+    ruta_json: str = "variables.json",
+    ruta_template: str = "prompts/prompt_clara.md"
+) -> BloqueAnalisisLenguajeSexista:
+    
+    # A. Carga Configuración
+    try:
+        vars_data = cargar_variables_desde_json(ruta_json)
+        config = obtener_config_variable(vars_data, "32") 
+    except Exception as e:
+        return BloqueAnalisisLenguajeSexista(codigo=1, explicacion=f"Error config: {e}", evidencias=[])
+
+    # ✅ CAMBIO 2: Limpieza preventiva del texto ANTES del prompt
+    # Si el artículo tiene comillas dobles ("), las convertimos a simples (')
+    # para que no confundan al modelo al generar el JSON.
+    texto_seguro = texto_articulo.replace('"', "'")
+
+    # B. Generación del Prompt (pasamos el texto seguro)
+    prompt = generar_prompt_dinamico(config, texto_seguro, ruta_template)
+
+    # C. Llamada a Ollama
+    print(f"--- Analizando {config['nombre']} con template dinámico ---")
+    respuesta_raw = consultar_ollama(prompt, temperature=0.1) 
+
+    # D. Parsing y Validación ROBUSTA
+    try:
+        # ✅ CAMBIO 3: Usar json_repair en lugar de json.loads
+        # json_repair hace tres cosas automáticamente:
+        # 1. Quita los bloques Markdown (```json)
+        # 2. Arregla comillas dobles rotas dentro de los textos
+        # 3. Cierra llaves faltantes
+        data = json_repair.loads(respuesta_raw)
+        
+        return BloqueAnalisisLenguajeSexista(**data)
+
+    except ValidationError as e:
+        print(f"⚠️ Error de validación Pydantic: {e}")
+        # Retorno de seguridad si faltan campos obligatorios
+        return BloqueAnalisisLenguajeSexista(
+            codigo=1, 
+            explicacion=f"El modelo no devolvió los campos correctos. Raw: {str(e)}", 
+            evidencias=[]
+        )
+    except Exception as e:
+        print(f"❌ Error fatal: {e}")
+        return BloqueAnalisisLenguajeSexista(
+            codigo=1, 
+            explicacion=f"Error técnico irrecuperable: {str(e)}", 
+            evidencias=[]
+        )
+
+
+# =====================================================================================
+# 33. Asimetría
+# =====================================================================================
+def clasificar_var_asimetria_mujer_hombre(
+    texto_articulo: str, 
+    ruta_json: str = "variables.json",
+    ruta_template: str = "prompts/prompt_clara.md"
+) -> BloqueAnalisisLenguajeSexista:
+    
+    # A. Carga Configuración
+    try:
+        vars_data = cargar_variables_desde_json(ruta_json)
+        config = obtener_config_variable(vars_data, "33") 
+    except Exception as e:
+        return BloqueAnalisisLenguajeSexista(codigo=1, explicacion=f"Error config: {e}", evidencias=[])
+
+    # ✅ CAMBIO 2: Limpieza preventiva del texto ANTES del prompt
+    # Si el artículo tiene comillas dobles ("), las convertimos a simples (')
+    # para que no confundan al modelo al generar el JSON.
+    texto_seguro = texto_articulo.replace('"', "'")
+
+    # B. Generación del Prompt (pasamos el texto seguro)
+    prompt = generar_prompt_dinamico(config, texto_seguro, ruta_template)
+
+    # C. Llamada a Ollama
+    print(f"--- Analizando {config['nombre']} con template dinámico ---")
+    respuesta_raw = consultar_ollama(prompt, temperature=0.1) 
+
+    # D. Parsing y Validación ROBUSTA
+    try:
+        # ✅ CAMBIO 3: Usar json_repair en lugar de json.loads
+        # json_repair hace tres cosas automáticamente:
+        # 1. Quita los bloques Markdown (```json)
+        # 2. Arregla comillas dobles rotas dentro de los textos
+        # 3. Cierra llaves faltantes
+        data = json_repair.loads(respuesta_raw)
+        
+        return BloqueAnalisisLenguajeSexista(**data)
+
+    except ValidationError as e:
+        print(f"⚠️ Error de validación Pydantic: {e}")
+        # Retorno de seguridad si faltan campos obligatorios
+        return BloqueAnalisisLenguajeSexista(
+            codigo=1, 
+            explicacion=f"El modelo no devolvió los campos correctos. Raw: {str(e)}", 
+            evidencias=[]
+        )
+    except Exception as e:
+        print(f"❌ Error fatal: {e}")
+        return BloqueAnalisisLenguajeSexista(
+            codigo=1, 
+            explicacion=f"Error técnico irrecuperable: {str(e)}", 
+            evidencias=[]
+        )
+
+
+# =====================================================================================
+# 34. Infatilización
+# =====================================================================================
+def clasificar_var_disminutivos_infantilizacion(
+    texto_articulo: str, 
+    ruta_json: str = "variables.json",
+    ruta_template: str = "prompts/prompt_clara.md"
+) -> BloqueAnalisisLenguajeSexista:
+    
+    # A. Carga Configuración
+    try:
+        vars_data = cargar_variables_desde_json(ruta_json)
+        config = obtener_config_variable(vars_data, "34") 
+    except Exception as e:
+        return BloqueAnalisisLenguajeSexista(codigo=1, explicacion=f"Error config: {e}", evidencias=[])
+
+    # ✅ CAMBIO 2: Limpieza preventiva del texto ANTES del prompt
+    # Si el artículo tiene comillas dobles ("), las convertimos a simples (')
+    # para que no confundan al modelo al generar el JSON.
+    texto_seguro = texto_articulo.replace('"', "'")
+
+    # B. Generación del Prompt (pasamos el texto seguro)
+    prompt = generar_prompt_dinamico(config, texto_seguro, ruta_template)
+
+    # C. Llamada a Ollama
+    print(f"--- Analizando {config['nombre']} con template dinámico ---")
+    respuesta_raw = consultar_ollama(prompt, temperature=0.1) 
+
+    # D. Parsing y Validación ROBUSTA
+    try:
+        # ✅ CAMBIO 3: Usar json_repair en lugar de json.loads
+        # json_repair hace tres cosas automáticamente:
+        # 1. Quita los bloques Markdown (```json)
+        # 2. Arregla comillas dobles rotas dentro de los textos
+        # 3. Cierra llaves faltantes
+        data = json_repair.loads(respuesta_raw)
+        
+        return BloqueAnalisisLenguajeSexista(**data)
+
+    except ValidationError as e:
+        print(f"⚠️ Error de validación Pydantic: {e}")
+        # Retorno de seguridad si faltan campos obligatorios
+        return BloqueAnalisisLenguajeSexista(
+            codigo=1, 
+            explicacion=f"El modelo no devolvió los campos correctos. Raw: {str(e)}", 
+            evidencias=[]
+        )
+    except Exception as e:
+        print(f"❌ Error fatal: {e}")
+        return BloqueAnalisisLenguajeSexista(
+            codigo=1, 
+            explicacion=f"Error técnico irrecuperable: {str(e)}", 
+            evidencias=[]
+        )
+
+
+# =====================================================================================
+# 35. Denominación Sexualizada
+# =====================================================================================
+def clasificar_var_denominacion_sexualizada(
+    texto_articulo: str, 
+    ruta_json: str = "variables.json",
+    ruta_template: str = "prompts/prompt_clara.md"
+) -> BloqueAnalisisLenguajeSexista:
+    
+    # A. Carga Configuración
+    try:
+        vars_data = cargar_variables_desde_json(ruta_json)
+        config = obtener_config_variable(vars_data, "35") 
+    except Exception as e:
+        return BloqueAnalisisLenguajeSexista(codigo=1, explicacion=f"Error config: {e}", evidencias=[])
+
+    # ✅ CAMBIO 2: Limpieza preventiva del texto ANTES del prompt
+    # Si el artículo tiene comillas dobles ("), las convertimos a simples (')
+    # para que no confundan al modelo al generar el JSON.
+    texto_seguro = texto_articulo.replace('"', "'")
+
+    # B. Generación del Prompt (pasamos el texto seguro)
+    prompt = generar_prompt_dinamico(config, texto_seguro, ruta_template)
+
+    # C. Llamada a Ollama
+    print(f"--- Analizando {config['nombre']} con template dinámico ---")
+    respuesta_raw = consultar_ollama(prompt, temperature=0.1) 
+
+    # D. Parsing y Validación ROBUSTA
+    try:
+        # ✅ CAMBIO 3: Usar json_repair en lugar de json.loads
+        # json_repair hace tres cosas automáticamente:
+        # 1. Quita los bloques Markdown (```json)
+        # 2. Arregla comillas dobles rotas dentro de los textos
+        # 3. Cierra llaves faltantes
+        data = json_repair.loads(respuesta_raw)
+        
+        return BloqueAnalisisLenguajeSexista(**data)
+
+    except ValidationError as e:
+        print(f"⚠️ Error de validación Pydantic: {e}")
+        # Retorno de seguridad si faltan campos obligatorios
+        return BloqueAnalisisLenguajeSexista(
+            codigo=1, 
+            explicacion=f"El modelo no devolvió los campos correctos. Raw: {str(e)}", 
+            evidencias=[]
+        )
+    except Exception as e:
+        print(f"❌ Error fatal: {e}")
+        return BloqueAnalisisLenguajeSexista(
+            codigo=1, 
+            explicacion=f"Error técnico irrecuperable: {str(e)}", 
+            evidencias=[]
+        )
+
+
+# =====================================================================================
+# 36. Denominación Redundante
+# =====================================================================================
+def clasificar_var_denominacion_redundante(
+    texto_articulo: str, 
+    ruta_json: str = "variables.json",
+    ruta_template: str = "prompts/prompt_clara.md"
+) -> BloqueAnalisisLenguajeSexista:
+    
+    # A. Carga Configuración
+    try:
+        vars_data = cargar_variables_desde_json(ruta_json)
+        config = obtener_config_variable(vars_data, "36") 
+    except Exception as e:
+        return BloqueAnalisisLenguajeSexista(codigo=1, explicacion=f"Error config: {e}", evidencias=[])
+
+    # ✅ CAMBIO 2: Limpieza preventiva del texto ANTES del prompt
+    # Si el artículo tiene comillas dobles ("), las convertimos a simples (')
+    # para que no confundan al modelo al generar el JSON.
+    texto_seguro = texto_articulo.replace('"', "'")
+
+    # B. Generación del Prompt (pasamos el texto seguro)
+    prompt = generar_prompt_dinamico(config, texto_seguro, ruta_template)
+
+    # C. Llamada a Ollama
+    print(f"--- Analizando {config['nombre']} con template dinámico ---")
+    respuesta_raw = consultar_ollama(prompt, temperature=0.1) 
+
+    # D. Parsing y Validación ROBUSTA
+    try:
+        # ✅ CAMBIO 3: Usar json_repair en lugar de json.loads
+        # json_repair hace tres cosas automáticamente:
+        # 1. Quita los bloques Markdown (```json)
+        # 2. Arregla comillas dobles rotas dentro de los textos
+        # 3. Cierra llaves faltantes
+        data = json_repair.loads(respuesta_raw)
+        
+        return BloqueAnalisisLenguajeSexista(**data)
+
+    except ValidationError as e:
+        print(f"⚠️ Error de validación Pydantic: {e}")
+        # Retorno de seguridad si faltan campos obligatorios
+        return BloqueAnalisisLenguajeSexista(
+            codigo=1, 
+            explicacion=f"El modelo no devolvió los campos correctos. Raw: {str(e)}", 
+            evidencias=[]
+        )
+    except Exception as e:
+        print(f"❌ Error fatal: {e}")
+        return BloqueAnalisisLenguajeSexista(
+            codigo=1, 
+            explicacion=f"Error técnico irrecuperable: {str(e)}", 
+            evidencias=[]
+        )
+
+
+# =====================================================================================
+# 37. Denominación Dependiente
+# =====================================================================================
+def clasificar_var_denominacion_dependiente(
+    texto_articulo: str, 
+    ruta_json: str = "variables.json",
+    ruta_template: str = "prompts/prompt_clara.md"
+) -> BloqueAnalisisLenguajeSexista:
+    
+    # A. Carga Configuración
+    try:
+        vars_data = cargar_variables_desde_json(ruta_json)
+        config = obtener_config_variable(vars_data, "37") 
+    except Exception as e:
+        return BloqueAnalisisLenguajeSexista(codigo=1, explicacion=f"Error config: {e}", evidencias=[])
+
+    # ✅ CAMBIO 2: Limpieza preventiva del texto ANTES del prompt
+    # Si el artículo tiene comillas dobles ("), las convertimos a simples (')
+    # para que no confundan al modelo al generar el JSON.
+    texto_seguro = texto_articulo.replace('"', "'")
+
+    # B. Generación del Prompt (pasamos el texto seguro)
+    prompt = generar_prompt_dinamico(config, texto_seguro, ruta_template)
+
+    # C. Llamada a Ollama
+    print(f"--- Analizando {config['nombre']} con template dinámico ---")
+    respuesta_raw = consultar_ollama(prompt, temperature=0.1) 
+
+    # D. Parsing y Validación ROBUSTA
+    try:
+        # ✅ CAMBIO 3: Usar json_repair en lugar de json.loads
+        # json_repair hace tres cosas automáticamente:
+        # 1. Quita los bloques Markdown (```json)
+        # 2. Arregla comillas dobles rotas dentro de los textos
+        # 3. Cierra llaves faltantes
+        data = json_repair.loads(respuesta_raw)
+        
+        return BloqueAnalisisLenguajeSexista(**data)
+
+    except ValidationError as e:
+        print(f"⚠️ Error de validación Pydantic: {e}")
+        # Retorno de seguridad si faltan campos obligatorios
+        return BloqueAnalisisLenguajeSexista(
+            codigo=1, 
+            explicacion=f"El modelo no devolvió los campos correctos. Raw: {str(e)}", 
+            evidencias=[]
+        )
+    except Exception as e:
+        print(f"❌ Error fatal: {e}")
+        return BloqueAnalisisLenguajeSexista(
+            codigo=1, 
+            explicacion=f"Error técnico irrecuperable: {str(e)}", 
+            evidencias=[]
+        )
+
+
+# =====================================================================================
+# 38. Criterios de Excepción
+# =====================================================================================
+def clasificar_var_criterios_excepcion(
+    texto_articulo: str, 
+    ruta_json: str = "variables.json",
+    ruta_template: str = "prompts/prompt_clara.md"
+) -> BloqueAnalisisLenguajeSexista:
+    
+    # A. Carga Configuración
+    try:
+        vars_data = cargar_variables_desde_json(ruta_json)
+        config = obtener_config_variable(vars_data, "38") 
+    except Exception as e:
+        return BloqueAnalisisLenguajeSexista(codigo=1, explicacion=f"Error config: {e}", evidencias=[])
+
+    # ✅ CAMBIO 2: Limpieza preventiva del texto ANTES del prompt
+    # Si el artículo tiene comillas dobles ("), las convertimos a simples (')
+    # para que no confundan al modelo al generar el JSON.
+    texto_seguro = texto_articulo.replace('"', "'")
+
+    # B. Generación del Prompt (pasamos el texto seguro)
+    prompt = generar_prompt_dinamico(config, texto_seguro, ruta_template)
+
+    # C. Llamada a Ollama
+    print(f"--- Analizando {config['nombre']} con template dinámico ---")
+    respuesta_raw = consultar_ollama(prompt, temperature=0.1) 
+
+    # D. Parsing y Validación ROBUSTA
+    try:
+        # ✅ CAMBIO 3: Usar json_repair en lugar de json.loads
+        # json_repair hace tres cosas automáticamente:
+        # 1. Quita los bloques Markdown (```json)
+        # 2. Arregla comillas dobles rotas dentro de los textos
+        # 3. Cierra llaves faltantes
+        data = json_repair.loads(respuesta_raw)
+        
+        return BloqueAnalisisLenguajeSexista(**data)
+
+    except ValidationError as e:
+        print(f"⚠️ Error de validación Pydantic: {e}")
+        # Retorno de seguridad si faltan campos obligatorios
+        return BloqueAnalisisLenguajeSexista(
+            codigo=1, 
+            explicacion=f"El modelo no devolvió los campos correctos. Raw: {str(e)}", 
+            evidencias=[]
+        )
+    except Exception as e:
+        print(f"❌ Error fatal: {e}")
+        return BloqueAnalisisLenguajeSexista(
+            codigo=1, 
+            explicacion=f"Error técnico irrecuperable: {str(e)}", 
+            evidencias=[]
+        )
+
+
+# =====================================================================================
+# 39. Comparación Mujer-Hombre
+# =====================================================================================
+def clasificar_var_comparacion_mujer_hombre(
+    texto_articulo: str, 
+    ruta_json: str = "variables.json",
+    ruta_template: str = "prompts/prompt_clara.md"
+) -> BloqueAnalisisLenguajeSexista:
+    
+    # A. Carga Configuración
+    try:
+        vars_data = cargar_variables_desde_json(ruta_json)
+        config = obtener_config_variable(vars_data, "39") 
+    except Exception as e:
+        return BloqueAnalisisLenguajeSexista(codigo=1, explicacion=f"Error config: {e}", evidencias=[])
+
+    # ✅ CAMBIO 2: Limpieza preventiva del texto ANTES del prompt
+    # Si el artículo tiene comillas dobles ("), las convertimos a simples (')
+    # para que no confundan al modelo al generar el JSON.
+    texto_seguro = texto_articulo.replace('"', "'")
+
+    # B. Generación del Prompt (pasamos el texto seguro)
+    prompt = generar_prompt_dinamico(config, texto_seguro, ruta_template)
+
+    # C. Llamada a Ollama
+    print(f"--- Analizando {config['nombre']} con template dinámico ---")
+    respuesta_raw = consultar_ollama(prompt, temperature=0.1) 
+
+    # D. Parsing y Validación ROBUSTA
+    try:
+        # ✅ CAMBIO 3: Usar json_repair en lugar de json.loads
+        # json_repair hace tres cosas automáticamente:
+        # 1. Quita los bloques Markdown (```json)
+        # 2. Arregla comillas dobles rotas dentro de los textos
+        # 3. Cierra llaves faltantes
+        data = json_repair.loads(respuesta_raw)
+        
+        return BloqueAnalisisLenguajeSexista(**data)
+
+    except ValidationError as e:
+        print(f"⚠️ Error de validación Pydantic: {e}")
+        # Retorno de seguridad si faltan campos obligatorios
+        return BloqueAnalisisLenguajeSexista(
+            codigo=1, 
+            explicacion=f"El modelo no devolvió los campos correctos. Raw: {str(e)}", 
+            evidencias=[]
+        )
+    except Exception as e:
+        print(f"❌ Error fatal: {e}")
+        return BloqueAnalisisLenguajeSexista(
+            codigo=1, 
+            explicacion=f"Error técnico irrecuperable: {str(e)}", 
+            evidencias=[]
+        )

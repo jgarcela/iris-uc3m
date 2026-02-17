@@ -20,7 +20,7 @@ config.request_timeout = 10
 # Cargar CSV
 SUFFIX = "scrape"
 # Ajusta la ruta a tu archivo real
-ruta_archivo = f"../data/2026_02_10_imio_def_todo_envio_heidy.xlsx - 2026_02_09_imio_def_todo_clara_{SUFFIX}.csv"
+ruta_archivo = f"../../../data/2026_02_10_imio_def_todo_envio_heidy.xlsx - 2026_02_09_imio_def_todo_clara_{SUFFIX}.csv"
 
 print("Cargando datos...")
 try:

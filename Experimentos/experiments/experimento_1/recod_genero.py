@@ -2,7 +2,7 @@ import pandas as pd
 from sklearn.metrics import accuracy_score, f1_score, classification_report
 
 # 1. Cargar datos
-archivo = 'results/Experimento-1_02-2026_resultados_modelo_2024_scrape.csv'
+archivo = '../../results/Experimento-1_02-2026_resultados_modelo_2024_scrape.csv'
 df = pd.read_csv(archivo)
 
 # --- FUNCIONES TRADUCTORAS (Modelo -> Realidad) ---

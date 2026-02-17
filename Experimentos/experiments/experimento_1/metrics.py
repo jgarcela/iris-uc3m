@@ -14,8 +14,8 @@ import os
 
 NOMBRE_EXPERIMENTO = "Experimento-1_02-2026"
 NOMBRE_ARCHIVO = 'Experimento-1_02-2026_resultados_modelo_2024_scrape.csv'
-ARCHIVO_INPUT = f'results/{NOMBRE_ARCHIVO}'
-ARCHIVO_OUTPUT = f'metrics/metrics_{NOMBRE_ARCHIVO}'
+ARCHIVO_INPUT = f'../../results/{NOMBRE_ARCHIVO}'
+ARCHIVO_OUTPUT = f'../../metrics/metrics_{NOMBRE_ARCHIVO}'
 
 # Columnas que son puramente numéricas (conteo)
 NUMERIC_COLS = ['Caracteres', 'numero_fotografias', 'numero_declaraciones']
