@@ -1,0 +1,16 @@
+Experimento,Variable,Tipo,Accuracy
+Experimento-Interspeech-gemma3_4b_prompt_clara,lenguaje_sexista,ERROR,0
+Experimento-Interspeech-gemma3_4b_prompt_clara,masc_generico,ERROR,0
+Experimento-Interspeech-gemma3_4b_prompt_clara,hombre_denominar_humanidad,ERROR,0
+Experimento-Interspeech-gemma3_4b_prompt_clara,uso_dual_zorr,ERROR,0
+Experimento-Interspeech-gemma3_4b_prompt_clara,uso_cargo_mujer,ERROR,0
+Experimento-Interspeech-gemma3_4b_prompt_clara,sexismo_social,ERROR,0
+Experimento-Interspeech-gemma3_4b_prompt_clara,androcentrismo,ERROR,0
+Experimento-Interspeech-gemma3_4b_prompt_clara,mencion_nombre_investigadora,ERROR,0
+Experimento-Interspeech-gemma3_4b_prompt_clara,asimetria_mujer_hombre,ERROR,0
+Experimento-Interspeech-gemma3_4b_prompt_clara,infatilizacion,ERROR,0
+Experimento-Interspeech-gemma3_4b_prompt_clara,denominacion_sexualizada,ERROR,0
+Experimento-Interspeech-gemma3_4b_prompt_clara,denominacion_redundante,ERROR,0
+Experimento-Interspeech-gemma3_4b_prompt_clara,denominacion_dependiente,ERROR,0
+Experimento-Interspeech-gemma3_4b_prompt_clara,criterios_excepcion,ERROR,0
+Experimento-Interspeech-gemma3_4b_prompt_clara,comparacion_mujer_hombre,ERROR,0

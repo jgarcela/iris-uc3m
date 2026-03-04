@@ -1,0 +1,168 @@
+[
+    {
+        "nombre": "lenguaje_sexista",
+        "codigo": "25",
+        "valores_posibles": [
+            "No",
+            "Sí",
+            "Sí; además se observa un salto semántico"
+        ],
+        "definicion": "El lenguaje sexista, también denominado sexismo lingüístico, se define como el uso discriminatorio del lenguaje que se hace por razón de sexo. Consiste en la discriminación que sufre un sexo con respecto al otro debido a los usos lingüísticos empleados. Este fenómeno ocurre cuando un mensaje resulta discriminatorio por su forma —es decir, por las palabras o estructuras elegidas— y no por su fondo.",
+        "metodologia": "Aplica la regla de inversión, que consiste en sustituir las referencias femeninas por las correspondientes masculinas, y a la inversa. Si el resultado de la inversión resulta inadecuado, extraño o incoherente, existe algún tipo de sexismo.",
+        "ejemplos": "• \"Los testigos son dos bomberos y dos mujeres\". • \"El seguro médico cubre a los afiliados y a sus mujeres\". • \"He atendido en tutorías a cuatro alumnos y a tres chiquitas\". • \"Presidieron el acto la presidenta, Inmaculada, y el vicepresidente, Emilio Núñez\". • \"La primera mujer surfista española\". • \"Carolina es rubia, de ojos azules y tiene 22 años\". • \"Maialen Chourraut, una madre de oro\"."
+    },
+    {
+        "nombre": "masc_generico",
+        "codigo": "26",
+        "valores_posibles": [
+            "No",
+            "Sí"
+        ],
+        "definicion": "Se refiere al uso del género gramatical masculino como \"género no marcado\", lo que teóricamente le permite designar a individuos de ambos sexos en un solo grupo. Se considera sexismo lingüístico cuando este uso genera ambigüedad, invisibiliza la presencia de las mujeres en el discurso o produce una representación mental que excluye al sexo femenino, supeditándolo al modelo masculino.",
+        "metodologia": "1. Regla de inversión. 2. Detección del salto semántico. 3. Evaluación de la invisibilización.",
+        "ejemplos": "• \"Este año los tenistas españoles llegan bien posicionados... y las chicas también\". • \"El seguro médico cubre a los afiliados y a sus mujeres\". • \"Los nadadores españoles triunfan en la piscina\". • \"Convención sobre los Derechos del Niño\". • \"Los investigadores del CSIC\". • \"Todos los alumnos deben conocer sus derechos\"."
+    },
+    {
+        "nombre": "hombre_denominar_humanidad",
+        "codigo": "27",
+        "valores_posibles": [
+            "No",
+            "Sí"
+        ],
+        "definicion": "Consiste en utilizar el sustantivo \"hombre\" con un pretendido valor genérico que incluye a varones y mujeres. Se considera una práctica sexista y androcéntrica porque oculta la presencia de las mujeres y toma al varón como el modelo de referencia universal.",
+        "metodologia": "1. Evaluación de la ambigüedad. 2. Criterio de visibilización. 3. Sustitución por términos colectivos.",
+        "ejemplos": "• \"En los últimos tiempos los hombres han evolucionado mucho\". • \"Fundamento ontológico del hombre\". • \"Los derechos del hombre\". • \"La historia del hombre\". • \"El hombre de la calle\"."
+    },
+    {
+        "nombre": "uso_dual_zorr",
+        "codigo": "28",
+        "valores_posibles": [
+            "No",
+            "Sí"
+        ],
+        "definicion": "Los duales aparentes son pares léxicos que, pese a compartir una misma raíz, cambian radicalmente su significado según el género. Habitualmente, el femenino adquiere connotaciones peyorativas o de menor prestigio.",
+        "metodologia": "1. Regla de inversión. 2. Detección de asimetría semántica.",
+        "ejemplos": "• \"Zorra\" / \"Zorro\". • \"Mujer pública\" / \"Hombre público\". • \"Secretaria\" / \"Secretario\". • \"Señorita\" / \"Señorito\". • \"Cortesana\" / \"Cortesano\". • \"Asistenta\" / \"Asistente\". • \"Gobernanta\" / \"Gobernante\". • \"Fulana\" / \"Fulano\"."
+    },
+    {
+        "nombre": "uso_cargo_mujer",
+        "codigo": "29",
+        "valores_posibles": [
+            "No",
+            "Sí"
+        ],
+        "definicion": "Consiste en no utilizar cargos, profesiones u oficios para denominar a mujeres o emplear el masculino gramatical cuando existe una forma femenina aceptada.",
+        "metodologia": "1. Identificación de asimetrías. 2. Verificación de concordancia. 3. Evaluación de redundancia sexuada.",
+        "ejemplos": "• \"Dos bomberos y dos mujeres\". • \"Tres mujeres y siete alumnos\". • \"La médico\" / \"La juez\". • \"Carolina cuarto árbitro\". • \"La primera mujer surfista\". • \"Las deportistas femeninas\". • \"La abogado\" / \"La ministro\"."
+    },
+    {
+        "nombre": "sexismo_discurso",
+        "codigo": "30",
+        "valores_posibles": [
+            "No",
+            "Sí"
+        ],
+        "definicion": "El sexismo social o cultural se centra en el fondo del mensaje, describiendo o normalizando realidades discriminatorias o asimetrías de poder.",
+        "metodologia": "1. Diferenciación forma/fondo. 2. Identificación de asimetrías. 3. Detección de estereotipos. 4. Invisibilidad estructural.",
+        "ejemplos": "• \"El Consejo está compuesto por 20 varones y 2 mujeres\". • \"Las mujeres sólo tienen una función\". • \"Su marido ingresó...\". • \"Se consiente a la mujer imitar al hombre\"."
+    },
+    {
+        "nombre": "androcentrismo",
+        "codigo": "31",
+        "valores_posibles": [
+            "No",
+            "Sí"
+        ],
+        "definicion": "Visión del mundo que sitúa lo masculino como centro y modelo universal, invisibilizando o subordinando lo femenino.",
+        "metodologia": "1. Evaluación del referente. 2. Invisibilidad. 3. Falso genérico. 4. Autoridad. 5. Regla de inversión. 6. Datos desagregados.",
+        "ejemplos": "• \"Fundamento ontológico del hombre\". • \"Los derechos del hombre\". • \"Resultados de fútbol... y algo de fútbol femenino\". • \"La señora de Karembeu\". • Uso exclusivo de voces masculinas expertas."
+    },
+    {
+        "nombre": "mencion_nombre_investigadora",
+        "codigo": "32",
+        "valores_posibles": [
+            "No",
+            "Sí"
+        ],
+        "definicion": "Fenómeno de invisibilización donde las mujeres no son identificadas con nombre y apellidos pese a ser protagonistas.",
+        "metodologia": "1. Comparación de identificación. 2. Colectivos indivisibles. 3. Mujer ilustración. 4. Excepcionalidad.",
+        "ejemplos": "• \"Una mujer arbitrará por primera vez...\". • \"Las chicas de sincronizada\". • \"Tres mujeres y siete alumnos\". • \"Carolina, cuarto árbitro\"."
+    },
+    {
+        "nombre": "asimetria_mujer_hombre",
+        "codigo": "33",
+        "valores_posibles": [
+            "No",
+            "Sí"
+        ],
+        "definicion": "Uso desigual del tratamiento nominal: nombre de pila para mujeres y apellido/nombre completo para hombres.",
+        "metodologia": "1. Verificación de simetría. 2. Familiaridad selectiva. 3. Regla de inversión.",
+        "ejemplos": "• \"La presidenta, Inmaculada, y el vicepresidente, Emilio Núñez\". • \"Don Carlos Ramos y Matilde Alonso\". • \"Carolina se apunta al Europeo\". • \"La Vigara\"."
+    },
+    {
+        "nombre": "disminutivos_infantilizacion",
+        "codigo": "34",
+        "valores_posibles": [
+            "No",
+            "Sí"
+        ],
+        "definicion": "Referirse a mujeres adultas mediante diminutivos o términos propios de la infancia.",
+        "metodologia": "1. Comparación de simetría. 2. Identificación de infantilización. 3. Regla de inversión.",
+        "ejemplos": "• \"Tres chiquitas\". • \"Dos hombres y dos chicas\". • \"Las chicas del balonmano\". • \"La nena del equipo\"."
+    },
+    {
+        "nombre": "denominacion_sexualizada",
+        "codigo": "35",
+        "valores_posibles": [
+            "No",
+            "Sí"
+        ],
+        "definicion": "Identificar mujeres exclusivamente por su sexo, condición biológica o roles familiares.",
+        "metodologia": "1. Regla de inversión. 2. Asimetría identificativa. 3. Redundancia. 4. Infantilización.",
+        "ejemplos": "• \"Dos bomberos y dos mujeres\". • \"Las chicas del balonmano\". • \"Una madre de oro\". • \"Lolitas para endulzar\"."
+    },
+    {
+        "nombre": "denominacion_redundante",
+        "codigo": "36",
+        "valores_posibles": [
+            "No",
+            "Sí"
+        ],
+        "definicion": "Uso innecesario de marcas de sexo en profesiones o cargos ya definidos.",
+        "metodologia": "1. Regla de inversión. 2. Verificación del sustantivo.",
+        "ejemplos": "• \"La primera mujer surfista\". • \"Deportistas femeninas\". • \"Dos mujeres informáticas\". • \"Nadadora femenina\"."
+    },
+    {
+        "nombre": "denominacion_dependiente",
+        "codigo": "37",
+        "valores_posibles": [
+            "No",
+            "Sí"
+        ],
+        "definicion": "Nombrar a mujeres a través de su relación con un varón.",
+        "metodologia": "1. Regla de inversión. 2. Fórmulas de posesión. 3. Jerarquía de identidad.",
+        "ejemplos": "• \"La señora de Karembeu\". • \"La hija de Ali\". • \"La ex de Iker Casillas\"."
+    },
+    {
+        "nombre": "criterios_excepcion",
+        "codigo": "38",
+        "valores_posibles": [
+            "No",
+            "Sí"
+        ],
+        "definicion": "Presentar logros femeninos como excepcionales o anómalos.",
+        "metodologia": "1. Regla de inversión. 2. Invisibilización. 3. Evaluación de anomalía.",
+        "ejemplos": "• \"Una mujer arbitrará por primera vez\". • \"La primera mujer surfista\". • \"La única iraní medallista\"."
+    },
+    {
+        "nombre": "comparacion_mujer_hombre",
+        "codigo": "39",
+        "valores_posibles": [
+            "No",
+            "Sí"
+        ],
+        "definicion": "Evaluar a mujeres en referencia al estándar masculino.",
+        "metodologia": "1. Identificación del referente. 2. Detección de imitación. 3. Validación masculina. 4. Estereotipos.",
+        "ejemplos": "• \"Imitar al hombre\". • \"¡Qué machada!\". • \"Versión femenina de...\"."
+    }
+]

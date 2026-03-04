@@ -7,7 +7,8 @@ from typing import Optional, Any, List
 import re
 import json
 from utils import consultar_ollama
-
+import ast
+import pandas as pd
 
 # =====================================================================================
 # 1. IdNoticia
@@ -130,7 +131,7 @@ def clasificar_var_titular(articulo: Article) -> Optional[str]:
 # =====================================================================================
 from utils import  NombresDetectados
 
-def clasificar_var_nombre_propio_titular_list(titulo: str) -> NombresDetectados:
+def clasificar_var_nombre_propio_titular_list(titulo: str, modelo: str = "gemma3:4b") -> NombresDetectados:
     """
     Extrae nombres propios del titular y los clasifica según su género o tipo.
     Devuelve dos listas sincronizadas: nombres y valores.
@@ -142,21 +143,22 @@ def clasificar_var_nombre_propio_titular_list(titulo: str) -> NombresDetectados:
 
     prompt = f"""
     Analiza el siguiente TITULAR y extrae los nombres propios, entidades, lugares o tecnologías.
+
     Asigna a cada uno su código numérico correspondiente.
 
     TITULAR: "{titulo}"
 
     TABLA DE CÓDIGOS:
-    1  = Hombre (Nombre individual)
-    2  = Mujer (Nombre individual)
-    3  = Grupo Mixto (ej: "Los Reyes", "La pareja", "Padres")
-    32 = Grupo Mixto (Mayoría hombres)
-    33 = Grupo Mixto (Mayoría mujeres)
-    4  = Institución, Organización, Empresa, Partido Político (ej: "Google", "PSOE", "La ONU")
-    41 = Lugares: Países, Regiones, Ciudades (ej: "España", "Madrid", "Europa")
-    42 = Tecnología: Apps, Modelos de IA, Robots, Software (ej: "ChatGPT", "Gemini", "Sora", "TikTok")
+    1 = Hombre: son sustantivos que designan e identifican de manera única e individual a una persona masculina específica, diferenciándola de los demás dentro de su clase. Se escriben siempre con mayúscula inicial y funcionan como etiquetas identificadoras (ej. Manuel, Mario, Carlos, "El Papa", "Pedro Sánchez")
+    2 = Mujer: son sustantivos que designan e identifican de manera única e individual a una persona femenina específica, diferenciándola de las demás dentro de su clase. Se escriben siempre con mayúscula inicial y funcionan como etiquetas identificadoras (Ej: "María", "Isabel Díaz Ayuso", "Alessandra", “La Reina”)
+    3 = Grupo Mixto: En un mismo titular aparecen sustantivos que designan e identifican de manera única e individual a una persona masculina y otra femenina (Ej: " trump y harris", " broncano, rosalía o santiago ")
+    4 = Institución, Organización, Empresa, Partido Político: Los nombres propios de instituciones, organizaciones, empresas y partidos políticos son sustantivos que designan entidades únicas e irrepetibles, diferenciándolas de otras de su misma clase. Se escriben con mayúscula inicial en todas sus palabras significativas (sustantivos y adjetivos), indicando su identidad oficial, jurídica o pública (ej: "Google", "PSOE",“openai” “ONU” “Fundación BBVA” “Microsoft”)
+    41 = Lugares: Países, Regiones, Ciudades Los nombres propios de lugares —países, regiones, ciudades, continentes o accidentes geográficos— son denominaciones específicas y únicas que identifican un lugar, conocidas técnicamente como topónimos (ej: "España", "Madrid", "Europa", “Comunidad de Madrid” “el Gobierno de EE.UU” “el gobierno Español”
+    42 = Tecnología: Apps, Modelos de IA, Robots, Software Los nombres propios en tecnología (apps, IA, robots, software) son marcas comerciales o nombres de producto específicos que identifican de forma única una herramienta, modelo o dispositivo creado por una empresa (ej. ChatGPT, Sophia, Windows). Se escriben con mayúscula inicial y distinguen el producto de la categoría general (ej: "ChatGPT", "Gemini", "Sora", "TikTok", “Instagram”, “Faceboock”)
 
     INSTRUCCIONES:
+    Los nombres propios (o sustantivos propios) son un tipo de nombres que designan un ser único dentro de su misma categoría. Los nombres propios se diferencian de los nombres comunes (o sustantivos comunes), que designan a un ser cualquiera de su clase. Los nombres propios pueden hacer referencia a personas, organización, productos o lugares, entre otros. Comienzan con mayúscula
+
     - Ignora sustantivos comunes que no sean entidades (ej: no extraigas "la policía" si es genérico, pero sí "Mossos d'Esquadra").
     - Distingue bien entre la EMPRESA (OpenAI -> 4) y el PRODUCTO (ChatGPT -> 42).
     - Si no hay nombres propios, devuelve listas vacías.
@@ -167,10 +169,11 @@ def clasificar_var_nombre_propio_titular_list(titulo: str) -> NombresDetectados:
         "nombres": ["Nombre1", "Nombre2"],
         "valores": [Codigo1, Codigo2]
     }}
+
     """
 
     # --- LLAMADA AL MODELO ---
-    respuesta_texto = consultar_ollama(prompt)
+    respuesta_texto = consultar_ollama(prompt, modelo)
 
     # --- PARSEO Y VALIDACIÓN ---
     try:
@@ -275,7 +278,7 @@ def clasificar_var_nombre_propio_titular(valores: list[int]) -> int:
 # =====================================================================================
 from utils import CitaTitularValidada
 
-def clasificar_var_cita_titular(titulo: str) -> CitaTitularValidada:
+def clasificar_var_cita_titular(titulo: str, modelo: str = "gemma3:4b") -> CitaTitularValidada:
     """
     Analiza si el titular contiene una cita o declaración de alguien.
     Distingue entre directa (textual) e indirecta (parafraseada).
@@ -285,15 +288,16 @@ def clasificar_var_cita_titular(titulo: str) -> CitaTitularValidada:
         return CitaTitularValidada(cita="N/A", tipo=1)
 
     prompt = f"""
+
     Analiza el siguiente TITULAR de noticia y detecta si contiene una CITA o DECLARACIÓN de una persona o entidad.
 
     TITULAR: "{titulo}"
-
+    
     CLASIFICACIÓN:
-    1 = No hay cita. Es un hecho, una descripción del periodista o usa comillas solo para resaltar una palabra (ej: El "caso Koldo").
-    2 = Cita Directa. Reproduce palabras textuales. 
+    1 = No hay cita: Es un hecho, una descripción del periodista o usa comillas solo para resaltar una palabra (ej: El "caso Koldo").
+    2 = Cita Directa:Si se introduce el texto literal con verbos de habla o dicción como decir, afirmar, declarar, manifestar, etc. En este caso, la cita va entrecomillada, con mayúscula inicial y precedida de dos puntos: El portavoz afirmó: «Es un disparate de ley y nos opondremos con energía» o El jugador declaró: «Lo dejo». Lo que va entrecomillado ha de ser exactamente lo que ha dicho o escrito el protagonista. El verbo de habla también puede ir pospuesto, y en tal caso se separa con una coma: «Es un disparate de ley y nos opondremos con energía», afirmó el vocero. Finalmente, sobre todo cuando la cita ocupa varios párrafos, se puede intercalar el verbo entre rayas: «Es un disparate de ley —⁠afirmó el portavoz— y nos opondremos con energía». Al contrario que en la narrativa, en la lengua periodística las citas se cierran con unas comillas al final de cada párrafo y se vuelven a abrir al comienzo del siguiente.
         - Pistas: Usa comillas para una frase completa ("Me voy", dijo X) o dos puntos (Sánchez: No dimitiré).
-    3 = Cita Indirecta. Parafrasea lo que alguien dijo sin usar comillas para la frase entera.
+    3 = Cita Indirecta: No se reproducen las palabras textuales, sino que se explica lo dicho o escrito por el hablante, normalmente con el apoyo de la partícula que, por lo que no se emplean comillas ni dos puntos: El jugador declaró que lo dejaba o El presidente aseguró tener constancia de la situación.
         - Pistas: Usa verbos de habla (asegura que, dice que, pide, advierte, niega) seguidos de la idea.
 
     INSTRUCCIONES:
@@ -321,13 +325,12 @@ def clasificar_var_cita_titular(titulo: str) -> CitaTitularValidada:
         # Fallback en caso de error
         return CitaTitularValidada(cita="Error al procesar", tipo=1)
 
-
 # =====================================================================================
 # 9a. Protagonistas que aparecen en la información
 # =====================================================================================
 from utils import ProtagonistasDetectados
 
-def clasificar_var_cla_genero_prota_list(texto_noticia: str) -> ProtagonistasDetectados:
+def clasificar_var_cla_genero_prota_list(texto_noticia: str, modelo: str = "gemma3:4b") -> ProtagonistasDetectados:
     """
     Analiza el cuerpo de la noticia para extraer los protagonistas principales.
     Devuelve listas sincronizadas de nombres únicos y sus códigos.
@@ -345,12 +348,12 @@ def clasificar_var_cla_genero_prota_list(texto_noticia: str) -> ProtagonistasDet
     "{texto_noticia}..."
 
     TABLA DE CÓDIGOS ESTRICTA:
-    1  = Hombre (Ej: "Pedro Sánchez", "El Papa", "Carlos")
-    2  = Mujer (Ej: "María", "Isabel Díaz Ayuso", "Alessandra")
-    3  = Grupo Mixto (Ej: "La pareja", "Los vecinos", "Padres")
-    4  = Institución/Empresa (Ej: "Gobierno", "Reuters", "Vatican Media", "PSOE")
-    41 = Lugares: Países, Regiones, Ciudades (ej: "España", "Madrid", "Europa")
-    42 = Tecnología: Apps, Modelos de IA, Robots, Software (ej: "ChatGPT", "Gemini", "Sora", "TikTok")
+    1 = Hombre: son sustantivos que designan e identifican de manera única e individual a una persona masculina específica, diferenciándola de los demás dentro de su clase. Se escriben siempre con mayúscula inicial y funcionan como etiquetas identificadoras (ej. Manuel, Mario, Carlos, "El Papa", "Pedro Sánchez")
+    2 = Mujer: son sustantivos que designan e identifican de manera única e individual a una persona femenina específica, diferenciándola de las demás dentro de su clase. Se escriben siempre con mayúscula inicial y funcionan como etiquetas identificadoras (Ej: "María", "Isabel Díaz Ayuso", "Alessandra", “La Reina”)
+    3 = Grupo Mixto: En una misma noticia aparecen sustantivos que designan e identifican de manera única e individual a una persona masculina y otra femenina (Ej: " trump y harris", " broncano y rosalía", )
+    4 = Institución, Organización, Empresa, Partido Político: Los nombres propios de instituciones, organizaciones, empresas y partidos políticos son sustantivos que designan entidades únicas e irrepetibles, diferenciándolas de otras de su misma clase. Se escriben con mayúscula inicial en todas sus palabras significativas (sustantivos y adjetivos), indicando su identidad oficial, jurídica o pública (ej: "Google", "PSOE",“openai” “ONU” “Fundación BBVA” “Microsoft”)
+    41 = Lugares: Países, Regiones, Ciudades Los nombres propios de lugares —países, regiones, ciudades, continentes o accidentes geográficos— son denominaciones específicas y únicas que identifican un lugar, conocidas técnicamente como topónimos (ej: "España", "Madrid", "Europa", “Comunidad de Madrid” “el Gobierno de EE.UU” “el gobierno Español”
+    42 = Tecnología: Apps, Modelos de IA, Robots, Software Los nombres propios en tecnología (apps, IA, robots, software) son marcas comerciales o nombres de producto específicos que identifican de forma única una herramienta, modelo o dispositivo creado por una empresa (ej. ChatGPT, Sophia, Windows). Se escriben con mayúscula inicial y distinguen el producto de la categoría general (ej: "ChatGPT", "Gemini", "Sora", "TikTok", “Instagram”, “Faceboock”)
 
     REGLAS OBLIGATORIAS:
     1. Si el nombre es de una sola persona, JAMÁS uses códigos 3, 32 o 33.
@@ -368,7 +371,7 @@ def clasificar_var_cla_genero_prota_list(texto_noticia: str) -> ProtagonistasDet
     # --- LLAMADA AL MODELO ---
     # Asumiendo que usas tu función 'consultar_ollama'
     # Se recomienda un modelo con buena capacidad de contexto (ej: llama3, mistral, gemma:7b)
-    respuesta_texto = consultar_ollama(prompt)
+    respuesta_texto = consultar_ollama(prompt, modelo)
 
     # --- PARSEO Y VALIDACIÓN ---
     try:
@@ -526,12 +529,66 @@ def clasificar_var_nombre_periodista(articulo: Article) -> str:
     # 4. Defecto
     return "Redacción / Otros"
 
+def clasificar_var_nombre_periodista_authors(authors_csv) -> str:
+    """
+    Extrae autores desde una celda del CSV (string o string-lista) 
+    y limpia textos basura como 'Ver Biografía', 'Redacción', etc.
+    """
+    
+    # 1. Filtro de seguridad: Si la celda está vacía (NaN o None)
+    if pd.isna(authors_csv) or not isinstance(authors_csv, str) or not authors_csv.strip():
+        return "Redacción / Otros"
+
+    # 2. Transformar el string del CSV a una lista real de Python
+    if authors_csv.startswith('[') and authors_csv.endswith(']'):
+        try:
+            # Convierte "['Autor 1', 'Autor 2']" en una lista real ['Autor 1', 'Autor 2']
+            lista_autores = ast.literal_eval(authors_csv)
+        except (ValueError, SyntaxError):
+            lista_autores = [authors_csv]
+    else:
+        # Si viene separado por comas: "Lorena Pacho, Redacción"
+        lista_autores = authors_csv.split(',')
+
+    # Lista de palabras/frases que NO queremos en el nombre
+    palabras_basura = [
+        "ver biografía", "biografía", "ver perfil", "perfil", 
+        "ver más", "see profile", "read more", "twitter", 
+        "email", "follow", "redacción", "agencia"
+    ]
+
+    autores_detectados = []
+
+    # 3. Limpiar cada autor individualmente
+    for autor in lista_autores:
+        autor_limpio = autor.strip()
+        
+        # Iteramos sobre nuestra lista de basura
+        for basura in palabras_basura:
+            # re.sub con re.IGNORECASE elimina la palabra basura sin importar 
+            # si es "Ver Biografía", "VER BIOGRAFÍA" o "ver biografía"
+            autor_limpio = re.sub(basura, '', autor_limpio, flags=re.IGNORECASE)
+
+        # Limpiamos caracteres sueltos que hayan podido quedar (ej: una coma sola "-, ")
+        autor_limpio = autor_limpio.strip(" ,|:-")
+
+        # Si después de limpiar todo nos queda un nombre válido (más de 2 letras)
+        if len(autor_limpio) > 2:
+            autores_detectados.append(autor_limpio)
+
+    # 4. Devolver el resultado final
+    if autores_detectados:
+        # Eliminamos duplicados (manteniendo el orden original) y unimos con comas
+        return ", ".join(list(dict.fromkeys(autores_detectados)))
+
+    # 5. Defecto (si todo era basura o estaba vacío)
+    return "Redacción / Otros"
 
 # =====================================================================================
 # 11. Género Periodista (Autoría)
 # =====================================================================================
 from utils import GeneroPeriodistaValidado
-def clasificar_var_genero_periodista(nombre_periodista: str, nombre_medio:str) -> int:
+def clasificar_var_genero_periodista(nombre_periodista: str, nombre_medio:str, modelo: str = "gemma3:4b") -> int:
     """
     Clasifica la autoría considerando el contexto del medio.
     Recibe:
@@ -552,9 +609,9 @@ def clasificar_var_genero_periodista(nombre_periodista: str, nombre_medio:str) -
     Tu misión es clasificar la autoría (0-7) siguiendo estrictamente estas definiciones:
 
     0 = Ns/Nc: Desconocido, ambiguo o iniciales.
-    1 = Hombre: Nombre de persona masculino.
-    2 = Mujer: Nombre de persona femenino.
-    3 = Mixto: Varios autores de distinto género.
+    1 = Hombre: son sustantivos que designan e identifican de manera única e individual a una persona masculina específica, diferenciándola de los demás dentro de su clase. Se escriben siempre con mayúscula inicial y funcionan como etiquetas identificadoras (ej. Manuel, Mario, Carlos, "El Papa", "Pedro Sánchez")
+    2 = Mujer: son sustantivos que designan e identifican de manera única e individual a una persona femenina específica, diferenciándola de las demás dentro de su clase. Se escriben siempre con mayúscula inicial y funcionan como etiquetas identificadoras (Ej: "María", "Isabel Díaz Ayuso", "Alessandra", “La Reina”)
+    3 = Grupo Mixto: En una misma firma aparecen sustantivos que designan e identifican de manera única e individual a una persona masculina y otra femenina (Ej: " trump y harris", " broncano y rosalía", )
     4 = Otros medios: El autor es otro medio de comunicación (ej: "The New York Times", "Revista Hola").
     5 = Agencia: Agencias de noticias puras (EFE, Europa Press, Reuters, AFP).
     
@@ -575,7 +632,7 @@ def clasificar_var_genero_periodista(nombre_periodista: str, nombre_medio:str) -
     Responde ÚNICAMENTE con el número dígito (0-7).
     """
     # 1. Llamada al modelo (tu función externa)
-    respuesta_texto = consultar_ollama(prompt)
+    respuesta_texto = consultar_ollama(prompt, modelo)
 
     # 2. Extracción del número (Pre-procesamiento)
     # Buscamos el primer dígito que aparezca en el texto
@@ -602,7 +659,7 @@ def clasificar_var_genero_periodista(nombre_periodista: str, nombre_medio:str) -
 # =====================================================================================
 from utils import TemaConExplicacion
 
-def clasificar_var_tema(titulo: str, texto_cuerpo: str) -> TemaConExplicacion:
+def clasificar_var_tema(titulo: str, texto_cuerpo: str, modelo: str = "gemma3:4b") -> TemaConExplicacion:
     """
     Clasifica el tema y da una explicación.
     Devuelve un objeto Pydantic con .codigo (int) y .explicacion (str).
@@ -653,7 +710,7 @@ def clasificar_var_tema(titulo: str, texto_cuerpo: str) -> TemaConExplicacion:
     """
 
     # 3. Llamada al modelo
-    respuesta_texto = consultar_ollama(prompt)
+    respuesta_texto = consultar_ollama(prompt, modelo)
 
     # 4. Limpieza y Parsing de JSON
     # A veces los modelos envuelven el JSON en markdown ```json ... ```
@@ -746,7 +803,7 @@ def clasificar_var_seccion(articulo: Article) -> str:
 # =====================================================================================
 from utils import IaTemaCentralConExplicacion
 
-def clasificar_var_ia_tema_central(titulo: str, texto_cuerpo: str) -> IaTemaCentralConExplicacion:
+def clasificar_var_ia_tema_central(titulo: str, texto_cuerpo: str, modelo: str = "gemma3:4b") -> IaTemaCentralConExplicacion:
     """
     Determina si la Inteligencia Artificial es el TEMA CENTRAL de la noticia.
     Devuelve objeto con .codigo y .explicacion.
@@ -772,7 +829,7 @@ def clasificar_var_ia_tema_central(titulo: str, texto_cuerpo: str) -> IaTemaCent
 
     # --- 2. PROMPT CON SOLICITUD DE JSON ---
     # Recortamos texto para centrar la atención en el inicio (donde suele estar el tema central)
-    texto_recortado = texto_cuerpo[:2500]
+    texto_recortado = texto_cuerpo
     
     prompt = f"""
     Analiza la jerarquía de la información en esta noticia:
@@ -803,7 +860,7 @@ def clasificar_var_ia_tema_central(titulo: str, texto_cuerpo: str) -> IaTemaCent
     """
 
     # --- 3. LLAMADA AL MODELO ---
-    respuesta_texto = consultar_ollama(prompt)
+    respuesta_texto = consultar_ollama(prompt, modelo)
 
     # --- 4. EXTRACCIÓN Y VALIDACIÓN ---
     try:
@@ -836,7 +893,7 @@ def clasificar_var_ia_tema_central(titulo: str, texto_cuerpo: str) -> IaTemaCent
 # =====================================================================================
 from utils import IaSignificadoConExplicacion
 
-def clasificar_var_significado_ia(titulo: str, texto_cuerpo: str) -> IaSignificadoConExplicacion:
+def clasificar_var_significado_ia(titulo: str, texto_cuerpo: str, modelo: str = "gemma3:4b") -> IaSignificadoConExplicacion:
     """
     Detecta si el artículo explica o define QUÉ ES la IA o CÓMO FUNCIONA.
     Devuelve un objeto con .codigo (1/2) y .explicacion (str).
@@ -857,7 +914,7 @@ def clasificar_var_significado_ia(titulo: str, texto_cuerpo: str) -> IaSignifica
 
     # --- 2. PROMPT EN FORMATO JSON ---
     # Recortamos el texto (buscamos definiciones, suelen estar al principio)
-    texto_recortado = texto_cuerpo[:2000]
+    texto_recortado = texto_cuerpo
     
     prompt = f"""
     Analiza el siguiente texto periodístico con enfoque pedagógico:
@@ -887,7 +944,7 @@ def clasificar_var_significado_ia(titulo: str, texto_cuerpo: str) -> IaSignifica
     """
 
     # --- 3. LLAMADA AL MODELO ---
-    respuesta_texto = consultar_ollama(prompt)
+    respuesta_texto = consultar_ollama(prompt, modelo)
 
     # --- 4. EXTRACCIÓN Y VALIDACIÓN ---
     try:
@@ -978,7 +1035,7 @@ def clasificar_var_menciona_ia(titulo: str, texto_cuerpo: str) -> MencionIaConEx
 # =====================================================================================
 from utils import ReferenciaPoliticasGeneroConExplicacion
 
-def clasificar_var_referencia_politicas_genero(titulo: str, texto_cuerpo: str) -> ReferenciaPoliticasGeneroConExplicacion:
+def clasificar_var_referencia_politicas_genero(titulo: str, texto_cuerpo: str, modelo: str = "gemma3:4b") -> ReferenciaPoliticasGeneroConExplicacion:
     """
     Detecta si la noticia hace referencia a POLÍTICAS, LEYES o DEBATES sobre 
     género, igualdad, feminismo o violencia machista.
@@ -1006,7 +1063,7 @@ def clasificar_var_referencia_politicas_genero(titulo: str, texto_cuerpo: str) -
 
     # --- 2. PROMPT ESPECÍFICO (Modo JSON) ---
     # Recortamos el texto para no saturar el contexto
-    texto_recortado = texto_cuerpo[:2000]
+    texto_recortado = texto_cuerpo
     
     prompt = f"""
     Analiza la siguiente noticia:
@@ -1034,7 +1091,7 @@ def clasificar_var_referencia_politicas_genero(titulo: str, texto_cuerpo: str) -
     """
 
     # --- 3. Llamada al modelo ---
-    respuesta_texto = consultar_ollama(prompt)
+    respuesta_texto = consultar_ollama(prompt, modelo)
 
     # --- 4. Procesamiento JSON ---
     try:
@@ -1067,7 +1124,7 @@ def clasificar_var_referencia_politicas_genero(titulo: str, texto_cuerpo: str) -
 # =====================================================================================
 from utils import DenunciaDesigualdadConExplicacion
 
-def clasificar_var_denuncia_desigualdad_genero(titulo: str, texto_cuerpo: str) -> DenunciaDesigualdadConExplicacion:
+def clasificar_var_denuncia_desigualdad_genero(titulo: str, texto_cuerpo: str, modelo: str = "gemma3:4b") -> DenunciaDesigualdadConExplicacion:
     """
     Detecta si la noticia DENUNCIA desigualdad y explica por qué.
     Devuelve objeto con .codigo (1/2) y .explicacion (str).
@@ -1092,7 +1149,7 @@ def clasificar_var_denuncia_desigualdad_genero(titulo: str, texto_cuerpo: str) -
         )
 
     # --- 2. PROMPT PARA JSON ---
-    texto_recortado = texto_cuerpo[:2000]
+    texto_recortado = texto_cuerpo
     
     prompt = f"""
     Analiza el enfoque de esta noticia:
@@ -1114,7 +1171,7 @@ def clasificar_var_denuncia_desigualdad_genero(titulo: str, texto_cuerpo: str) -
     """
 
     # --- 3. LLAMADA A OLLAMA ---
-    respuesta_texto = consultar_ollama(prompt)
+    respuesta_texto = consultar_ollama(prompt, modelo)
 
     # --- 4. PROCESAMIENTO DE RESPUESTA ---
     try:
@@ -1148,7 +1205,7 @@ def clasificar_var_denuncia_desigualdad_genero(titulo: str, texto_cuerpo: str) -
 # =====================================================================================
 from utils import MujeresRacializadasConExplicacion
 
-def clasificar_var_mujeres_racializadas_noticias(titulo: str, texto_cuerpo: str) -> MujeresRacializadasConExplicacion:
+def clasificar_var_mujeres_racializadas_noticias(titulo: str, texto_cuerpo: str, modelo: str = "gemma3:4b") -> MujeresRacializadasConExplicacion:
     """
     Detecta la presencia o mención de mujeres racializadas (no blancas/caucásicas) en la noticia.
     Devuelve objeto con .codigo (1/2) y .explicacion (str).
@@ -1178,7 +1235,7 @@ def clasificar_var_mujeres_racializadas_noticias(titulo: str, texto_cuerpo: str)
         )
 
     # --- 2. PROMPT CON SOLICITUD DE JSON ---
-    texto_recortado = texto_cuerpo[:2000]
+    texto_recortado = texto_cuerpo
     
     prompt = f"""
     Analiza la representación de las personas en esta noticia:
@@ -1217,7 +1274,7 @@ def clasificar_var_mujeres_racializadas_noticias(titulo: str, texto_cuerpo: str)
     """
 
     # --- 3. LLAMADA AL MODELO ---
-    respuesta_texto = consultar_ollama(prompt)
+    respuesta_texto = consultar_ollama(prompt, modelo)
 
     # --- 4. EXTRACCIÓN Y VALIDACIÓN ---
     try:
@@ -1247,7 +1304,7 @@ def clasificar_var_mujeres_racializadas_noticias(titulo: str, texto_cuerpo: str)
 # =====================================================================================
 from utils import MujeresConDiscapacidadConExplicacion
 
-def clasificar_var_mujeres_con_discapacidad_noticias(titulo: str, texto_cuerpo: str) -> MujeresConDiscapacidadConExplicacion:
+def clasificar_var_mujeres_con_discapacidad_noticias(titulo: str, texto_cuerpo: str, modelo: str = "gemma3:4b") -> MujeresConDiscapacidadConExplicacion:
     """
     Detecta la presencia o mención explícita de mujeres con discapacidad o diversidad funcional.
     Devuelve objeto con .codigo (1/2) y .explicacion (str).
@@ -1275,7 +1332,7 @@ def clasificar_var_mujeres_con_discapacidad_noticias(titulo: str, texto_cuerpo: 
         )
 
     # --- 2. PROMPT CON SOLICITUD DE JSON ---
-    texto_recortado = texto_cuerpo[:2000]
+    texto_recortado = texto_cuerpo
     
     prompt = f"""
     Analiza la representación de las personas en esta noticia:
@@ -1307,7 +1364,7 @@ def clasificar_var_mujeres_con_discapacidad_noticias(titulo: str, texto_cuerpo: 
 
     # --- 3. LLAMADA AL MODELO ---
     # Gemma 4b suele ser bueno distinguiendo género en estos contextos
-    respuesta_texto = consultar_ollama(prompt)
+    respuesta_texto = consultar_ollama(prompt, modelo)
 
     # --- 4. EXTRACCIÓN Y VALIDACIÓN ---
     try:
@@ -1337,7 +1394,7 @@ def clasificar_var_mujeres_con_discapacidad_noticias(titulo: str, texto_cuerpo: 
 # =====================================================================================
 from utils import MujeresGeneracionalidadConExplicacion
 
-def clasificar_var_mujeres_generacionalidad_noticias(titulo: str, texto_cuerpo: str) -> MujeresGeneracionalidadConExplicacion:
+def clasificar_var_mujeres_generacionalidad_noticias(titulo: str, texto_cuerpo: str, modelo: str = "gemma3:4b") -> MujeresGeneracionalidadConExplicacion:
     """
     Detecta si en la noticia aparecen mujeres de **distintas generaciones** o de 
     **edades no hegemónicas** (niñas, adolescentes o ancianas).
@@ -1369,7 +1426,7 @@ def clasificar_var_mujeres_generacionalidad_noticias(titulo: str, texto_cuerpo: 
         )
 
     # --- 2. PROMPT CON SOLICITUD DE JSON ---
-    texto_recortado = texto_cuerpo[:2000]
+    texto_recortado = texto_cuerpo
     
     prompt = f"""
     Analiza la edad y las generaciones de las mujeres en esta noticia:
@@ -1399,8 +1456,7 @@ def clasificar_var_mujeres_generacionalidad_noticias(titulo: str, texto_cuerpo: 
     """
 
     # --- 3. LLAMADA AL MODELO ---
-    # Usamos Gemma 4b (o tu modelo preferido)
-    respuesta_texto = consultar_ollama(prompt)
+    respuesta_texto = consultar_ollama(prompt, modelo)
 
     # --- 4. EXTRACCIÓN Y VALIDACIÓN ---
     try:
@@ -1513,7 +1569,7 @@ def clasificar_var_fotografias(articulo: Any) -> FotografiasValidadas:
 # =====================================================================================
 from utils import FuentesValidadas
 
-def clasificar_var_tiene_fuentes(texto_noticia: str) -> FuentesValidadas:
+def clasificar_var_tiene_fuentes(texto_noticia: str, modelo: str = "gemma3:4b") -> FuentesValidadas:
     """
     Determina si la noticia tiene fuentes.
     Retorna codigo=2 si encuentra al menos una, codigo=1 si no encuentra nada.
@@ -1524,7 +1580,7 @@ def clasificar_var_tiene_fuentes(texto_noticia: str) -> FuentesValidadas:
         return FuentesValidadas(codigo=1, evidencias=[], cantidad=0)
 
     # 2. Recorte (Analizamos el principio del texto donde se atribuyen las fuentes)
-    texto_analisis = texto_noticia[:3500]
+    texto_analisis = texto_noticia
 
     # 3. Prompt: Solo pedimos la lista de nombres
     prompt = f"""
@@ -1543,7 +1599,7 @@ def clasificar_var_tiene_fuentes(texto_noticia: str) -> FuentesValidadas:
     """
 
     # 4. Llamada al LLM
-    respuesta_texto = consultar_ollama(prompt)
+    respuesta_texto = consultar_ollama(prompt, modelo)
 
     # 5. Lógica Python (Determinista)
     try:
@@ -1588,7 +1644,8 @@ from utils import BloqueAnalisisLenguajeSexista
 def clasificar_var_lenguaje_sexista(
     texto_articulo: str, 
     ruta_json: str = "variables.json",
-    ruta_template: str = "prompts/prompt_clara.md"
+    ruta_template: str = "prompts/prompt_clara.md", 
+    modelo: str = "gemma3:4b"
 ) -> BloqueAnalisisLenguajeSexista:
     
     # A. Carga Configuración
@@ -1608,7 +1665,7 @@ def clasificar_var_lenguaje_sexista(
 
     # C. Llamada a Ollama
     print(f"--- Analizando {config['nombre']} con template dinámico ---")
-    respuesta_raw = consultar_ollama(prompt, temperature=0.1) 
+    respuesta_raw = consultar_ollama(prompt, modelo, temperature=0.1) 
 
     # D. Parsing y Validación ROBUSTA
     try:
@@ -1646,7 +1703,8 @@ from utils import BloqueAnalisisBinario
 def clasificar_var_masc_generico(
     texto_articulo: str, 
     ruta_json: str = "variables.json",
-    ruta_template: str = "prompts/prompt_clara.md"
+    ruta_template: str = "prompts/prompt_clara.md", 
+    modelo: str = "gemma3:4b"
 ) -> BloqueAnalisisBinario:
     
     # A. Carga Configuración
@@ -1666,7 +1724,7 @@ def clasificar_var_masc_generico(
 
     # C. Llamada a Ollama
     print(f"--- Analizando {config['nombre']} con template dinámico ---")
-    respuesta_raw = consultar_ollama(prompt, temperature=0.1) 
+    respuesta_raw = consultar_ollama(prompt, modelo, temperature=0.1) 
 
     # D. Parsing y Validación ROBUSTA
     try:
@@ -1702,7 +1760,8 @@ def clasificar_var_masc_generico(
 def clasificar_var_hombre_denominar_humanidad(
     texto_articulo: str, 
     ruta_json: str = "variables.json",
-    ruta_template: str = "prompts/prompt_clara.md"
+    ruta_template: str = "prompts/prompt_clara.md", 
+    modelo: str = "gemma3:4b"
 ) -> BloqueAnalisisLenguajeSexista:
     
     # A. Carga Configuración
@@ -1722,7 +1781,7 @@ def clasificar_var_hombre_denominar_humanidad(
 
     # C. Llamada a Ollama
     print(f"--- Analizando {config['nombre']} con template dinámico ---")
-    respuesta_raw = consultar_ollama(prompt, temperature=0.1) 
+    respuesta_raw = consultar_ollama(prompt, modelo, temperature=0.1) 
 
     # D. Parsing y Validación ROBUSTA
     try:
@@ -1758,7 +1817,8 @@ def clasificar_var_hombre_denominar_humanidad(
 def clasificar_var_uso_dual_zorr(
     texto_articulo: str, 
     ruta_json: str = "variables.json",
-    ruta_template: str = "prompts/prompt_clara.md"
+    ruta_template: str = "prompts/prompt_clara.md", 
+    modelo: str = "gemma3:4b"
 ) -> BloqueAnalisisLenguajeSexista:
     
     # A. Carga Configuración
@@ -1778,7 +1838,7 @@ def clasificar_var_uso_dual_zorr(
 
     # C. Llamada a Ollama
     print(f"--- Analizando {config['nombre']} con template dinámico ---")
-    respuesta_raw = consultar_ollama(prompt, temperature=0.1) 
+    respuesta_raw = consultar_ollama(prompt, modelo, temperature=0.1) 
 
     # D. Parsing y Validación ROBUSTA
     try:
@@ -1814,7 +1874,8 @@ def clasificar_var_uso_dual_zorr(
 def clasificar_var_uso_cargo_mujer(
     texto_articulo: str, 
     ruta_json: str = "variables.json",
-    ruta_template: str = "prompts/prompt_clara.md"
+    ruta_template: str = "prompts/prompt_clara.md", 
+    modelo: str = "gemma3:4b"
 ) -> BloqueAnalisisLenguajeSexista:
     
     # A. Carga Configuración
@@ -1834,7 +1895,7 @@ def clasificar_var_uso_cargo_mujer(
 
     # C. Llamada a Ollama
     print(f"--- Analizando {config['nombre']} con template dinámico ---")
-    respuesta_raw = consultar_ollama(prompt, temperature=0.1) 
+    respuesta_raw = consultar_ollama(prompt, modelo, temperature=0.1) 
 
     # D. Parsing y Validación ROBUSTA
     try:
@@ -1870,7 +1931,8 @@ def clasificar_var_uso_cargo_mujer(
 def clasificar_var_sexismo_discurso(
     texto_articulo: str, 
     ruta_json: str = "variables.json",
-    ruta_template: str = "prompts/prompt_clara.md"
+    ruta_template: str = "prompts/prompt_clara.md", 
+    modelo: str = "gemma3:4b"
 ) -> BloqueAnalisisLenguajeSexista:
     
     # A. Carga Configuración
@@ -1890,7 +1952,7 @@ def clasificar_var_sexismo_discurso(
 
     # C. Llamada a Ollama
     print(f"--- Analizando {config['nombre']} con template dinámico ---")
-    respuesta_raw = consultar_ollama(prompt, temperature=0.1) 
+    respuesta_raw = consultar_ollama(prompt, modelo, temperature=0.1) 
 
     # D. Parsing y Validación ROBUSTA
     try:
@@ -1926,7 +1988,8 @@ def clasificar_var_sexismo_discurso(
 def clasificar_var_androcentrismo(
     texto_articulo: str, 
     ruta_json: str = "variables.json",
-    ruta_template: str = "prompts/prompt_clara.md"
+    ruta_template: str = "prompts/prompt_clara.md", 
+    modelo: str = "gemma3:4b"
 ) -> BloqueAnalisisLenguajeSexista:
     
     # A. Carga Configuración
@@ -1946,7 +2009,7 @@ def clasificar_var_androcentrismo(
 
     # C. Llamada a Ollama
     print(f"--- Analizando {config['nombre']} con template dinámico ---")
-    respuesta_raw = consultar_ollama(prompt, temperature=0.1) 
+    respuesta_raw = consultar_ollama(prompt, modelo, temperature=0.1) 
 
     # D. Parsing y Validación ROBUSTA
     try:
@@ -1982,7 +2045,8 @@ def clasificar_var_androcentrismo(
 def clasificar_var_mencion_nombre_investigadora(
     texto_articulo: str, 
     ruta_json: str = "variables.json",
-    ruta_template: str = "prompts/prompt_clara.md"
+    ruta_template: str = "prompts/prompt_clara.md", 
+    modelo: str = "gemma3:4b"
 ) -> BloqueAnalisisLenguajeSexista:
     
     # A. Carga Configuración
@@ -2002,7 +2066,7 @@ def clasificar_var_mencion_nombre_investigadora(
 
     # C. Llamada a Ollama
     print(f"--- Analizando {config['nombre']} con template dinámico ---")
-    respuesta_raw = consultar_ollama(prompt, temperature=0.1) 
+    respuesta_raw = consultar_ollama(prompt, modelo, temperature=0.1) 
 
     # D. Parsing y Validación ROBUSTA
     try:
@@ -2038,7 +2102,8 @@ def clasificar_var_mencion_nombre_investigadora(
 def clasificar_var_asimetria_mujer_hombre(
     texto_articulo: str, 
     ruta_json: str = "variables.json",
-    ruta_template: str = "prompts/prompt_clara.md"
+    ruta_template: str = "prompts/prompt_clara.md", 
+    modelo: str = "gemma3:4b"
 ) -> BloqueAnalisisLenguajeSexista:
     
     # A. Carga Configuración
@@ -2058,7 +2123,7 @@ def clasificar_var_asimetria_mujer_hombre(
 
     # C. Llamada a Ollama
     print(f"--- Analizando {config['nombre']} con template dinámico ---")
-    respuesta_raw = consultar_ollama(prompt, temperature=0.1) 
+    respuesta_raw = consultar_ollama(prompt, modelo, temperature=0.1) 
 
     # D. Parsing y Validación ROBUSTA
     try:
@@ -2091,10 +2156,11 @@ def clasificar_var_asimetria_mujer_hombre(
 # =====================================================================================
 # 34. Infatilización
 # =====================================================================================
-def clasificar_var_disminutivos_infantilizacion(
+def clasificar_var_diminutivos_infantilizacion(
     texto_articulo: str, 
     ruta_json: str = "variables.json",
-    ruta_template: str = "prompts/prompt_clara.md"
+    ruta_template: str = "prompts/prompt_clara.md", 
+    modelo: str = "gemma3:4b"
 ) -> BloqueAnalisisLenguajeSexista:
     
     # A. Carga Configuración
@@ -2114,7 +2180,7 @@ def clasificar_var_disminutivos_infantilizacion(
 
     # C. Llamada a Ollama
     print(f"--- Analizando {config['nombre']} con template dinámico ---")
-    respuesta_raw = consultar_ollama(prompt, temperature=0.1) 
+    respuesta_raw = consultar_ollama(prompt, modelo, temperature=0.1) 
 
     # D. Parsing y Validación ROBUSTA
     try:
@@ -2150,7 +2216,8 @@ def clasificar_var_disminutivos_infantilizacion(
 def clasificar_var_denominacion_sexualizada(
     texto_articulo: str, 
     ruta_json: str = "variables.json",
-    ruta_template: str = "prompts/prompt_clara.md"
+    ruta_template: str = "prompts/prompt_clara.md", 
+    modelo: str = "gemma3:4b"
 ) -> BloqueAnalisisLenguajeSexista:
     
     # A. Carga Configuración
@@ -2170,7 +2237,7 @@ def clasificar_var_denominacion_sexualizada(
 
     # C. Llamada a Ollama
     print(f"--- Analizando {config['nombre']} con template dinámico ---")
-    respuesta_raw = consultar_ollama(prompt, temperature=0.1) 
+    respuesta_raw = consultar_ollama(prompt, modelo, temperature=0.1) 
 
     # D. Parsing y Validación ROBUSTA
     try:
@@ -2206,7 +2273,8 @@ def clasificar_var_denominacion_sexualizada(
 def clasificar_var_denominacion_redundante(
     texto_articulo: str, 
     ruta_json: str = "variables.json",
-    ruta_template: str = "prompts/prompt_clara.md"
+    ruta_template: str = "prompts/prompt_clara.md", 
+    modelo: str = "gemma3:4b"
 ) -> BloqueAnalisisLenguajeSexista:
     
     # A. Carga Configuración
@@ -2226,7 +2294,7 @@ def clasificar_var_denominacion_redundante(
 
     # C. Llamada a Ollama
     print(f"--- Analizando {config['nombre']} con template dinámico ---")
-    respuesta_raw = consultar_ollama(prompt, temperature=0.1) 
+    respuesta_raw = consultar_ollama(prompt, modelo, temperature=0.1) 
 
     # D. Parsing y Validación ROBUSTA
     try:
@@ -2262,7 +2330,8 @@ def clasificar_var_denominacion_redundante(
 def clasificar_var_denominacion_dependiente(
     texto_articulo: str, 
     ruta_json: str = "variables.json",
-    ruta_template: str = "prompts/prompt_clara.md"
+    ruta_template: str = "prompts/prompt_clara.md", 
+    modelo: str = "gemma3:4b"
 ) -> BloqueAnalisisLenguajeSexista:
     
     # A. Carga Configuración
@@ -2282,7 +2351,7 @@ def clasificar_var_denominacion_dependiente(
 
     # C. Llamada a Ollama
     print(f"--- Analizando {config['nombre']} con template dinámico ---")
-    respuesta_raw = consultar_ollama(prompt, temperature=0.1) 
+    respuesta_raw = consultar_ollama(prompt, modelo, temperature=0.1) 
 
     # D. Parsing y Validación ROBUSTA
     try:
@@ -2318,7 +2387,8 @@ def clasificar_var_denominacion_dependiente(
 def clasificar_var_criterios_excepcion(
     texto_articulo: str, 
     ruta_json: str = "variables.json",
-    ruta_template: str = "prompts/prompt_clara.md"
+    ruta_template: str = "prompts/prompt_clara.md", 
+    modelo: str = "gemma3:4b"
 ) -> BloqueAnalisisLenguajeSexista:
     
     # A. Carga Configuración
@@ -2338,7 +2408,7 @@ def clasificar_var_criterios_excepcion(
 
     # C. Llamada a Ollama
     print(f"--- Analizando {config['nombre']} con template dinámico ---")
-    respuesta_raw = consultar_ollama(prompt, temperature=0.1) 
+    respuesta_raw = consultar_ollama(prompt, modelo, temperature=0.1) 
 
     # D. Parsing y Validación ROBUSTA
     try:
@@ -2374,7 +2444,8 @@ def clasificar_var_criterios_excepcion(
 def clasificar_var_comparacion_mujer_hombre(
     texto_articulo: str, 
     ruta_json: str = "variables.json",
-    ruta_template: str = "prompts/prompt_clara.md"
+    ruta_template: str = "prompts/prompt_clara.md", 
+    modelo: str = "gemma3:4b"
 ) -> BloqueAnalisisLenguajeSexista:
     
     # A. Carga Configuración
@@ -2394,7 +2465,7 @@ def clasificar_var_comparacion_mujer_hombre(
 
     # C. Llamada a Ollama
     print(f"--- Analizando {config['nombre']} con template dinámico ---")
-    respuesta_raw = consultar_ollama(prompt, temperature=0.1) 
+    respuesta_raw = consultar_ollama(prompt, modelo, temperature=0.1) 
 
     # D. Parsing y Validación ROBUSTA
     try:

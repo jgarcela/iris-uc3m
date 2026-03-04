@@ -1,0 +1,4 @@
+experimento,run_id,timestamp,modelo,prompt_file,n_textos,n_variables,accuracy,kappa,f1_micro,f1_macro,f1_weighted,mae,sd,tiempo_total_seg
+Experimento-Interspeech-gemma3_1b_prompt_mentalidad,run_d1753363,2026-02-19 09:03:30,gemma3:1b,../../prompts/prompt_mentalidad.md,1000,0,0.0,,,,,,,69751.72
+Experimento-Interspeech-gemma3_4b_prompt_zeroshot,run_fc59ea73,2026-02-23 20:09:49,gemma3:4b,../../prompts/interspeech/prompt_zeroshot.md,999,0,0.0,,,,,,,25123.4
+Experimento-Interspeech-gemma3_4b_prompt_clara,run_7b304f41,2026-02-24 04:56:06,gemma3:4b,../../prompts/interspeech/prompt_clara.md,999,0,0.0,,,,,,,31573.81

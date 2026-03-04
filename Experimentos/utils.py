@@ -1,6 +1,6 @@
 
 from pydantic import BaseModel, Field, ValidationError
-from typing import Optional, Any, List
+from typing import Optional, Any, List, Dict
 import re
 import ollama
 from pathlib import Path
