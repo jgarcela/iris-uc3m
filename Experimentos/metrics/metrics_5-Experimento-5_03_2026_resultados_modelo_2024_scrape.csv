@@ -1,0 +1,5 @@
+Experimento,Variable,Tipo,N_Muestras,Accuracy,Kappa,F1_Macro,F1_Weighted,MAE,SD_Error,F1_Micro
+5-Experimento-5_03_2026,nombre_propio_titular,Categórica,1000.0,0.862,0.7992,0.8097,0.862,,,0.862
+5-Experimento-5_03_2026,cita_en_titulo,ERROR,,0.0,,,,,,
+5-Experimento-5_03_2026,cla_genero_prota,Categórica,1000.0,0.717,0.5783,0.6582,0.7231,,,0.717
+5-Experimento-5_03_2026,genero_periodista,Categórica,1000.0,0.595,0.4677,0.4618,0.6746,,,0.595

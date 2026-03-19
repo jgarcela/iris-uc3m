@@ -12,8 +12,8 @@ import os
 # 1. CONFIGURACIÓN
 # ==========================================
 
-NOMBRE_EXPERIMENTO = "2-Experimento-2_02-2026"
-NOMBRE_ARCHIVO = '2-Experimento-2_02-2026_resultados_modelo_2024_scrape.csv'
+NOMBRE_EXPERIMENTO = "3-Experimento-3_03_2026"
+NOMBRE_ARCHIVO = '3-Experimento-3_03_2026_resultados_modelo_2024_scrape.csv'
 ARCHIVO_INPUT = f'../../results/{NOMBRE_ARCHIVO}'
 ARCHIVO_OUTPUT = f'../../metrics/metrics_{NOMBRE_ARCHIVO}'
 

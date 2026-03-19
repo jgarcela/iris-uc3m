@@ -1,3 +1,4 @@
+
 import pandas as pd
 from newspaper import Article, Config
 from tqdm import tqdm
@@ -16,7 +17,7 @@ import utils # Importamos archivo utils.py
 # ==========================================
 # Definimos el nombre del archivo ANTES de cargar los datos para poder comprobar el progreso
 FOLDER = "../../results"
-PREFFIX = "2-Experimento-2_02-2026"
+PREFFIX = "3-Experimento-3_03_2026"
 SUFFIX = "scrape"
 nombre_output = f"{FOLDER}/{PREFFIX}_resultados_modelo_2024_{SUFFIX}.csv"
 
@@ -101,20 +102,15 @@ def procesar_fila(row):
 
     # --- APLICACIÓN DE VARIABLES ---
     # 7a. Nombre Propio Titular (Lista)
-    np_titular = variables.clasificar_var_nombre_propio_titular_list(titulo)
+    np_titular = variables.clasificar_var_nombre_propio_titular_list_e3(titulo)
     resultados['modelo_nombre_propio_titular_nombres'] = str(np_titular.nombres)
     resultados['modelo_nombre_propio_titular_valores'] = str(np_titular.valores)
     
     # 7b. Género Nombre Propio Titular (Cálculo sobre la lista)
     resultados['modelo_nombre_propio_titular'] = variables.clasificar_var_nombre_propio_titular(np_titular.valores)
 
-    # 8. Cita Titular
-    cita = variables.clasificar_var_cita_titular(titulo)
-    resultados['modelo_cita_en_titulo'] = cita.tipo
-    resultados['modelo_cita_en_titulo_texto'] = cita.cita
-
     # 9a. Protagonistas Cuerpo
-    protas = variables.clasificar_var_cla_genero_prota_list(texto)
+    protas = variables.clasificar_var_cla_genero_prota_list_e3(texto)
     resultados['modelo_cla_genero_prota_nombres'] = str(protas.nombres)
     resultados['modelo_cla_genero_prota_valores'] = str(protas.valores)
 
@@ -127,7 +123,7 @@ def procesar_fila(row):
 
     # 11. Género Periodista (Autoría)
     nombre_medio = resultados.get('modelo_Medio_nombre', 'Desconocido')
-    resultados['modelo_genero_periodista'] = variables.clasificar_var_genero_periodista(nombre_periodista, nombre_medio)
+    resultados['modelo_genero_periodista'] = variables.clasificar_var_genero_periodista_e3(nombre_periodista, nombre_medio)
 
     return resultados
 
