@@ -25,4 +25,9 @@ confusion_matrices
 *.docx
 *.pdf
 *.zip
-CLUSTER/
+
+# CLUSTER: versionar código; excluir resultados, logs y config local
+CLUSTER/**/results/
+CLUSTER/**/__pycache__/
+CLUSTER/**/*.log
+CLUSTER/llm.json

@@ -1,0 +1,45 @@
+{
+    "cluster": {
+        "master"            : "https://subserver2.tsc.uc3m.es:6820",
+	    "queue"		    : "main"
+    },
+    "resources": {
+        "CPUS": 4,
+        "GPUS": 0,
+        "MEMORY": 16384
+    },
+    "tasks": {
+        "task_basename"     : "Ejemplo_Matlab",
+        "cmdbase"           : "{working_dir}/{baseprogram} {funcion_matlab} {num_params} {var_param1} {param2} {var_param3} ",
+        "var_parameters"    : {
+            "var_param1"    : [3,6,8],
+            "var_param3"    : "np.arange(10)",
+	    "working_dir"   : "os.getcwd()"
+        },
+        "parameters"        : {
+            "baseprogram"       : "MatlabFunctions",
+            "funcion_matlab"    : "cpu_eater",
+            "num_params"        : 3,
+            "param2"            : 100
+        }
+    },
+
+    "framework" : {
+        "name"                      : "Ejemplo Matlab",
+        "max_num_procs_simultaneos" : -1,
+        "max_failed_tasks"          : 0,
+        "environment_vars"      : {
+            "MATLABPATH"        : "/export/usuarios01/USUARIO/matlab",
+            "HOME"              : "/export/usuarios01/USUARIO"
+        },
+        "stdouta"                : "stdout.log",
+        "stderra"                : "stderr.log",
+        "notification"          : 1,       
+	"email"                 : "h.molina@tsc.uc3m.es"
+    }
+
+
+
+
+    
+}

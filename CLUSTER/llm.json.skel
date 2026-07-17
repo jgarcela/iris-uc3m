@@ -1,0 +1,51 @@
+{
+    "cluster": {
+        "master"            : "https://subserver2.tsc.uc3m.es:6820",
+        "queue"		        : "gpus"
+    },
+    "resources": {
+        "CPUS": 4,
+        "MEMORY": 32768,
+	"GPUS": 1
+    },
+    "attributes": {
+      "gpu_model" : "rtx3090"
+    },
+    "tasks": {
+        "task_basename"     : "LLM Evaluation",
+        "cmdbase"           : "{baseprogram} -c 'OLLAMA_HOST=0.0.0.0:{port} {ollama_bin} {ollama_param}'",
+        "var_parameters"    : {
+            "port"        : [ 
+		11434,
+		11435,
+		11436,
+		11437
+            ]
+        },
+        "parameters"        : {
+            "baseprogram"       : "/usr/bin/bash",
+	    "ollama_bin"        : "/opt/ollama/bin/ollama",
+            "ollama_param"      : "serve"
+        }
+    },
+
+    "framework" : {
+        "name"                      : "SERVIDOR LLM EVALUACION",
+        "max_num_procs_simultaneos" : -1,
+        "max_failed_tasks"          : 0,
+        "environment_vars"      : {
+            "OLLAMA_MODELS"     : "/data/tmp/AQUI CAMBIAR USUARIO/models",
+	    "HOME"              : "/export/usuarios01/USUARIO"
+        },
+        "stdout"                : "stdout.log",
+        "stderr"                : "stderr.log",
+        "logdir"		: "DONDE VAS A SALVAR LOS LOGS",
+	"basename_log"		: "llm_eval",
+        "notification_at_end"   : 1          
+    }
+
+
+
+
+    
+}

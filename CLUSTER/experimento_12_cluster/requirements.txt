@@ -1,0 +1,9 @@
+# Dependencias del cliente exp12 + scripts de apoyo (variables.py, utils.py)
+pandas
+pydantic
+ollama
+json_repair
+gender_guesser
+tqdm
+newspaper3k        # variables.py hace 'from newspaper import Article' al importar el módulo
+# anthropic         # SOLO si vas a usar modelos Claude vía API (no necesario para gemma4:e4b)

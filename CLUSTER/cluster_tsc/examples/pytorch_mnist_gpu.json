@@ -1,0 +1,61 @@
+{
+    "cluster": {
+        "master"            : "https://subserver2.tsc.uc3m.es:6820",
+        "queue"		        : "gpus"
+    },
+    "resources": {
+        "CPUS": 4,
+        "MEMORY": 8192,
+	    "GPUS": 1
+    },
+    "tasks": {
+        "task_basename"     : "DeepAutoencoder",
+        "cmdbase"           : "{working_dir}/{baseprogram} --lr {learning_rate} --epochs {numepochs} --batch-size {batchsize}",
+        "var_parameters"    : {
+            "working_dir"        : "os.getcwd()",
+            "learning_rate"        : [
+	            0.00000000100,
+		        0.00000000150,
+                0.00000000500,
+                0.00000001000,
+                0.00000001500,
+                0.00000002000,
+                0.00000002500,
+                0.00000003000,
+                0.00000003500,
+                0.00000004000,
+                0.00000004500,
+                0.00000005000,
+                0.00000005500,
+                0.00000006000,
+                0.00000006500,
+                0.00000007000,
+                0.00000007500,
+                0.00000010000
+            ]
+        },
+        "parameters"        : {
+            "baseprogram"       : "mnist_pytorch.py",
+            "database"          : "MNIST",
+            "numepochs"         : 10,
+            "batchsize"         : 250
+        }
+    },
+
+    "framework" : {
+        "name"                      : "Prueba Nuevo Lanzador",
+        "max_num_procs_simultaneos" : -1,
+        "max_failed_tasks"          : 0,
+        "environment_vars"      : {
+            "PATH"              : "/usr/local/bin:/usr/bin:/bin"
+        },
+        "stdout"                : "stdout.log",
+        "stderr"                : "stderr.log",
+        "notification_at_end"   : 1          
+    }
+
+
+
+
+    
+}

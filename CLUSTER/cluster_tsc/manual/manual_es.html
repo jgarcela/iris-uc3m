@@ -1,0 +1,882 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Manual de Uso del Cluster del DTSC - SLURM</title>
+  <style>
+    :root {
+      --bg: #0b1020; --panel: #111a33; --card: #ffffff; --soft: #f5f7fb;
+      --text: #1c2434; --muted: #60708c; --primary: #2657d9; --primary2: #0fa3b1;
+      --ok: #16a34a; --warn: #d97706; --bad: #dc2626; --line: #dce4f2;
+      --code: #0f172a; --codeText: #e5e7eb; --radius: 18px; --shadow: 0 18px 45px rgba(15,23,42,.16);
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { margin: 0; font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; color: var(--text); background: linear-gradient(180deg,#eef4ff 0,#fff 28rem); }
+    a { color: var(--primary); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .hero { background: radial-gradient(circle at top left,#2dd4bf55,transparent 32rem), linear-gradient(135deg,#0b1020,#172554 65%,#0f766e); color: white; padding: 48px 24px 34px; }
+    .wrap { max-width: 1180px; margin: auto; }
+    .hero h1 { margin: 0; font-size: clamp(2rem,5vw,4.3rem); line-height: 1.03; letter-spacing: -.05em; }
+    .hero p { max-width: 860px; color: #dbeafe; font-size: 1.1rem; }
+    .meta { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 24px; }
+    .chip { border: 1px solid #ffffff33; background: #ffffff14; backdrop-filter: blur(8px); padding: 10px 14px; border-radius: 999px; font-weight: 650; }
+    .layout { max-width: 1500px; margin: 0 auto; display: grid; grid-template-columns: 300px minmax(0,1fr); gap: 28px; padding: 30px 22px 70px; align-items: start; }
+    .sidebar { position: sticky; top: 20px; height: calc(100vh - 40px); overflow-y: auto; background: linear-gradient(180deg,#0f172a,#111827); color: #e5e7eb; border: 1px solid #243047; border-radius: 22px; box-shadow: var(--shadow); }
+    .sidebar-inner { padding: 22px; }
+    .sidebar-title { font-size: 1.1rem; font-weight: 850; letter-spacing: -.02em; color: #ffffff; margin-bottom: 4px; }
+    .sidebar-subtitle { font-size: .85rem; color: #93c5fd; text-transform: uppercase; letter-spacing: .08em; margin-bottom: 18px; }
+    .side-nav { display: flex; flex-direction: column; gap: 6px; }
+    .side-nav a { color: #cbd5e1; text-decoration: none; padding: 10px 12px; border-radius: 12px; font-weight: 650; border: 1px solid transparent; }
+    .side-nav a:hover { background: #1e293b; color: #ffffff; border-color: #334155; text-decoration: none; }
+    main.content { min-width: 0; }
+    section { margin: 0 0 28px; background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); padding: clamp(22px,4vw,38px); scroll-margin-top: 24px; }
+    h2 { margin-top: 0; font-size: clamp(1.55rem,3vw,2.2rem); letter-spacing: -.025em; }
+    h3 { color: #15213a; margin-top: 1.8rem; }
+    .lead { color: var(--muted); font-size: 1.06rem; line-height: 1.65; }
+    .grid { display: grid; gap: 18px; }
+    .grid-2 { grid-template-columns: repeat(auto-fit,minmax(280px,1fr)); }
+    .grid-4 { grid-template-columns: repeat(auto-fit,minmax(210px,1fr)); }
+    .card { background: var(--soft); border: 1px solid var(--line); border-radius: 16px; padding: 18px; }
+    .card h3 { margin: 0 0 8px; }
+    .kpi { font-size: 2rem; font-weight: 800; color: var(--primary); }
+    .pill { display: inline-block; font-size: .78rem; padding: .22rem .55rem; border-radius: 999px; font-weight: 700; }
+    .ok { background: #dcfce7; color: #166534; } .warn { background: #fef3c7; color: #92400e; } .bad { background: #fee2e2; color: #991b1b; }
+    table { width: 100%; border-collapse: collapse; margin: 14px 0; font-size: .95rem; }
+    th, td { text-align: left; padding: 12px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+    th { background: #eef3ff; color: #18233c; position: sticky; top: 0; }
+    .table-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 14px; }
+    code { background: #eef2ff; color: #1e3a8a; padding: .15rem .35rem; border-radius: .35rem; }
+    pre { background: var(--code); color: var(--codeText); overflow-x: auto; padding: 18px; border-radius: 14px; border: 1px solid #26314b; line-height: 1.45; }
+    pre code { background: transparent; color: inherit; padding: 0; }
+    .callout { border-left: 5px solid var(--primary2); background: #ecfeff; padding: 16px 18px; border-radius: 12px; margin: 16px 0; }
+    .warnbox { border-left-color: var(--warn); background: #fffbeb; }
+    .dangerbox { border-left-color: var(--bad); background: #fef2f2; }
+    ul, ol { line-height: 1.65; }
+    .links a { display: block; padding: 14px 16px; background: var(--soft); border: 1px solid var(--line); border-radius: 14px; margin: 10px 0; }
+    footer { color: #64748b; text-align: center; padding: 25px; }
+
+    @media (max-width: 980px) {
+      .layout { display: block; padding: 18px 14px 54px; }
+      .sidebar { position: static; height: auto; margin-bottom: 22px; border-radius: 18px; }
+      .side-nav { display: grid; grid-template-columns: repeat(auto-fit,minmax(180px,1fr)); }
+      section { scroll-margin-top: 12px; }
+    }
+    @media print { .sidebar { display:none; } .layout { display:block; max-width:none; padding:0; } section { box-shadow:none; break-inside:avoid; } body { background:white; } }
+  </style>
+</head>
+<body>
+<header class="hero">
+  <div class="wrap">
+    <h1>Manual de Uso del Cluster del Departamento de Teoría de la Señal y Comunicaciones</h1>
+    <p>Guía práctica para lanzar trabajos, seleccionar particiones, usar recursos CPU/GPU y consultar el estado de la granja gestionada con SLURM.</p>
+    <div class="meta">
+      <span class="chip">Cluster: Scylla_DTSC_Cluster</span>
+      <span class="chip">Controladores: subserver1, subserver2</span>
+      <span class="chip">Gestor: SLURM</span>
+    </div>
+  </div>
+</header>
+
+
+
+<div class="layout">
+<aside class="sidebar" aria-label="Índice del manual">
+  <div class="sidebar-inner">
+    <div class="sidebar-title">Manual SLURM</div>
+    <div class="sidebar-subtitle">Índice</div>
+    <nav class="side-nav">
+      <a href="#intro">Introducción</a>
+      <a href="#acceso">Acceso al sistema</a>
+      <a href="#entornos">Entornos de trabajo</a>
+      <a href="#recursos">Recursos disponibles</a>
+      <a href="#decision">Tabla de decisión</a>
+      <a href="#json-barridos">Barridos paramétricos JSON</a>
+      <a href="#ejemplos">Ejemplos de uso</a>
+      <a href="#comandos">Comandos básicos</a>
+      <a href="#problemas">Resolución de problemas</a>
+      <a href="#web">Interfaces web</a>
+      <a href="#buenas">Buenas prácticas</a>
+      <a href="#plantilla">Plantilla recomendada</a>
+    </nav>
+  </div>
+</aside>
+<main class="content">
+<section id="intro">
+  <h2>1. Introducción</h2>
+  <p class="lead">SLURM es el gestor de recursos y planificador de trabajos usado en el cluster del DTSC. Su función principal es repartir de forma ordenada los recursos compartidos de computación —CPU, memoria, nodos y GPUs— entre los usuarios y grupos de investigación.</p>
+  <div class="grid grid-4">
+    <div class="card"><h3>Gestión centralizada</h3><p>Evita conflictos entre usuarios y permite definir políticas de uso por particiones, cuentas y QoS.</p></div>
+    <div class="card"><h3>Optimización</h3><p>Ajusta la asignación de CPUs, memoria, tiempo y GPUs a las necesidades reales de cada trabajo.</p></div>
+    <div class="card"><h3>Colas inteligentes</h3><p>Prioriza trabajos cortos, depuración, trabajos normales, largos o GPU según la política del cluster.</p></div>
+    <div class="card"><h3>Trazabilidad</h3><p>Permite consultar quién ejecutó un trabajo, cuándo, con qué recursos y con qué resultado.</p></div>
+  </div>
+</section>
+
+<section id="acceso">
+  <h2>2. Acceso al sistema</h2>
+  <p>Para lanzar procesos al cluster de SLURM, los usuarios deben conectarse a las máquinas autorizadas para su grupo de trabajo. Desde esas máquinas se preparan los scripts y se envían los trabajos con <code>sbatch</code>, <code>srun</code>, <code>salloc</code> o mediante la librería de lanzamiento basada en <code>launch_process.py</code> y <code>Scheduler.py</code>.</p>
+  <div class="grid grid-4">
+    <div class="card"><h3>Grupo de Comunicaciones</h3><p><code>ceres</code></p></div>
+    <div class="card"><h3>Grupo ML4DS</h3><p><code>hator00</code> a <code>hator07</code>, <code>izanami</code></p></div>
+    <div class="card"><h3>Grupo de Procesado Multimedia</h3><p><code>amaterasu</code> o <code>kusanagi</code></p></div>
+    <div class="card"><h3>Grupo GTS</h3><p><code>meiga01</code> a <code>meiga06</code>, <code>arvak</code> o <code>skoll</code></p></div>
+    <div class="card"><h3>Otros</h3><p><code>medusa00</code>, <code>glenfiddish</code> o <code>macallan</code></p></div>
+  </div>
+  <div class="callout warnbox"><strong>Importante:</strong> no se debe entrar por SSH directamente a los nodos de cómputo para ejecutar procesos pesados. Los trabajos deben lanzarse mediante SLURM.</div>
+</section>
+
+<section id="entornos">
+  <h2>3. Preparación de entornos de trabajo</h2>
+  <p>Los usuarios pueden usar las librerías preinstaladas y optimizadas para cada máquina, o preparar entornos aislados de Python con <code>venv</code> o Conda.</p>
+  <p>Para entornos, datos y resultados se recomienda utilizar volúmenes compartidos como <code>/export/usuarios01/USER</code> o <code>/export/clusterdata/USER</code>, de forma que los ficheros estén disponibles desde los nodos donde se ejecuten las tareas.</p>
+  <h3>Entorno Python con venv</h3>
+<pre><code>mkdir -p /export/clusterdata/$USER/venvs
+python3 -m venv /export/clusterdata/$USER/venvs/mi_entorno
+source /export/clusterdata/$USER/venvs/mi_entorno/bin/activate
+python -m pip install --upgrade pip
+pip install numpy scipy pandas scikit-learn torch</code></pre>
+  <h3>Entorno con Conda</h3>
+<pre><code>conda create -p /export/clusterdata/$USER/conda/envs/mi_entorno python=3.11
+conda activate /export/clusterdata/$USER/conda/envs/mi_entorno
+conda install numpy scipy pandas scikit-learn</code></pre>
+  <div class="callout"><strong>Recomendación:</strong> ubica los entornos en volúmenes compartidos como <code>/export/usuarios01/USER</code> o <code>/export/clusterdata/USER</code>, para que estén disponibles desde los nodos que ejecuten el trabajo.</div>
+</section>
+
+<section id="recursos">
+  <h2>4. Recursos disponibles</h2>
+  <div class="grid grid-4">
+    <div class="card"><div class="kpi">8</div><strong>particiones configuradas</strong></div>
+    <div class="card"><div class="kpi">76</div><strong>nodos CPU en particiones generales</strong></div>
+    <div class="card"><div class="kpi">10</div><strong>nodos GPU bastet[01-10]</strong></div>
+    <div class="card"><div class="kpi">32</div><strong>GPUs disponibles en partición gpus</strong></div>
+  </div>
+  <h3>Particiones</h3>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Partición</th><th>QoS</th><th>Cuenta</th><th>Tiempo máx.</th><th>Nodos</th><th>CPUs</th><th>TRES</th></tr></thead>
+      <tbody>
+<tr>
+  <td><strong>main <span class="pill ok">default</span></strong></td>
+  <td>normal</td>
+  <td>general</td>
+  <td>7-00:00:00</td>
+  <td>76</td>
+  <td>1264</td>
+  <td>cpu=1264,mem=6056057M,node=76,billing=1264</td>
+</tr>
+
+<tr>
+  <td><strong>gpus</strong></td>
+  <td>normal_gpu</td>
+  <td>gpu</td>
+  <td>7-00:00:00</td>
+  <td>10</td>
+  <td>216</td>
+  <td>cpu=216,mem=1673511M,node=10,billing=216,gres/gpu=32</td>
+</tr>
+
+<tr>
+  <td><strong>priority</strong></td>
+  <td>priority</td>
+  <td>priority</td>
+  <td>02:00:00</td>
+  <td>76</td>
+  <td>1264</td>
+  <td>cpu=1264,mem=6056057M,node=76,billing=1264</td>
+</tr>
+
+<tr>
+  <td><strong>debug</strong></td>
+  <td>debug</td>
+  <td>debug</td>
+  <td>1-00:00:00</td>
+  <td>76</td>
+  <td>1264</td>
+  <td>cpu=1264,mem=6056057M,node=76,billing=1264</td>
+</tr>
+
+<tr>
+  <td><strong>gpus_priority</strong></td>
+  <td>priority_gpu</td>
+  <td>priority</td>
+  <td>02:00:00</td>
+  <td>10</td>
+  <td>216</td>
+  <td>cpu=216,mem=1673511M,node=10,billing=216,gres/gpu=32</td>
+</tr>
+
+<tr>
+  <td><strong>long</strong></td>
+  <td>long</td>
+  <td>general</td>
+  <td>30-00:00:00</td>
+  <td>76</td>
+  <td>1264</td>
+  <td>cpu=1264,mem=6056057M,node=76,billing=1264</td>
+</tr>
+
+<tr>
+  <td><strong>gpus_long</strong></td>
+  <td>long_gpu</td>
+  <td>gpu</td>
+  <td>30-00:00:00</td>
+  <td>10</td>
+  <td>216</td>
+  <td>cpu=216,mem=1673511M,node=10,billing=216,gres/gpu=32</td>
+</tr>
+
+<tr>
+  <td><strong>gpus_debug</strong></td>
+  <td>debug_gpu</td>
+  <td>gpu</td>
+  <td>30-00:00:00</td>
+  <td>10</td>
+  <td>216</td>
+  <td>cpu=216,mem=1673511M,node=10,billing=216,gres/gpu=32</td>
+</tr></tbody>
+    </table>
+  </div>
+  <h3>Niveles de Calidad de Servicio — QoS</h3>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>QoS</th><th>Descripción</th><th>Prioridad</th><th>Tiempo máximo</th><th>Límite GPU</th></tr></thead>
+      <tbody>
+<tr>
+  <td><strong>normal</strong></td>
+  <td>Normal QOS default</td>
+  <td>100</td>
+  <td>7-00:00:00</td>
+  <td>gres/gpu=0</td>
+</tr>
+
+<tr>
+  <td><strong>debug</strong></td>
+  <td>debug</td>
+  <td>1000</td>
+  <td>06:00:00</td>
+  <td>gres/gpu=0</td>
+</tr>
+
+<tr>
+  <td><strong>long</strong></td>
+  <td>long</td>
+  <td>10</td>
+  <td>30-00:00:00</td>
+  <td>gres/gpu=0</td>
+</tr>
+
+<tr>
+  <td><strong>priority</strong></td>
+  <td>priority</td>
+  <td>2000</td>
+  <td>1-00:00:00</td>
+  <td>gres/gpu=0</td>
+</tr>
+
+<tr>
+  <td><strong>normal_gpu</strong></td>
+  <td>normal_gpu</td>
+  <td>100</td>
+  <td>7-00:00:00</td>
+  <td>gres/gpu=32</td>
+</tr>
+
+<tr>
+  <td><strong>debug_gpu</strong></td>
+  <td>debug_gpu</td>
+  <td>1000</td>
+  <td>06:00:00</td>
+  <td>gres/gpu=1</td>
+</tr>
+
+<tr>
+  <td><strong>long_gpu</strong></td>
+  <td>long_gpu</td>
+  <td>10</td>
+  <td>30-00:00:00</td>
+  <td>gres/gpu=16</td>
+</tr>
+
+<tr>
+  <td><strong>priority_gpu</strong></td>
+  <td>priority_gpu</td>
+  <td>2000</td>
+  <td>1-00:00:00</td>
+  <td>gres/gpu=16</td>
+</tr></tbody>
+    </table>
+  </div>
+  <div class="callout">La partición <code>long</code> aparece como partición por defecto en la configuración actual. Para trabajos CPU normales se recomienda especificar explícitamente <code>--partition=main</code> cuando se desee usar la cola general de hasta 7 días.</div>
+</section>
+
+<section id="decision">
+  <h2>5. Tabla de decisión</h2>
+  <p>Como regla general, usa una partición CPU si no necesitas GPUs y una partición GPU si el programa requiere CUDA, PyTorch/TensorFlow con aceleración, o procesamiento explícito en GPU.</p>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Necesidad</th><th>Partición recomendada</th><th>QoS</th><th>Cuenta</th><th>Ejemplo relacionado</th></tr></thead>
+      <tbody>
+        <tr><td>Trabajo CPU estándar, hasta 7 días</td><td><code>main</code></td><td><code>normal</code></td><td><code>general</code></td><td><a href="#cpu">Script CPU</a></td></tr>
+        <tr><td>Prueba corta o depuración CPU</td><td><code>debug</code></td><td><code>debug</code></td><td><code>debug</code></td><td><a href="#cpu">Script CPU con menos tiempo</a></td></tr>
+        <tr><td>Trabajo CPU largo, hasta 30 días</td><td><code>long</code></td><td><code>long</code></td><td><code>general</code></td><td><a href="#plantilla">Plantilla recomendada</a></td></tr>
+        <tr><td>Trabajo GPU estándar</td><td><code>gpus</code></td><td><code>normal_gpu</code></td><td><code>gpu</code></td><td><a href="#gpu1">Una GPU</a></td></tr>
+        <tr><td>Prueba corta en GPU</td><td><code>gpus_debug</code></td><td><code>debug_gpu</code></td><td><code>gpu</code></td><td><a href="#gpu1">Una GPU</a></td></tr>
+        <tr><td>Entrenamiento largo GPU</td><td><code>gpus_long</code></td><td><code>long_gpu</code></td><td><code>gpu</code></td><td><a href="#gpu-multi">Múltiples GPUs</a></td></tr>
+        <tr><td>Trabajo prioritario corto</td><td><code>priority</code> o <code>gpus_priority</code></td><td><code>priority</code> / <code>priority_gpu</code></td><td><code>priority</code></td><td>Solo si tienes autorización</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section id="json-barridos">
+  <h2>6. Definición de tareas de barrido paramétrico usando fichero JSON</h2>
+  <p class="lead">Uno de los problemas habituales al lanzar experimentos basados en barridos paramétricos con un gran número de combinaciones de parámetros es automatizar su lanzamiento, seguimiento y reintento en caso de fallo.</p>
+  <p>Basados en el gestor antiguo de MESOS, se ha migrado la librería Python <code>launch_process.py</code> + <code>Scheduler.py</code> para que funcione con el nuevo gestor SLURM. Esta nueva versión asegura compatibilidad con la definición de experimentos antiguos, adaptándolos para poder lanzarlos directamente sin cambios. Existe, no obstante, un cambio de comportamiento en cuanto a la ubicación de ficheros temporales y consultas al sistema.</p>
+  <p><b>NOTA:</b>Esta nueva version se debe ejecutar con PYTHON 3.9 o superior, a diferencia del gestor antiguo que se ejecutaba con PYTHON 2.7.</p>
+  <h3>Lanzamiento de experimentos</h3>
+  <p>Una vez definido el fichero de configuración JSON, el experimento se lanza mediante la herramienta <code>launch_process.py</code>. Esta herramienta genera todas las combinaciones de parámetros, envía las tareas a SLURM y supervisa su ejecución hasta la finalización del framework.</p>
+<pre><code>python3 ./launch_process.py -c CONFIGURACION.json</code></pre>
+  <p>Si el fichero <code>launch_process.py</code> tiene permisos de ejecución (0755), se puede ejecutar directamente:</p>
+<pre><code>./launch_process.py -c CONFIGURACION.json</code></pre>
+  <p>El fichero <code>CONFIGURACION.json</code> contiene la definición completa del experimento: conexión al cluster, recursos, parámetros variables, parámetros estáticos y comportamiento del framework.</p>
+  <p>También se pueden pasar parámetros extra desde la línea de comandos para redefinir valores definidos dentro del JSON. Para consultar todas las opciones disponibles:</p>
+<pre><code>python3 launch_process.py --help</code></pre>
+  <div class="grid grid-2">
+    <div class="card">
+      <h3>Versión estable</h3>
+      <p>Última versión de la librería y ejemplos de ficheros JSON:</p>
+      <p><a href="https://www.tsc.uc3m.es/cluster/scripts_latest.zip">https://www.tsc.uc3m.es/cluster/scripts_latest.zip</a></p>
+    </div>
+    <div class="card">
+      <h3>Versión de desarrollo</h3>
+      <p>Versiones inestables desde el repositorio de desarrollo:</p>
+      <p><a href="https://hermes.tsc.uc3m.es/git/hmolina/cluster_tsc/archive/master.tar.gz">https://hermes.tsc.uc3m.es/git/hmolina/cluster_tsc/archive/master.tar.gz</a></p>
+    </div>
+  </div>
+  <div class="callout warnbox"><strong>Compatibilidad CPU/GPU:</strong> si no se solicitan GPUs y se configura una partición <code>queue</code> con GPUs, los procesos se rechazarán. Si se solicitan GPUs y se configura una <code>queue</code> sin GPUs, los procesos quedarán en <code>PENDING</code> esperando recursos que esa partición no puede proporcionar.</div>
+
+  <h3>Sección <code>cluster</code></h3>
+  <p>Define la configuración de conexión al cluster y las particiones y QoS que se utilizarán para lanzar las tareas.</p>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Variable</th><th>Descripción</th><th>Posibles valores</th></tr></thead>
+      <tbody>
+        <tr><td><code>master</code></td><td>Endpoint del servicio <code>slurmrestd</code> al que se conectará la librería para enviar trabajos y consultar el estado del cluster.</td><td><code>https://subserver2.tsc.uc3m.es:6820</code> o <code>https://subserver1.tsc.uc3m.es:6820</code>. Es importante especificar el puerto <code>6820</code>, correspondiente al servicio SLURM REST.</td></tr>
+        <tr><td><code>queue</code></td><td>Partición SLURM a utilizar. Esta clave sustituye el concepto antiguo de cola del sistema basado en MESOS.</td><td>Cualquiera de las particiones definidas en la sección 4: <code>main</code>, <code>debug</code>, <code>long</code>, <code>priority</code>, <code>gpus</code>, <code>gpus_debug</code>, <code>gpus_long</code>, <code>gpus_priority</code>.</td></tr>
+        <tr><td><code>qos</code></td><td>Nivel de servicio esperado, asociado a la partición seleccionada.</td><td><code>normal</code>, <code>debug</code>, <code>long</code>, <code>priority</code>, <code>normal_gpu</code>, <code>debug_gpu</code>, <code>long_gpu</code>, <code>priority_gpu</code>.</td></tr>
+      </tbody>
+    </table>
+  </div>
+<pre><code>"cluster": {
+  "master": "https://subserver2.tsc.uc3m.es:6820",
+  "queue": "main",
+  "qos": "normal"
+}</code></pre>
+
+  <h3>Sección <code>resources</code></h3>
+  <p>Define los recursos necesarios en cada nodo para la ejecución de la tarea.</p>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Variable</th><th>Descripción</th><th>Valor recomendado</th></tr></thead>
+      <tbody>
+        <tr><td><code>CPUS</code></td><td>Número de cores por proceso.</td><td><code>4</code></td></tr>
+        <tr><td><code>MEMORY</code></td><td>Memoria requerida por proceso, en MBytes.</td><td><code>4096</code> MBytes por CPU requerida. Por ejemplo, para 4 CPUs se recomienda empezar con al menos <code>16384</code> MBytes si la aplicación lo necesita.</td></tr>
+        <tr><td><code>GPUS</code></td><td>Número de GPUs requeridas por proceso.</td><td><code>0</code> para trabajos CPU; <code>1</code> o más para trabajos GPU.</td></tr>
+      </tbody>
+    </table>
+  </div>
+<pre><code>"resources": {
+  "CPUS": 4,
+  "GPUS": 0,
+  "MEMORY": 8192
+}</code></pre>
+
+  <h3>Sección <code>tasks</code></h3>
+  <p>La sección <code>tasks</code> es un diccionario que define el nombre base de las tareas, el comando a ejecutar, los parámetros variables del barrido y los parámetros estáticos comunes a todas las ejecuciones.</p>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Clave</th><th>Descripción</th></tr></thead>
+      <tbody>
+        <tr><td><code>task_basename</code></td><td>Nombre con el que se identificará cada tarea lanzada a los nodos remotos. El nombre se construirá a partir de <code>task_basename</code> más el identificador de la tarea y el número total de tareas.</td></tr>
+        <tr><td><code>cmdbase</code></td><td>Sintaxis del comando que se debe ejecutar. Es un string basado en Python cuyos valores entre llaves se sustituyen por valores individuales de <code>var_parameters</code> o por variables estáticas definidas en <code>parameters</code>.<br/>El programa o script a ejecutar debe: <ul><li>Especificarse su <i>PATH</i> completo</i></li><li>El directorio que lo contiene esté en la variable de entorno <i>PATH</i></li><li>Estar en el directorio de trabajo definido por la variable <i>workdir</i> definida en la sección <i>framework</i>.</li></ul></td></tr>
+        <tr><td><code>var_parameters</code></td><td>Parámetros variables para cada comando a ejecutar. Se realizará una combinación entre todas las variables aquí definidas para generar todas las tareas. Los valores pueden ser listas de valores numéricos, cadenas de texto o expresiones Python que generen listas de datos de forma automática, por ejemplo <code>range(inicio, final, paso)</code>, <code>np.arange(...)</code>, <code>os.getcwd()</code> u otras expresiones que permitan construir secuencias de valores de forma programática.</td></tr>
+        <tr><td><code>parameters</code></td><td>Parámetros estáticos de la tarea. Estos valores son comunes a todos los comandos generados.</td></tr>
+      </tbody>
+    </table>
+  </div>
+<pre><code>"tasks": {
+  "task_basename": "DeepAutoencoder",
+  "cmdbase": "{baseprogram} --lr {learning_rate} --epochs {numepochs} --batch-size {batchsize}",
+  "var_parameters": {
+    "learning_rate": [
+      0.00000000100,
+      0.00000000101,
+      0.00000000102,
+      0.00000000103,
+      0.00000000104,
+      0.00000000105
+    ]
+  },
+  "parameters": {
+    "baseprogram": "/usr/bin/python3 mnist_pytorch.py",
+    "database": "MNIST",
+    "numepochs": 10,
+    "batchsize": 250,
+    "localdir": "/export/clusterdata/USER/data_test",
+    "shared_dir": "/export/clusterdata/USER/autoencoder/results"
+  }
+}</code></pre>
+  <p>Con estos parámetros, se generarán automáticamente los comandos a ejecutar sustituyendo las variables definidas entre llaves (<code>{}</code>) por los valores establecidos en los campos <code>var_parameters</code> y <code>parameters</code>. Por ejemplo, los dos primeros comandos generados serían:</p>
+<pre><code>/usr/bin/python3 mnist_pytorch.py --lr 0.00000000100 --epochs 10 --batch-size 250
+/usr/bin/python3 mnist_pytorch.py --lr 0.00000000101 --epochs 10 --batch-size 250</code></pre>
+  <p>Y así sucesivamente hasta completar todos los valores definidos en la lista <code>learning_rate</code>. Cuando existan varias variables dentro de <code>var_parameters</code>, el sistema generará automáticamente todas las combinaciones posibles entre ellas, creando una tarea independiente para cada combinación de parámetros.</p>
+  <div class="callout"><strong>Cálculo del número de tareas:</strong> el número total de tareas generadas será el producto del número de valores definidos para cada una de las variables incluidas en <code>var_parameters</code>.</div>
+<pre><code>learning_rate : 6 valores
+batchsize     : 4 valores
+optimizer     : 3 valores
+
+Total tareas = 6 × 4 × 3 = 72</code></pre>
+
+  <h3>Clave <code>framework</code></h3>
+  <p>La clave <code>framework</code> es un diccionario que define los comandos y el entorno de ejecución de cada uno de los procesos remotos lanzados en los nodos esclavos.</p>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Clave</th><th>Descripción</th></tr></thead>
+      <tbody>
+        <tr><td><code>name</code></td><td>Nombre del framework.</td></tr>
+        <tr><td><code>max_num_procs_simultaneos</code></td><td>Máximo número de procesos simultáneos. Use <code>-1</code> para no limitar el número de procesos.</td></tr>
+        <tr><td><code>max_failed_tasks</code></td><td>Máximo número de tareas que pueden fallar antes de declarar el framework fallido. <code>0</code>: ante el primer fallo se para la ejecución completa. <code>n&gt;0</code>: pueden fallar hasta <code>n</code> tareas antes de parar el framework. <code>-1</code>: las tareas fallidas se reasignan y el framework no se para por fallos individuales.</td></tr>
+        <tr><td><code>environment_vars</code></td><td>Diccionario con variables de entorno que se definirán en cada proceso remoto. Para procesos Matlab es necesario exportar <code>HOME</code>.</td></tr>
+        <tr><td><code>uris</code></td><td>Vector con el conjunto de ficheros que se distribuirán a cada proceso remoto.</td></tr>
+        <tr><td><code>stdout</code></td><td>Fichero donde se almacenará la salida de consola del proceso maestro <code>launch_process.py</code>.</td></tr>
+        <tr><td><code>stderr</code></td><td>Fichero donde se almacenará la salida de error del proceso maestro <code>launch_process.py</code>.</td></tr>
+        <tr><td><code>notification</code></td><td><code>1</code> si se desea enviar un correo al finalizar las tareas.</td></tr>
+        <tr><td><code>email</code></td><td>Dirección de correo de destino cuando <code>notification</code> vale <code>1</code>. El correo se enviará desde <code>cluster@tsc.uc3m.es</code>.</td></tr>
+        <tr><td><code>max_num_task_per_host</code></td><td>Máximo número de tareas simultáneas por equipo. Es útil cuando cada proceso necesita un puerto específico y no puede haber más de cierto número de procesos por máquina.</td></tr>
+        <tr><td><code>workdir</code></td><td>Directorio donde se ejecutarán los procesos. Allí encontrará scripts y librerías de ejecución y, salvo que se defina otra variable, salvará los ficheros de log de cada proceso. Si no se define, se asumirá como <code>workdir</code> el directorio actual desde donde se lanza <code>launch_process.py</code>.</td></tr>
+        <tr><td><code>logdir</code></td><td>Directorio donde se almacenarán los logs de cada tarea. Si no se especifica, será el mismo <code>workdir</code>.</td></tr>
+      </tbody>
+    </table>
+  </div>
+<pre><code>"framework": {
+  "name": "Ejemplo Matlab",
+  "max_num_procs_simultaneos": -1,
+  "max_failed_tasks": 0,
+  "environment_vars": {
+    "MATLABPATH": "/export/usuarios01/USUARIO/matlab",
+    "HOME": "/export/usuarios01/USUARIO"
+  },
+  "stdout": "stdout.log",
+  "stderr": "stderr.log",
+  "notification": 1,
+  "email": "USUARIO@tsc.uc3m.es",
+  "max_num_task_per_host": 3,
+  "workdir": "/export/clusterdata/USUARIO/experimentos/matlab",
+  "logdir": "/export/clusterdata/USUARIO/experimentos/matlab/logs"
+}</code></pre>
+  <p>Este ejemplo configura un framework de nombre <strong>Ejemplo Matlab</strong>. El máximo número de procesos simultáneos se define con <code>max_num_procs_simultaneos=-1</code>, por lo que no se limita cuántos procesos se lanzan en la granja.</p>
+  <p>El máximo número de tareas fallidas se fija con <code>max_failed_tasks=0</code>, indicando que ante la primera tarea fallida el framework debe detenerse. El diccionario <code>environment_vars</code> exporta las variables <code>MATLABPATH</code> y <code>HOME</code>; en experimentos con Matlab es necesario definir <code>HOME</code>.</p>
+  <p>Las variables <code>stdout</code> y <code>stderr</code>, si están definidas, indican los ficheros a los que se redireccionará la salida estándar y la salida de error del programa <code>launch_process.py</code>. Si <code>notification</code> es <code>1</code>, se enviará un correo a la dirección indicada en <code>email</code> desde la cuenta <code>cluster@tsc.uc3m.es</code>. La variable <code>max_num_task_per_host</code> limita cuántas tareas simultáneas pueden ejecutarse en un mismo nodo; en el ejemplo, como máximo 3 tareas por equipo.</p>
+
+  <h3>Ejemplos completos de ficheros JSON</h3>
+  <p>Los siguientes ejemplos muestran configuraciones completas para el lanzador. El primer ejemplo usa una configuración ya adaptada a SLURM con <code>queue=main</code>. El segundo ejemplo corresponde a una definición antigua basada en MESOS, conservada como ejemplo de compatibilidad y como referencia para migración a la nueva estructura SLURM.</p>
+
+  <h4>Ejemplo Matlab</h4>
+<pre><code>{
+    &quot;cluster&quot;: {
+        &quot;master&quot;            : &quot;https://subserver2.tsc.uc3m.es:6820&quot;,
+	&quot;queue&quot;		    : &quot;main&quot;
+    },
+    &quot;resources&quot;: {
+        &quot;CPUS&quot;: 4,
+        &quot;GPUS&quot;: 0,
+        &quot;MEMORY&quot;: 16384
+    },
+    &quot;tasks&quot;: {
+        &quot;task_basename&quot;     : &quot;Ejemplo_Matlab&quot;,
+        &quot;cmdbase&quot;           : &quot;{working_dir}/{baseprogram} {funcion_matlab} {num_params} {var_param1} {param2} {var_param3} &quot;,
+        &quot;var_parameters&quot;    : {
+            &quot;var_param1&quot;    : [3,6,8],
+            &quot;var_param3&quot;    : &quot;np.arange(10)&quot;,
+	    &quot;working_dir&quot;   : &quot;os.getcwd()&quot;
+        },
+        &quot;parameters&quot;        : {
+            &quot;baseprogram&quot;       : &quot;MatlabFunctions&quot;,
+            &quot;funcion_matlab&quot;    : &quot;cpu_eater&quot;,
+            &quot;num_params&quot;        : 3,
+            &quot;param2&quot;            : 100
+        }
+    },
+
+    &quot;framework&quot; : {
+        &quot;name&quot;                      : &quot;Ejemplo Matlab&quot;,
+        &quot;max_num_procs_simultaneos&quot; : -1,
+        &quot;max_failed_tasks&quot;          : 0,
+        &quot;environment_vars&quot;      : {
+            &quot;MATLABPATH&quot;        : &quot;/export/usuarios01/USUARIO/matlab&quot;,
+            &quot;HOME&quot;              : &quot;/export/usuarios01/USUARIO&quot;
+        },
+        &quot;stdouta&quot;                : &quot;stdout.log&quot;,
+        &quot;stderra&quot;                : &quot;stderr.log&quot;,
+        &quot;notification&quot;          : 1,       
+	&quot;email&quot;                 : &quot;h.molina@tsc.uc3m.es&quot;
+    }
+
+
+
+
+    
+}</code></pre>
+
+  <h4>Ejemplo PyTorch MNIST / DeepAutoencoder</h4>
+<pre><code>{
+    &quot;cluster&quot;: {
+        &quot;master&quot;            : &quot;zk://10.0.12.18:2181,10.0.12.77:2181,10.0.12.60:2181,10.0.12.51:2181,10.0.12.75:2181,10.0.12.76:2181,10.0.12.78:2181/mesos_gpu&quot;
+    },
+    &quot;resources&quot;: {
+        &quot;CPUS&quot;: 4,
+        &quot;MEMORY&quot;: 8192
+    },
+    &quot;tasks&quot;: {
+        &quot;task_basename&quot;     : &quot;DeepAutoencoder&quot;,
+        &quot;cmdbase&quot;           : &quot;{working_dir}/{baseprogram} --lr {learning_rate} --epochs {numepochs} --batch-size {batchsize}&quot;,
+        &quot;var_parameters&quot;    : {
+            &quot;working_dir&quot;        : &quot;os.getcwd()&quot;,
+            &quot;learning_rate&quot;        : [
+		        0.00000000100,
+                0.00000000101,
+                0.00000000102,
+                0.00000000103,
+                0.00000000104,
+                0.00000000105
+            ]
+        },
+        &quot;parameters&quot;        : {
+            &quot;baseprogram&quot;       : &quot;mnist_pytorch.py&quot;,
+            &quot;database&quot;          : &quot;MNIST&quot;,
+            &quot;numepochs&quot;         : 10,
+            &quot;batchsize&quot;         : 250
+        }
+    },
+
+    &quot;framework&quot; : {
+        &quot;name&quot;                      : &quot;Prueba Nuevo Lanzador&quot;,
+        &quot;max_num_procs_simultaneos&quot; : -1,
+        &quot;max_failed_tasks&quot;          : 0,
+        &quot;environment_vars&quot;      : {
+            &quot;PATH&quot;              : &quot;/usr/local/bin:/usr/bin:/bin&quot;
+        },
+        &quot;stdout&quot;                : &quot;stdout.log&quot;,
+        &quot;stderr&quot;                : &quot;stderr.log&quot;,
+        &quot;notification_at_end&quot;   : 1          
+    }
+
+
+
+
+    
+}</code></pre>
+  <div class="callout warnbox"><strong>Nota sobre compatibilidad con configuraciones antiguas:</strong> este ejemplo utiliza una configuración histórica basada en MESOS mediante un identificador <code>master</code> de tipo <code>zk://...</code>, con el objetivo de ilustrar la compatibilidad hacia atrás de la herramienta de lanzamiento. Aunque el ejemplo sigue funcionando sin modificaciones, en nuevas configuraciones se recomienda utilizar la definición basada en SLURM REST:</div>
+<pre><code>"cluster": {
+  "master": "https://subserver2.tsc.uc3m.es:6820",
+  "queue": "gpus",
+  "qos": "normal_gpu"
+}</code></pre>
+  <p>La herramienta detecta automáticamente las configuraciones heredadas basadas en MESOS y las adapta internamente para funcionar sobre SLURM, pero se recomienda migrar progresivamente los experimentos al nuevo formato.</p>
+
+  <div class="callout warnbox"><strong>Nota de migración:</strong> en ficheros antiguos puede aparecer un <code>master</code> de tipo <code>zk://...</code> usado por MESOS. Aunque se recomienda actualizar esta variable al nuevo formato basado en SLURM REST, por ejemplo <code>https://subserver2.tsc.uc3m.es:6820</code>, la herramienta detecta automáticamente si se trata de una configuración antigua y redirige la ejecución al servidor principal de SLURM definido por omisión. De esta forma, los experimentos antiguos pueden seguir lanzándose sin modificar el fichero JSON, aunque se recomienda migrarlos progresivamente al nuevo formato.</div>
+</section>
+
+
+<section id="ejemplos">
+  <h2>7. Ejemplos de uso</h2>
+  <h3 id="cpu">Lanzar un trabajo en CPU</h3>
+<pre><code>#!/bin/bash
+#SBATCH --job-name=cpu_ejemplo
+#SBATCH --partition=main
+#SBATCH --account=general
+#SBATCH --qos=normal
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=4
+#SBATCH --mem=8G
+#SBATCH --time=02:00:00
+#SBATCH --output=/export/clusterdata/%u/logs/%x-%j.out
+#SBATCH --error=/export/clusterdata/%u/logs/%x-%j.err
+
+set -euo pipefail
+
+cd /export/clusterdata/$USER/proyectos/mi_proyecto
+source /export/clusterdata/$USER/venvs/mi_entorno/bin/activate
+
+python mi_programa.py</code></pre>
+
+  <h3 id="gpu1">Lanzar un trabajo en GPU con una sola GPU</h3>
+<pre><code>#!/bin/bash
+#SBATCH --job-name=gpu_1
+#SBATCH --partition=gpus
+#SBATCH --account=gpu
+#SBATCH --qos=normal_gpu
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=8
+#SBATCH --mem=32G
+#SBATCH --gres=gpu:1
+#SBATCH --time=08:00:00
+#SBATCH --output=/export/clusterdata/%u/logs/%x-%j.out
+#SBATCH --error=/export/clusterdata/%u/logs/%x-%j.err
+
+set -euo pipefail
+
+cd /export/clusterdata/$USER/proyectos/entrenamiento
+source /export/clusterdata/$USER/venvs/torch/bin/activate
+
+nvidia-smi
+python train.py --epochs 50 --batch-size 128</code></pre>
+
+  <h3 id="gpu-multi">Lanzar un trabajo en GPU con múltiples GPUs, por ejemplo PyTorch</h3>
+<pre><code>#!/bin/bash
+#SBATCH --job-name=pytorch_multi_gpu
+#SBATCH --partition=gpus
+#SBATCH --account=gpu
+#SBATCH --qos=normal_gpu
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=4
+#SBATCH --cpus-per-task=8
+#SBATCH --mem=96G
+#SBATCH --gres=gpu:4
+#SBATCH --time=12:00:00
+#SBATCH --output=/export/clusterdata/%u/logs/%x-%j.out
+#SBATCH --error=/export/clusterdata/%u/logs/%x-%j.err
+
+set -euo pipefail
+
+cd /export/clusterdata/$USER/proyectos/pytorch
+source /export/clusterdata/$USER/venvs/torch/bin/activate
+
+export OMP_NUM_THREADS=$SLURM_CPUS_PER_TASK
+
+torchrun --standalone \
+  --nnodes=1 \
+  --nproc_per_node=$SLURM_NTASKS_PER_NODE \
+  train.py --config configs/experimento.yaml</code></pre>
+
+  <h3>Pasar parámetros a un script</h3>
+<pre><code># Enviar parámetros al script:
+sbatch ejemplo_parametros.slurm datos.csv resultado.csv 100
+
+# ejemplo_parametros.slurm
+#!/bin/bash
+#SBATCH --job-name=parametros
+#SBATCH --partition=main
+#SBATCH --account=general
+#SBATCH --qos=normal
+#SBATCH --time=01:00:00
+#SBATCH --cpus-per-task=2
+#SBATCH --mem=4G
+
+INPUT="$1"
+OUTPUT="$2"
+ITERACIONES="$3"
+
+python procesa.py --input "$INPUT" --output "$OUTPUT" --iteraciones "$ITERACIONES"</code></pre>
+</section>
+
+<section id="comandos">
+  <h2>8. Comandos básicos de SLURM</h2>
+  <h3>1) Lanzar scripts</h3>
+<pre><code># Lanzar un script
+sbatch trabajo.slurm
+
+# Lanzar a una partición concreta
+sbatch --partition=main --account=general --qos=normal trabajo.slurm
+
+# Lanzar a una partición GPU
+sbatch --partition=gpus --account=gpu --qos=normal_gpu --gres=gpu:1 trabajo.slurm
+
+# Solicitar un modelo de GPU concreto, si está definido en GRES
+sbatch --partition=gpus --account=gpu --qos=normal_gpu --gres=gpu:MODELO:1 trabajo.slurm</code></pre>
+
+  <h3>2) Consultar estados de trabajo</h3>
+<pre><code># Ver la cola del usuario actual
+squeue -u $USER
+
+# Ver un trabajo concreto y el motivo de espera
+squeue -j JOBID -o "%.18i %.9P %.30j %.8u %.2t %.10M %.6D %R"
+
+# Información detallada
+scontrol show job JOBID</code></pre>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Estado</th><th>Significado</th></tr></thead>
+      <tbody>
+        <tr><td><code>PD</code> / <code>PENDING</code></td><td>El trabajo está en cola esperando recursos, prioridad, permisos o condiciones de partición.</td></tr>
+        <tr><td><code>R</code> / <code>RUNNING</code></td><td>El trabajo está ejecutándose.</td></tr>
+        <tr><td><code>CG</code> / <code>COMPLETING</code></td><td>El trabajo está finalizando y limpiando recursos.</td></tr>
+        <tr><td><code>CD</code> / <code>COMPLETED</code></td><td>El trabajo terminó correctamente.</td></tr>
+        <tr><td><code>F</code> / <code>FAILED</code></td><td>El trabajo falló.</td></tr>
+        <tr><td><code>CA</code> / <code>CANCELLED</code></td><td>El trabajo fue cancelado.</td></tr>
+        <tr><td><code>TO</code> / <code>TIMEOUT</code></td><td>El trabajo superó el tiempo máximo asignado.</td></tr>
+        <tr><td><code>OOM</code> / <code>OUT_OF_MEMORY</code></td><td>El trabajo superó la memoria solicitada.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>3) Cancelar trabajos</h3>
+<pre><code>scancel JOBID
+scancel -u $USER
+scancel --name nombre_del_trabajo</code></pre>
+
+  <h3>4) Información del cluster</h3>
+<pre><code>sinfo
+sinfo -Nel
+scontrol show partition
+scontrol show node NOMBRE_NODO</code></pre>
+
+  <h3>5) Historial y contabilidad</h3>
+<pre><code># Trabajos recientes del usuario
+sacct -u $USER --format=JobID,JobName,Partition,Account,QOS,State,Elapsed,MaxRSS,ExitCode
+
+# Eficiencia de un trabajo terminado
+seff JOBID</code></pre>
+
+  <h3>6) Trabajos interactivos</h3>
+<pre><code># Sesión interactiva CPU
+srun --partition=debug --account=debug --qos=debug \
+     --cpus-per-task=2 --mem=4G --time=01:00:00 --pty bash
+
+# Sesión interactiva GPU
+srun --partition=gpus_debug --account=gpu --qos=debug_gpu \
+     --gres=gpu:1 --cpus-per-task=4 --mem=16G --time=01:00:00 --pty bash</code></pre>
+</section>
+
+<section id="problemas">
+  <h2>9. Resolución de problemas</h2>
+<div class="card">
+  <h3>Trabajos en PENDING</h3>
+  <p>Si un trabajo queda en <code>PENDING</code>, consulta el motivo exacto con la columna <code>%R</code>:</p>
+<pre><code>squeue -j JOBID -o "%.18i %.9P %.30j %.8u %.2t %.10M %.6D %R"
+scontrol show job JOBID</code></pre>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Motivo frecuente</th><th>Qué revisar</th></tr></thead>
+      <tbody>
+        <tr><td><code>Resources</code></td><td>No hay suficientes CPUs, memoria, nodos o GPUs libres. Reduce recursos o espera.</td></tr>
+        <tr><td><code>Priority</code></td><td>Hay trabajos con mayor prioridad por delante.</td></tr>
+        <tr><td><code>PartitionTimeLimit</code></td><td>El tiempo solicitado supera el máximo de la partición/QoS.</td></tr>
+        <tr><td><code>AssocGrpGRES</code> o límites de GPU</td><td>Se han alcanzado límites de GPUs por QoS, cuenta o usuario.</td></tr>
+        <tr><td><code>InvalidAccount</code> / <code>QOS</code></td><td>La cuenta o QoS indicada no es válida para esa partición.</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+  <div class="card">
+  <h3>Errores de salida comunes</h3>
+  <p>SLURM escribe la salida estándar y los errores en los ficheros configurados con <code>--output</code> y <code>--error</code>. Si no se indican, normalmente se genera un fichero <code>slurm-JOBID.out</code> en el directorio desde el que se lanzó el trabajo.</p>
+<pre><code>tail -f /export/clusterdata/$USER/logs/mi_trabajo-JOBID.out
+tail -f /export/clusterdata/$USER/logs/mi_trabajo-JOBID.err</code></pre>
+</div>
+<div class="card">
+  <h3>Ficheros stdout y stderr en mismo directorio de trabajo (<i>workdir</i>)</h3>
+
+  <p><strong>Síntoma: El directorio de trabajo se llena de ficheros slurm_XXXXXX.out y slurm_XXXXXX.err</strong></p>
+  <p>A diferencia del sistema APACHE MESOS, en el cual los ficheros de salida stdout y stderr se generaban en el <i>sandbox</i> en cada agente de ejecución, en SLURM se generan, salvo que se especifique lo contrario, en el mismo directorio de trabajo <i>workdir</i>.<p>
+  <p><strong>Solución:</strong></p>
+  <ul>
+    <li>Definir en la sección <i>framework</i> del fichero <i>json></i> la variable <i>logdir</i>, indicando en qué directorio se quieren almacenar los ficheros de stdeout y stderr.</li>
+    <li>Pasar por línea de comando el parámetro <code>--logdir</code>, que especifica el directorio para los ficheros de stdout y stderr. Este parámetro tiene prioridad sobre la variable <i>logdir</i> definida en el fichero <i>json</i>.</li>
+  </ul>
+</div>
+
+<div class="callout dangerbox"><strong>Errores típicos:</strong> entorno Python no activado, librerías no instaladas en el nodo de ejecución, rutas relativas incorrectas, falta de permisos, memoria insuficiente, límite de tiempo agotado o solicitud incorrecta de GPUs.</div>
+
+
+</section>
+
+<section id="web">
+  <h2>10. Interfaces web</h2>
+  <div class="links">
+    <a href="https://subserver3.tsc.uc3m.es/slurm-web"><strong>SLURM Web</strong><br>Interfaz para ver el estado de las colas de trabajo, procesos en ejecución, recursos usados, recursos disponibles y nodos fuera de línea.</a>
+    <a href="https://subserver3.tsc.uc3m.es/statistics"><strong>Statistics</strong><br>Dashboard con información básica del estado del cluster.</a>
+    <a href="https://subserver3.tsc.uc3m.es/grafana"><strong>Grafana</strong><br>Dashboards avanzados con información detallada del estado de la granja.</a>
+  </div>
+</section>
+
+<section id="buenas">
+  <h2>11. Buenas prácticas</h2>
+  <div class="grid grid-2">
+    <div class="card">
+      <h3>Recomendaciones</h3>
+      <ul>
+        <li>Siempre prueba con <code>--qos=debug</code> antes de lanzar trabajos largos.</li>
+        <li>Usa nombres descriptivos para tus trabajos con <code>--job-name</code>.</li>
+        <li>Especifica correctamente la memoria y CPUs que necesitas.</li>
+        <li>Utiliza rutas absolutas en tus scripts.</li>
+        <li>Guarda logs en directorios organizados.</li>
+        <li>Implementa checkpoints en entrenamientos largos.</li>
+        <li>Monitoriza el uso de recursos con <code>seff</code> después de ejecutar.</li>
+        <li>Usa entornos virtuales en discos compartidos.</li>
+        <li>Documenta tus scripts con comentarios claros.</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>Evita hacer</h3>
+      <ul>
+        <li>Conectarte directamente por SSH a nodos de cómputo.</li>
+        <li>Ejecutar trabajos pesados en el nodo principal.</li>
+        <li>Solicitar más recursos de los que realmente necesitas.</li>
+        <li>Dejar trabajos en cola indefinidamente si ya no los necesitas.</li>
+        <li>Usar entornos virtuales, datos o resultados en rutas locales no compartidas. Usa <code>/export/usuarios01/USER</code> o <code>/export/clusterdata/USER</code>.</li>
+        <li>No especificar límites de tiempo.</li>
+        <li>Ignorar los mensajes de error en logs.</li>
+        <li>Lanzar múltiples trabajos idénticos sin control.</li>
+        <li>No limpiar archivos temporales después de terminar.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="plantilla">
+  <h2>12. Plantilla de script recomendada</h2>
+<pre><code>#!/bin/bash
+#SBATCH --job-name=nombre_descriptivo
+#SBATCH --partition=main
+#SBATCH --account=general
+#SBATCH --qos=normal
+#SBATCH --nodes=1
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=4
+#SBATCH --mem=8G
+#SBATCH --time=02:00:00
+#SBATCH --output=/export/clusterdata/%u/logs/%x-%j.out
+#SBATCH --error=/export/clusterdata/%u/logs/%x-%j.err
+
+set -euo pipefail
+
+echo "Trabajo: $SLURM_JOB_NAME"
+echo "Job ID: $SLURM_JOB_ID"
+echo "Nodo(s): $SLURM_JOB_NODELIST"
+echo "Directorio inicial: $(pwd)"
+echo "Fecha inicio: $(date)"
+
+mkdir -p /export/clusterdata/$USER/logs
+
+cd /export/clusterdata/$USER/proyectos/mi_proyecto
+
+# Activar entorno, si procede
+source /export/clusterdata/$USER/venvs/mi_entorno/bin/activate
+
+# Ejecutar aplicación
+python programa.py --input datos/input.dat --output resultados/output.dat
+
+echo "Fecha fin: $(date)"</code></pre>
+  <div class="callout">Para trabajos GPU, cambia <code>--partition=main</code> por <code>--partition=gpus</code>, <code>--account=general</code> por <code>--account=gpu</code>, <code>--qos=normal</code> por <code>--qos=normal_gpu</code>, y añade <code>--gres=gpu:1</code> o el número de GPUs necesario.</div>
+</section>
+</main>
+</div>
+
+<footer>
+  Manual generado para el Departamento de Teoría de la Señal y Comunicaciones · SLURM / HPC · Versión v6 completa con sección JSON y plantilla de incidencias
+</footer>
+</body>
+</html>

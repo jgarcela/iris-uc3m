@@ -1,0 +1,314 @@
+#!/usr/bin/perl -w 
+#
+# Author: Harold Molina-Bulla
+# Date  : November 9 2004
+# Last Change Date: Oct 15 2009
+# Rev   : 1.09
+#
+# ChangeLog
+#
+# Rev 1.12
+# Uso de la variable MATLAB_BASE para definir que version de MATLAB se va a ejecutar
+# Cambio de uso de matlab para lanzar matlab ubicado en /export/workdir/MATLAB/default
+#
+# Rev 1.11
+# Seleccion de distintas versiones de matlab
+# -v version
+# VERSION [79 711]
+#
+# Rev 1.10
+# Compatibilidad con SGE
+# 
+# Rev 1.09
+# Inclusi?n de la metainfo S: en los par?metros para indicar que es un string
+#
+# Rev 1.08
+# Correccion del error FAILED TO GET ASN FROM CORESERVICES en MacOS
+#
+# Rev 1.07
+# Correccion de error al ejecutar Matlab en Apple intel
+#
+# Rev 1.06
+# Adaptacion de codigos para Fura (regreso a los valores originales en positivo)
+#
+# Rev 1.05
+# Adaptacion de codigos para Fura
+#
+# Rev 1.04
+# Eliminacion de la opcion -nojvm en la plataforma Mac para hacer compatible
+# Matlab 14 con los nodos Apple Intel
+#
+# Rev 1.03
+# Inclusion de la opcion -nojvm en todas las plataformas
+# Eliminacion del parametro -nodesktop innecesario por la inclusion de -nojvm
+#
+# Rev 1.02
+# Correcci?n de error de sintaxis. (No permitia la ejecuci?n de las tareas)
+#
+
+use Cwd;
+
+$STDOUTLOGFILE=">stdout.log";
+$STDERRLOGFILE=">stderr.log";
+open STDOUT, $STDOUTLOGFILE;
+open STDERR, $STDERRLOGFILE;
+
+if(@ARGV < 2){
+    print "The number of parameters should be greather tan 2\n";
+    print "You should indicate the function to be called and the number of parameters\n";
+    exit 1;
+}
+
+my $functionName;
+my $numberOfFunctionParameters;
+my $incomingParameters;
+my @functionParameters;
+my $matlab_version_cmd="matlab";
+
+$param_offset=2;
+
+if ( $ARGV[0] =~ /^-v/ ) {
+  $param_offset=4;
+  $version=$ARGV[1];
+  $functionName=$ARGV[2];
+  $numberOfFunctionParameters=$ARGV[3];
+  if ( $version =~ /^79/ ) {
+    $matlab_version_cmd="matlab79";
+  } elsif ( $version =~ /^711/ ) {
+    $matlab_version_cmd="matlab711";
+  } else {
+    $matlab_version_cmd="matlab";
+  }
+} else {
+  $functionName=$ARGV[0];
+  $numberOfFunctionParameters=$ARGV[1];
+}
+
+if($numberOfFunctionParameters < 0){
+    print "Bad invocation\n";
+    print "You have declared a negative number of function parameters: $numberOfFunctionParameters\n";
+    exit 2;
+}
+
+$incomingParameters=@ARGV-$param_offset;
+
+if($incomingParameters != $numberOfFunctionParameters){
+    print "Bad invocation\n";
+    print "The number of parameters for the function $functionName is $numberOfFunctionParameters\n";
+    print "You have invoked the script with $incomingParameters for $functionName\n";
+    exit 3;
+}
+
+
+my $counter;
+my $param_parsed;
+for($counter=0; $counter < $numberOfFunctionParameters; $counter++){
+	print "Analizando parametro ".$counter."\n";
+	if ( $ARGV[$counter+$param_offset] =~ /^S:(.+)/ ){
+	  $param_parsed = "'".$1."'";
+	  print "Parametro cadena ".$param_parsed."\n";
+	  push( @functionParameters,$param_parsed);
+	} else {
+      push( @functionParameters, $ARGV[$counter+$param_offset]);
+    }
+}
+
+
+#completing the funtion call
+my $functionCall="\"Shell('$functionName',";
+for($counter=0; $counter < $numberOfFunctionParameters-1; $counter++){
+    $functionCall .="$functionParameters[$counter],";
+}
+$functionCall .="$functionParameters[$numberOfFunctionParameters-1]";
+$functionCall .=")\"";
+print "the function invocation is $functionCall\n";
+
+#####################################################
+####Now we should create a matLab invocation for each
+####platform....
+
+my $exeCommand;
+my $matLabEnvironment;
+my $environmentValue;
+( $exeCommand,$matLabEnvironment,$environmentValue)= prepareEnvironment($matlab_version_cmd);
+
+$exeCommand .="$functionCall";
+print "The final command line is $exeCommand\n";
+
+###... and declare the MatLab environment Variable########
+# $ENV{$matLabEnvironment}=$environmentValue;
+# print "Working directory:$matLabEnvironment=  $ENV{$matLabEnvironment}\n";
+####################################################
+my $container_dir = getcwd();
+$ENV{"MATLAB_PREFDIR"}=$container_dir."/matlab_prefdir";
+####Calling matLab
+createShellScript();
+my $matLabExitCode=callMatLab( $exeCommand);
+if ( $matLabExitCode==0 ){
+    $matLabExitCode = check_stdout();
+}
+if ( $matLabExitCode==0 ){
+    print "MatLab Correct execution cleaning and exiting\n";
+#    callCleaner();
+}else{
+     print "MatLab Bad execution (Error Code: ".$matLabExitCode."), cleaning and exiting\n";
+#     callCleaner();
+}
+close STDOUT;
+close STDERR;
+if ( $matLabExitCode != 0 ){
+  callShowStdOut();
+}
+exit $matLabExitCode;
+
+    sub check_stdout
+    {
+      my $exitcode=0;
+
+      open FOUT, "<stdout.log" or die;
+      while ( $line=<FOUT>) {
+        if ( $line =~ /Attempt to execute SCRIPT/oi ) {
+          $exitcode=8;        
+        } else {
+	  if ( $line =~ /Unable to read MAT file/oi ) {
+            $exitcode=8;
+          } else {
+            if ( $line =~ /GridExecutionScript Error/oi ){
+	      $exitcode=7;
+            }
+          }
+        }
+      }
+      close FOUT;
+      return $exitcode;
+    }
+
+sub callShowStdOut
+  {
+    open FOUT, "<stdout.log" or die;
+    while ( $line=<FOUT>) {
+      print $line."\n";
+    }
+  }
+
+sub callMatLab
+  {
+    my $exeCommand=$_[0];
+    my $exitCode;
+    my $error_no;
+
+    print "Calling MatLab with $exeCommand\n";
+    $error_no = system("$exeCommand");	
+
+    if( $error_no==0 ){
+      print "MatLab correctly called\n";
+      $exitCode=0;
+    } else { 
+      if ( $error_no==65024 ) {
+	    print "Too many matlab process running in the machine. Stoping\n";
+	    $exitCode=6;
+      } else {
+	    print "MatLab Bad Execution $error_no\n";
+	    $exitCode=5;
+      }
+    }
+    return $exitCode;
+  }
+
+sub prepareEnvironment
+  {
+
+    ####preparing the environment
+    my $OS = $ENV{'OS'};
+    if(!defined $OS) {  # Unix OS
+      $OS = `uname`;
+      chomp($OS);
+    }
+    my $MATLAB_BASE = $ENV{'MATLAB_BASE'};
+    if(!defined $MATLAB_BASE) {
+          $MATLAB_BASE="/export/workdir/MATLAB/default";
+    }
+
+    my $exeCommand;
+    my $copyCommand;
+    my $deleteCommand;
+    my $matLabEnvironment;
+    my $environmentValue;
+
+	my $matlab_version_cmd=$_[0];
+    print "The operating system is $OS\n";
+    if($OS eq "SunOS"){
+      $copyCommand="cp";
+      $deleteCommand="rm -rf ";
+      $exeCommand=$matlab_version_cmd." -nojvm -nosplash -r ";
+      $matLabEnvironment="MATLABPATH";
+      $environmentValue=`pwd`;
+    }elsif($OS eq "Linux"){
+      $copyCommand="cp";
+      $deleteCommand="rm -rf ";
+      $exeCommand=$MATLAB_BASE."/bin/matlab -nodisplay -nosoftwareopengl -logfile matlab.log -nodesktop -r ";
+      $matLabEnvironment="MATLABPATH";
+      $environmentValue=`pwd`;
+    }elsif($OS eq "Darwin"){
+      $copyCommand="cp";
+      $deleteCommand="rm -rf ";
+      $exeCommand="matlab711 -nojvm -nodisplay -nosplash -r ";
+      $matLabEnvironment="MATLABPATH";
+      $environmentValue=`pwd`;
+    }elsif($OS eq "Windows_NT"){
+      $copyCommand="copy";
+      $deleteCommand="del /q ";
+      $exeCommand="matlab -automation -minimize -nosplash -r ";
+      $matLabEnvironment="USERPROFILE";
+      $environmentValue=`cd`;
+      ####################
+      #In Windows we must creat a localDir/matlab
+      #directory and locate there all the matLab 
+      # functions.
+      mkdir("matlab",0777);
+      if(-e "matlab"){
+	print "MatLab directory created\n";
+      }else{
+	print "impossible to create MatLab directory\n";
+	exit 4;
+      }
+      if(system("$copyCommand *.m matlab ")==0){
+	print "MatLab functions copied to MatLab directory ";
+      }else{
+	print "impossible to copy MatLab funtions to MatLab directory\n";
+	exit 5;
+      }
+    }
+    print "Exiting from prepareEnvironment\n";
+    return ($exeCommand, $matLabEnvironment,$environmentValue);
+  }
+
+sub createShellScript {
+  printf "Creating shell function\n";
+  open FOUT, ">Shell.m";
+  printf FOUT "
+function OutMLFunc=Shell(func_name,varargin)
+n_args=length(varargin);
+Function_Call=sprintf('%%s(',func_name);
+for k=1:n_args
+  if ( ischar(varargin{k}))
+    Function_Call=sprintf('%%s%%c%%s%%c',Function_Call,char(39),varargin{k},char(39));
+  else
+    Function_Call=sprintf('%%s%%f',Function_Call,varargin{k});
+  end
+  if (k<n_args)
+      Function_Call=sprintf('%%s,',Function_Call);
+  end
+end
+Function_Call=sprintf('%%s)',Function_Call);
+try
+  eval(Function_Call);
+catch
+  disp(sprintf('GridExecutionScript Error calling function %%s.\\nGridExecutionScript Error message:\\t%%s\\n',func_name,lasterr))
+  quit force;
+end
+exit
+";
+  close FOUT;
+}
+
