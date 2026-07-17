@@ -1,0 +1,112 @@
+# Codebook de ejemplo: sesgo de género en cobertura política
+# Basado en: GMMP (2025), Gender Gap Tracker (Asr et al., 2021),
+# Davis et al. (2022) sobre framing, EuroParlVote (2025).
+# Sustituye estas variables por las tuyas reales.
+
+documento:
+  id: ejemplo_001
+  fuente: opcional
+  idioma: es
+
+variables:
+
+  - nombre: atribucion_genero
+    descripcion: Género gramatical o referencial atribuido a una persona o grupo mencionado.
+    etiquetas:
+      - F                  # femenino (sujeto individual o mayoritariamente femenino)
+      - M                  # masculino
+      - no_binario
+      - colectivo          # grupo donde no se individualiza por género
+      - indeterminado      # genérico no marcado, sin información suficiente
+    multi_span: true
+    criterio: |
+      Anota cualquier mención a una persona individualizada o a un grupo
+      cuyo género sea identificable por marcas gramaticales (artículo,
+      sufijo) o por contexto explícito (nombre propio reconocible, cita).
+      No anotes pronombres genéricos cuando el referente ya tiene anotación
+      en la misma oración.
+    ejemplos_positivos:
+      - {span: "la ministra", etiqueta: F, motivo: "sufijo -a y artículo femenino"}
+      - {span: "el portavoz", etiqueta: M, motivo: "artículo masculino"}
+      - {span: "la oposición", etiqueta: colectivo, motivo: "sintagma agrupador"}
+
+  - nombre: rol_tematico
+    descripcion: Posición narrativa de la persona en la acción descrita.
+    etiquetas:
+      - agente_activo      # ejecuta la acción principal
+      - paciente           # recibe la acción
+      - fuente_citada      # aparece como fuente de cita directa o indirecta
+      - objeto_descrito    # se la describe sin que actúe ni hable
+    multi_span: true
+    criterio: |
+      Considera el verbo asociado a la mención. Si la persona controla
+      la acción, agente_activo. Si la sufre o recibe, paciente. Si
+      introduce una cita o es introducida por verbo de habla
+      ('declaró', 'afirmó'), fuente_citada. Si el texto solo la describe,
+      objeto_descrito.
+    ejemplos_positivos:
+      - {span: "lideró el debate", etiqueta: agente_activo}
+      - {span: "le había preparado", etiqueta: paciente, motivo: "construcción dativa pasiva"}
+
+  - nombre: descriptor_sexista
+    descripcion: |
+      Descriptor que se aplicaría con menor probabilidad a una persona
+      del género opuesto en el mismo rol profesional.
+    etiquetas:
+      - apariencia_emocion # 'visiblemente nerviosa', 'sonriente'
+      - rol_familiar       # 'madre de dos hijos', 'abuela'
+      - edad               # 'la joven diputada', 'la veterana'
+      - tono_voz           # 'con voz temblorosa', 'estridente'
+      - vestimenta         # 'con un vestido azul'
+      - ninguno            # mención sin descriptores asimétricos
+    multi_span: true
+    depende_de: atribucion_genero
+    criterio: |
+      Solo anota cuando exista una anotación previa de atribucion_genero
+      que cubra a la persona descrita. El criterio operativo es el test
+      de simetría: ¿se publicaría este descriptor para un hombre en
+      idéntico rol profesional, en la misma posición narrativa?
+      Si la respuesta es 'rara vez' o 'no', la etiqueta aplica.
+    ejemplos_positivos:
+      - {span: "madre de dos hijos", etiqueta: rol_familiar}
+      - {span: "visiblemente nerviosa", etiqueta: apariencia_emocion}
+
+  - nombre: frame_dominante
+    descripcion: Marco interpretativo predominante en el fragmento.
+    etiquetas:
+      - conflicto          # léxico bélico-adversarial
+      - heroismo           # virtud moral, valentía
+      - victimizacion
+      - tecnocratico       # neutral, técnico
+      - estrategia_juego   # carrera de caballos, política como táctica
+      - ninguno
+    multi_span: true
+    criterio: |
+      Identifica el frame por el léxico evaluativo y las metáforas
+      dominantes en cada oración o párrafo. Si conviven dos frames
+      en un mismo span, elige el más prominente y baja la confianza.
+    ejemplos_positivos:
+      - {span: "duro alegato", etiqueta: conflicto}
+      - {span: "respuesta valiente a la crisis", etiqueta: heroismo}
+
+  - nombre: cita_directa
+    descripcion: Texto entrecomillado atribuido a una fuente.
+    etiquetas:
+      - hablante_F
+      - hablante_M
+      - hablante_colectivo
+      - hablante_no_identificado
+    multi_span: true
+    criterio: |
+      Anota únicamente texto entre comillas (",  «»). El span debe
+      incluir las comillas. Asigna género por co-referencia con la
+      atribucion_genero del verbo de habla más cercano.
+
+reglas_globales:
+  - "Procesa las variables en el orden declarado."
+  - "Cada anotación es independiente; no fusiones spans contiguos de la misma variable."
+  - "Si dudas entre dos etiquetas, elige la más conservadora y baja la confianza a 0.6-0.8."
+
+asimetrias_a_reportar:
+  - "Si todos los descriptores_sexistas anotados se asocian a personas con atribucion_genero=F, repórtalo."
+  - "Si la ratio de fuente_citada por género es desigual, repórtalo."

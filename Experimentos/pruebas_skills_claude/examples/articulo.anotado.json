@@ -1,0 +1,253 @@
+{
+  "documento_id": "ejemplo_001",
+  "oraciones": [
+    {
+      "id": "S1",
+      "texto": "La vicepresidenta segunda compareció ayer en el Congreso para defender el nuevo paquete económico."
+    },
+    {
+      "id": "S2",
+      "texto": "Visiblemente nerviosa, comenzó leyendo unas notas que su equipo le había preparado."
+    },
+    {
+      "id": "S3",
+      "texto": "Frente a ella, el portavoz del grupo opositor, en un duro alegato, calificó las medidas de \"irresponsables\"."
+    },
+    {
+      "id": "S4",
+      "texto": "\"Esto es una huida hacia adelante\", sentenció."
+    },
+    {
+      "id": "S5",
+      "texto": "La ministra, madre de dos hijos, replicó con una explicación detallada de las partidas presupuestarias."
+    },
+    {
+      "id": "S6",
+      "texto": "Lideró el debate técnico durante más de cuarenta minutos."
+    },
+    {
+      "id": "S7",
+      "texto": "El presidente del comité económico defendió la propuesta como \"una respuesta valiente a la crisis\", mientras la oposición abandonó la sala."
+    }
+  ],
+  "anotaciones": [
+    {
+      "id": "a1",
+      "variable": "atribucion_genero",
+      "etiqueta": "F",
+      "texto": "La vicepresidenta segunda",
+      "oracion_id": "S1",
+      "explicacion": "Sustantivo con sufijo -a y artículo femenino. Marca clara de género gramatical femenino.",
+      "confianza": 0.99
+    },
+    {
+      "id": "a2",
+      "variable": "atribucion_genero",
+      "etiqueta": "M",
+      "texto": "el portavoz del grupo opositor",
+      "oracion_id": "S3",
+      "explicacion": "Sustantivo masculino con artículo masculino. Marca clara de género gramatical.",
+      "confianza": 0.99
+    },
+    {
+      "id": "a3",
+      "variable": "atribucion_genero",
+      "etiqueta": "F",
+      "texto": "La ministra",
+      "oracion_id": "S5",
+      "explicacion": "Sustantivo con sufijo -a y artículo femenino. Marca clara de género gramatical femenino.",
+      "confianza": 0.99
+    },
+    {
+      "id": "a4",
+      "variable": "atribucion_genero",
+      "etiqueta": "colectivo",
+      "texto": "la oposición",
+      "oracion_id": "S7",
+      "explicacion": "Sintagma nominal agrupador que denota colectividad sin género individual especificado.",
+      "confianza": 0.95
+    },
+    {
+      "id": "a5",
+      "variable": "atribucion_genero",
+      "etiqueta": "M",
+      "texto": "El presidente del comité económico",
+      "oracion_id": "S7",
+      "explicacion": "Sustantivo masculino con artículo masculino. Marca clara de género gramatical.",
+      "confianza": 0.99
+    },
+    {
+      "id": "a6",
+      "variable": "rol_tematico",
+      "etiqueta": "agente_activo",
+      "texto": "La vicepresidenta segunda compareció ayer en el Congreso para defender el nuevo paquete económico",
+      "oracion_id": "S1",
+      "explicacion": "El verbo 'compareció' indica presencia activa y control de la acción; además, el verbo 'defender' subordinado refuerza agencia.",
+      "confianza": 0.96
+    },
+    {
+      "id": "a7",
+      "variable": "rol_tematico",
+      "etiqueta": "paciente",
+      "texto": "le había preparado",
+      "oracion_id": "S2",
+      "explicacion": "Construcción con dativo donde el equipo actúa sobre ella; ella recibe la acción de que le preparen las notas.",
+      "confianza": 0.94
+    },
+    {
+      "id": "a8",
+      "variable": "rol_tematico",
+      "etiqueta": "agente_activo",
+      "texto": "el portavoz del grupo opositor, en un duro alegato, calificó las medidas",
+      "oracion_id": "S3",
+      "explicacion": "El verbo 'calificó' lo posiciona como agente que controla la acción de evaluación.",
+      "confianza": 0.97
+    },
+    {
+      "id": "a9",
+      "variable": "rol_tematico",
+      "etiqueta": "fuente_citada",
+      "texto": "sentenció",
+      "oracion_id": "S4",
+      "explicacion": "Verbo de habla que introduce una cita directa previa. Aunque no se expresa el sujeto, por contexto se refiere al portavoz.",
+      "confianza": 0.92
+    },
+    {
+      "id": "a10",
+      "variable": "rol_tematico",
+      "etiqueta": "agente_activo",
+      "texto": "La ministra, madre de dos hijos, replicó con una explicación detallada",
+      "oracion_id": "S5",
+      "explicacion": "El verbo 'replicó' posiciona al sujeto como agente que controla la respuesta.",
+      "confianza": 0.97
+    },
+    {
+      "id": "a11",
+      "variable": "rol_tematico",
+      "etiqueta": "agente_activo",
+      "texto": "Lideró el debate técnico",
+      "oracion_id": "S6",
+      "explicacion": "El verbo 'lideró' indica control y dirección de la acción sobre el debate.",
+      "confianza": 0.98
+    },
+    {
+      "id": "a12",
+      "variable": "rol_tematico",
+      "etiqueta": "agente_activo",
+      "texto": "El presidente del comité económico defendió la propuesta",
+      "oracion_id": "S7",
+      "explicacion": "El verbo 'defendió' posiciona al presidente como agente activo que controla la acción argumentativa.",
+      "confianza": 0.97
+    },
+    {
+      "id": "a13",
+      "variable": "descriptor_sexista",
+      "etiqueta": "apariencia_emocion",
+      "texto": "Visiblemente nerviosa",
+      "oracion_id": "S2",
+      "explicacion": "Descriptor de estado emocional aplicado a la vicepresidenta (F, anotación a1). Test de simetría: rara vez se describiría a un vicepresidente como 'visiblemente nervioso' en contexto equivalente. Asimetría de género detectada.",
+      "confianza": 0.93
+    },
+    {
+      "id": "a14",
+      "variable": "descriptor_sexista",
+      "etiqueta": "rol_familiar",
+      "texto": "madre de dos hijos",
+      "oracion_id": "S5",
+      "explicacion": "Descriptor de rol familiar aplicado a la ministra (F, anotación a3) que carece de relevancia para su rol profesional. Test de simetría: no se especificaría que un ministro es 'padre de dos hijos' en contexto profesional equivalente.",
+      "confianza": 0.94
+    },
+    {
+      "id": "a15",
+      "variable": "frame_dominante",
+      "etiqueta": "tecnocratico",
+      "texto": "una explicación detallada de las partidas presupuestarias",
+      "oracion_id": "S5",
+      "explicacion": "Léxico técnico y analítico ('detallada', 'partidas presupuestarias') que enfatiza expertise y racionalidad sobre conflicto o emoción.",
+      "confianza": 0.91
+    },
+    {
+      "id": "a16",
+      "variable": "frame_dominante",
+      "etiqueta": "tecnocratico",
+      "texto": "el debate técnico",
+      "oracion_id": "S6",
+      "explicacion": "Adjetivo 'técnico' refuerza el frame de discurso experto, racional, sin carga evaluativa de conflicto.",
+      "confianza": 0.93
+    },
+    {
+      "id": "a17",
+      "variable": "frame_dominante",
+      "etiqueta": "conflicto",
+      "texto": "duro alegato",
+      "oracion_id": "S3",
+      "explicacion": "Adjetivo 'duro' y sustantivo 'alegato' evocan confrontación y enfrentamiento. Léxico de conflicto explícito.",
+      "confianza": 0.96
+    },
+    {
+      "id": "a18",
+      "variable": "cita_directa",
+      "etiqueta": "hablante_M",
+      "texto": "\"irresponsables\"",
+      "oracion_id": "S3",
+      "explicacion": "Cita directa atribuida por contexto al portavoz (M, anotación a2) mediante 'calificó'.",
+      "confianza": 0.94
+    },
+    {
+      "id": "a19",
+      "variable": "cita_directa",
+      "etiqueta": "hablante_M",
+      "texto": "\"Esto es una huida hacia adelante\"",
+      "oracion_id": "S4",
+      "explicacion": "Cita directa atribuida al portavoz (M, anotación a2) por verbo de habla 'sentenció' y continuidad contextual.",
+      "confianza": 0.95
+    },
+    {
+      "id": "a20",
+      "variable": "cita_directa",
+      "etiqueta": "hablante_M",
+      "texto": "\"una respuesta valiente a la crisis\"",
+      "oracion_id": "S7",
+      "explicacion": "Cita directa atribuida al presidente (M, anotación a5) mediante verbo de habla 'defendió'.",
+      "confianza": 0.96
+    }
+  ],
+  "resumen": {
+    "total_anotaciones": 20,
+    "por_variable": {
+      "atribucion_genero": {
+        "F": 2,
+        "M": 2,
+        "colectivo": 1
+      },
+      "rol_tematico": {
+        "agente_activo": 5,
+        "paciente": 1,
+        "fuente_citada": 1
+      },
+      "descriptor_sexista": {
+        "apariencia_emocion": 1,
+        "rol_familiar": 1
+      },
+      "frame_dominante": {
+        "tecnocratico": 2,
+        "conflicto": 1
+      },
+      "cita_directa": {
+        "hablante_M": 3
+      }
+    },
+    "asimetrias_detectadas": [
+      {
+        "tipo": "descriptores_sexistas_genero",
+        "descripcion": "El 100% (2/2) de los descriptores sexistas anotados (apariencia_emocion, rol_familiar) se asocian exclusivamente a personas con atribucion_genero=F. Ningún descriptor sexista se aplica a personas con atribucion_genero=M.",
+        "severidad": "alta"
+      },
+      {
+        "tipo": "cita_directa_genero",
+        "descripcion": "Las citas directas (3/3) están todas atribuidas a hablantes con atribucion_genero=M. Las personas con atribucion_genero=F (vicepresidenta, ministra) no tienen citas directas atribuidas, solo descripciones narrativas de su discurso.",
+        "severidad": "alta"
+      }
+    ]
+  }
+}

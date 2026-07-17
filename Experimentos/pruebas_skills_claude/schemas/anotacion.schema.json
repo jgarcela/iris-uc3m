@@ -1,0 +1,56 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Anotacion periodistica",
+  "type": "object",
+  "required": ["anotaciones", "oraciones", "resumen"],
+  "properties": {
+    "documento_id": {
+      "type": ["string", "null"]
+    },
+    "oraciones": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "texto"],
+        "properties": {
+          "id": {"type": "string", "pattern": "^S[0-9]+$"},
+          "texto": {"type": "string", "minLength": 1}
+        }
+      }
+    },
+    "anotaciones": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "variable", "etiqueta", "texto", "oracion_id", "explicacion", "confianza"],
+        "properties": {
+          "id": {"type": "string", "pattern": "^a[0-9]+$"},
+          "variable": {"type": "string"},
+          "etiqueta": {"type": "string"},
+          "texto": {"type": "string", "minLength": 1},
+          "oracion_id": {"type": "string", "pattern": "^S[0-9]+$"},
+          "explicacion": {"type": "string", "minLength": 10},
+          "confianza": {"type": "number", "minimum": 0, "maximum": 1}
+        }
+      }
+    },
+    "resumen": {
+      "type": "object",
+      "required": ["total_anotaciones", "por_variable"],
+      "properties": {
+        "total_anotaciones": {"type": "integer", "minimum": 0},
+        "por_variable": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "object",
+            "additionalProperties": {"type": "integer"}
+          }
+        },
+        "asimetrias_detectadas": {
+          "type": "array",
+          "items": {"type": "string"}
+        }
+      }
+    }
+  }
+}

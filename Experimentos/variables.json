@@ -1,168 +1,853 @@
-[
-    {
-        "nombre": "lenguaje_sexista",
-        "codigo": "25",
-        "valores_posibles": [
-            "No",
-            "Sí",
-            "Sí; además se observa un salto semántico"
-        ],
-        "definicion": "El lenguaje sexista, también denominado sexismo lingüístico, se define como el uso discriminatorio del lenguaje que se hace por razón de sexo. Consiste en la discriminación que sufre un sexo con respecto al otro debido a los usos lingüísticos empleados. Este fenómeno ocurre cuando un mensaje resulta discriminatorio por su forma —es decir, por las palabras o estructuras elegidas— y no por su fondo.",
-        "metodologia": "Aplica la regla de inversión, que consiste en sustituir las referencias femeninas por las correspondientes masculinas, y a la inversa. Si el resultado de la inversión resulta inadecuado, extraño o incoherente, existe algún tipo de sexismo.",
-        "ejemplos": "• \"Los testigos son dos bomberos y dos mujeres\". • \"El seguro médico cubre a los afiliados y a sus mujeres\". • \"He atendido en tutorías a cuatro alumnos y a tres chiquitas\". • \"Presidieron el acto la presidenta, Inmaculada, y el vicepresidente, Emilio Núñez\". • \"La primera mujer surfista española\". • \"Carolina es rubia, de ojos azules y tiene 22 años\". • \"Maialen Chourraut, una madre de oro\"."
+{
+    "_meta": {
+      "version": "2.0",
+      "fecha": "2026-05",
+      "basado_en": "Sainz de Baranda Andújar (UC3M, tesis 2013); García Meseguer (1977, 1994); Lledó Cunill (1992); Bengoechea Bartolomé (2015)",
+      "principio_metodologico": "Cada variable debe ser operativamente distinguible de las demás. Definición incluye criterio operativo, metodología es procedimiento ejecutable, ejemplos incluyen contraejemplos, fronteras con variables similares documentadas.",
+      "referencias_canonicas": {
+        "garcia_meseguer_1977": "García Meseguer, Á. (1977). Lenguaje y discriminación sexual. Madrid: Cuadernos para el Diálogo (Edicusa).",
+        "garcia_meseguer_1994": "García Meseguer, Á. (1994). ¿Es sexista la lengua española? Una investigación sobre el género gramatical. Barcelona: Paidós (Papeles de Comunicación, nº 4).",
+        "lledo_cunill_1992": "Lledó Cunill, E. (1992). El sexismo y el androcentrismo en la lengua: análisis y propuestas de cambio. Barcelona: ICE de la Universitat Autònoma de Barcelona (Cuadernos para la coeducación, nº 3).",
+        "sainz_de_baranda_2013": "Sainz de Baranda Andújar, C. (2013). Mujeres y deporte en los medios de comunicación: estudio de la prensa deportiva española (1979-2010) [Tesis doctoral]. Universidad Carlos III de Madrid.",
+        "sainz_de_baranda_2014": "Sainz de Baranda Andújar, C. (2014). El género de los protagonistas en la información deportiva (1979-2010): noticias y titulares. Estudios sobre el Mensaje Periodístico, 20(2), 1225-1236.",
+        "bengoechea_2015": "Bengoechea Bartolomé, M. (2015). Lengua y género. Madrid: Síntesis.",
+        "bengoechea_calero_2003": "Bengoechea Bartolomé, M. y Calero Vaquera, M.L. (2003). Sexismo y redacción periodística. Valladolid: Junta de Castilla y León."
+      }
     },
-    {
-        "nombre": "masc_generico",
-        "codigo": "26",
-        "valores_posibles": [
-            "No",
-            "Sí"
-        ],
-        "definicion": "Se refiere al uso del género gramatical masculino como \"género no marcado\", lo que teóricamente le permite designar a individuos de ambos sexos en un solo grupo. Se considera sexismo lingüístico cuando este uso genera ambigüedad, invisibiliza la presencia de las mujeres en el discurso o produce una representación mental que excluye al sexo femenino, supeditándolo al modelo masculino.",
-        "metodologia": "1. Regla de inversión. 2. Detección del salto semántico. 3. Evaluación de la invisibilización.",
-        "ejemplos": "• \"Este año los tenistas españoles llegan bien posicionados... y las chicas también\". • \"El seguro médico cubre a los afiliados y a sus mujeres\". • \"Los nadadores españoles triunfan en la piscina\". • \"Convención sobre los Derechos del Niño\". • \"Los investigadores del CSIC\". • \"Todos los alumnos deben conocer sus derechos\"."
+  
+    "25": {
+      "nombre": "lenguaje_sexista",
+      "codigo": "25",
+      "valores_posibles": ["No", "Sí", "Sí; además se observa un salto semántico"],
+      "definicion": {
+        "concepto": "Uso discriminatorio del lenguaje por razón de sexo. El sexismo lingüístico opera sobre la FORMA del mensaje (palabras o estructuras gramaticales elegidas), no sobre su fondo. Un mensaje puede tener contenido no sexista pero estar expresado con formas sexistas, o al revés (ver V30 para el fondo).",
+        "criterio_operativo": "Existe sexismo lingüístico cuando, al aplicar la regla de inversión (sustituir referencias femeninas por masculinas y viceversa), el resultado produce extrañeza, incoherencia o sería inaceptable. Si la inversión no produce nada raro, no hay sexismo lingüístico aunque el mensaje hable de desigualdad.",
+        "salto_semantico": "Subcaso especial de sexismo lingüístico. Ocurre cuando un masculino usado como genérico se revela posteriormente no inclusivo al aparecer una marca explícita de mujer. La frase 'expone' por sí sola que el masculino nunca fue inclusivo. Ejemplo: 'los tenistas españoles llegan bien posicionados... y las chicas también' (el segundo 'y' demuestra que 'tenistas' no incluía a las chicas)."
+      },
+      "metodologia": {
+        "paso_1_identificacion": "Localiza pasajes donde aparezca alguna mujer (sustantivo, nombre, pronombre, adjetivo concordado) y observa cómo se la trata gramaticalmente respecto a los hombres del mismo texto.",
+        "paso_2_regla_de_inversion": "Toma el pasaje candidato y reescríbelo invirtiendo el género (femeninos→masculinos, masculinos→femeninos). Pregúntate: ¿esta frase invertida se publicaría con naturalidad? ¿O suena extraña, ridícula, irrespetuosa? Si lo segundo, hay sexismo en la versión original.",
+        "paso_3_deteccion_salto_semantico": "Busca específicamente la estructura: [colectivo masculino] + [aparece marca de mujer]. Si encuentras un masculino que se presentó como inclusivo y luego se demuestra que no lo era, hay salto semántico (etiqueta 3).",
+        "paso_4_diferenciacion_con_v30": "Si el sexismo está en la FORMA (palabras concretas elegibles de otra manera), es V25. Si está en el FONDO del mensaje (lo que se cuenta), es V30."
+      },
+      "ejemplos_positivos": [
+        {
+          "texto": "Los testigos son dos bomberos y dos mujeres",
+          "etiqueta": 2,
+          "regla_inversion": "Invertido: 'Las testigos son dos bomberas y dos hombres' — extraño y revelador. El original trata a las mujeres como categoría definida solo por su sexo, mientras los hombres se definen por su profesión.",
+          "razon": "Asimetría léxica: profesión vs sexo biológico"
+        },
+        {
+          "texto": "Maialen Chourraut, una madre de oro",
+          "etiqueta": 2,
+          "regla_inversion": "Invertido: 'Mikel Chourraut, un padre de oro' — no se publicaría. La paternidad de un deportista no se usa como titular.",
+          "razon": "Identificación por rol familiar eclipsando profesional"
+        },
+        {
+          "texto": "Este año los tenistas españoles llegan bien posicionados... y las chicas también",
+          "etiqueta": 3,
+          "regla_inversion": "El masculino 'tenistas' se presenta como general; al añadir 'y las chicas también' se revela que era exclusivamente masculino.",
+          "razon": "Salto semántico ejemplar"
+        }
+      ],
+      "ejemplos_negativos": [
+        {
+          "texto": "La brecha salarial de género se redujo un 2% en 2024 según un informe del INE",
+          "razon_no_aplica": "Habla DE desigualdad pero sin formas sexistas. La regla de inversión ('La brecha salarial entre hombres se redujo...') no produce extrañeza porque el contenido es informativo. Esto sería V17 (denuncia desigualdad) si describe el problema, no V25.",
+          "variable_correcta": "Posiblemente V17 si denuncia"
+        },
+        {
+          "texto": "El equipo de bomberos rescató a tres personas atrapadas en el incendio",
+          "razon_no_aplica": "'Bomberos' funciona como colectivo profesional inclusivo; 'personas' es no marcado. La inversión ('Las personas rescatadas por el equipo de bomberas') no genera extrañeza."
+        },
+        {
+          "texto": "La presidenta del Congreso clausuró la sesión",
+          "razon_no_aplica": "Cargo correctamente feminizado, sin asimetría. Inversión: 'El presidente del Congreso clausuró la sesión'."
+        }
+      ],
+      "frontera_con_otras": {
+        "v26_masc_generico": "V25 es la categoría 'paraguas' que incluye TODO sexismo lingüístico. V26 es un subtipo específico: usar el masculino como pretendido genérico. Si la única forma sexista detectada es masc_generico, marca AMBAS V25 y V26.",
+        "v30_sexismo_discurso": "V25 = problema en las PALABRAS elegidas (forma). V30 = problema en lo QUE SE CUENTA (fondo). Una frase puede ser V25 sin V30, V30 sin V25, o ambas.",
+        "v25_vs_subtipos": "V25 actúa como agregador. Si detectas V26, V27, V28, V29, V31-V39, también deberías marcar V25 porque todas son subtipos de sexismo lingüístico (excepto V30 que es de fondo)."
+      },
+      "caso_limite_documentado": {
+        "texto": "Las nadadoras españolas han ganado tres medallas",
+        "decision": "NO es V25",
+        "explicacion": "'Nadadoras' está bien feminizado. La inversión ('Los nadadores españoles han ganado tres medallas') tampoco produciría extrañeza. Es un texto sin sexismo lingüístico, aunque hable solo de mujeres."
+      },
+      "referencias": ["garcia_meseguer_1994", "lledo_cunill_1992", "sainz_de_baranda_2013"]
     },
-    {
-        "nombre": "hombre_denominar_humanidad",
-        "codigo": "27",
-        "valores_posibles": [
-            "No",
-            "Sí"
-        ],
-        "definicion": "Consiste en utilizar el sustantivo \"hombre\" con un pretendido valor genérico que incluye a varones y mujeres. Se considera una práctica sexista y androcéntrica porque oculta la presencia de las mujeres y toma al varón como el modelo de referencia universal.",
-        "metodologia": "1. Evaluación de la ambigüedad. 2. Criterio de visibilización. 3. Sustitución por términos colectivos.",
-        "ejemplos": "• \"En los últimos tiempos los hombres han evolucionado mucho\". • \"Fundamento ontológico del hombre\". • \"Los derechos del hombre\". • \"La historia del hombre\". • \"El hombre de la calle\"."
+  
+    "26": {
+      "nombre": "masc_generico",
+      "codigo": "26",
+      "valores_posibles": ["No", "Sí"],
+      "definicion": {
+        "concepto": "Uso del género gramatical masculino como 'género no marcado' para designar a individuos de ambos sexos. No es siempre sexista: lo es cuando genera ambigüedad, invisibiliza la presencia de las mujeres, o produce una representación mental que las excluye y subordina al modelo masculino.",
+        "criterio_operativo": "El masculino genérico es problemático cuando: (a) la inversión a femenino genérico produce extrañeza (no consideraríamos 'las profesoras' como inclusivo para hombres); (b) en el mismo texto aparece después una marca explícita que demuestra que no era inclusivo (salto semántico, ver V25); (c) se refiere a un colectivo donde la presencia de mujeres es relevante y se las invisibiliza."
+      },
+      "metodologia": {
+        "paso_1_localizar_genericos": "Identifica todos los sustantivos masculinos plurales que pretenden incluir a ambos sexos: 'los profesores', 'los investigadores', 'los alumnos', 'los nadadores'.",
+        "paso_2_test_de_invisibilizacion": "Pregúntate: ¿este masculino, en este contexto, evoca a hombres y mujeres por igual? ¿O el lector medio entenderá 'solo hombres'? Pista: si el texto luego añade 'y las mujeres también', es claro caso de no-inclusión.",
+        "paso_3_test_de_inversion": "Reescribe con femenino genérico: '¿Las profesoras del CSIC pidieron una reunión?'. Si el femenino no funcionaría como inclusivo, el masculino tampoco lo es.",
+        "paso_4_alternativas_disponibles": "¿Existe forma no marcada (profesorado, alumnado, ciudadanía)? Si sí y no se usa, el masculino genérico está invisibilizando deliberadamente."
+      },
+      "ejemplos_positivos": [
+        {
+          "texto": "Este año los tenistas españoles llegan bien posicionados... y las chicas también",
+          "razon": "Caso ejemplar de salto semántico. 'Tenistas' se reveló no inclusivo."
+        },
+        {
+          "texto": "Los investigadores del CSIC firmaron el manifiesto",
+          "razon": "Existe 'el personal investigador' o 'investigadoras e investigadores'. Usar solo masculino invisibiliza."
+        },
+        {
+          "texto": "Convención sobre los Derechos del Niño",
+          "razon": "Caso paradigmático. 'Del Niño' invisibiliza a las niñas. Existía 'de la Infancia' como alternativa neutra."
+        }
+      ],
+      "ejemplos_negativos": [
+        {
+          "texto": "El profesorado universitario debate la nueva ley",
+          "razon_no_aplica": "Sustantivo colectivo no marcado por género gramatical. Solución correcta del masculino genérico."
+        },
+        {
+          "texto": "Los juegos olímpicos masculinos comienzan mañana",
+          "razon_no_aplica": "El adjetivo 'masculinos' hace explícito que no pretende ser genérico. Es uso marcado, correcto."
+        },
+        {
+          "texto": "Las ministras del Gobierno se reunieron con sus homólogas europeas",
+          "razon_no_aplica": "Femenino específico, refleja realidad: las ministras existentes son mujeres."
+        }
+      ],
+      "frontera_con_otras": {
+        "v25_lenguaje_sexista": "V26 es un subtipo de V25. Si activas V26, casi siempre activas también V25.",
+        "v27_hombre_humanidad": "V26 cubre todos los masculinos genéricos plurales ('los investigadores'). V27 es específicamente el uso de 'hombre' (singular o plural) con valor genérico ('los derechos del hombre').",
+        "v31_androcentrismo": "V26 es un mecanismo concreto. V31 es la visión del mundo subyacente. Una noticia puede tener V26 sin ser globalmente androcéntrica."
+      },
+      "caso_limite_documentado": {
+        "texto": "Los ciudadanos tendrán que renovar sus DNI antes de junio",
+        "decision": "Discutible — depende del contexto institucional",
+        "explicacion": "En contexto administrativo genérico, 'ciudadanos' se usa como término jurídico que históricamente incluye a todas las personas. Si el texto procede de fuente oficial (BOE, gobierno) con esta convención, el sesgo es del sistema institucional. Marcar V26 si hay alternativa neutra disponible ('la ciudadanía')."
+      },
+      "referencias": ["garcia_meseguer_1994", "lledo_cunill_1992", "bengoechea_2015"]
     },
-    {
-        "nombre": "uso_dual_zorr",
-        "codigo": "28",
-        "valores_posibles": [
-            "No",
-            "Sí"
-        ],
-        "definicion": "Los duales aparentes son pares léxicos que, pese a compartir una misma raíz, cambian radicalmente su significado según el género. Habitualmente, el femenino adquiere connotaciones peyorativas o de menor prestigio.",
-        "metodologia": "1. Regla de inversión. 2. Detección de asimetría semántica.",
-        "ejemplos": "• \"Zorra\" / \"Zorro\". • \"Mujer pública\" / \"Hombre público\". • \"Secretaria\" / \"Secretario\". • \"Señorita\" / \"Señorito\". • \"Cortesana\" / \"Cortesano\". • \"Asistenta\" / \"Asistente\". • \"Gobernanta\" / \"Gobernante\". • \"Fulana\" / \"Fulano\"."
+  
+    "27": {
+      "nombre": "hombre_denominar_humanidad",
+      "codigo": "27",
+      "valores_posibles": ["No", "Sí"],
+      "definicion": {
+        "concepto": "Uso específico del sustantivo 'hombre' (singular o plural) con pretendido valor genérico que incluye a varones y mujeres. Práctica sexista y androcéntrica porque oculta la presencia de las mujeres y toma al varón como referencia universal de la especie humana.",
+        "criterio_operativo": "Existe V27 cuando aparece la palabra 'hombre/hombres' en un contexto donde el sentido pretendido es 'humanidad', 'personas' o 'seres humanos'. Test: si sustituyes 'el hombre' por 'la humanidad' y el sentido se conserva, era falso genérico (V27). Si al sustituir se pierde el sentido, era referencia específica a varones (no V27)."
+      },
+      "metodologia": {
+        "paso_1_localizar_hombre": "Busca todas las ocurrencias de 'hombre' u 'hombres' en el texto.",
+        "paso_2_clasificar_referente": "Para cada ocurrencia, determina el referente: (a) un varón específico; (b) varones como grupo; (c) la humanidad / las personas en general.",
+        "paso_3_test_sustitucion": "Si el referente es (c), sustituye por 'humanidad/persona/ser humano'. Si funciona, era falso genérico → V27 = Sí.",
+        "paso_4_excluir_referentes_humanos_individuales": "'El hombre detenido niega los hechos' NO es V27 (referente individual masculino). 'Los hombres han evolucionado mucho' SÍ es V27 si se refiere a la especie."
+      },
+      "ejemplos_positivos": [
+        {
+          "texto": "Los derechos del hombre son universales",
+          "razon": "Pretende cubrir a todas las personas. Sustituible por 'los derechos humanos' sin pérdida de sentido."
+        },
+        {
+          "texto": "En los últimos tiempos los hombres han evolucionado mucho",
+          "razon": "Contexto antropológico-evolutivo: se refiere a la especie humana, no a varones."
+        },
+        {
+          "texto": "Fundamento ontológico del hombre",
+          "razon": "Discurso filosófico. 'El hombre' = el ser humano en abstracto."
+        }
+      ],
+      "ejemplos_negativos": [
+        {
+          "texto": "El hombre detenido por el robo niega los hechos",
+          "razon_no_aplica": "Referencia clara a un varón individual identificado. No es uso genérico."
+        },
+        {
+          "texto": "Los derechos humanos son universales",
+          "razon_no_aplica": "Construcción correcta sin uso androcéntrico de 'hombre'."
+        },
+        {
+          "texto": "Tres hombres y dos mujeres firmaron la petición",
+          "razon_no_aplica": "'Hombres' marcado en oposición a 'mujeres'. Es uso específico, no genérico."
+        }
+      ],
+      "frontera_con_otras": {
+        "v26_masc_generico": "V26 cubre masculinos plurales genéricos en general ('los profesores'). V27 es el caso específico del lexema 'hombre'.",
+        "v25_lenguaje_sexista": "V27 es un subtipo de V25. Activar V27 implica activar V25.",
+        "v31_androcentrismo": "V27 puede ser síntoma de V31 cuando el uso es sistemático en el texto, pero por sí solo no implica V31 (visión global)."
+      },
+      "caso_limite_documentado": {
+        "texto": "La evolución del hombre desde el Paleolítico hasta hoy",
+        "decision": "SÍ es V27",
+        "explicacion": "Aunque el uso académico-tradicional de 'hombre' por 'especie humana' es históricamente convencional, hoy existen alternativas no sexistas ('la evolución humana', 'de la humanidad'). Marcar V27 porque el lenguaje genérico-masculino sigue invisibilizando a la mitad de la especie. Es exactamente el caso que García Meseguer (1994) propone reformar."
+      },
+      "referencias": ["garcia_meseguer_1994", "lledo_cunill_1992", "bengoechea_2015"]
     },
-    {
-        "nombre": "uso_cargo_mujer",
-        "codigo": "29",
-        "valores_posibles": [
-            "No",
-            "Sí"
-        ],
-        "definicion": "Consiste en no utilizar cargos, profesiones u oficios para denominar a mujeres o emplear el masculino gramatical cuando existe una forma femenina aceptada.",
-        "metodologia": "1. Identificación de asimetrías. 2. Verificación de concordancia. 3. Evaluación de redundancia sexuada.",
-        "ejemplos": "• \"Dos bomberos y dos mujeres\". • \"Tres mujeres y siete alumnos\". • \"La médico\" / \"La juez\". • \"Carolina cuarto árbitro\". • \"La primera mujer surfista\". • \"Las deportistas femeninas\". • \"La abogado\" / \"La ministro\"."
+  
+    "28": {
+      "nombre": "uso_dual_zorr",
+      "codigo": "28",
+      "valores_posibles": ["No", "Sí"],
+      "definicion": {
+        "concepto": "Duales aparentes: pares léxicos con misma raíz pero significado radicalmente distinto según género gramatical. Habitualmente, el femenino adquiere connotaciones peyorativas, sexuales o de menor prestigio, mientras el masculino mantiene neutralidad o positividad.",
+        "criterio_operativo": "Existe V28 cuando el texto usa el femenino de un par dual cuyo masculino no cargaría con la misma connotación. Test: cambia la forma femenina por la masculina. Si el masculino mantiene la connotación negativa/sexual, no es dual aparente. Si la pierde (el masculino es neutro o positivo), es dual aparente."
+      },
+      "metodologia": {
+        "paso_1_localizar_pares": "Identifica sustantivos o adjetivos en femenino cuyo masculino existe (zorra/zorro, secretaria/secretario, golfa/golfo).",
+        "paso_2_test_de_simetria_semantica": "Pregúntate: ¿el masculino del mismo lexema tiene la misma carga? 'Zorro' = listo, 'zorra' = insulto sexual. Asimetría: V28 = Sí.",
+        "paso_3_descarte_de_no_duales": "Pares simétricos (presidenta/presidente, directora/director) NO son duales aparentes: tienen significado equivalente. No marcar V28.",
+        "paso_4_contexto_de_uso": "Considera el contexto. 'La secretaria' usado como cargo administrativo no activa V28; usado como insinuación sexual o subordinación sí."
+      },
+      "ejemplos_positivos": [
+        {
+          "texto": "Aquí vienen las zorras del barrio",
+          "razon": "'Zorras' como insulto sexual. 'Zorros' = astutos. Asimetría flagrante."
+        },
+        {
+          "texto": "La mujer pública del barrio cuenta su historia",
+          "razon": "'Mujer pública' = prostituta. 'Hombre público' = político notable. Dual aparente clásico."
+        },
+        {
+          "texto": "La señorita del piso de arriba todavía no se ha casado",
+          "razon": "'Señorita' marca estado civil (soltera, infantilizada). 'Señorito' = privilegiado, no marca estado civil."
+        }
+      ],
+      "ejemplos_negativos": [
+        {
+          "texto": "La presidenta y el presidente firmaron el acuerdo",
+          "razon_no_aplica": "Par léxico simétrico. Ambas formas designan el cargo sin asimetría."
+        },
+        {
+          "texto": "La directora del museo presentó la exposición",
+          "razon_no_aplica": "Femenino profesional sin carga peyorativa. Equivalente al masculino."
+        },
+        {
+          "texto": "La secretaria de Estado recibió a la delegación",
+          "razon_no_aplica": "En este contexto 'secretaria' = cargo político de alto nivel, no la asimetría peyorativa de 'secretaria' = administrativa subordinada."
+        }
+      ],
+      "frontera_con_otras": {
+        "v25_lenguaje_sexista": "V28 es subtipo de V25.",
+        "v35_denominacion_sexualizada": "V28 trata la asimetría léxica intrínseca del par. V35 trata el USO de denominaciones que reducen a la mujer a su sexualidad. 'Las zorras' puede activar AMBAS V28 y V35."
+      },
+      "caso_limite_documentado": {
+        "texto": "La asistenta del hogar trabaja seis horas al día",
+        "decision": "SÍ es V28",
+        "explicacion": "'Asistenta' = trabajadora doméstica (subordinada). 'Asistente' = ayudante profesional, técnico, médico (estatus medio o alto). El femenino adquiere connotación de servidumbre que el masculino no tiene. Caso paradigmático recogido por Lledó."
+      },
+      "referencias": ["garcia_meseguer_1994", "lledo_cunill_1992", "bengoechea_calero_2003"]
     },
-    {
-        "nombre": "sexismo_discurso",
-        "codigo": "30",
-        "valores_posibles": [
-            "No",
-            "Sí"
-        ],
-        "definicion": "El sexismo social o cultural se centra en el fondo del mensaje, describiendo o normalizando realidades discriminatorias o asimetrías de poder.",
-        "metodologia": "1. Diferenciación forma/fondo. 2. Identificación de asimetrías. 3. Detección de estereotipos. 4. Invisibilidad estructural.",
-        "ejemplos": "• \"El Consejo está compuesto por 20 varones y 2 mujeres\". • \"Las mujeres sólo tienen una función\". • \"Su marido ingresó...\". • \"Se consiente a la mujer imitar al hombre\"."
+  
+    "29": {
+      "nombre": "uso_cargo_mujer",
+      "codigo": "29",
+      "valores_posibles": ["No", "Sí"],
+      "definicion": {
+        "concepto": "Falta de uso de las formas femeninas en cargos, profesiones u oficios para denominar a mujeres, o uso del masculino gramatical cuando existe una forma femenina aceptada por la norma (RAE / uso periodístico consolidado).",
+        "criterio_operativo": "Existe V29 cuando el texto: (a) usa masculino para referirse a una mujer en cargo ('la médico', 'la juez') existiendo forma femenina aceptada ('la médica', 'la jueza'); (b) sustituye el cargo profesional femenino por el sustantivo 'mujer' + cargo masculino ('una mujer bombera' por 'una bombera')."
+      },
+      "metodologia": {
+        "paso_1_localizar_referencias_a_mujeres": "Identifica menciones a mujeres con cargo, profesión u oficio.",
+        "paso_2_verificar_concordancia": "¿Se usa el cargo en femenino ('la abogada') o se mantiene el masculino ('la abogado')? Si existe la forma femenina aceptada y no se usa, marca V29.",
+        "paso_3_detectar_sustitucion_por_mujer": "¿Se ha sustituido el sustantivo profesional por 'mujer + masculino'? ('La primera mujer bombero' vs 'la primera bombera'). Si sí, V29.",
+        "paso_4_consultar_norma": "La RAE admite y recomienda la mayoría de feminizaciones (ministra, jueza, médica, fiscala, soldada, presidenta). Solo casos muy restringidos justifican mantener el masculino."
+      },
+      "ejemplos_positivos": [
+        {
+          "texto": "La médico de guardia atendió al paciente",
+          "razon": "Existe 'médica', aceptada por la RAE. Mantener 'médico' invisibiliza la presencia femenina en la profesión."
+        },
+        {
+          "texto": "La juez instructora dictó auto de prisión",
+          "razon": "Existe 'jueza'. 'La juez' es vestigio de tiempo donde la profesión era exclusivamente masculina."
+        },
+        {
+          "texto": "Carolina, cuarto árbitro del partido",
+          "razon": "'Cuarta árbitra' es la forma correcta. 'Cuarto árbitro' aplicado a una mujer es asimetría léxica."
+        }
+      ],
+      "ejemplos_negativos": [
+        {
+          "texto": "La médica de guardia firmó el alta del paciente",
+          "razon_no_aplica": "Cargo feminizado correctamente."
+        },
+        {
+          "texto": "La presidenta del Tribunal Supremo dictó sentencia",
+          "razon_no_aplica": "Forma femenina aceptada y aplicada."
+        },
+        {
+          "texto": "La fiscala presentó la acusación",
+          "razon_no_aplica": "Feminización reciente pero admitida por la RAE desde 2014."
+        }
+      ],
+      "frontera_con_otras": {
+        "v25_lenguaje_sexista": "V29 es subtipo de V25.",
+        "v36_denominacion_redundante": "V29 = NO feminizar cuando se podría ('la médico'). V36 = REDUNDANCIA al feminizar marcando sexo en cargo ya feminizable ('una mujer bombera' donde 'bombera' bastaría). Son cara y cruz de la misma moneda léxica.",
+        "v32_mencion_nombre_investigadora": "V29 trata el cargo. V32 trata la falta de identidad propia (sin nombre/apellido). Pueden coexistir."
+      },
+      "caso_limite_documentado": {
+        "texto": "La jefe de servicio explicó el protocolo",
+        "decision": "SÍ es V29",
+        "explicacion": "'Jefa' existe y es de uso periodístico común. 'La jefe' es masculino con artículo femenino: la combinación más típica del problema. Caso constante en prensa según Lledó (1992)."
+      },
+      "referencias": ["lledo_cunill_1992", "bengoechea_calero_2003", "sainz_de_baranda_2013"]
     },
-    {
-        "nombre": "androcentrismo",
-        "codigo": "31",
-        "valores_posibles": [
-            "No",
-            "Sí"
-        ],
-        "definicion": "Visión del mundo que sitúa lo masculino como centro y modelo universal, invisibilizando o subordinando lo femenino.",
-        "metodologia": "1. Evaluación del referente. 2. Invisibilidad. 3. Falso genérico. 4. Autoridad. 5. Regla de inversión. 6. Datos desagregados.",
-        "ejemplos": "• \"Fundamento ontológico del hombre\". • \"Los derechos del hombre\". • \"Resultados de fútbol... y algo de fútbol femenino\". • \"La señora de Karembeu\". • Uso exclusivo de voces masculinas expertas."
+  
+    "30": {
+      "nombre": "sexismo_discurso",
+      "codigo": "30",
+      "valores_posibles": ["No", "Sí"],
+      "definicion": {
+        "concepto": "Sexismo social o cultural. A diferencia del lingüístico (V25), opera sobre el FONDO del mensaje: la realidad que el texto describe, normaliza o presenta como natural. Las palabras pueden estar gramaticalmente bien elegidas, pero lo que se cuenta refleja o legitima asimetrías de poder, estereotipos o desigualdad estructural.",
+        "criterio_operativo": "Existe sexismo social cuando el texto: (a) describe asimetrías de poder entre hombres y mujeres sin marcarlas como problemáticas (las normaliza); (b) presenta estereotipos de género como hechos naturales; (c) invisibiliza estructuralmente a las mujeres en ámbitos donde están presentes; o (d) atribuye roles sociales según sexo sin cuestionarlos. Distinguir de la denuncia crítica (V17): si el texto SEÑALA la desigualdad como problema, NO es V30; si la presenta como dato neutro o como hecho legítimo, SÍ es V30."
+      },
+      "metodologia": {
+        "paso_1_separar_forma_y_fondo": "Ignora momentáneamente las palabras concretas. Pregúntate: ¿qué realidad está retratando este texto? ¿Qué relaciones, roles o jerarquías muestra?",
+        "paso_2_evaluar_actitud_textual": "El texto presenta esa realidad como (a) un problema a denunciar [→ NO es V30, posiblemente V17], (b) un dato informativo neutro [→ ZONA GRIS], (c) algo natural o legítimo [→ V30].",
+        "paso_3_test_de_naturalizacion": "Pregúntate: si la realidad descrita fuese al revés (mujeres ocupando el rol de poder o autoridad), ¿el texto sonaría natural o forzado? Si la inversión social produce extrañeza, hay sexismo social en el original.",
+        "paso_4_zonas_grises": "El dato neutro sobre una asimetría real (ej. 'el Consejo lo componen 20 hombres y 2 mujeres') es V30 si SE PRESENTA sin contexto crítico — el lector recibe el dato como 'esto es así'. Si va acompañado de análisis sobre por qué, es denuncia (V17), no V30."
+      },
+      "ejemplos_positivos": [
+        {
+          "texto": "El Consejo está compuesto por 20 varones y 2 mujeres",
+          "razon": "Dato presentado sin marcaje crítico. La asimetría se naturaliza por la mera enunciación.",
+          "subtipo": "Invisibilización estructural normalizada"
+        },
+        {
+          "texto": "Su marido ingresó en el hospital tras el accidente; ella lo cuidó día y noche",
+          "razon": "Asigna implícitamente el rol cuidador a la esposa como hecho natural.",
+          "subtipo": "Estereotipo de rol presentado como hecho"
+        },
+        {
+          "texto": "Las mujeres tienen una función biológica que las hace más adecuadas para la crianza",
+          "razon": "Presenta como verdad biológica un constructo cultural.",
+          "subtipo": "Esencialismo de género"
+        }
+      ],
+      "ejemplos_negativos": [
+        {
+          "texto": "Solo 2 de los 22 miembros del Consejo son mujeres, un dato que evidencia la brecha que persiste en los órganos de poder corporativo",
+          "razon_no_aplica": "Mismo dato que el primer ejemplo positivo, pero AQUÍ se enmarca explícitamente como brecha problemática. Esto es V17 (denuncia), no V30.",
+          "variable_correcta": "V17"
+        },
+        {
+          "texto": "La ministra de Defensa presentó el nuevo plan estratégico ante el Congreso",
+          "razon_no_aplica": "Hecho informativo sin asimetrías presentadas, sin estereotipo, sin naturalización. Es una noticia neutra."
+        },
+        {
+          "texto": "El estudio del INE muestra que la brecha salarial se redujo dos puntos respecto al año anterior",
+          "razon_no_aplica": "Reporta la asimetría como dato medido en un contexto de seguimiento, no la legitima."
+        }
+      ],
+      "frontera_con_otras": {
+        "v25_lenguaje_sexista": "V25 trata el cómo se DICE (palabras). V30 trata el qué se CUENTA (realidad). Pueden coexistir o no.",
+        "v17_denuncia_desigualdad": "V17 y V30 son polos opuestos sobre el mismo material. Si el texto DENUNCIA la asimetría → V17. Si la NORMALIZA o la describe como hecho natural → V30. Un texto bien escrito sobre desigualdad puede activar V17 y NO V30.",
+        "v31_androcentrismo": "V31 sitúa al varón como centro/referente. V30 describe asimetrías de poder. V31 es un MECANISMO; V30 es el CONTENIDO. Una noticia que solo cita expertos varones es V31; una noticia que dice 'las mujeres prefieren X por su naturaleza' es V30."
+      },
+      "caso_limite_documentado": {
+        "texto": "El Papa Francisco recibió en audiencia a la familia real",
+        "decision": "NO es V30",
+        "explicacion": "Describe una situación factual (Papa = varón por institución, familia real = mixta). No naturaliza asimetría que no esté en la propia realidad institucional descrita. Una noticia sobre las restricciones del cardenalato a varones sería distinto: la PRESENTACIÓN importa."
+      },
+      "referencias": ["garcia_meseguer_1977", "bengoechea_2015", "sainz_de_baranda_2013"]
     },
-    {
-        "nombre": "mencion_nombre_investigadora",
-        "codigo": "32",
-        "valores_posibles": [
-            "No",
-            "Sí"
-        ],
-        "definicion": "Fenómeno de invisibilización donde las mujeres no son identificadas con nombre y apellidos pese a ser protagonistas.",
-        "metodologia": "1. Comparación de identificación. 2. Colectivos indivisibles. 3. Mujer ilustración. 4. Excepcionalidad.",
-        "ejemplos": "• \"Una mujer arbitrará por primera vez...\". • \"Las chicas de sincronizada\". • \"Tres mujeres y siete alumnos\". • \"Carolina, cuarto árbitro\"."
+  
+    "31": {
+      "nombre": "androcentrismo",
+      "codigo": "31",
+      "valores_posibles": ["No", "Sí"],
+      "definicion": {
+        "concepto": "Visión del mundo que sitúa lo masculino como centro y modelo universal de referencia, invisibilizando o subordinando lo femenino. El androcentrismo se manifiesta en el texto a través de mecanismos como: el varón como referente implícito de 'lo humano', la voz masculina como única autoridad, la perspectiva masculina como única perspectiva descrita, datos sin desagregar por sexo cuando la cuestión es relevante.",
+        "criterio_operativo": "Existe V31 cuando el texto, considerado globalmente, opera con el varón como punto de referencia implícito o explícito. Mecanismos detectables: (a) solo se citan voces masculinas como expertas; (b) la mujer aparece como excepción, complemento o secundaria del relato masculino; (c) los datos se presentan sin desagregar cuando la diferenciación es relevante; (d) el lector implícito del texto es masculino."
+      },
+      "metodologia": {
+        "paso_1_localizar_voces_expertas": "Enumera todas las personas citadas como autoridad, fuente o experta. ¿Qué porcentaje son hombres? ¿Las mujeres aparecen citadas o solo descritas?",
+        "paso_2_identificar_referente": "¿Quién es el sujeto activo de las acciones? ¿Quién es objeto o complemento? Si las mujeres son sistemáticamente objeto y los hombres sujeto, hay androcentrismo.",
+        "paso_3_test_de_relevancia_de_sexo": "Si la noticia trata un tema con dimensión de género (deporte, salud, política, ciencia), ¿se desagregan datos por sexo? ¿Se contemplan ambas perspectivas?",
+        "paso_4_lector_implicito": "Léelo desde una perspectiva femenina. ¿El texto te interpela igual? ¿O asume un lector varón ('su mujer', 'sus aficiones', 'el partido del domingo')?"
+      },
+      "ejemplos_positivos": [
+        {
+          "texto": "Resultados de la jornada: Real Madrid 2-Barcelona 1, Atlético 3-Sevilla 0... Y algo de fútbol femenino al final",
+          "razon": "El fútbol como categoría implícita es masculino. El femenino aparece como apéndice menor."
+        },
+        {
+          "texto": "Los expertos consultados por este diario (Dr. García, Prof. Martínez, Dr. Pérez) coinciden en señalar...",
+          "razon": "Solo voces masculinas como autoridad expertal en un tema donde hay mujeres expertas."
+        },
+        {
+          "texto": "La señora de Karembeu acudió al partido del marido",
+          "razon": "Androcentrismo de dependencia: mujer definida por relación con varón conocido."
+        }
+      ],
+      "ejemplos_negativos": [
+        {
+          "texto": "Expertas y expertos coinciden en las conclusiones del informe",
+          "razon_no_aplica": "Inclusión explícita de ambos géneros como autoridad."
+        },
+        {
+          "texto": "El partido femenino se disputará a las 18h en el estadio principal",
+          "razon_no_aplica": "Especificación necesaria sin jerarquización implícita."
+        },
+        {
+          "texto": "La investigadora principal Ana Mato (CSIC) y su equipo publicaron el estudio en Nature",
+          "razon_no_aplica": "Mujer como sujeto activo y autoridad reconocida."
+        }
+      ],
+      "frontera_con_otras": {
+        "v27_hombre_humanidad": "V27 es manifestación léxica concreta. V31 es la visión global del texto. Pueden coexistir o aparecer una sin la otra.",
+        "v30_sexismo_discurso": "V30 trata sobre el CONTENIDO sexista. V31 trata sobre la PERSPECTIVA narrativa. Una noticia puede ser androcéntrica (V31) sin contar nada explícitamente sexista (V30), simplemente por elegir solo voces masculinas.",
+        "v32_sin_nombre": "V32 es asimetría puntual en identificación. V31 es la perspectiva narrativa global. Si todo el texto solo da nombre a hombres y a las mujeres las menciona genéricamente, ambas se activan."
+      },
+      "caso_limite_documentado": {
+        "texto": "El ciudadano medio español dedica dos horas diarias al ocio",
+        "decision": "SÍ es V31",
+        "explicacion": "'Ciudadano medio' presupone implícitamente lector varón. Los datos de ocio son notoriamente distintos por sexo (las mujeres tienen menos tiempo libre por la doble jornada). No desagregar invisibiliza esta diferencia y normaliza el patrón masculino como humano universal."
+      },
+      "referencias": ["lledo_cunill_1992", "bengoechea_2015", "sainz_de_baranda_2013"]
     },
-    {
-        "nombre": "asimetria_mujer_hombre",
-        "codigo": "33",
-        "valores_posibles": [
-            "No",
-            "Sí"
-        ],
-        "definicion": "Uso desigual del tratamiento nominal: nombre de pila para mujeres y apellido/nombre completo para hombres.",
-        "metodologia": "1. Verificación de simetría. 2. Familiaridad selectiva. 3. Regla de inversión.",
-        "ejemplos": "• \"La presidenta, Inmaculada, y el vicepresidente, Emilio Núñez\". • \"Don Carlos Ramos y Matilde Alonso\". • \"Carolina se apunta al Europeo\". • \"La Vigara\"."
+  
+    "32": {
+      "nombre": "mencion_nombre_investigadora",
+      "codigo": "32",
+      "valores_posibles": ["No", "Sí"],
+      "definicion": {
+        "concepto": "Fenómeno de invisibilización donde las mujeres NO son identificadas con nombre y apellidos pese a ser protagonistas o sujetos relevantes del texto, mientras los hombres del mismo texto sí lo son. La mujer aparece como categoría genérica ('una mujer', 'la investigadora', 'las chicas') en lugar de como individuo identificado.",
+        "criterio_operativo": "Existe V32 cuando: (a) hay una asimetría detectable en el mismo texto entre la identificación de mujeres y hombres (los varones con nombre+apellido, las mujeres genéricamente); (b) una mujer protagonista del hecho narrado aparece sin nombre cuando el contexto exigiría identificarla; (c) las mujeres aparecen agrupadas en colectivos indivisibles ('las chicas del balonmano') sin nombres individuales."
+      },
+      "metodologia": {
+        "paso_1_enumerar_personas_citadas": "Lista todas las personas referenciadas en el texto separando por sexo.",
+        "paso_2_comparar_nivel_identificacion": "Para cada persona, anota cómo se la identifica: (a) nombre completo, (b) solo nombre, (c) solo apellido, (d) cargo + apellido, (e) cargo genérico, (f) descripción genérica ('una mujer', 'la activista').",
+        "paso_3_detectar_asimetria": "Si los hombres del texto reciben mayoritariamente identificación (a-d) y las mujeres (e-f), hay asimetría → V32.",
+        "paso_4_protagonismo_sin_identificacion": "Si una mujer es central en el hecho narrado pero aparece sin nombre ('una mujer arbitrará por primera vez'), V32 sin necesidad de asimetría comparativa."
+      },
+      "ejemplos_positivos": [
+        {
+          "texto": "Una mujer arbitrará por primera vez un partido de Primera División",
+          "razon": "La protagonista de un hito histórico no es nombrada. Cualquier varón en idéntico hito sería identificado."
+        },
+        {
+          "texto": "Las chicas de sincronizada lograron el bronce; el equipo masculino quedó cuarto. El capitán Carlos Ruiz lamentó el resultado",
+          "razon": "Asimetría intratextual: el capitán masculino con nombre+apellido, las nadadoras como colectivo indivisible."
+        },
+        {
+          "texto": "Tres mujeres y siete alumnos firmaron la queja, encabezados por el delegado de curso Juan Pérez",
+          "razon": "Hombres con cargo y nombre; mujeres como número anónimo."
+        }
+      ],
+      "ejemplos_negativos": [
+        {
+          "texto": "María González y Juan Pérez firmaron el contrato",
+          "razon_no_aplica": "Identificación simétrica con nombre+apellido para ambos."
+        },
+        {
+          "texto": "La investigadora Ana Mato lideró el estudio publicado en Nature",
+          "razon_no_aplica": "Mujer protagonista identificada con nombre completo."
+        },
+        {
+          "texto": "Una mujer y un hombre fueron heridos en el accidente",
+          "razon_no_aplica": "Anonimización simétrica en contexto donde tampoco se identifica al varón (suceso con víctimas no identificadas por convención periodística)."
+        }
+      ],
+      "frontera_con_otras": {
+        "v33_asimetria_mujer_hombre": "V33 es ASIMETRÍA EN LA FORMA del tratamiento nominal (nombre de pila vs apellido). V32 es la AUSENCIA de identificación. Son distintos: V32 = mujer sin nombre, V33 = mujer con nombre de pila vs hombre con apellido.",
+        "v31_androcentrismo": "V32 puntual + V32 puntual + V32 puntual = puede acumularse hasta configurar V31 (perspectiva androcéntrica global).",
+        "v38_criterios_excepcion": "Si el motivo de invisibilización es presentar a la mujer como caso excepcional ('una mujer arbitrará por primera vez'), también activa V38."
+      },
+      "caso_limite_documentado": {
+        "texto": "Una madre de tres hijos murió ayer en el incendio",
+        "decision": "NO es V32 si se trata de un suceso",
+        "explicacion": "En sucesos, la convención periodística es a menudo anonimizar a TODAS las víctimas (protección de datos). Si en el mismo texto se identifica al causante o a otros varones, sí sería V32. La asimetría intratextual es el criterio decisivo."
+      },
+      "referencias": ["sainz_de_baranda_2013", "lledo_cunill_1992", "bengoechea_calero_2003"]
     },
-    {
-        "nombre": "disminutivos_infantilizacion",
-        "codigo": "34",
-        "valores_posibles": [
-            "No",
-            "Sí"
-        ],
-        "definicion": "Referirse a mujeres adultas mediante diminutivos o términos propios de la infancia.",
-        "metodologia": "1. Comparación de simetría. 2. Identificación de infantilización. 3. Regla de inversión.",
-        "ejemplos": "• \"Tres chiquitas\". • \"Dos hombres y dos chicas\". • \"Las chicas del balonmano\". • \"La nena del equipo\"."
+  
+    "33": {
+      "nombre": "asimetria_mujer_hombre",
+      "codigo": "33",
+      "valores_posibles": ["No", "Sí"],
+      "definicion": {
+        "concepto": "Uso desigual del tratamiento nominal en un mismo texto: las mujeres son referidas por nombre de pila (familiarización) mientras los hombres son referidos por apellido o nombre completo (formalización). Esta asimetría infantiliza, familiariza o subordina a la mujer respecto al hombre del mismo texto.",
+        "criterio_operativo": "Existe V33 cuando, en el mismo texto, hay una asimetría detectable: hombres tratados como 'apellido' o 'señor X' y mujeres tratadas como 'nombre de pila' o 'señora X' sin apellido. Test: aplica la inversión: ¿si llamáramos a Sánchez 'Pedro' y a Ayuso 'señora Ayuso' o 'Díaz Ayuso', sonaría natural? Si la inversión produce extrañeza, había asimetría sexista."
+      },
+      "metodologia": {
+        "paso_1_enumerar_referencias_a_personas": "Lista todas las personas mencionadas y la forma exacta en que se las menciona en cada ocurrencia.",
+        "paso_2_clasificar_tipo_referencia": "Por persona: nombre de pila, apellido, nombre+apellido, título+apellido. Anota la fórmula predominante para cada uno/a.",
+        "paso_3_comparar_intra_texto": "¿Las mujeres tienen fórmula sistemáticamente menos formal que los hombres del mismo texto?",
+        "paso_4_descartar_convenciones_legitimas": "En ciertos contextos (deporte juvenil, perfiles personales) puede ser legítimo el nombre de pila para todas las personas. Solo activa V33 si la asimetría es entre sexos del mismo texto."
+      },
+      "ejemplos_positivos": [
+        {
+          "texto": "Presidieron el acto la presidenta, Inmaculada, y el vicepresidente, Emilio Núñez",
+          "razon": "Ella nombrada con nombre de pila ('Inmaculada'), él con nombre y apellido ('Emilio Núñez')."
+        },
+        {
+          "texto": "Carolina se enfrentará en cuartos a Carlos Alcaraz",
+          "razon": "Ella por nombre de pila ('Carolina' = Carolina Marín), él con nombre+apellido."
+        },
+        {
+          "texto": "Don Carlos Ramos asistió acompañado de Matilde",
+          "razon": "Tratamiento formal ('Don', nombre+apellido) para él; coloquial (solo nombre de pila) para ella."
+        }
+      ],
+      "ejemplos_negativos": [
+        {
+          "texto": "Sánchez y Ayuso debatieron en el Congreso",
+          "razon_no_aplica": "Apellido para ambos. Tratamiento simétrico."
+        },
+        {
+          "texto": "Pedro y María explicaron su decisión",
+          "razon_no_aplica": "Nombre de pila para ambos. Simetría conservada (probable contexto informal o familiar)."
+        },
+        {
+          "texto": "La presidenta Sánchez recibió al primer ministro Macron",
+          "razon_no_aplica": "Apellido para ambos en función de su cargo. Asimetría aparente pero simétrica por convención diplomática."
+        }
+      ],
+      "frontera_con_otras": {
+        "v32_sin_nombre": "V32 = mujer SIN nombre. V33 = mujer CON nombre pero solo de pila vs hombre con apellido. Distintos niveles.",
+        "v34_infantilizacion": "Si el nombre de pila es además diminutivo o forma infantil ('Caro' por Carolina, 'Lola' por Dolores en cargo profesional), activa V34 además de V33.",
+        "v37_dependiente": "V37 = nombrada por relación con varón ('la mujer de X'). V33 = nombrada por nombre de pila propio pero asimétricamente."
+      },
+      "caso_limite_documentado": {
+        "texto": "La Vigara firmó por el Real Madrid",
+        "decision": "SÍ es V33 si en el mismo texto hay hombres con nombre+apellido",
+        "explicacion": "El uso de artículo + apellido ('la Vigara') es marca de informalidad/familiaridad sobre figuras femeninas en deporte que no se aplica al uso masculino contemporáneo. Lo opuesto sería decir 'el Sánchez' al presidente, que sonaría irrespetuoso. Caso histórico bien documentado en prensa deportiva (Sainz de Baranda, 2013)."
+      },
+      "referencias": ["sainz_de_baranda_2013", "lledo_cunill_1992", "bengoechea_calero_2003"]
     },
-    {
-        "nombre": "denominacion_sexualizada",
-        "codigo": "35",
-        "valores_posibles": [
-            "No",
-            "Sí"
-        ],
-        "definicion": "Identificar mujeres exclusivamente por su sexo, condición biológica o roles familiares.",
-        "metodologia": "1. Regla de inversión. 2. Asimetría identificativa. 3. Redundancia. 4. Infantilización.",
-        "ejemplos": "• \"Dos bomberos y dos mujeres\". • \"Las chicas del balonmano\". • \"Una madre de oro\". • \"Lolitas para endulzar\"."
+  
+    "34": {
+      "nombre": "disminutivos_infantilizacion",
+      "codigo": "34",
+      "valores_posibles": ["No", "Sí"],
+      "definicion": {
+        "concepto": "Referirse a mujeres adultas mediante diminutivos lexicales ('chiquitas', 'nenas') o sustantivos propios de la infancia ('niñas', 'chicas') cuando los hombres adultos del mismo texto reciben tratamiento adulto. La infantilización reduce el estatus, la autoridad y la madurez profesional de la mujer.",
+        "criterio_operativo": "Existe V34 cuando: (a) se usan formas diminutivas o infantilizadoras para mujeres adultas; (b) los hombres adultos del mismo texto NO reciben tratamiento equivalente ('chicos', 'chavales'); (c) el uso no está justificado por la edad real de las personas mencionadas (no son efectivamente niñas)."
+      },
+      "metodologia": {
+        "paso_1_localizar_infantilizacion": "Identifica usos de 'niñas', 'chicas', 'chiquitas', 'nenas', diminutivos en -ita/-ica.",
+        "paso_2_verificar_edad_real": "¿Las personas mencionadas son menores de 18 años? Si sí, 'niñas/chicas' puede ser correcto descriptivo (no V34). Si son adultas, sigue al paso 3.",
+        "paso_3_test_de_simetria": "¿Los hombres adultos del mismo texto son llamados 'chicos', 'chavales', 'chiquillos'? Si no, hay asimetría y V34 = Sí.",
+        "paso_4_contexto_profesional": "Atención especial al ámbito deportivo y profesional. 'Las chicas del balonmano' aplicado a jugadoras profesionales adultas es infantilización; 'los chicos del balonmano' es uso paralelo solo cuando se aplica simétricamente a ambos sexos."
+      },
+      "ejemplos_positivos": [
+        {
+          "texto": "Las chicas del balonmano se llevaron el bronce; el equipo masculino quedó cuarto",
+          "razon": "'Chicas' aplicado a deportistas profesionales adultas; el masculino se refiere correctamente como 'equipo masculino'. Asimetría."
+        },
+        {
+          "texto": "He atendido en tutorías a cuatro alumnos y a tres chiquitas",
+          "razon": "Diminutivo aplicado solo a alumnas, no a alumnos. García Meseguer (1994) cita este ejemplo."
+        },
+        {
+          "texto": "La nena del equipo, Lucía Pérez, sorprendió a todos",
+          "razon": "'Nena' aplicado a deportista adulta como apelativo cariñoso pero infantilizador."
+        }
+      ],
+      "ejemplos_negativos": [
+        {
+          "texto": "Las jugadoras del equipo nacional viajaron a París para los Juegos",
+          "razon_no_aplica": "Sustantivo profesional ('jugadoras'), no infantilizado."
+        },
+        {
+          "texto": "Las niñas de 10 años ganaron el torneo escolar interescolar",
+          "razon_no_aplica": "'Niñas' referido a personas efectivamente menores. Uso descriptivo correcto."
+        },
+        {
+          "texto": "Los chicos y las chicas del equipo entrenan juntos los lunes",
+          "razon_no_aplica": "Uso simétrico de ambos términos para edades equivalentes (no especificadas pero coherentes)."
+        }
+      ],
+      "frontera_con_otras": {
+        "v33_asimetria_mujer_hombre": "V34 es subtipo específico de V33 cuando la asimetría incluye infantilización.",
+        "v35_denominacion_sexualizada": "Si 'nena/chica' se usa con connotación sexual o de objeto, activa también V35.",
+        "v25_lenguaje_sexista": "Todas las V34 son V25."
+      },
+      "caso_limite_documentado": {
+        "texto": "La pequeña Carolina Marín se hizo con su séptimo título",
+        "decision": "SÍ es V34",
+        "explicacion": "Carolina Marín es atleta olímpica adulta y campeona consolidada. 'Pequeña' no refiere a su estatura ni edad sino a una infantilización lingüística que reduciría a cualquier deportista adulta. Equivalente masculino impensable: 'El pequeño Rafa Nadal'."
+      },
+      "referencias": ["garcia_meseguer_1994", "lledo_cunill_1992", "sainz_de_baranda_2013"]
     },
-    {
-        "nombre": "denominacion_redundante",
-        "codigo": "36",
-        "valores_posibles": [
-            "No",
-            "Sí"
-        ],
-        "definicion": "Uso innecesario de marcas de sexo en profesiones o cargos ya definidos.",
-        "metodologia": "1. Regla de inversión. 2. Verificación del sustantivo.",
-        "ejemplos": "• \"La primera mujer surfista\". • \"Deportistas femeninas\". • \"Dos mujeres informáticas\". • \"Nadadora femenina\"."
+  
+    "35": {
+      "nombre": "denominacion_sexualizada",
+      "codigo": "35",
+      "valores_posibles": ["No", "Sí"],
+      "definicion": {
+        "concepto": "Identificar a mujeres exclusivamente por su sexo biológico, condición corporal o roles familiares y reproductivos, eclipsando su identidad profesional, cívica o pública. La mujer queda reducida a su categoría sexual/reproductiva, no a su persona o función social.",
+        "criterio_operativo": "Existe V35 cuando: (a) la mujer es identificada con 'mujer' como sustantivo principal en contexto donde el cargo profesional sería esperable ('dos bomberos y dos mujeres' en lugar de 'cuatro bomberos/as'); (b) la denominación principal es por rol biológico/reproductivo en contexto profesional ('madre de oro'); (c) se usan apelativos sexualizadores ('lolitas', 'bellezas') que reducen a la mujer a objeto."
+      },
+      "metodologia": {
+        "paso_1_localizar_referencias_a_mujeres": "Identifica todas las menciones a mujeres y la categoría principal por la que se las nombra (profesión, cargo, rol familiar, sexo biológico, etc.).",
+        "paso_2_test_de_reduccion": "¿La denominación reduce a la mujer a su sexo, cuerpo, o rol reproductivo cuando el contexto requería identificación profesional o cívica?",
+        "paso_3_test_de_inversion": "¿Se usaría una categoría equivalente para hombres en el mismo contexto? 'Un padre de oro' por 'campeón olímpico' no se usaría: la maternidad como denominación profesional es asimétrica.",
+        "paso_4_contexto_de_uso": "Una noticia sobre maternidad puede legítimamente identificar a mujeres como madres. Una noticia sobre deporte que identifica a una deportista solo como madre activa V35."
+      },
+      "ejemplos_positivos": [
+        {
+          "texto": "Los testigos son dos bomberos y dos mujeres",
+          "razon": "Las mujeres son identificadas por su sexo cuando el contexto requería 'bomberas' o 'cuatro testigos'."
+        },
+        {
+          "texto": "Maialen Chourraut, una madre de oro",
+          "razon": "Deportista olímpica identificada por su rol familiar reproductivo. Eclipsa identidad profesional."
+        },
+        {
+          "texto": "Lolitas para endulzar la sección de moda",
+          "razon": "Apelativo sexualizador ('lolitas' = niñas-sexualizadas, referencia a Nabokov) aplicado a modelos profesionales."
+        }
+      ],
+      "ejemplos_negativos": [
+        {
+          "texto": "La empresaria Ana Botín presentó los resultados anuales",
+          "razon_no_aplica": "Identificación profesional ('empresaria'), no biológica ni familiar."
+        },
+        {
+          "texto": "La madre de la víctima testificó ante el tribunal",
+          "razon_no_aplica": "Rol familiar relevante para la noticia (testificó por ser madre de la víctima), no sustituye identidad profesional."
+        },
+        {
+          "texto": "Las nadadoras españolas, entre ellas tres madres recientes, prepararon los Juegos",
+          "razon_no_aplica": "Identifica profesionalmente como 'nadadoras' y añade información biográfica relevante para el contexto deportivo (compatibilidad maternidad/élite). No reduce ni eclipsa."
+        }
+      ],
+      "frontera_con_otras": {
+        "v28_uso_dual_zorr": "V28 trata pares léxicos con asimetría intrínseca ('zorra/zorro'). V35 trata la elección de categoría sustantiva ('madre' vs 'campeona'). Pueden coexistir.",
+        "v34_infantilizacion": "Si la denominación es además infantilizadora ('chicas', 'nenas'), activa también V34.",
+        "v37_dependiente": "V37 = nombrada por relación familiar con un VARÓN concreto. V35 = nombrada por rol biológico-familiar genérico. 'La señora de Karembeu' = V37. 'Una madre' = V35."
+      },
+      "caso_limite_documentado": {
+        "texto": "La esposa del nuevo CEO acudió a la presentación",
+        "decision": "Depende del contexto. SÍ V37 si solo se la identifica así",
+        "explicacion": "Si 'la esposa' es la única identificación de una mujer protagonista, activa V37 (dependiente). Si la esposa es accesoria al evento (acompañante meramente mencionada), puede ser información contextual no problemática. La frontera está en la centralidad narrativa."
+      },
+      "referencias": ["sainz_de_baranda_2013", "lledo_cunill_1992", "bengoechea_calero_2003"]
     },
-    {
-        "nombre": "denominacion_dependiente",
-        "codigo": "37",
-        "valores_posibles": [
-            "No",
-            "Sí"
-        ],
-        "definicion": "Nombrar a mujeres a través de su relación con un varón.",
-        "metodologia": "1. Regla de inversión. 2. Fórmulas de posesión. 3. Jerarquía de identidad.",
-        "ejemplos": "• \"La señora de Karembeu\". • \"La hija de Ali\". • \"La ex de Iker Casillas\"."
+  
+    "36": {
+      "nombre": "denominacion_redundante",
+      "codigo": "36",
+      "valores_posibles": ["No", "Sí"],
+      "definicion": {
+        "concepto": "Uso innecesario y redundante de marcas de sexo en sustantivos profesionales que ya están feminizados o cuyas formas femeninas existen y son aceptadas. La redundancia ('una mujer bombera', 'deportistas femeninas') refuerza la idea de que la profesión es por defecto masculina y la presencia femenina necesita marca explícita.",
+        "criterio_operativo": "Existe V36 cuando se añade 'mujer' o 'femenino/-a' a un sustantivo que ya admite forma femenina o que es no marcado. Test: ¿se diría la versión masculina equivalente? Si 'hombres informáticos' o 'deportistas masculinos' sonaría redundante, también lo es la versión femenina."
+      },
+      "metodologia": {
+        "paso_1_localizar_marcas_redundantes": "Identifica construcciones tipo 'mujer + cargo masculino', 'cargo + femenina', diminutivos profesionales sexuados.",
+        "paso_2_verificar_existencia_de_forma_femenina": "¿Existe la forma femenina del sustantivo profesional? Si sí, marcar 'mujer X' es redundante.",
+        "paso_3_test_de_inversion": "¿Se usaría la forma masculina equivalente? ('Dos hombres informáticos', 'jugadores masculinos'). Si no se usaría, la versión femenina es redundancia sexista.",
+        "paso_4_excepciones_legitimas": "En deportes con categorías por sexo, especificar 'femenino/masculino' es necesario para distinguir competiciones ('el partido masculino de la Champions'). NO es V36."
+      },
+      "ejemplos_positivos": [
+        {
+          "texto": "La primera mujer surfista española logró clasificarse",
+          "razon": "'Surfista' es nombre profesional no marcado. 'Mujer surfista' es redundante: bastaba 'la primera surfista española'."
+        },
+        {
+          "texto": "Las deportistas femeninas del equipo nacional viajaron al torneo",
+          "razon": "'Deportistas' ya implica el sexo por el artículo y participio. 'Femeninas' es redundancia."
+        },
+        {
+          "texto": "Dos mujeres informáticas presentaron el proyecto",
+          "razon": "'Informáticas' ya marca el género. 'Mujeres' es redundante."
+        }
+      ],
+      "ejemplos_negativos": [
+        {
+          "texto": "Las nadadoras españolas ganaron tres medallas",
+          "razon_no_aplica": "'Nadadoras' marca el género en el propio sustantivo. Sin redundancia."
+        },
+        {
+          "texto": "El equipo femenino de baloncesto se enfrenta al equipo masculino en la final",
+          "razon_no_aplica": "Especificación necesaria para distinguir competiciones por categoría. Uso correcto."
+        },
+        {
+          "texto": "La selección femenina sub-21 disputó la final del europeo",
+          "razon_no_aplica": "Especificación de categoría deportiva, necesaria para identificar competición."
+        }
+      ],
+      "frontera_con_otras": {
+        "v29_uso_cargo_mujer": "V29 = NO feminizar cargos pudiendo ('la médico'). V36 = REDUNDAR al feminizar ('una mujer médica'). Son cara y cruz: ambas reflejan tratamiento del cargo femenino como anomalía.",
+        "v38_criterios_excepcion": "Si la redundancia se enmarca como hito excepcional ('la PRIMERA mujer surfista'), activa también V38.",
+        "v32_sin_nombre": "Diferentes: V36 = redundancia en la denominación profesional. V32 = ausencia de identificación nominal."
+      },
+      "caso_limite_documentado": {
+        "texto": "Una entrenadora mujer dirige por primera vez al equipo masculino",
+        "decision": "SÍ es V36 + V38",
+        "explicacion": "'Entrenadora' ya marca el género. Añadir 'mujer' es redundancia sexista. Adicionalmente, el marco 'por primera vez' activa V38 (criterios de excepción)."
+      },
+      "referencias": ["lledo_cunill_1992", "bengoechea_calero_2003", "sainz_de_baranda_2013"]
     },
-    {
-        "nombre": "criterios_excepcion",
-        "codigo": "38",
-        "valores_posibles": [
-            "No",
-            "Sí"
-        ],
-        "definicion": "Presentar logros femeninos como excepcionales o anómalos.",
-        "metodologia": "1. Regla de inversión. 2. Invisibilización. 3. Evaluación de anomalía.",
-        "ejemplos": "• \"Una mujer arbitrará por primera vez\". • \"La primera mujer surfista\". • \"La única iraní medallista\"."
+  
+    "37": {
+      "nombre": "denominacion_dependiente",
+      "codigo": "37",
+      "valores_posibles": ["No", "Sí"],
+      "definicion": {
+        "concepto": "Nombrar a una mujer principalmente a través de su relación con un varón concreto: esposa, hija, ex pareja, madre, viuda de. La mujer aparece definida no por sí misma sino como satélite del varón, que es el referente reconocido.",
+        "criterio_operativo": "Existe V37 cuando: (a) una mujer es identificada principalmente por su relación familiar con un varón ('la señora de X', 'la hija de Y'); (b) esa relación es la denominación PRINCIPAL en el texto, no un dato secundario; (c) si invirtiéramos los roles, no se nombraría a un hombre así. 'El marido de Letizia' tendría que ser equivalente — no se usa."
+      },
+      "metodologia": {
+        "paso_1_localizar_referencias_relacionales": "Identifica fórmulas tipo 'la mujer/esposa/hija/ex de [nombre masculino]', 'la señora X' donde X es apellido del marido.",
+        "paso_2_evaluar_centralidad": "¿Es la denominación principal de la mujer en el texto? ¿O un dato accesorio entre otros?",
+        "paso_3_test_de_inversion": "Imagina la inversión: ¿se nombraría a un varón con fórmula equivalente? ('El marido de Ayuso fue detenido', 'el hijo de Botín dirige una empresa'). Si la inversión NO se usaría en prensa, había asimetría sexista.",
+        "paso_4_legitimidad_contextual": "Si la mujer es protagonista de la noticia POR su relación con el varón (testimonio de la viuda en juicio, biografía de la esposa de un presidente), V37 puede ser informacionalmente justificado. Si no, V37 = Sí."
+      },
+      "ejemplos_positivos": [
+        {
+          "texto": "La señora de Karembeu acudió al evento benéfico",
+          "razon": "Identificada únicamente por su relación matrimonial con Karembeu, eclipsando su identidad profesional (modelo internacional)."
+        },
+        {
+          "texto": "La hija de Ali Khamenei se pronunció sobre las protestas",
+          "razon": "Su voz política se valida vía la relación filial con el líder, no por su trayectoria propia."
+        },
+        {
+          "texto": "La ex de Iker Casillas asistió al partido",
+          "razon": "Identificada por ser exnovia de un futbolista, no por su persona."
+        }
+      ],
+      "ejemplos_negativos": [
+        {
+          "texto": "Adriana Karembeu, modelo y empresaria, lanza nueva colección",
+          "razon_no_aplica": "Identificada por su profesión propia, no por su pareja."
+        },
+        {
+          "texto": "La hija del fallecido participó en el funeral",
+          "razon_no_aplica": "Relación familiar relevante para la noticia (el funeral). No sustituye identidad pública porque no se trata de noticia sobre su carrera."
+        },
+        {
+          "texto": "La esposa del presidente, Begoña Gómez, anunció una nueva iniciativa cultural",
+          "razon_no_aplica": "Caso límite: si la noticia es sobre su iniciativa propia y se la identifica también por nombre, V37 no se activa. Si solo apareciera 'la esposa del presidente' sin Gómez, sí."
+        }
+      ],
+      "frontera_con_otras": {
+        "v35_denominacion_sexualizada": "V35 trata identificación por rol biológico/familiar genérico ('una madre'). V37 trata identificación por relación con VARÓN concreto ('la madre de X', 'la mujer de Y'). 'Madre de oro' = V35. 'Madre de Pedro Sánchez' = V37.",
+        "v32_sin_nombre": "Si en V37 falta además el nombre propio de la mujer ('la mujer de X'), también activa V32.",
+        "v31_androcentrismo": "V37 es manifestación local. Si todo el texto presenta mujeres por relación con varones, escala a V31."
+      },
+      "caso_limite_documentado": {
+        "texto": "Letizia Ortiz acompañó al rey en su viaje oficial",
+        "decision": "Discutible. NO V37 si Letizia es identificada con nombre propio.",
+        "explicacion": "Letizia Ortiz tiene identidad propia previa (periodista) además de institucional (reina). Mencionarla con nombre propio acompañando al rey en función protocolar NO es V37 porque mantiene identidad. 'La esposa del rey' sin más sí lo sería. La frontera está en si la mujer conserva su nombre y, por tanto, su persona."
+      },
+      "referencias": ["lledo_cunill_1992", "sainz_de_baranda_2013", "bengoechea_calero_2003"]
     },
-    {
-        "nombre": "comparacion_mujer_hombre",
-        "codigo": "39",
-        "valores_posibles": [
-            "No",
-            "Sí"
-        ],
-        "definicion": "Evaluar a mujeres en referencia al estándar masculino.",
-        "metodologia": "1. Identificación del referente. 2. Detección de imitación. 3. Validación masculina. 4. Estereotipos.",
-        "ejemplos": "• \"Imitar al hombre\". • \"¡Qué machada!\". • \"Versión femenina de...\"."
+  
+    "38": {
+      "nombre": "criterios_excepcion",
+      "codigo": "38",
+      "valores_posibles": ["No", "Sí"],
+      "definicion": {
+        "concepto": "Presentar logros, posiciones o roles ejercidos por mujeres como excepcionales, anómalos, pioneros o únicos, reforzando implícitamente la idea de que la norma es la ausencia femenina en ese ámbito. La excepcionalidad invisibiliza tanto a las mujeres que precedieron (que existieron pero no se cuentan) como naturaliza la futura ausencia.",
+        "criterio_operativo": "Existe V38 cuando el texto enmarca un hecho protagonizado por una mujer con léxico de rareza: 'primera', 'única', 'pionera', 'rompió la barrera', 'a pesar de ser mujer', 'sorprendentemente'. Test: ¿se diría lo mismo con un hombre en idéntico contexto? Si 'primer hombre que arbitra' nunca se diría en un partido de fútbol, marcar 'primera mujer que arbitra' es señalar excepcionalidad sesgada."
+      },
+      "metodologia": {
+        "paso_1_localizar_lexico_excepcionalidad": "Identifica marcadores como 'primera', 'única', 'pionera', 'sin precedentes', 'rompe el techo', 'a pesar de'.",
+        "paso_2_test_de_simetria": "¿Se usaría el equivalente masculino en idéntico contexto? Si la respuesta es no, V38 = Sí.",
+        "paso_3_hitos_historicos_legitimos": "Algunos 'primera' son hitos históricos universales (primera mujer presidenta de un país nunca antes gobernado por mujer). Estos pueden ser informativamente correctos, NO V38, si no acumulan léxico de anomalía adicional ('sorprendentemente', 'a pesar de').",
+        "paso_4_recurrencia": "Si el texto subraya la excepcionalidad más allá de su valor informativo objetivo (varias menciones, énfasis retórico), V38 = Sí incluso si el hito es real."
+      },
+      "ejemplos_positivos": [
+        {
+          "texto": "Una mujer arbitrará por primera vez un partido de Primera División",
+          "razon": "El arbitraje no es campo de exclusividad masculina por convención: hay mujeres árbitras formadas. Presentarlo como 'primera vez' naturaliza la ausencia previa."
+        },
+        {
+          "texto": "La primera mujer surfista española logró clasificarse",
+          "razon": "Sostiene implícitamente que la profesionalización femenina del surf es novedad, no consecuencia de derechos básicos."
+        },
+        {
+          "texto": "Sorprendentemente, la pequeña Carolina Marín ganó al campeón del mundo",
+          "razon": "'Sorprendentemente' marca anomalía. Marín ha ganado a múltiples rivales: no es sorpresa, es trayectoria."
+        }
+      ],
+      "ejemplos_negativos": [
+        {
+          "texto": "La árbitra Marta Frías dirigirá el partido del domingo",
+          "razon_no_aplica": "Mención profesional sin léxico de excepcionalidad. Uso periodístico correcto."
+        },
+        {
+          "texto": "La primera persona en pisar la Luna fue Neil Armstrong",
+          "razon_no_aplica": "'Primera' referido a un hito histórico universal de la especie, no a excepción de género."
+        },
+        {
+          "texto": "La selección femenina española gana su primer Mundial",
+          "razon_no_aplica": "Hito deportivo objetivo: primer trofeo mundial de la selección, no marca de excepcionalidad de género."
+        }
+      ],
+      "frontera_con_otras": {
+        "v36_denominacion_redundante": "Si la excepcionalidad va con redundancia léxica ('primera mujer surfista' = primera + mujer + surfista), activa V36 y V38.",
+        "v32_sin_nombre": "Si la mujer 'primera' no es identificada ('una mujer arbitrará'), activa V32 además de V38.",
+        "v31_androcentrismo": "V38 es síntoma local. Si todo el texto marca excepcionalidad sistemáticamente, escala a V31."
+      },
+      "caso_limite_documentado": {
+        "texto": "La primera ministra del Reino Unido tras Liz Truss será Kemi Badenoch",
+        "decision": "Discutible. Hito objetivo pero su recurrencia es relevante.",
+        "explicacion": "El Reino Unido ha tenido varias primeras ministras (Thatcher, May, Truss). 'Primera' aquí podría sonar reductora si se sugiere que es novedad de género. Si el contexto enfatiza solo el cambio de gobierno y la condición femenina es dato secundario, NO V38. Si el titular pone foco en 'mujer' como elemento principal, V38 = Sí."
+      },
+      "referencias": ["sainz_de_baranda_2013", "lledo_cunill_1992", "bengoechea_2015"]
+    },
+  
+    "39": {
+      "nombre": "comparacion_mujer_hombre",
+      "codigo": "39",
+      "valores_posibles": ["No", "Sí"],
+      "definicion": {
+        "concepto": "Evaluar, validar o describir a las mujeres tomando al varón como estándar de referencia o como medida de excelencia. La mujer es valorada en función de su parecido, imitación o competencia con el modelo masculino, que queda asentado como norma neutra.",
+        "criterio_operativo": "Existe V39 cuando: (a) el texto usa expresiones de imitación ('imita a los grandes', 'al estilo de'); (b) se aplican apelativos masculinos a mujeres como elogio ('qué machada'); (c) la categoría femenina se presenta como 'versión' de la masculina ('versión femenina de Messi'); (d) el rendimiento femenino se valida vía comparación con el masculino, no por mérito propio."
+      },
+      "metodologia": {
+        "paso_1_localizar_comparaciones": "Identifica frases donde una mujer se compara, equipara o se mide con un varón (real o categórico).",
+        "paso_2_evaluar_direccion_de_referencia": "¿Quién es el modelo? Si el varón es la referencia y la mujer la imitadora/equivalente, V39 = Sí. Si la comparación es entre iguales sin jerarquía implícita, V39 = No.",
+        "paso_3_localizar_apelativos_masculinizantes": "Expresiones como 'tiene cojones', 'qué machada', 'corre como un tío'. Aplicadas a mujeres como elogio, activan V39 porque asumen que el estándar de capacidad/coraje es masculino.",
+        "paso_4_versionado_categorias": "'Femenino de X', 'la X de las mujeres', 'Messi en versión femenina'. La categoría femenina se subordina a la masculina como derivada o reflejo."
+      },
+      "ejemplos_positivos": [
+        {
+          "texto": "La nadadora corre con la potencia de un hombre",
+          "razon": "El masculino como estándar de potencia. Asume superioridad masculina como referencia."
+        },
+        {
+          "texto": "Qué machada la de Carolina Marín",
+          "razon": "Apelativo derivado de 'macho' aplicado como elogio asume el estándar masculino como medida de valor."
+        },
+        {
+          "texto": "Es la Messi del fútbol femenino",
+          "razon": "La excelencia femenina se valida vía comparación con varón. Versionado: el fútbol femenino es 'el otro' fútbol respecto al neutro."
+        }
+      ],
+      "ejemplos_negativos": [
+        {
+          "texto": "La tenista superó su récord personal en el torneo",
+          "razon_no_aplica": "Comparación interna (consigo misma), no contra estándar masculino."
+        },
+        {
+          "texto": "El Real Madrid femenino derrotó al Barcelona femenino en la final",
+          "razon_no_aplica": "Comparación entre equipos del mismo género, sin referencia jerárquica al masculino."
+        },
+        {
+          "texto": "Alcaraz y Sabalenka son los líderes del ranking ATP y WTA respectivamente",
+          "razon_no_aplica": "Reconocimiento simétrico de excelencia en circuitos paralelos. Sin subordinación de uno respecto al otro."
+        }
+      ],
+      "frontera_con_otras": {
+        "v31_androcentrismo": "V39 es manifestación local de V31. Cuando el texto compara a una mujer con un hombre como modelo, está aplicando perspectiva androcéntrica. V31 es la global, V39 la puntual.",
+        "v38_criterios_excepcion": "V38 = la mujer como primera/única (anomalía). V39 = la mujer comparada con varón (medida). Pueden coexistir: 'la primera mujer que juega como un hombre' activaría ambas.",
+        "v34_infantilizacion": "Si la comparación incluye diminutivo o infantilización ('la pequeña Caro corre como un hombre'), activa también V34."
+      },
+      "caso_limite_documentado": {
+        "texto": "Carolina Marín ha alcanzado un nivel comparable al de los mejores del bádminton masculino",
+        "decision": "SÍ es V39",
+        "explicacion": "La excelencia de Marín se valida tomando el bádminton masculino como referencia de 'mejor'. Inversión: 'Viktor Axelsen ha alcanzado un nivel comparable a las mejores del femenino' nunca se escribiría. La asimetría revela qué categoría se considera 'norma' y cuál 'derivada'."
+      },
+      "referencias": ["sainz_de_baranda_2013", "lledo_cunill_1992", "bengoechea_2015"]
     }
-]
+  }

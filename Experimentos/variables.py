@@ -6,7 +6,8 @@ from pydantic import BaseModel, Field, ValidationError
 from typing import Optional, Any, List
 import re
 import json
-from utils import consultar_ollama
+import json_repair
+from utils import cargar_variables_desde_json, consultar_ollama, generar_prompt_dinamico, obtener_config_variable, parsear_respuesta_modelo
 import ast
 import pandas as pd
 
@@ -131,8 +132,80 @@ def clasificar_var_titular(articulo: Article) -> Optional[str]:
 # =====================================================================================
 from utils import  NombresDetectados
 
-### Experimento 1, 2
-def clasificar_var_nombre_propio_titular_list(titulo: str, modelo: str = "gemma3:4b") -> NombresDetectados:
+### Prompt 1
+def clasificar_var_nombre_propio_titular_list_e1(titulo: str, modelo: str = "gemma3:4b") -> NombresDetectados:
+    """
+    Extrae nombres propios del titular y los clasifica según su género o tipo.
+    Devuelve dos listas sincronizadas: nombres y valores.
+    """
+    
+    # Si el título es muy corto, devolvemos listas vacías
+    if not titulo or len(titulo) < 3:
+        return NombresDetectados(nombres=[], valores=[])
+
+    prompt = f"""
+    Analiza el siguiente TITULAR y extrae los nombres propios, entidades, lugares o tecnologías.
+
+    Asigna a cada uno su código numérico correspondiente.
+
+    TITULAR: "{titulo}"
+
+    TABLA DE CÓDIGOS:
+    1  = Hombre (Ej: "Pedro Sánchez", "El Papa", "Carlos")
+    2  = Mujer (Ej: "María", "Isabel Díaz Ayuso", "Alessandra")
+    3  = Grupo Mixto (Ej: "La pareja", "Los vecinos", "Padres")
+    4  = Institución, Organización, Empresa, Partido Político (ej: "Google", "PSOE", "La ONU")
+    41 = Lugares: Países, Regiones, Ciudades (ej: "España", "Madrid", "Europa")
+    42 = Tecnología: Apps, Modelos de IA, Robots, Software (ej: "ChatGPT", "Gemini", "Sora", "TikTok")
+
+    INSTRUCCIONES:
+    Los nombres propios (o sustantivos propios) son un tipo de nombres que designan un ser único dentro de su misma categoría. Los nombres propios se diferencian de los nombres comunes (o sustantivos comunes), que designan a un ser cualquiera de su clase. Los nombres propios pueden hacer referencia a personas, organización, productos o lugares, entre otros. Comienzan con mayúscula
+
+    - Ignora sustantivos comunes que no sean entidades (ej: no extraigas "la policía" si es genérico, pero sí "Mossos d'Esquadra").
+    - Distingue bien entre la EMPRESA (OpenAI -> 4) y el PRODUCTO (ChatGPT -> 42).
+    - Si no hay nombres propios, devuelve listas vacías.
+
+    FORMATO DE RESPUESTA (JSON):
+    Responde ÚNICAMENTE con un objeto JSON con esta estructura exacta:
+    {{
+        "nombres": ["Nombre1", "Nombre2"],
+        "valores": [Codigo1, Codigo2]
+    }}
+
+    """
+
+    # --- LLAMADA AL MODELO ---
+    respuesta_texto = consultar_ollama(prompt, modelo)
+
+    # --- PARSEO Y VALIDACIÓN ---
+    try:
+        # Limpieza básica para encontrar el JSON
+        inicio = respuesta_texto.find('{')
+        fin = respuesta_texto.rfind('}') + 1
+        
+        if inicio == -1:
+            return NombresDetectados(nombres=[], valores=[])
+            
+        json_str = respuesta_texto[inicio:fin]
+        data = json.loads(json_str)
+        
+        # Validamos con Pydantic
+        resultado = NombresDetectados(**data)
+        
+        # Validación de seguridad: Las listas deben tener el mismo tamaño
+        if len(resultado.nombres) != len(resultado.valores):
+            # Si hay desajuste, cortamos a la longitud del más corto
+            min_len = min(len(resultado.nombres), len(resultado.valores))
+            resultado.nombres = resultado.nombres[:min_len]
+            resultado.valores = resultado.valores[:min_len]
+            
+        return resultado
+
+    except (json.JSONDecodeError, ValidationError):
+        return NombresDetectados(nombres=[], valores=[])
+
+### Prompt 2
+def clasificar_var_nombre_propio_titular_list_e2(titulo: str, modelo: str = "gemma3:4b") -> NombresDetectados:
     """
     Extrae nombres propios del titular y los clasifica según su género o tipo.
     Devuelve dos listas sincronizadas: nombres y valores.
@@ -203,7 +276,7 @@ def clasificar_var_nombre_propio_titular_list(titulo: str, modelo: str = "gemma3
     except (json.JSONDecodeError, ValidationError):
         return NombresDetectados(nombres=[], valores=[])
 
-### Experimento 3
+### Prompt 3
 import gender_guesser.detector as gender
 
 # Inicializamos el detector fuera de la función para mayor rendimiento
@@ -439,8 +512,8 @@ def clasificar_var_cita_titular(titulo: str, modelo: str = "gemma3:4b") -> CitaT
 # =====================================================================================
 from utils import ProtagonistasDetectados
 
-### Experimento 1, 2
-def clasificar_var_cla_genero_prota_list(texto_noticia: str, modelo: str = "gemma3:4b") -> ProtagonistasDetectados:
+### Prompt 1
+def clasificar_var_cla_genero_prota_list_e1(texto_noticia: str, modelo: str = "gemma3:4b") -> ProtagonistasDetectados:
     """
     Analiza el cuerpo de la noticia para extraer los protagonistas principales.
     Devuelve listas sincronizadas de nombres únicos y sus códigos.
@@ -463,13 +536,7 @@ def clasificar_var_cla_genero_prota_list(texto_noticia: str, modelo: str = "gemm
     3 = Grupo Mixto: En una misma noticia aparecen sustantivos que designan e identifican de manera única e individual a una persona masculina y otra femenina (Ej: " trump y harris", " broncano y rosalía", )
     4 = Institución, Organización, Empresa, Partido Político: Los nombres propios de instituciones, organizaciones, empresas y partidos políticos son sustantivos que designan entidades únicas e irrepetibles, diferenciándolas de otras de su misma clase. Se escriben con mayúscula inicial en todas sus palabras significativas (sustantivos y adjetivos), indicando su identidad oficial, jurídica o pública (ej: "Google", "PSOE",“openai” “ONU” “Fundación BBVA” “Microsoft”)
     41 = Lugares: Países, Regiones, Ciudades Los nombres propios de lugares —países, regiones, ciudades, continentes o accidentes geográficos— son denominaciones específicas y únicas que identifican un lugar, conocidas técnicamente como topónimos (ej: "España", "Madrid", "Europa", “Comunidad de Madrid” “el Gobierno de EE.UU” “el gobierno Español”
-    42 = Tecnología: Apps, Modelos de IA, Robots, Software Los nombres propios en tecnología (apps, IA, robots, software) son marcas comerciales o nombres de producto específicos que identifican de forma única una herramienta, modelo o dispositivo creado por una empresa (ej. ChatGPT, Sophia, Windows). Se escriben con mayúscula inicial y distinguen el producto de la categoría general (ej: "ChatGPT", "Gemini", "Sora", "TikTok", “Instagram”, “Faceboock”)
-
-    REGLAS OBLIGATORIAS:
-    1. Si el nombre es de una sola persona, JAMÁS uses códigos 3, 32 o 33.
-    2. Agencias de noticias (Reuters, EFE, Europa Press) son SIEMPRE código 4.
-    3. Nombres femeninos (María, Alessandra) son código 2.
-    4. Nombres masculinos (Pedro, Francisco) son código 1.
+    42 = Tecnología: Apps, Modelos de IA, Robots, Software Los nombres propios en tecnología (apps, IA, robots, software) son marcas comerciales o nombres de producto específicos que identifican de forma única una herramienta, modelo o dispositivo creado por una empresa (ej. ChatGPT, Sophia, Windows). Se escriben con mayúscula inicial y distinguen el producto de la categoría general (ej: "ChatGPT", "Gemini", "Sora", "TikTok", “Instagram”, “Facebook”)
     
     FORMATO JSON EXACTO:
     {{
@@ -506,7 +573,68 @@ def clasificar_var_cla_genero_prota_list(texto_noticia: str, modelo: str = "gemm
     except (json.JSONDecodeError, ValidationError):
         return ProtagonistasDetectados(nombres=[], valores=[])
 
-### Experimento 3
+### Prompt 2
+def clasificar_var_cla_genero_prota_list_e2(texto_noticia: str, modelo: str = "gemma3:4b") -> ProtagonistasDetectados:
+    """
+    Analiza el cuerpo de la noticia para extraer los protagonistas principales.
+    Devuelve listas sincronizadas de nombres únicos y sus códigos.
+    """
+    
+    # Validación básica
+    if not texto_noticia or len(texto_noticia) < 10:
+        return ProtagonistasDetectados(nombres=[], valores=[])
+
+    # --- PROMPT ---
+    prompt = f"""
+    Analiza el siguiente TEXTO DE NOTICIA y extrae los protagonistas (personas, entidades, lugares clave).
+    
+    TEXTO (Fragmento):
+    "{texto_noticia}..."
+
+    TABLA DE CÓDIGOS ESTRICTA:
+    1 = Hombre: son sustantivos que designan e identifican de manera única e individual a una persona masculina específica, diferenciándola de los demás dentro de su clase. Se escriben siempre con mayúscula inicial y funcionan como etiquetas identificadoras (ej. Manuel, Mario, Carlos, "El Papa", "Pedro Sánchez")
+    2 = Mujer: son sustantivos que designan e identifican de manera única e individual a una persona femenina específica, diferenciándola de las demás dentro de su clase. Se escriben siempre con mayúscula inicial y funcionan como etiquetas identificadoras (Ej: "María", "Isabel Díaz Ayuso", "Alessandra", “La Reina”)
+    3 = Grupo Mixto: En una misma noticia aparecen sustantivos que designan e identifican de manera única e individual a una persona masculina y otra femenina (Ej: " trump y harris", " broncano y rosalía", )
+    4 = Institución, Organización, Empresa, Partido Político: Los nombres propios de instituciones, organizaciones, empresas y partidos políticos son sustantivos que designan entidades únicas e irrepetibles, diferenciándolas de otras de su misma clase. Se escriben con mayúscula inicial en todas sus palabras significativas (sustantivos y adjetivos), indicando su identidad oficial, jurídica o pública (ej: "Google", "PSOE",“openai” “ONU” “Fundación BBVA” “Microsoft”)
+    41 = Lugares: Países, Regiones, Ciudades Los nombres propios de lugares —países, regiones, ciudades, continentes o accidentes geográficos— son denominaciones específicas y únicas que identifican un lugar, conocidas técnicamente como topónimos (ej: "España", "Madrid", "Europa", “Comunidad de Madrid” “el Gobierno de EE.UU” “el gobierno Español”
+    42 = Tecnología: Apps, Modelos de IA, Robots, Software Los nombres propios en tecnología (apps, IA, robots, software) son marcas comerciales o nombres de producto específicos que identifican de forma única una herramienta, modelo o dispositivo creado por una empresa (ej. ChatGPT, Sophia, Windows). Se escriben con mayúscula inicial y distinguen el producto de la categoría general (ej: "ChatGPT", "Gemini", "Sora", "TikTok", “Instagram”, “Facebook”)
+    
+    FORMATO JSON EXACTO:
+    {{
+        "nombres": ["Nombre1", "Nombre2"],
+        "valores": [Codigo1, Codigo2]
+    }}
+    """
+
+    # --- LLAMADA AL MODELO ---
+    # Asumiendo que usas tu función 'consultar_ollama'
+    # Se recomienda un modelo con buena capacidad de contexto (ej: llama3, mistral, gemma:7b)
+    respuesta_texto = consultar_ollama(prompt, modelo)
+
+    # --- PARSEO Y VALIDACIÓN ---
+    try:
+        inicio = respuesta_texto.find('{')
+        fin = respuesta_texto.rfind('}') + 1
+        
+        if inicio == -1:
+            return ProtagonistasDetectados(nombres=[], valores=[])
+            
+        json_str = respuesta_texto[inicio:fin]
+        data = json.loads(json_str)
+        
+        resultado = ProtagonistasDetectados(**data)
+        
+        # Sincronización de seguridad
+        min_len = min(len(resultado.nombres), len(resultado.valores))
+        resultado.nombres = resultado.nombres[:min_len]
+        resultado.valores = resultado.valores[:min_len]
+            
+        return resultado
+
+    except (json.JSONDecodeError, ValidationError):
+        return ProtagonistasDetectados(nombres=[], valores=[])
+
+### Prompt 3
 def clasificar_var_cla_genero_prota_list_e3(texto_noticia: str, modelo: str = "gemma3:4b") -> ProtagonistasDetectados:
     """
     Analiza el cuerpo de la noticia para extraer los protagonistas principales.
@@ -527,7 +655,7 @@ def clasificar_var_cla_genero_prota_list_e3(texto_noticia: str, modelo: str = "g
     3 = Grupo Mixto: En una misma noticia aparecen sustantivos que designan e identifican de manera única e individual a una persona masculina y otra femenina (Ej: " trump y harris", " broncano y rosalía", )
     4 = Institución, Organización, Empresa, Partido Político: Los nombres propios de instituciones, organizaciones, empresas y partidos políticos son sustantivos que designan entidades únicas e irrepetibles, diferenciándolas de otras de su misma clase. Se escriben con mayúscula inicial en todas sus palabras significativas (sustantivos y adjetivos), indicando su identidad oficial, jurídica o pública (ej: "Google", "PSOE",“openai” “ONU” “Fundación BBVA” “Microsoft”)
     41 = Lugares: Países, Regiones, Ciudades Los nombres propios de lugares —países, regiones, ciudades, continentes o accidentes geográficos— son denominaciones específicas y únicas que identifican un lugar, conocidas técnicamente como topónimos (ej: "España", "Madrid", "Europa", “Comunidad de Madrid” “el Gobierno de EE.UU” “el gobierno Español”
-    42 = Tecnología: Apps, Modelos de IA, Robots, Software Los nombres propios en tecnología (apps, IA, robots, software) son marcas comerciales o nombres de producto específicos que identifican de forma única una herramienta, modelo o dispositivo creado por una empresa (ej. ChatGPT, Sophia, Windows). Se escriben con mayúscula inicial y distinguen el producto de la categoría general (ej: "ChatGPT", "Gemini", "Sora", "TikTok", “Instagram”, “Faceboock”)
+    42 = Tecnología: Apps, Modelos de IA, Robots, Software Los nombres propios en tecnología (apps, IA, robots, software) son marcas comerciales o nombres de producto específicos que identifican de forma única una herramienta, modelo o dispositivo creado por una empresa (ej. ChatGPT, Sophia, Windows). Se escriben con mayúscula inicial y distinguen el producto de la categoría general (ej: "ChatGPT", "Gemini", "Sora", "TikTok", “Instagram”, “Facebook”)
 
     REGLAS OBLIGATORIAS:
     1. Si el nombre es de una sola persona, JAMÁS uses códigos 3, 32 o 33.
@@ -791,8 +919,74 @@ def clasificar_var_nombre_periodista_authors(authors_csv) -> str:
 # =====================================================================================
 from utils import GeneroPeriodistaValidado
 
-# Experimento 1, 2
-def clasificar_var_genero_periodista(nombre_periodista: str, nombre_medio:str, modelo: str = "gemma3:4b") -> int:
+# Prompt 1
+def clasificar_var_genero_periodista_e1(nombre_periodista: str, nombre_medio:str, modelo: str = "gemma3:4b") -> int:
+    """
+    Clasifica la autoría considerando el contexto del medio.
+    Recibe:
+      - nombre_periodista: El texto de la firma (ej: "Redacción", "Juan Pérez")
+      - nombre_medio: El nombre del periódico donde se publica (ej: "El País")
+    """
+    
+    # Validación inicial rápida
+    if not nombre_periodista or len(nombre_periodista) < 2:
+        return 0
+
+    # Prompt enriquecido con el contexto del medio y definiciones
+    prompt = f"""
+    Contexto:
+    Noticia publicada en el medio: "{nombre_medio}".
+    Autor/Firma a analizar: "{nombre_periodista}".
+    
+    Tu misión es clasificar la autoría (0-7) siguiendo estrictamente estas definiciones:
+
+    0 = Ns/Nc: Desconocido, ambiguo o iniciales.
+    1 = Hombre: Nombre de persona masculino.
+    2 = Mujer: Nombre de persona femenino.
+    3 = Mixto: Varios autores de distinto género.
+    4 = Otros medios: El autor es otro medio de comunicación (ej: "The New York Times", "Revista Hola").
+    5 = Agencia: Agencias de noticias puras (EFE, Europa Press, Reuters, AFP).
+    
+    6 = Redacción (Periodística): 
+        - Firma genérica del propio medio "{nombre_medio}" (ej: "Redacción", "El País", "Editorial").
+        - IMPORTANTE: Si el autor es una empresa comercial que NO es un medio de noticias (como Ford, Apple), NO ES 6.
+    
+    7 = Corporativo (Comercial / Institucional): 
+        - Firmado por una empresa comercial, marca de tecnología, coches, banco, etc. (ej: Ford, Meta, Google, BBVA, Zara).
+        - Firmado por instituciones gubernamentales o ONGs (ej: Gobierno de España, Greenpeace).
+        - Notas de prensa firmadas por la marca.
+
+    INSTRUCCIONES DE PRIORIDAD:
+    1. Si "{nombre_periodista}" es una marca conocida (coches, tech, ropa) -> ELIGE 7.
+    2. Si "{nombre_periodista}" es igual a "{nombre_medio}" -> ELIGE 6.
+    3. Si "{nombre_periodista}" es una Agencia conocida -> ELIGE 5.
+
+    Responde ÚNICAMENTE con el número dígito (0-7).
+    """
+    # 1. Llamada al modelo (tu función externa)
+    respuesta_texto = consultar_ollama(prompt, modelo)
+
+    # 2. Extracción del número (Pre-procesamiento)
+    # Buscamos el primer dígito que aparezca en el texto
+    match = re.search(r'\d+', respuesta_texto)
+    
+    numero_detectado = int(match.group()) if match else 0
+
+    # 3. Validación con Pydantic
+    try:
+        # Instanciamos el modelo con el dato detectado
+        # Si numero_detectado es 9 (alucinación), Pydantic dará error aquí
+        resultado = GeneroPeriodistaValidado(codigo=numero_detectado)
+        
+        # Si llegamos aquí, es un int válido entre 0 y 5
+        return resultado.codigo
+
+    except ValidationError as e:
+        print(f"Error de validación Pydantic (Dato inválido: {numero_detectado}): {e}")
+        return 0 # Default seguro si la IA alucina un número fuera de rango
+
+# Prompt 2
+def clasificar_var_genero_periodista_e2(nombre_periodista: str, nombre_medio:str, modelo: str = "gemma3:4b") -> int:
     """
     Clasifica la autoría considerando el contexto del medio.
     Recibe:
@@ -857,7 +1051,7 @@ def clasificar_var_genero_periodista(nombre_periodista: str, nombre_medio:str, m
         print(f"Error de validación Pydantic (Dato inválido: {numero_detectado}): {e}")
         return 0 # Default seguro si la IA alucina un número fuera de rango
 
-# Experimento 3
+# Prompt 3
 def clasificar_var_genero_periodista_e3(nombre_periodista: str, nombre_medio:str, modelo: str = "gemma3:4b") -> int:
     """
     Clasifica la autoría considerando el contexto del medio.
@@ -1962,7 +2156,7 @@ def clasificar_var_lenguaje_sexista(
         # 1. Quita los bloques Markdown (```json)
         # 2. Arregla comillas dobles rotas dentro de los textos
         # 3. Cierra llaves faltantes
-        data = json_repair.loads(respuesta_raw)
+        data = parsear_respuesta_modelo(respuesta_raw)
         
         return BloqueAnalisisLenguajeSexista(**data)
 
@@ -2021,7 +2215,7 @@ def clasificar_var_masc_generico(
         # 1. Quita los bloques Markdown (```json)
         # 2. Arregla comillas dobles rotas dentro de los textos
         # 3. Cierra llaves faltantes
-        data = json_repair.loads(respuesta_raw)
+        data = parsear_respuesta_modelo(respuesta_raw)
         
         return BloqueAnalisisLenguajeSexista(**data)
 
@@ -2078,7 +2272,7 @@ def clasificar_var_hombre_denominar_humanidad(
         # 1. Quita los bloques Markdown (```json)
         # 2. Arregla comillas dobles rotas dentro de los textos
         # 3. Cierra llaves faltantes
-        data = json_repair.loads(respuesta_raw)
+        data = parsear_respuesta_modelo(respuesta_raw)
         
         return BloqueAnalisisLenguajeSexista(**data)
 
@@ -2135,7 +2329,7 @@ def clasificar_var_uso_dual_zorr(
         # 1. Quita los bloques Markdown (```json)
         # 2. Arregla comillas dobles rotas dentro de los textos
         # 3. Cierra llaves faltantes
-        data = json_repair.loads(respuesta_raw)
+        data = parsear_respuesta_modelo(respuesta_raw)
         
         return BloqueAnalisisLenguajeSexista(**data)
 
@@ -2192,7 +2386,7 @@ def clasificar_var_uso_cargo_mujer(
         # 1. Quita los bloques Markdown (```json)
         # 2. Arregla comillas dobles rotas dentro de los textos
         # 3. Cierra llaves faltantes
-        data = json_repair.loads(respuesta_raw)
+        data = parsear_respuesta_modelo(respuesta_raw)
         
         return BloqueAnalisisLenguajeSexista(**data)
 
@@ -2249,7 +2443,7 @@ def clasificar_var_sexismo_discurso(
         # 1. Quita los bloques Markdown (```json)
         # 2. Arregla comillas dobles rotas dentro de los textos
         # 3. Cierra llaves faltantes
-        data = json_repair.loads(respuesta_raw)
+        data = parsear_respuesta_modelo(respuesta_raw)
         
         return BloqueAnalisisLenguajeSexista(**data)
 
@@ -2306,7 +2500,7 @@ def clasificar_var_androcentrismo(
         # 1. Quita los bloques Markdown (```json)
         # 2. Arregla comillas dobles rotas dentro de los textos
         # 3. Cierra llaves faltantes
-        data = json_repair.loads(respuesta_raw)
+        data = parsear_respuesta_modelo(respuesta_raw)
         
         return BloqueAnalisisLenguajeSexista(**data)
 
@@ -2363,7 +2557,7 @@ def clasificar_var_mencion_nombre_investigadora(
         # 1. Quita los bloques Markdown (```json)
         # 2. Arregla comillas dobles rotas dentro de los textos
         # 3. Cierra llaves faltantes
-        data = json_repair.loads(respuesta_raw)
+        data = parsear_respuesta_modelo(respuesta_raw)
         
         return BloqueAnalisisLenguajeSexista(**data)
 
@@ -2420,7 +2614,7 @@ def clasificar_var_asimetria_mujer_hombre(
         # 1. Quita los bloques Markdown (```json)
         # 2. Arregla comillas dobles rotas dentro de los textos
         # 3. Cierra llaves faltantes
-        data = json_repair.loads(respuesta_raw)
+        data = parsear_respuesta_modelo(respuesta_raw)
         
         return BloqueAnalisisLenguajeSexista(**data)
 
@@ -2477,7 +2671,7 @@ def clasificar_var_diminutivos_infantilizacion(
         # 1. Quita los bloques Markdown (```json)
         # 2. Arregla comillas dobles rotas dentro de los textos
         # 3. Cierra llaves faltantes
-        data = json_repair.loads(respuesta_raw)
+        data = parsear_respuesta_modelo(respuesta_raw)
         
         return BloqueAnalisisLenguajeSexista(**data)
 
@@ -2534,7 +2728,7 @@ def clasificar_var_denominacion_sexualizada(
         # 1. Quita los bloques Markdown (```json)
         # 2. Arregla comillas dobles rotas dentro de los textos
         # 3. Cierra llaves faltantes
-        data = json_repair.loads(respuesta_raw)
+        data = parsear_respuesta_modelo(respuesta_raw)
         
         return BloqueAnalisisLenguajeSexista(**data)
 
@@ -2591,7 +2785,7 @@ def clasificar_var_denominacion_redundante(
         # 1. Quita los bloques Markdown (```json)
         # 2. Arregla comillas dobles rotas dentro de los textos
         # 3. Cierra llaves faltantes
-        data = json_repair.loads(respuesta_raw)
+        data = parsear_respuesta_modelo(respuesta_raw)
         
         return BloqueAnalisisLenguajeSexista(**data)
 
@@ -2648,7 +2842,7 @@ def clasificar_var_denominacion_dependiente(
         # 1. Quita los bloques Markdown (```json)
         # 2. Arregla comillas dobles rotas dentro de los textos
         # 3. Cierra llaves faltantes
-        data = json_repair.loads(respuesta_raw)
+        data = parsear_respuesta_modelo(respuesta_raw)
         
         return BloqueAnalisisLenguajeSexista(**data)
 
@@ -2705,7 +2899,7 @@ def clasificar_var_criterios_excepcion(
         # 1. Quita los bloques Markdown (```json)
         # 2. Arregla comillas dobles rotas dentro de los textos
         # 3. Cierra llaves faltantes
-        data = json_repair.loads(respuesta_raw)
+        data = parsear_respuesta_modelo(respuesta_raw)
         
         return BloqueAnalisisLenguajeSexista(**data)
 
@@ -2762,7 +2956,7 @@ def clasificar_var_comparacion_mujer_hombre(
         # 1. Quita los bloques Markdown (```json)
         # 2. Arregla comillas dobles rotas dentro de los textos
         # 3. Cierra llaves faltantes
-        data = json_repair.loads(respuesta_raw)
+        data = parsear_respuesta_modelo(respuesta_raw)
         
         return BloqueAnalisisLenguajeSexista(**data)
 

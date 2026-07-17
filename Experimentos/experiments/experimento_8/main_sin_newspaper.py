@@ -102,7 +102,7 @@ def procesar_fila(row):
 
     # --- APLICACIÓN DE VARIABLES ---
     # 7a. Nombre Propio Titular (Lista)
-    np_titular = variables.clasificar_var_nombre_propio_titular_list_e3(titulo=titulo, modelo='qwen3:8b')
+    np_titular = variables.clasificar_var_nombre_propio_titular_list(titulo=titulo, modelo='qwen3:8b')
     resultados['modelo_nombre_propio_titular_nombres'] = str(np_titular.nombres)
     resultados['modelo_nombre_propio_titular_valores'] = str(np_titular.valores)
     
@@ -110,7 +110,7 @@ def procesar_fila(row):
     resultados['modelo_nombre_propio_titular'] = variables.clasificar_var_nombre_propio_titular(np_titular.valores)
 
     # 9a. Protagonistas Cuerpo
-    protas = variables.clasificar_var_cla_genero_prota_list_e3(texto_noticia=texto, modelo='qwen3:8b')
+    protas = variables.clasificar_var_cla_genero_prota_list(texto_noticia=texto, modelo='qwen3:8b')
     resultados['modelo_cla_genero_prota_nombres'] = str(protas.nombres)
     resultados['modelo_cla_genero_prota_valores'] = str(protas.valores)
 
@@ -123,7 +123,7 @@ def procesar_fila(row):
 
     # 11. Género Periodista (Autoría)
     nombre_medio = resultados.get('modelo_Medio_nombre', 'Desconocido')
-    resultados['modelo_genero_periodista'] = variables.clasificar_var_genero_periodista_e3(nombre_periodista=nombre_periodista, nombre_medio=nombre_medio, modelo='qwen3:8b')
+    resultados['modelo_genero_periodista'] = variables.clasificar_var_genero_periodista(nombre_periodista=nombre_periodista, nombre_medio=nombre_medio, modelo='qwen3:8b')
 
     return resultados
 
