@@ -1,0 +1,13 @@
+%----------
+%	DATA PRE-PROCESSING - LANGUAGES
+%----------	
+
+A preliminary analysis was performed for the languages of the tweets in our dataset. As the majority of our corpus is in Spanish, representing 63.14\% of the total tweets, we decided to discard other languages to facilitate the classification. As seen in Figure~\ref{fig:languages}, since there were not many tweets for some classes, a manual review was made and it was checked that tweets that belong to \textit{'cy', 'ht', 'in', 'lt', 'qam', 'tl'} and \textit{'und'} were mainly tweets in Spanish that had been misclassified at the origin. For this reason, they have been considered also for the experiments.
+
+\begin{figure}[H]
+	\ffigbox[\FBwidth]
+	{\caption{Histogram of the Language Counts for the Complete Dataset of Tweets, with Languages Considered in Light Blue}\label{fig:languages}} 
+ % [Aquí ponemos como queremos que aparezca en el índice, sin la referencia]{Aquí como queremos que aparezca en el documento, con la referencia}
+	{\includegraphics[scale=0.38]{Plantilla_TFG_ingles_2019/imagenes/languages_counts.pdf}}
+\end{figure}
+

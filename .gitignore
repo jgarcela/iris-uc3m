@@ -31,3 +31,10 @@ CLUSTER/**/results/
 CLUSTER/**/__pycache__/
 CLUSTER/**/*.log
 CLUSTER/llm.json
+# Archivo local de trabajo antiguo (1.1 GB) — no versionar
+[[]OLD[]]/
+
+# Exp 21 Agent Skills: versionar código y skills; excluir outputs regenerables
+Experimentos/experiments/experimento_21_agentskills/results/
+Experimentos/experiments/experimento_21_agentskills/__pycache__/
+Experimentos/experiments/experimento_21_agentskills/*.log

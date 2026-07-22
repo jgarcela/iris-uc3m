@@ -1,0 +1,310 @@
+% =====================================================================
+% Resultados del Experimento 21 — Agentes especializados y Agent Skills
+% Datos: Experimentos/experiments/experimento_21_agentskills/results/
+% Corpus de evaluación: 1.313 noticias anotadas en las cinco variables
+% =====================================================================
+
+Esta sección presenta los resultados de la evaluación de la arquitectura de
+agentes especializados descrita en el Capítulo~\ref{implementation}. Todas las
+cifras se calculan sobre el subconjunto de \textbf{1.313 noticias} del corpus
+IMIO que cuentan con anotación experta simultánea en las cinco variables de
+lenguaje sexista consideradas (V25, V26, V30, V33 y V35).
+
+\subsection{Diseño experimental y condiciones controladas}
+\label{subsec:iris_diseno}
+
+La comparación se articula en dos niveles que comparten corpus, modelos,
+número de llamadas al modelo (cinco por artículo, una por variable) y formato
+de salida. La única diferencia entre ambos es \emph{cómo llega la metodología
+experta al modelo}:
+
+\begin{itemize}
+    \item \textbf{Nivel B0 (\textit{baseline}).} La metodología de cada variable
+    se inyecta íntegramente en el \textit{prompt}. El modelo emite su veredicto
+    en una única llamada, sin herramientas.
+    \item \textbf{Nivel B1 (\textit{Agent Skills}).} El agente recibe únicamente
+    los metadatos (\texttt{name} y \texttt{description}) de las \textit{skills}
+    disponibles y carga bajo demanda el cuerpo de la que necesita
+    (\textit{progressive disclosure}), pudiendo además consultar las guías
+    expertas y verificar sus evidencias mediante herramientas.
+\end{itemize}
+
+Este diseño evita el sesgo de comparación presente en trabajos previos del
+proyecto, donde el nivel con \textit{skills} empleaba una única llamada
+conjunta frente a cinco llamadas independientes del \textit{baseline}, de modo
+que cualquier diferencia observada resultaba inatribuible. Para garantizar la
+comparabilidad entre proveedores se desactivó el razonamiento explícito en
+todos los modelos (\texttt{reasoning\_effort} en OpenAI,
+\texttt{thinking\_budget} en Google) y se empleó el mismo fichero de
+definiciones de variables en régimen estricto.
+
+La Tabla~\ref{tab:iris-prevalencia} recoge la prevalencia de la clase positiva
+en la anotación experta, dato imprescindible para interpretar correctamente las
+métricas posteriores.
+
+\begin{table}[H]
+    \centering
+    \begingroup
+    \small
+    \ttabbox[\FBwidth]{
+        \caption{Prevalencia de la clase positiva en la anotación experta ($N=1.313$)}
+        \label{tab:iris-prevalencia}
+    }{
+        \begin{tabularx}{\textwidth}{
+            X
+            >{\centering\arraybackslash}X
+            >{\centering\arraybackslash}X
+        }
+            \hline
+            \textbf{Variable} & \textbf{Código} & \textbf{Prevalencia «Sí»} \\
+            \hline
+            \texttt{lenguaje\_sexista}         & V25 & 0,810 \\
+            \texttt{masc\_generico}            & V26 & 0,810 \\
+            \texttt{sexismo\_discurso}         & V30 & 0,428 \\
+            \texttt{asimetria\_mujer\_hombre}  & V33 & 0,062 \\
+            \texttt{denominacion\_sexualizada} & V35 & 0,100 \\
+            \hline
+        \end{tabularx}
+    }
+    \endgroup
+\end{table}
+
+Dos rasgos condicionan toda la interpretación posterior. En primer lugar, V25 y
+V26 presentan una prevalencia muy elevada (81\,\%), lo que implica que un
+clasificador trivial que respondiese siempre «Sí» alcanzaría una exactitud de
+0,810. En segundo lugar, V33 y V35 están fuertemente desbalanceadas (6,2\,\% y
+10,0\,\% de positivos), régimen en el que el estadístico $\kappa$ resulta
+especialmente severo.
+
+\subsection{Resultados del núcleo: \textit{baseline} frente a Agent Skills}
+\label{subsec:iris_core}
+
+La Tabla~\ref{tab:iris-b0b1} presenta la comparación agregada entre ambos
+niveles para los tres proveedores evaluados.
+
+\begin{table}[H]
+    \centering
+    \begingroup
+    \small
+    \ttabbox[\FBwidth]{
+        \caption{Comparación B0 (\textit{baseline}) frente a B1 (Agent Skills). Medias sobre las cinco variables, $N=1.313$}
+        \label{tab:iris-b0b1}
+    }{
+        \begin{tabularx}{\textwidth}{
+            X
+            >{\centering\arraybackslash}X
+            >{\centering\arraybackslash}X
+            >{\columncolor{gray!15}\centering\arraybackslash}X
+            >{\centering\arraybackslash}X
+            >{\centering\arraybackslash}X
+        }
+            \hline
+            \textbf{Modelo} & \textbf{Nivel} & \textbf{Exactitud} & \textbf{$\kappa$} & \textbf{F1 macro} & \textbf{Coste (USD)} \\
+            \hline
+            \multirow{3}{*}{\texttt{gemini-3.1-flash-lite}}
+              & B0 & 0,600 & $+0,026$ & 0,388 & 5,64 \\
+              & B1 & 0,661 & $\mathbf{+0,066}$ & 0,443 & 13,16 \\
+              & $\Delta$ & $+0,061$ & $+0,040$ & $+0,055$ & $2,3\times$ \\
+            \hline
+            \multirow{3}{*}{\texttt{gpt-4o-mini}}
+              & B0 & 0,564 & $+0,033$ & 0,410 & 2,52 \\
+              & B1 & 0,612 & $+0,014$ & 0,438 & 6,89 \\
+              & $\Delta$ & $+0,048$ & $-0,019$ & $+0,029$ & $2,7\times$ \\
+            \hline
+            \multirow{3}{*}{\texttt{gpt-5.4-nano}}
+              & B0 & 0,571 & $+0,052$ & 0,430 & 5,67 \\
+              & B1 & 0,569 & $+0,004$ & 0,364 & 10,86 \\
+              & $\Delta$ & $-0,003$ & $-0,048$ & $-0,066$ & $1,9\times$ \\
+            \hline
+            \multirow{2}{*}{\textbf{Media}}
+              & \textbf{B0} & 0,578 & $\mathbf{+0,037}$ & 0,409 & 13,83 \\
+              & \textbf{B1} & \textbf{0,614} & $+0,028$ & 0,415 & 30,91 \\
+            \hline
+        \end{tabularx}
+    }
+    \endgroup
+\end{table}
+
+El resultado principal es que \textbf{el empaquetado de la metodología como
+Agent Skills no mejora el acuerdo con las anotadoras expertas}. En promedio, el
+coeficiente $\kappa$ resulta incluso ligeramente inferior en el nivel B1
+($+0,028$) que en el \textit{baseline} ($+0,037$), a pesar de que B1 multiplica
+por 2,2 el coste de inferencia. El efecto es además dependiente del modelo:
+únicamente \texttt{gemini-3.1-flash-lite} mejora ($\Delta\kappa = +0,040$),
+mientras que \texttt{gpt-4o-mini} y \texttt{gpt-5.4-nano} empeoran
+($-0,019$ y $-0,048$ respectivamente).
+
+\subsection{Divergencia entre exactitud y \texorpdfstring{$\kappa$}{kappa}}
+\label{subsec:iris_divergencia}
+
+La Tabla~\ref{tab:iris-b0b1} revela un fenómeno que constituye, a juicio de
+este trabajo, su hallazgo metodológico más relevante: \textbf{la exactitud y el
+coeficiente $\kappa$ apuntan en direcciones opuestas}. Considerando las medias,
+el nivel B1 mejora la exactitud en $+0,036$ mientras empeora $\kappa$ en
+$-0,009$.
+
+El mecanismo subyacente es identificable. Las \textit{skills} vuelven al modelo
+menos conservador: en \texttt{gpt-4o-mini} la proporción de respuestas «Sí»
+para V25 pasa del 9\,\% en B0 al 46\,\% en B1. Dado que la prevalencia real de
+esa variable es del 81\,\%, responder afirmativamente con mayor frecuencia
+incrementa mecánicamente los aciertos por efecto de la distribución marginal,
+sin que ello implique una mejora en la capacidad discriminativa. La exactitud
+recompensa ese desplazamiento; $\kappa$, que descuenta el acuerdo esperable por
+azar, no lo hace.
+
+La consecuencia práctica es directa: \emph{un trabajo que reportase únicamente
+exactitud concluiría que la arquitectura de Agent Skills mejora el sistema, y
+tal conclusión sería incorrecta}. Este mismo patrón se observó de forma
+independiente en las tres ablaciones descritas en la
+Sección~\ref{subsec:iris_ablaciones}, lo que refuerza la recomendación de
+reportar siempre exactitud, $\kappa$ y prevalencia de forma conjunta en tareas
+de clasificación desbalanceadas.
+
+\subsection{Diagnóstico por variable: análisis de \textit{lift}}
+\label{subsec:iris_lift}
+
+Para determinar si los sistemas poseen capacidad discriminativa real se emplea
+el \textit{lift}, definido como el cociente entre la precisión sobre la clase
+positiva y la prevalencia de dicha clase. Un valor de 1,0 indica que las
+predicciones positivas del modelo no son mejores que las que produciría una
+asignación aleatoria con la misma tasa de disparo; valores superiores indican
+discriminación efectiva. La Tabla~\ref{tab:iris-lift} recoge estos valores para
+el nivel B1.
+
+\begin{table}[H]
+    \centering
+    \begingroup
+    \small
+    \ttabbox[\FBwidth]{
+        \caption{Exactitud, $\kappa$ y \textit{lift} por variable en el nivel B1 ($N=1.313$)}
+        \label{tab:iris-lift}
+    }{
+        \begin{tabularx}{\textwidth}{
+            X
+            >{\centering\arraybackslash}X
+            >{\centering\arraybackslash}X
+            >{\centering\arraybackslash}X
+            >{\centering\arraybackslash}X
+        }
+            \hline
+            \textbf{Variable} & \textbf{Prev.} & \textbf{Gemini} & \textbf{GPT-4o-mini} & \textbf{GPT-5.4-nano} \\
+             & & \multicolumn{3}{c}{\small exactitud / $\kappa$ / \textit{lift}} \\
+            \hline
+            \texttt{lenguaje\_sexista} & 0,810 & 0,226 / $+0,015$ / 1,19 & 0,457 / $-0,037$ / 0,97 & 0,191 / $+0,000$ / 1,24 \\
+            \texttt{masc\_generico} & 0,810 & \textbf{0,708 / $+0,261$ / 1,10} & 0,332 / $+0,034$ / 1,08 & 0,262 / $+0,016$ / 1,08 \\
+            \texttt{sexismo\_discurso} & 0,428 & 0,569 / $-0,000$ / 0,99 & 0,561 / $+0,011$ / 1,05 & 0,558 / $+0,004$ / 1,02 \\
+            \texttt{asimetria\_mujer\_hombre} & 0,062 & 0,909 / $+0,045$ / 1,91 & 0,813 / $+0,003$ / 1,03 & 0,931 / $-0,012$ / 0,00 \\
+            \texttt{denominacion\_sexualizada} & 0,100 & 0,894 / $+0,011$ / 1,67 & 0,897 / $+0,061$ / 3,76 & 0,901 / $+0,014$ / 10,02 \\
+            \hline
+        \end{tabularx}
+    }
+    \endgroup
+\end{table}
+
+El diagnóstico permite distinguir tres modos de fallo cualitativamente
+distintos, que explican por qué ninguna de las intervenciones ensayadas logró
+elevar el acuerdo:
+
+\begin{enumerate}
+    \item \textbf{Ausencia de señal discriminativa en V25.} Con un \textit{lift}
+    de 0,97 en \texttt{gpt-4o-mini}, las predicciones positivas del sistema no
+    superan al azar. Resulta significativo que la prevalencia experta de esta
+    variable alcance el 81\,\%, lo que sugiere que las anotadoras aplicaron un
+    criterio considerablemente más amplio que la regla de inversión codificada
+    en la metodología operativa. Se trata, por tanto, de un problema de validez
+    de constructo antes que de capacidad del modelo: sistema y anotadoras no
+    están respondiendo a la misma pregunta.
+
+    \item \textbf{Infradetección generalizada.} Todas las variables disparan muy
+    por debajo de su prevalencia real. Entre las causas plausibles se encuentra
+    la exigencia, impuesta por la propia arquitectura, de citar evidencias
+    literales del texto: ante la imposibilidad de reproducir un fragmento exacto,
+    el agente tiende a resolver en negativo.
+
+    \item \textbf{Desbalance extremo en V33 y V35.} Los valores elevados de
+    \textit{lift} en V35 (3,76 y 10,02) descansan sobre un número muy reducido de
+    predicciones positivas y deben interpretarse con cautela. En este régimen,
+    $\kappa$ penaliza severamente incluso a clasificadores razonables, hasta el
+    punto de que una exactitud de 0,90 puede coexistir con $\kappa = 0,000$.
+\end{enumerate}
+
+Únicamente \texttt{masc\_generico} bajo \texttt{gemini-3.1-flash-lite} alcanza
+un acuerdo apreciable ($\kappa = 0,261$), siendo además el único caso en que
+exactitud y $\kappa$ mejoran simultáneamente respecto al \textit{baseline}, lo
+que descarta el artefacto de marginales y confirma una ganancia genuina.
+
+\subsection{Ablaciones}
+\label{subsec:iris_ablaciones}
+
+Con objeto de descartar que el bajo rendimiento obedeciese a decisiones de
+configuración, se ejecutaron tres ablaciones controladas sobre
+\texttt{gpt-4o-mini}, modificando en cada caso un único factor. La
+Tabla~\ref{tab:iris-ablaciones} sintetiza sus resultados.
+
+\begin{table}[H]
+    \centering
+    \begingroup
+    \small
+    \ttabbox[\FBwidth]{
+        \caption{Ablaciones controladas sobre \texttt{gpt-4o-mini}}
+        \label{tab:iris-ablaciones}
+    }{
+        \begin{tabularx}{\textwidth}{
+            X
+            X
+            >{\centering\arraybackslash}X
+        }
+            \hline
+            \textbf{Factor} & \textbf{Efecto observado} & \textbf{$\Delta$ coste} \\
+            \hline
+            \textit{Prompt caching} &
+            Sin efecto sobre $\kappa$. Altera el comportamiento del agente:
+            al reestructurar el \textit{prompt} en roles \textit{system}/\textit{user},
+            duplica el uso de herramientas. &
+            $+87\,\%$ \\
+            \hline
+            \textit{Skills}-resumen de guías &
+            Sin efecto claro sobre $\kappa$. &
+            $-20\,\%$ \\
+            \hline
+            Umbral de detección (estricto \textit{vs.} permisivo) &
+            Incrementa la exactitud (0,644 $\rightarrow$ 0,688) \emph{destruyendo}
+            señal: el \textit{lift} de \texttt{masc\_generico} cae de 1,25 a 1,01.
+            $\kappa$ no mejora de forma real. &
+            --- \\
+            \hline
+        \end{tabularx}
+    }
+    \endgroup
+\end{table}
+
+La ablación del umbral merece comentario específico por su relevancia
+metodológica. El régimen permisivo mejora la exactitud de forma apreciable,
+resultado que en trabajos previos del proyecto se interpretó como una mejora
+del sistema. El análisis de \textit{lift} revela, sin embargo, que la
+precisión de \texttt{masc\_generico} desciende hasta igualar exactamente su
+prevalencia: el clasificador deja de discriminar y pasa a acertar por
+distribución. Se reproduce así, por tercera vez y de manera independiente, el
+fenómeno descrito en la Sección~\ref{subsec:iris_divergencia}.
+
+En cuanto al \textit{prompt caching}, su efecto resultó contraintuitivo. Aunque
+la técnica reduce en un 33\,\% el coste unitario por \textit{token}, la
+reestructuración del \textit{prompt} que exige duplica el volumen total
+consumido, de modo que el coste neto se incrementa. Cabe señalar que la
+implementación de esta técnica no es neutra respecto al comportamiento del
+agente, extremo que rara vez se documenta en la literatura aplicada.
+
+\subsection{Coste computacional}
+\label{subsec:iris_coste}
+
+La Tabla~\ref{tab:iris-b0b1} incluye el coste real de inferencia. La
+arquitectura de agentes multiplica por 2,2 el coste respecto al \textit{baseline}
+(30,91 USD frente a 13,83 USD para los tres modelos sobre 1.313 noticias), al
+requerir aproximadamente diez llamadas por variable frente a una única llamada.
+
+Esta diferencia condiciona la viabilidad de la aproximación con modelos
+desplegados localmente. Las mediciones efectuadas sobre \texttt{gemma4:e4b}
+arrojan un tiempo aproximado de ocho minutos por artículo, lo que situaría el
+procesamiento del corpus de evaluación en torno a las 175 horas. El coste
+computacional de las arquitecturas agénticas constituye, por tanto, una
+limitación estructural para su despliegue fuera de infraestructura dedicada.

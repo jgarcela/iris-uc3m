@@ -1,0 +1,54 @@
+%----------
+%	RESULTS AND DISCUSSION
+%----------	
+
+
+The contents of this Chapter provide an in-depth analysis of the results that have been obtained during this work.
+
+As mentioned in Section~\ref{sec:classification_procedure}, we have tackled three different classification tasks: "Análisis General", "Contenido Negativo" and "Insultos". Therefore, the experimentation process involved a systematic and iterative approach explained in Chapter~\ref{implementation}, marked by specific adjustments and modifications to the dataset and different parameters, such as data balancing, embedding type, models, preprocessing, etc. The classification tasks have been done by means of three different approaches: Traditional Machine Learning, Deep Learning with Transformers, and Generative AI with Large Language Models (LLMs). A comprehensive set of experiments, totalling 1090, were conducted across the 3 different classification tasks. Moreover, detailed records of these experiments, organized by classification approach, are available in the Excel files included in the project repository (Appendix~\ref{appendix_code}).
+
+
+\begin{table}[H]
+    \centering
+    \begingroup
+    \small % Change to desired font size
+    \ttabbox[\FBwidth]{
+        \caption{Classification Tasks, Approaches, and Number of Experiments}
+        \label{table:classification_tasks} % Unique label for the table
+    }{
+        \begin{tabularx}{\textwidth}{
+            X
+            X
+            >{\centering\arraybackslash}X
+            }
+            
+            \hline
+            \rowcolor{gray!30} % Adding a gray color to the header row
+            \textbf{Classification Task} & \textbf{Approach} & \textbf{Number of Experiments}\\ \hline
+            \multirow{3}{*}{Análisis General} & Machine Learning & 163 \\ \cline{2-3}
+                                              & Deep Learning & 15 \\ \cline{2-3}
+                                              & Generative AI & 64 \\ \cline{2-3}
+                                              & \textbf{Total} & \textbf{242} \\ \hline
+                                              
+            \multirow{3}{*}{Contenido Negativo} & Machine Learning & 102 \\ \cline{2-3}
+                                                & Deep Learning & 15 \\ \cline{2-3}
+                                                & Generative AI & 64 \\ \cline{2-3}
+                                                & \textbf{Total} & \textbf{181} \\ \hline
+                                                
+            \multirow{3}{*}{Insultos} & Machine Learning & 588 \\ \cline{2-3}
+                                      & Deep Learning & 15 \\ \cline{2-3}
+                                      & Generative AI & 64 \\ \cline{2-3}
+                                      & \textbf{Total} & \textbf{667} \\ \hline
+            %\multicolumn{3}{l}{Source: 'Training.xlsx', 'DL2\_Análisis General.xlsx', 'DL2\_Contenido Negativo.xlsx', 'DL2\_Insultos.xlsx' and 'Training\_LLM.xlsx'} \\
+            %\hline
+        \end{tabularx}
+    }
+    \endgroup
+\end{table}
+
+
+
+The presentation of these experiments will follow this structure: we will first examine each classification task individually to highlight their differences, followed by detailed descriptions of the three classification approaches employed for each task.
+
+
+\newpage

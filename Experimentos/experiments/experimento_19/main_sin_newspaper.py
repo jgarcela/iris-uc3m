@@ -120,26 +120,53 @@ def procesar_fila(row):
 
     # --- APLICACIÓN DE VARIABLES ---
 
+    cache_read_total = 0
+    cache_creation_total = 0
+    prompt_tokens_total = 0
+    completion_tokens_total = 0
+
+    def _con_consumo(resultado, prefijo: str) -> None:
+        nonlocal cache_read_total, cache_creation_total, prompt_tokens_total, completion_tokens_total
+        resultados.update(_expandir_resultado(resultado, prefijo))
+        cons = utils.get_consumo_llamada()
+        resultados[f"{prefijo}_prompt_tokens"] = cons["prompt_tokens"]
+        resultados[f"{prefijo}_completion_tokens"] = cons["completion_tokens"]
+        resultados[f"{prefijo}_cache_read_tokens"] = cons["cache_read_tokens"]
+        resultados[f"{prefijo}_cache_creation_tokens"] = cons["cache_creation_tokens"]
+        prompt_tokens_total += cons["prompt_tokens"]
+        completion_tokens_total += cons["completion_tokens"]
+        cache_read_total += cons["cache_read_tokens"]
+        cache_creation_total += cons["cache_creation_tokens"]
+
     # 25. Lenguaje Sexista
-    lenguaje_sexista = variables.clasificar_var_lenguaje_sexista(texto, ruta_json=RUTA_VARIABLES_JSON, ruta_template=RUTA_TEMPLATE, modelo='gpt-5-nano')
-    resultados.update(_expandir_resultado(lenguaje_sexista, 'modelo_lenguaje_sexista'))
+    _con_consumo(
+        variables.clasificar_var_lenguaje_sexista(texto, ruta_json=RUTA_VARIABLES_JSON, ruta_template=RUTA_TEMPLATE, modelo='gpt-5-nano'),
+        'modelo_lenguaje_sexista')
 
     # 26. Masc Generico
-    masc_generico = variables.clasificar_var_masc_generico(texto, ruta_json=RUTA_VARIABLES_JSON, ruta_template=RUTA_TEMPLATE, modelo='gpt-5-nano')
-    resultados.update(_expandir_resultado(masc_generico, 'modelo_masc_generico'))
+    _con_consumo(
+        variables.clasificar_var_masc_generico(texto, ruta_json=RUTA_VARIABLES_JSON, ruta_template=RUTA_TEMPLATE, modelo='gpt-5-nano'),
+        'modelo_masc_generico')
 
     # 30. Sexismo Discurso
-    sexismo_discurso = variables.clasificar_var_sexismo_discurso(texto, ruta_json=RUTA_VARIABLES_JSON, ruta_template=RUTA_TEMPLATE, modelo='gpt-5-nano')
-    resultados.update(_expandir_resultado(sexismo_discurso, 'modelo_sexismo_discurso'))
+    _con_consumo(
+        variables.clasificar_var_sexismo_discurso(texto, ruta_json=RUTA_VARIABLES_JSON, ruta_template=RUTA_TEMPLATE, modelo='gpt-5-nano'),
+        'modelo_sexismo_discurso')
 
     # 33. Asimetria Mujer Hombre
-    asimetria_mujer_hombre = variables.clasificar_var_asimetria_mujer_hombre(texto, ruta_json=RUTA_VARIABLES_JSON, ruta_template=RUTA_TEMPLATE, modelo='gpt-5-nano')
-    resultados.update(_expandir_resultado(asimetria_mujer_hombre, 'modelo_asimetria_mujer_hombre'))
+    _con_consumo(
+        variables.clasificar_var_asimetria_mujer_hombre(texto, ruta_json=RUTA_VARIABLES_JSON, ruta_template=RUTA_TEMPLATE, modelo='gpt-5-nano'),
+        'modelo_asimetria_mujer_hombre')
 
     # 35. Denominacion Sexualizada
-    denominacion_sexualizada = variables.clasificar_var_denominacion_sexualizada(texto, ruta_json=RUTA_VARIABLES_JSON, ruta_template=RUTA_TEMPLATE, modelo='gpt-5-nano')
-    resultados.update(_expandir_resultado(denominacion_sexualizada, 'modelo_denominacion_sexualizada'))
+    _con_consumo(
+        variables.clasificar_var_denominacion_sexualizada(texto, ruta_json=RUTA_VARIABLES_JSON, ruta_template=RUTA_TEMPLATE, modelo='gpt-5-nano'),
+        'modelo_denominacion_sexualizada')
 
+    resultados["modelo_prompt_tokens_total"] = prompt_tokens_total
+    resultados["modelo_completion_tokens_total"] = completion_tokens_total
+    resultados["modelo_cache_read_tokens_total"] = cache_read_total
+    resultados["modelo_cache_creation_tokens_total"] = cache_creation_total
     return resultados
 
 # ==========================================

@@ -1,0 +1,12 @@
+%----------
+%	DATA PRE-PROCESSING - SPECIAL TOKENS
+%----------	
+
+Adding new tokens to a deep learning model is necessary when the text data contains important words or symbols that the pre-trained model's tokenizer does not recognize. For this reason, once we have defined the different lexicons, now we can use them and replace words in the tweets for new special tokens:
+\begin{itemize}
+    \item \textbf{"[INSULT]":} for any word in the tweets that belong to the "Misogyny", "Insults" or "Insults SeAcabó" lexicons.
+    \item \textbf{"[VICTIM]":} for any word in the tweets belonging to the "Victim" lexicon.
+    \item \textbf{"[AGGRESSOR]":} for any word in the tweets that belong to the "Aggressor" lexicon.
+\end{itemize}
+
+By including these tokens, we ensure the different models can accurately understand and represent these elements, which can significantly improve its performance on the HS detection task.

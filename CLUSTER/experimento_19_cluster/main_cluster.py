@@ -247,13 +247,33 @@ def procesar_fila(row):
     resultados = {}
 
     texto = str(row["contenido_articulo"]) if pd.notna(row["contenido_articulo"]) else ""
+    cache_read_total = 0
+    cache_creation_total = 0
+    prompt_tokens_total = 0
+    completion_tokens_total = 0
 
     for nombre in VARS_A_PROCESAR:
         clasificador = _CLASIFICADORES[nombre]
         res = clasificador(
             texto, ruta_json=RUTA_VARIABLES_JSON, ruta_template=RUTA_TEMPLATE, modelo=MODELO)
-        resultados.update(_expandir_resultado(res, f"modelo_{nombre}"))
+        prefijo = f"modelo_{nombre}"
+        resultados.update(_expandir_resultado(res, prefijo))
 
+        # Consumo de la última llamada API (utils.consultar_ollama → thread-local).
+        cons = utils.get_consumo_llamada()
+        resultados[f"{prefijo}_prompt_tokens"] = cons["prompt_tokens"]
+        resultados[f"{prefijo}_completion_tokens"] = cons["completion_tokens"]
+        resultados[f"{prefijo}_cache_read_tokens"] = cons["cache_read_tokens"]
+        resultados[f"{prefijo}_cache_creation_tokens"] = cons["cache_creation_tokens"]
+        prompt_tokens_total += cons["prompt_tokens"]
+        completion_tokens_total += cons["completion_tokens"]
+        cache_read_total += cons["cache_read_tokens"]
+        cache_creation_total += cons["cache_creation_tokens"]
+
+    resultados["modelo_prompt_tokens_total"] = prompt_tokens_total
+    resultados["modelo_completion_tokens_total"] = completion_tokens_total
+    resultados["modelo_cache_read_tokens_total"] = cache_read_total
+    resultados["modelo_cache_creation_tokens_total"] = cache_creation_total
     return resultados
 
 

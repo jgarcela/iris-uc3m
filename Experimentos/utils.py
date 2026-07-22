@@ -1,6 +1,7 @@
 
 import json
 import configparser
+import threading
 from pydantic import BaseModel, Field, ValidationError
 from typing import Optional, Any, List, Dict, Union
 import re
@@ -9,6 +10,43 @@ from pathlib import Path
 
 # Ruta al config.ini (junto a este utils.py) con la sección [API-KEYS].
 _CONFIG_PATH = Path(__file__).resolve().parent / "config.ini"
+
+# Consumo de la última llamada a consultar_ollama (thread-local, para CSV/métricas).
+_tls_consumo = threading.local()
+_CONSUMO_VACIO = {
+    "prompt_tokens": 0,
+    "completion_tokens": 0,
+    "cache_read_tokens": 0,
+    "cache_creation_tokens": 0,
+    "proveedor": "",
+}
+
+
+def reset_consumo_llamada() -> None:
+    """Pone a cero el consumo de la última llamada (llamar antes de cada variable)."""
+    _tls_consumo.last = dict(_CONSUMO_VACIO)
+
+
+def get_consumo_llamada() -> dict:
+    """Devuelve el consumo de la última consulta (prompt/completion/cache_*)."""
+    return dict(getattr(_tls_consumo, "last", None) or _CONSUMO_VACIO)
+
+
+def _registrar_consumo(
+    *,
+    prompt_tokens: int = 0,
+    completion_tokens: int = 0,
+    cache_read_tokens: int = 0,
+    cache_creation_tokens: int = 0,
+    proveedor: str = "",
+) -> None:
+    _tls_consumo.last = {
+        "prompt_tokens": int(prompt_tokens or 0),
+        "completion_tokens": int(completion_tokens or 0),
+        "cache_read_tokens": int(cache_read_tokens or 0),
+        "cache_creation_tokens": int(cache_creation_tokens or 0),
+        "proveedor": proveedor or "",
+    }
 
 
 def _get_api_key(nombre: str) -> Optional[str]:
@@ -61,15 +99,38 @@ def _con_reintentos(fn, *, intentos: int = 5, base: float = 1.0, proveedor: str 
 
 CLAUDE_API_MODEL_ID = "claude-haiku-4-5-20251001"
 
+# Separador en prompts (p. ej. prompt_clara.md): prefijo cacheable (artículo) + sufijo por variable.
+# Debe coincidir literalmente con el marcador del template.
+IRIS_CACHE_BREAK = "<<<IRIS_CACHE_BREAK>>>"
+
 # IDs que deben ir a la API de Anthropic (no a Ollama). Ampliar aquí si añades más variantes Claude vía API.
 CLAUDE_API_MODEL_IDS = frozenset(
     {
         CLAUDE_API_MODEL_ID,
+        "claude-haiku-4-5",
         "claude-sonnet-4-6",
+        "claude-sonnet-5",
         "claude-opus-4-6",
         "claude-opus-4-7",
+        "claude-opus-4-8",
     }
 )
+
+
+def _partir_prompt_cache(prompt: str) -> tuple[Optional[str], Optional[str]]:
+    """
+    Parte un prompt en (prefijo_cacheable, sufijo_variable) si contiene IRIS_CACHE_BREAK.
+    El prefijo debe ser idéntico entre las N variables del mismo artículo para que
+    OpenAI/Gemini/Claude puedan reutilizar tokens (prompt caching).
+    """
+    if IRIS_CACHE_BREAK not in prompt:
+        return None, None
+    prefijo, sufijo = prompt.split(IRIS_CACHE_BREAK, 1)
+    prefijo = prefijo.strip()
+    sufijo = sufijo.strip()
+    if not prefijo or not sufijo:
+        return None, None
+    return prefijo, sufijo
 
 # Modelos de razonamiento de OpenAI (familia GPT-5 / o*): NO aceptan `temperature`
 # distinto del valor por defecto y usan `max_completion_tokens`.
@@ -78,8 +139,16 @@ OPENAI_REASONING_MODEL_IDS = frozenset(
         "gpt-5",
         "gpt-5-mini",
         "gpt-5-nano",
+        # Catálogo vigente 2026 (gpt-5-nano / gpt-4o-mini quedaron legacy).
+        "gpt-5.4",
+        "gpt-5.4-mini",
+        "gpt-5.4-nano",
     }
 )
+
+# Familia GPT-5 original: no admite reasoning_effort='none' (mínimo 'minimal').
+# Los GPT-5.4+ sí admiten 'none' → razonamiento totalmente desactivado.
+OPENAI_REASONING_LEGACY_IDS = frozenset({"gpt-5", "gpt-5-mini", "gpt-5-nano"})
 
 # IDs que deben ir a la API de OpenAI (no a Ollama). Ampliar aquí si añades más variantes.
 OPENAI_API_MODEL_IDS = frozenset(
@@ -92,11 +161,16 @@ OPENAI_API_MODEL_IDS = frozenset(
 ) | OPENAI_REASONING_MODEL_IDS
 
 # IDs que deben ir a la API de Google Gemini (no a Ollama). Ampliar aquí si añades más variantes.
+# Nota: gemini-2.5-flash-lite ya no está disponible para cuentas nuevas; usar gemini-3.1-flash-lite.
 GEMINI_API_MODEL_IDS = frozenset(
     {
         "gemini-2.5-flash",
         "gemini-2.5-pro",
         "gemini-2.5-flash-lite",
+        "gemini-3.1-flash-lite",
+        "gemini-3.5-flash",
+        "gemini-3-flash-preview",
+        "gemini-3.1-pro-preview",
     }
 )
 
@@ -131,7 +205,12 @@ def consultar_ollama(prompt: str, modelo: str = "gemma3:4b", temperature: float 
       - Gemini (Google): usa `GEMINI_API_KEY` (o `GOOGLE_API_KEY`) en el entorno.
     Los modelos locales (p. ej. `gemma3n:e4b`) caen en la rama Ollama por defecto.
     Devuelve la respuesta del modelo como texto limpio.
+
+    Tras cada llamada, el consumo queda en get_consumo_llamada() (prompt/completion/
+    cache_read/cache_creation tokens) para poder guardarlo en el CSV.
     """
+    reset_consumo_llamada()
+
     if modelo in GEMINI_API_MODEL_IDS:
         try:
             from google import genai
@@ -141,12 +220,37 @@ def consultar_ollama(prompt: str, modelo: str = "gemma3:4b", temperature: float 
             return ""
         try:
             client = genai.Client(api_key=_get_api_key("gemini_api_key"))
+            prefijo, sufijo = _partir_prompt_cache(prompt)
+            # Prefijo (artículo) como system_instruction: idéntico en las 5 vars → cache implícito.
+            # thinking_budget=0 desactiva el razonamiento para que el benchmark sea
+            # comparable con los modelos sin reasoning.
+            _sin_thinking = types.ThinkingConfig(thinking_budget=0)
+            if prefijo and sufijo:
+                config = types.GenerateContentConfig(
+                    temperature=temperature,
+                    system_instruction=prefijo,
+                    thinking_config=_sin_thinking,
+                )
+                contents = sufijo
+            else:
+                config = types.GenerateContentConfig(
+                    temperature=temperature,
+                    thinking_config=_sin_thinking,
+                )
+                contents = prompt
             response = _con_reintentos(
                 lambda: client.models.generate_content(
                     model=modelo,
-                    contents=prompt,
-                    config=types.GenerateContentConfig(temperature=temperature),
+                    contents=contents,
+                    config=config,
                 ),
+                proveedor="gemini",
+            )
+            um = getattr(response, "usage_metadata", None)
+            _registrar_consumo(
+                prompt_tokens=getattr(um, "prompt_token_count", 0) or 0,
+                completion_tokens=getattr(um, "candidates_token_count", 0) or 0,
+                cache_read_tokens=getattr(um, "cached_content_token_count", 0) or 0,
                 proveedor="gemini",
             )
             return (response.text or "").strip()
@@ -162,18 +266,42 @@ def consultar_ollama(prompt: str, modelo: str = "gemma3:4b", temperature: float 
             return ""
         try:
             client = OpenAI(api_key=_get_api_key("openai_api_key"))
+            prefijo, sufijo = _partir_prompt_cache(prompt)
+            # system = artículo (prefijo estable); user = instrucciones de la variable.
+            if prefijo and sufijo:
+                messages = [
+                    {"role": "system", "content": prefijo},
+                    {"role": "user", "content": sufijo},
+                ]
+            else:
+                messages = [{"role": "user", "content": prompt}]
             kwargs = {
                 "model": modelo,
-                "messages": [{"role": "user", "content": prompt}],
+                "messages": messages,
             }
             # Los modelos de razonamiento (GPT-5) solo admiten la temperatura por
-            # defecto; en su lugar controlamos el coste/latencia con reasoning_effort.
+            # defecto. Desactivamos el razonamiento para que el benchmark sea comparable
+            # con los modelos sin reasoning (gpt-4o-mini, Claude sin thinking, Gemini
+            # con thinking_budget=0). Los GPT-5 antiguos no aceptan 'none' → 'minimal'.
             if modelo in OPENAI_REASONING_MODEL_IDS:
-                kwargs["reasoning_effort"] = "low"
+                kwargs["reasoning_effort"] = (
+                    "minimal" if modelo in OPENAI_REASONING_LEGACY_IDS else "none"
+                )
             else:
                 kwargs["temperature"] = temperature
             response = _con_reintentos(
                 lambda: client.chat.completions.create(**kwargs),
+                proveedor="openai",
+            )
+            u = response.usage
+            cached = 0
+            details = getattr(u, "prompt_tokens_details", None) if u else None
+            if details is not None:
+                cached = getattr(details, "cached_tokens", 0) or 0
+            _registrar_consumo(
+                prompt_tokens=getattr(u, "prompt_tokens", 0) or 0,
+                completion_tokens=getattr(u, "completion_tokens", 0) or 0,
+                cache_read_tokens=cached,
                 proveedor="openai",
             )
             return (response.choices[0].message.content or "").strip()
@@ -189,13 +317,38 @@ def consultar_ollama(prompt: str, modelo: str = "gemma3:4b", temperature: float 
             return ""
         try:
             client = Anthropic(api_key=_get_api_key("anthropic_api_key"))
+            prefijo, sufijo = _partir_prompt_cache(prompt)
+            if prefijo and sufijo:
+                # Prompt caching explícito: el bloque del artículo se marca ephemeral
+                # (TTL ~5 min). Las vars 2–5 del mismo artículo reutilizan ese prefijo.
+                messages = [{
+                    "role": "user",
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": prefijo,
+                            "cache_control": {"type": "ephemeral"},
+                        },
+                        {"type": "text", "text": sufijo},
+                    ],
+                }]
+            else:
+                messages = [{"role": "user", "content": prompt}]
             response = _con_reintentos(
                 lambda: client.messages.create(
                     model=modelo,
                     max_tokens=8192,
                     temperature=temperature,
-                    messages=[{"role": "user", "content": prompt}],
+                    messages=messages,
                 ),
+                proveedor="anthropic",
+            )
+            u = response.usage
+            _registrar_consumo(
+                prompt_tokens=getattr(u, "input_tokens", 0) or 0,
+                completion_tokens=getattr(u, "output_tokens", 0) or 0,
+                cache_read_tokens=getattr(u, "cache_read_input_tokens", 0) or 0,
+                cache_creation_tokens=getattr(u, "cache_creation_input_tokens", 0) or 0,
                 proveedor="anthropic",
             )
             texto = "".join(
@@ -207,11 +360,15 @@ def consultar_ollama(prompt: str, modelo: str = "gemma3:4b", temperature: float 
             return ""
 
     try:
+        # Ollama no tiene prompt cache: quitamos el marcador y unimos las partes.
+        prefijo, sufijo = _partir_prompt_cache(prompt)
+        prompt_local = f"{prefijo}\n\n{sufijo}" if prefijo and sufijo else prompt
         response = ollama.chat(
             model=modelo,
-            messages=[{'role': 'user', 'content': prompt}],
+            messages=[{'role': 'user', 'content': prompt_local}],
             options={'temperature': temperature},
         )
+        _registrar_consumo(proveedor="ollama")
         return response['message']['content'].strip()
 
     except Exception as e:
@@ -579,6 +736,9 @@ def generar_prompt_dinamico(config: dict, texto: str, ruta_template: str) -> str
     """
     Rellena el template .md con los datos de la variable.
     Compatible con JSON plano (legacy) y enriquecido (v2).
+
+    Si el template incluye IRIS_CACHE_BREAK, consultar_ollama parte el prompt:
+    prefijo (artículo) cacheable + sufijo específico de la variable.
     """
     template = cargar_texto_template(ruta_template)
  

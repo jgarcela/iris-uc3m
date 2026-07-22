@@ -1,0 +1,37 @@
+%----------
+%	RIESGOS Y MEDIDAS DE MITIGACIÓN
+%----------	
+La Tabla \ref{table:work_methodology} identifica los principales riesgos asociados a los Paquetes de Trabajo (PT) descritos en la Sección \ref{sec:workmethodology_planning}, evaluando su impacto y estableciendo las medidas de mitigación correspondientes.
+
+
+\begin{table}[H]
+    \small % Font size
+    \ttabbox[\FBwidth]{
+        \caption{Riesgos y medidas de mitigación}
+        \label{table:work_methodology} % Etiqueta única para la tabla
+    }{
+        \begin{tabular}{p{4cm} p{2cm} p{2cm} p{1cm} p{4cm}}
+            \hline
+            \rowcolor{gray!30} % Adding a gray color to the header row
+            \textbf{Riesgo} & \textbf{Verosimilitud} & \textbf{Severidad} & \textbf{PTs} & \textbf{Medidas de Mitigación} \\ \hline
+            
+            \textbf{R1.} Limitaciones de recursos provenientes de IRIS\_IAMEDIA (anotaciones, validación experta, corpus ampliado) & Baja, Media & Media & Todos & Uso del corpus ya validado de IRIS\_IAMEDIA, anotación complementaria propia, generación de ejemplos sintéticos con LLMs, retroalimentación puntual en lugar de continua. \\ \hline
+
+            
+            \textbf{R2.} Variabilidad y falta de consistencia en los LLMs al detectar sesgos & Media & Alta & PT2, PT3, PT4 & Uso de prompting estructurado, definición de casos de test, comparación entre modelos, agente verificador y validación con corpus experto IRIS\_IAMEDIA. \\ \hline
+
+            
+            \textbf{R3.} Dificultad para capturar variables cualitativas complejas (androcentrismo, infantilización, etc.) & Media & Media, Alta & PT2, PT4 & Ajuste iterativo de prompts, RAG para aportar contexto, supervisión human-in-the-loop, casos anotados por expertas. \\ \hline
+
+            
+            \textbf{R4.} Desalineación entre las recomendaciones del sistema y las prácticas reales periodística & Media & Media & PT1, PT5 &  Intensificar las consultas con expertas, incorporación de casos de uso reales, test de usabilidad y ajustes iterativos. \\ \hline
+
+            
+            \textbf{R5.} Dependencia de herramientas externas o carga académica que afecte al calendario de ejecución & Media & Media & Todos & Planificación semanal, priorización de entregables, y alternativas técnicas si fallan APIs o servicios externos. \\ \hline
+
+        \end{tabular}
+    }
+\end{table}
+
+
+\newpage

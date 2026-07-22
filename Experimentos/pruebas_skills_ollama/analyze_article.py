@@ -30,7 +30,9 @@ from langchain_ollama import ChatOllama
 from pydantic import BaseModel, Field
 
 _ROOT = Path(__file__).resolve().parent
-_DEFAULT_MANIFEST = _ROOT / "methodology_manifest.json"
+# Las guías de lenguaje se movieron a Experimentos/methodology/ (antes en esta carpeta de pruebas).
+_METHODOLOGY_DIR = _ROOT.parent / "methodology"
+_DEFAULT_MANIFEST = _METHODOLOGY_DIR / "methodology_manifest.json"
 _PIPELINE_SKILLS = [
     "pipeline_01_carga_contexto",
     "pipeline_02_deteccion_etiquetado",
@@ -235,7 +237,7 @@ def main() -> None:
     parser.add_argument(
         "--methodology-dir",
         type=Path,
-        default=_ROOT / "methodology",
+        default=_METHODOLOGY_DIR,
         help="Directorio con las guías .md",
     )
     parser.add_argument(

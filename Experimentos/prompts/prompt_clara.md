@@ -1,4 +1,11 @@
-Eres una experta en análisis de género en medios de comunicación. Analiza el siguiente texto periodístico para detectar si contiene la variable "{nombre}".
+Eres una experta en análisis de género en medios de comunicación. Analiza el siguiente texto periodístico.
+
+TEXTO A ANALIZAR:
+"{texto_input}"
+
+<<<IRIS_CACHE_BREAK>>>
+
+Detecta si el texto contiene la variable "{nombre}".
 
 DEFINICIÓN:
 {definicion}
@@ -8,9 +15,6 @@ METODOLOGÍA (resumen):
 
 EJEMPLOS (casos donde SÍ aplica):
 {ejemplos_positivos}
-
-TEXTO A ANALIZAR:
-"{texto_input}"
 
 CÓDIGOS POSIBLES:
 {lista_opciones}

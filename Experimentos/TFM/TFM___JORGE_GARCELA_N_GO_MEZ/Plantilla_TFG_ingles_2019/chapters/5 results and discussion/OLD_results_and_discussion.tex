@@ -1,0 +1,99 @@
+%----------
+%	RESULTS AND DISCUSSION
+%----------	
+
+
+The contents of this section provides an in-depth analysis of the results that have been obtained during this work.
+
+As mentioned in Section~\ref{sec:classification_procedure}, we tackle three different classification tasks: "Análisis General", "Comentario Negativo" and "Insultos". Therefore, the experimentation process involved a systematic and iterative approach explained in chapter \ref{implementation}, marked by specific adjustments and modifications to the dataset and different parameters, such as data balancing, embedding type and size, models, preprocessing, etc. The classification tasks have been done by means of three different approaches: Traditional Machine Learning, Deep Learning with Transformers, and Generative AI with Large Language Models (LLMs). A comprehensive set of experiments, totaling 1363, were conducted across the 3 different classification tasks.
+
+
+\begin{table}[H]
+    \centering
+    \begingroup
+    \small % Change to desired font size
+    \ttabbox[\FBwidth]{
+        \caption{Classification Tasks, Approaches, and Number of Experiments}
+        \label{table:classification_tasks} % Unique label for the table
+    }{
+        \begin{tabularx}{\textwidth}{
+            X
+            X
+            >{\centering\arraybackslash}X
+            }
+            
+            \hline
+            \rowcolor{gray!30} % Adding a gray color to the header row
+            \textbf{Classification Task} & \textbf{Approach} & \textbf{Number of Experiments}\\ \hline
+            \multirow{3}{*}{Análisis General} & Machine Learning & 255 \\ \cline{2-3}
+                                              & Deep Learning & 15 \\ \cline{2-3}
+                                              & Generative AI & 64 \\ \cline{2-3}
+                                              & \textbf{Total} & \textbf{334} \\ \hline
+                                              
+            \multirow{3}{*}{Contenido Negativo} & Machine Learning & 158 \\ \cline{2-3}
+                                                & Deep Learning & 15 \\ \cline{2-3}
+                                                & Generative AI & 64 \\ \cline{2-3}
+                                                & \textbf{Total} & \textbf{237} \\ \hline
+                                                
+            \multirow{3}{*}{Insultos} & Machine Learning & 713 \\ \cline{2-3}
+                                      & Deep Learning & 15 \\ \cline{2-3}
+                                      & Generative AI & 64 \\ \cline{2-3}
+                                      & \textbf{Total} & \textbf{792} \\ \hline
+            %\multicolumn{3}{l}{Source: 'Training.xlsx', 'DL2\_Análisis General.xlsx', 'DL2\_Contenido Negativo.xlsx', 'DL2\_Insultos.xlsx' and 'Training\_LLM.xlsx'} \\
+            %\hline
+        \end{tabularx}
+    }
+    \endgroup
+\end{table}
+
+
+In Table~\ref{table:classification_tasks_performance} we can see a comparison of the performance of the three different approaches followed. Section~\ref{implementation_dl} explains that for the DL approach different sets of hyperparameters have not been tested due to their computational cost. However, in Table~\ref{table:classification_tasks_performance} we can see that the time spent in DL is 3.368 times less than in ML. The reason is that although in total time for ML experiments has been higher, we have performed more different experiments, in particular 25.022 times more. This means that the total average time per experiment for DL is 7.555 times higher. Note that while the number of experiments for each deep learning (DL) task in Table~\ref{table:classification_tasks_performance} is 15, the actual number of successful experiments varied slightly: 11 for"Análisis General", 14 for "Contenido Negativo" and 14 for "Insultos". 
+
+Another interesting highlight is the performance of the zero-shot Generative AI approach, especially for the "Contenido Negativo" task, where the mean time per experiment was just 0.043 hours, and 0.026 hours for "Insultos." Remarkably, in 4.186 times less time, we were able to conduct 4.267 times more experiments than with the DL approach. However, when compared to the ML approach, we performed 5.865 times more experiments in ML, investing 14.099 times more in total time, yet achieving a better Mean Time per Experiment of 0.183 hours.
+
+
+\begin{table}[H]
+    \centering
+    \begingroup
+    \small % Change to desired font size
+    \ttabbox[\FBwidth]{
+        \caption{Performance metrics for the different approaches}
+        \label{table:classification_tasks_performance} % Unique label for the table
+    }{
+        \begin{tabularx}{\textwidth}{
+            X
+            >{\hsize=1.5\hsize}X
+            >{\hsize=0.5\hsize\centering\arraybackslash}X
+            >{\hsize=0.5\hsize\centering\arraybackslash}X
+            >{\hsize=0.5\hsize\centering\arraybackslash}X
+            }
+            
+            \hline
+            \rowcolor{gray!30} % Adding a gray color to the header row
+             \textbf{Approach} & \textbf{Classification Task} & \textbf{Number of Exp.}  & \textbf{Total Time (h)} & \textbf{Mean Time per Exp. (h)}\\ \hline
+            \multirow{4}{*}{Machine Learning} & Análisis General & 255 & 79.835 & 0.313\\ \cline{2-5}
+                                              & Contenido Negativo & 158 & 46.954 & 0.297\\ \cline{2-5}
+                                              & Insultos & 713 & 79.773 & 0.112\\ \cline{2-5}
+                                              & \textbf{Total} & \textbf{1126} & \textbf{206.552} & \textbf{0.183}\\ \hline
+                                              
+            \multirow{4}{*}{Deep Learning} & Análisis General & 15 & 49.486 & 3.299\\ \cline{2-5}
+                                                & Contenido Negativo & 15 & 7.417 & 4.494\\ \cline{2-5}
+                                                & Insultos & 15 & 4.422 & 0.295\\ \cline{2-5}
+                                                & \textbf{Total} & \textbf{45} & \textbf{61.325} & \textbf{1.363}\\ \hline
+                                                
+            \multirow{4}{*}{Generative AI} & Análisis General & 64 & 11.850 & 0.185\\ \cline{2-5}
+                                      & Contenido Negativo & 64 & 2.774 & 0.043\\ \cline{2-5}
+                                      & Insultos & 64 & 1.638 & 0.026\\ \cline{2-5}
+                                      & \textbf{Total} & \textbf{192} & \textbf{14.650} & \textbf{0.254}\\ \hline
+            %\multicolumn{5}{l}{Source: 'Training.xlsx', 'DL2\_Análisis General.xlsx', 'DL2\_Contenido Negativo.xlsx', 'DL2\_Insultos.xlsx' and 'Training\_LLM.xlsx'} \\
+            %\hline
+        \end{tabularx}
+    }
+    \endgroup
+\end{table}
+
+
+The presentation of these experiments will follow this structure:  First, we will examine each classification task individually to highlight their differences. Following this, we will provide detailed descriptions of the three approaches employed.
+
+
+\newpage

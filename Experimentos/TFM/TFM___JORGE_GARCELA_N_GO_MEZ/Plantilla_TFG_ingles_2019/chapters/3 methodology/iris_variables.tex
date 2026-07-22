@@ -1,0 +1,128 @@
+%----------
+%	VARIABLES DEL ANÁLISIS — sexismo lingüístico
+%----------
+
+El libro de códigos del proyecto define quince variables de sexismo lingüístico,
+codificadas como V25 a V39, que se recogen en la
+Tabla~\ref{tab:iris-inventario-variables}. Cada una captura un mecanismo
+distinto mediante el cual el lenguaje periodístico puede reproducir
+desigualdad.
+
+\begin{table}[H]
+    \centering
+    \begingroup
+    \small
+    \ttabbox[\FBwidth]{
+        \caption{Inventario de variables de sexismo lingüístico del libro de códigos}
+        \label{tab:iris-inventario-variables}
+    }{
+        \begin{tabularx}{\textwidth}{
+            >{\centering\arraybackslash}p{1.2cm}
+            X
+            >{\columncolor{gray!15}\centering\arraybackslash}p{2.2cm}
+        }
+            \hline
+            \textbf{Cód.} & \textbf{Variable} & \textbf{En este trabajo} \\
+            \hline
+            V25 & \texttt{lenguaje\_sexista} & \textbf{Sí} \\
+            V26 & \texttt{masc\_generico} & \textbf{Sí} \\
+            V27 & \texttt{hombre\_denominar\_humanidad} & No \\
+            V28 & \texttt{uso\_dual\_zorr} & No \\
+            V29 & \texttt{uso\_cargo\_mujer} & No \\
+            V30 & \texttt{sexismo\_discurso} & \textbf{Sí} \\
+            V31 & \texttt{androcentrismo} & No \\
+            V32 & \texttt{mencion\_nombre\_investigadora} & No \\
+            V33 & \texttt{asimetria\_mujer\_hombre} & \textbf{Sí} \\
+            V34 & \texttt{disminutivos\_infantilizacion} & No \\
+            V35 & \texttt{denominacion\_sexualizada} & \textbf{Sí} \\
+            V36 & \texttt{denominacion\_redundante} & No \\
+            V37 & \texttt{denominacion\_dependiente} & No \\
+            V38 & \texttt{criterios\_excepcion} & No \\
+            V39 & \texttt{comparacion\_mujer\_hombre} & No \\
+            \hline
+        \end{tabularx}
+    }
+    \endgroup
+\end{table}
+
+\subsubsection{Selección de las cinco variables}
+
+El alcance de este trabajo se restringe a cinco variables (V25, V26, V30, V33 y
+V35), seleccionadas por el equipo experto del proyecto atendiendo a dos
+criterios: su relevancia teórica dentro del marco de análisis y su frecuencia de
+aparición en el corpus, que garantiza un número de casos suficiente para una
+evaluación con sentido estadístico. Las diez variables restantes permanecen como
+marco teórico del libro de códigos, pero no se someten a evaluación automática.
+
+Esta restricción responde asimismo a una consideración de diseño experimental:
+evaluar cinco variables sobre la totalidad del subconjunto anotado y con varios
+proveedores de modelos resulta preferible, en términos de solidez de las
+conclusiones, a una cobertura amplia pero superficial de las quince.
+
+\subsubsection{Definición operativa de las variables evaluadas}
+\label{sec:iris_variables}
+
+Las cinco variables seleccionadas se definen del modo siguiente:
+
+\begin{itemize}
+    \item \textbf{V25 --- \texttt{lenguaje\_sexista}.} Uso discriminatorio del
+    lenguaje por razón de sexo. Opera como categoría agregadora: engloba todo
+    sexismo lingüístico de forma, de modo que la detección de cualquiera de sus
+    subtipos debería implicar su marcado. Admite un tercer valor específico para
+    el \emph{salto semántico}, esto es, el caso en que un masculino presentado
+    como genérico se revela posteriormente no inclusivo al aparecer una marca
+    explícita de mujer.
+
+    \item \textbf{V26 --- \texttt{masc\_generico}.} Empleo del masculino
+    gramatical como pretendido genérico cuando existe alternativa inclusiva.
+    Constituye un subtipo específico de V25.
+
+    \item \textbf{V30 --- \texttt{sexismo\_discurso}.} Sexismo situado en el
+    \emph{fondo} del mensaje —en aquello que se cuenta— y no en la forma
+    lingüística elegida. Es la única de las cinco que no constituye un subtipo
+    de V25, lo que permite que una pieza presente una variable sin la otra.
+
+    \item \textbf{V33 --- \texttt{asimetria\_mujer\_hombre}.} Tratamiento
+    asimétrico de mujeres y hombres dentro de una misma pieza: diferencias en el
+    uso del nombre, el apellido, el título profesional o el tratamiento.
+
+    \item \textbf{V35 --- \texttt{denominacion\_sexualizada}.} Identificación de
+    la mujer por su aspecto físico, su rol familiar o su relación con un varón,
+    en detrimento de su función profesional o del motivo informativo por el que
+    aparece en la pieza.
+\end{itemize}
+
+Todas las variables se codifican en una escala en la que el valor~1 indica
+ausencia del fenómeno y el valor~2 su presencia; V25 admite adicionalmente el
+valor~3 para el caso del salto semántico. En el tratamiento de los resultados,
+y con objeto de homogeneizar la comparación entre variables, los valores 2 y 3
+se agrupan como clase positiva.
+
+\subsubsection{Prevalencia y sus implicaciones}
+
+La distribución de las clases en la anotación experta resulta marcadamente
+desigual y condiciona de forma decisiva la elección de métricas de evaluación,
+tal como se analiza en la Sección~\ref{subsec:iris_divergencia}. Mientras V25 y
+V26 presentan una prevalencia del 81\,\% de casos positivos, V33 y V35 se
+sitúan en el 6,2\,\% y el 10,0\,\% respectivamente.
+
+Esta circunstancia implica que un clasificador trivial que respondiese siempre
+con la clase mayoritaria alcanzaría exactitudes de 0,810 en V25 y V26, y de
+0,938 y 0,900 en V33 y V35. Por consiguiente, \textbf{la exactitud no constituye
+por sí sola una métrica informativa} en esta tarea, y todos los resultados de
+este trabajo se acompañan del coeficiente $\kappa$ de Cohen —que descuenta el
+acuerdo esperable por azar— y de la prevalencia de referencia.
+
+\subsubsection{De la definición experta a la especificación ejecutable}
+
+Para su empleo por sistemas automáticos, cada variable se formaliza en una
+especificación estructurada que recoge, además de la definición conceptual: un
+criterio operativo de decisión, una metodología paso a paso, ejemplos positivos
+y contraejemplos comentados, casos límite documentados y las fronteras que la
+separan de las variables contiguas. Esta especificación constituye la fuente
+única a partir de la cual se generan tanto los \textit{prompts} del sistema de
+referencia como las \textit{skills} de la arquitectura de agentes, garantizando
+que ambos niveles experimentales operan con \emph{idéntico} contenido
+metodológico y difieren únicamente en la forma en que dicho contenido se pone a
+disposición del modelo. Los detalles de esta formalización se abordan en el
+Capítulo~\ref{implementation}.

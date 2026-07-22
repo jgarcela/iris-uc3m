@@ -1,0 +1,165 @@
+%----------
+%	INSULTOS - DEEP LEARNING
+%----------	
+
+The next approach followed in the "Insultos" classification task was using Deep Learning models, as explained in Section~\ref{implementation_dl}, with a total of 15 experiments (5 models and 3 types of contexts). Notice that the RoBERTuito model for "Full Context" ({\insfcrobertuito}) did not execute entirely due to exceeding its context window.
+
+From Table~\ref{tab:insultos-dl-bestmodels_metrics} and Figure~\ref{fig:exp_insultos_dl_max_f1}, we observe that the "Without Context" setting showed balanced performance with the highest weighted average F1-Score of 0.516, and across classes, with "Genéricos" achieving the highest F1-Score (0.656). As we transition to "Tweet Context", there was a noticeable decline, particularly in "Sexistas/Misóginos", where the highest F1-Score dropped significantly from 0.375 to 0.182, suggesting that adding tweet-specific context may introduce some noise. Interestingly, the decline in "Genéricos" and "Deseo de Dañar" was more subtle in this setting. However, in the "Full Context" scenario, the performance in terms of the highest F1-Score for "Deseo de Dañar" improved from 0.423 to 0.541, but it remained stable for "Genéricos" and "Sexistas/Misóginos", which indicates that context must be carefully curated to enhance model performance effectively in all classes.
+
+
+% Max Weighted F1
+\begin{figure}[H]
+	\ffigbox[\FBwidth]
+	{\caption{Maximum Weighted F1-Score Achieved across all DL Models for Each Type of Context within "Insultos"}\label{fig:exp_insultos_dl_max_f1}}
+ % [Aquí ponemos como queremos que aparezca en el índice, sin la referencia]{Aquí como queremos que aparezca en el documento, con la referencia}
+	{\includegraphics[scale=0.25]{Plantilla_TFG_ingles_2019/imagenes/DL_Experiments in _Insultos_ weightedF1_max.pdf}}
+\end{figure}
+
+\begin{table}[H]
+    \centering
+    \begingroup
+    \small % Change to desired font size
+    \ttabbox[\FBwidth]{
+        \caption{INS Evaluation Metrics for the DL Models after 10 Epochs}
+        \label{tab:insultos-dl-bestmodels_metrics} % Unique label for the table
+    }{
+        \begin{tabularx}{\textwidth}{
+            X
+            >{\columncolor{gray!15}\centering\arraybackslash}X % Highlight this column
+            >{\centering\arraybackslash}X
+            >{\centering\arraybackslash}X
+            >{\centering\arraybackslash}X
+            >{\centering\arraybackslash}X
+        }
+            \hline
+            \rowcolor{gray!30} % Adding a gray color to the header row
+            \textbf{} & \textbf{W. Avg. F1-Score} & \textbf{Sex./Mis. F1-Score} &  \textbf{Genéricos F1-Score} & \textbf{D. Dañar. F1-Score}\\
+            \hline
+            \multicolumn{5}{l}{\textbf{Without Context}} \\
+            \hline
+            \insscbeto & 0.516 & 0.375 & 0.619 & 0.462 \\
+            \hline
+            \insscroberta & 0.329 & 0.000 & 0.474 & 0.364 \\
+            \hline
+            \insscrobertuito & 0.324 & 0.000 & 0.633 & 0.143 \\
+            \hline
+            \insscbertmulti & 0.312 & 0.000 & 0.656 & 0.000 \\
+            \hline
+            \insscxlmroberta & 0.307 & 0.000 & 0.645 & 0.000 \\
+            \hline
+            
+            \multicolumn{5}{l}{\textbf{Tweet Context}} \\
+            \hline
+            \instcroberta & 0.441 & 0.181 & 0.578 & 0.423 \\
+            \hline
+            \instcbeto & 0.406 & 0.167 & 0.612 & 0.261 \\
+            \hline
+            \instcbertmulti & 0.339 & 0.182 & 0.645 & 0.000 \\
+            \hline
+            \instcrobertuito & 0.307 & 0.000 & 0.645 & 0.000 \\
+            \hline
+            \instcxlmroberta & 0.307 & 0.000 & 0.645 & 0.000 \\
+            \hline
+            
+            \multicolumn{5}{l}{\textbf{Full Context}} \\
+            \hline
+            \insfcbertmulti & 0.412 & 0.000 & 0.541 & 0.541 \\
+            \hline
+            \insfcroberta & 0.335 & 0.167 & 0.621 & 0.000 \\
+            \hline
+            \insfcbeto & 0.307 & 0.000 & 0.645 & 0.000 \\
+            \hline
+            \insfcxlmroberta & 0.307 & 0.000 & 0.645 & 0.000 \\
+            \hline
+            \insfcrobertuito & - & - & - & - \\
+            \hline
+            \multicolumn{5}{l}{Source: 'DL2\_Insultos.xlsx', 'DL2\_Training\_Insultos.xlsx'} \\
+            \hline
+        \end{tabularx}
+    }
+    \endgroup
+\end{table}
+
+
+%\begin{table}[H]
+%    \centering
+%    \begingroup
+%    \tiny % Change to desired font size
+%    \ttabbox[\FBwidth]{
+%        \caption{INS Metrics for the DL Models after 10 Epochs}
+%        \label{tab:insultos-dl-bestmodels_metrics} % Unique label for the table
+%    }{
+%        \begin{tabularx}{\textwidth}{
+%            X
+%            >{\columncolor{gray!15}\centering\arraybackslash}X % Highlight this column
+%            >{\columncolor{gray!15}\centering\arraybackslash}X % Highlight this column
+%            >{\centering\arraybackslash}X
+%            >{\centering\arraybackslash}X
+%            >{\centering\arraybackslash}X
+%            >{\centering\arraybackslash}X
+%            >{\centering\arraybackslash}X
+%            >{\centering\arraybackslash}X
+%        }
+%            \hline
+%            \rowcolor{gray!30} % Adding a gray color to the header row
+%            \textbf{} & \textbf{Train. Weighted. F1-Score} & \textbf{Eval. Weighted F1-Score} & \textbf{Train. Sex./Mis. F1-Score} &  \textbf{Eval. Sex./Mis. F1-Score} & \textbf{Train. Genéricos F1-Score} & \textbf{Eval. Genéricos F1-Score} & \textbf{Train. D. Dañar. F1-Score} & \textbf{Eval. D. Dañar. F1-Score}\\
+%            \hline
+%            \multicolumn{9}{l}{\textbf{Without Context}} \\
+%            \hline
+%            \insscbeto & 0.439 & 0.516 & 0.500 & 0.375 & 0.500 & 0.619 & 0.286 & 0.462 \\
+%            \hline
+%            \insscroberta & 0.338 & 0.329 & 0.333 & 0.000 & 0.353 & 0.474 & 0.316 & 0.364 \\
+%            \hline
+%            \insscbertmulti & 0.375 & 0.312 & 0.333 & 0.000 & 0.621 & 0.656 & 0.000 & 0.000 \\
+%            \hline
+%            \insscrobertuito & 0.256 & 0.324 & 0.000 & 0.000 & 0.538 & 0.633 & 0.000 & 0.143 \\
+%            \hline
+%            \insscxlmroberta & 0.307 & 0.307 & 0.000 & 0.000 & 0.645 & 0.645 & 0.000 & 0.000 \\
+%            \hline
+%            
+%            \multicolumn{9}{l}{\textbf{Tweet Context}} \\
+%            \hline
+%            \instcroberta & 0.286 & 0.441 & 0.333 & 0.181 & 0.434 & 0.578 & 0.000 & 0.423 \\
+%            \hline
+%            \instcbeto & 0.381 & 0.406 & 0.000 & 0.167 & 0.692 & 0.612 & 0.182 & 0.261 \\
+%            \hline
+%            \instcrobertuito & 0.317 & 0.307 & 0.000 & 0.000 & 0.667 & 0.645 & 0.000 & 0.000 \\
+%            \hline
+%            \instcbertmulti & 0.464 & 0.339 & 0.571 & 0.182 & 0.690 & 0.645 & 0.000 & 0.000 \\
+%            \hline
+%            \instcxlmroberta & 0.307 & 0.307 & 0.000 & 0.000 & 0.645 & 0.645 & 0.000 & 0.000 \\
+%            \hline
+%            
+%            \multicolumn{9}{l}{\textbf{Full Context}} \\
+%            \hline
+%            \insfcroberta & 0.286 & 0.335 & 0.000 & 0.167 & 0.600 & 0.621 & 0.000 & 0.000 \\
+%            \hline
+%            \insfcbeto & 0.307 & 0.307 & 0.000 & 0.000 & 0.645 & 0.645 & 0.000 & 0.000 \\
+%            \hline
+%            \insfcbertmulti & 0.332 & 0.412 & 0.000 & 0.000 & 0.444 & 0.541 & 0.421 & 0.541 \\
+%            \hline
+%            \insfcxlmroberta & 0.307 & 0.307 & 0.000 & 0.000 & 0.645 & 0.645 & 0.000 & 0.000 \\
+%            \hline
+%            \insfcrobertuito & - & - & - & - & - & - & - & - \\
+%            \hline
+%            \multicolumn{9}{l}{Source: 'DL2\_Insultos.xlsx', 'DL2\_Training\_Insultos.xlsx'} \\
+%            \hline
+%        \end{tabularx}
+%    }
+%    \endgroup
+%\end{table}
+
+Following a similar approach as in Section~\ref{sec:insultos_ml}, \textbf{\insscbeto} was considered the best DL model for this task because it achieved the highest weighted F1-Score of 0.516 while scoring consistent metrics for the three classes considered: 0.375, 0.619 and 0.462 for "Sexistas/Misóginos", "Genéricos" and "Deseo de Dañar", respectively. In particular, Figure~\ref{fig:exp_insultos_dl_bestmodel} shows the confusion matrix for this model. From this figure, we can appreciate that the model performed best on "Genéricos", which was also the majority class in the dataset. This prevalence likely contributed to false positives from the other classes, which was the model's tendency to predict "Genéricos" for instances belonging to the other two classes, "Sexistas/Misóginos" and "Deseo de Dañar". Moreover, the misclassification of "Deseo de Dañar" with "Genéricos" could be also due to this fact. For these reasons, overall we could argue that the model may have a generalization issue, especially in distinguishing between the differences of "Sexistas/misóginos" and "Deseo de Dañar" with the "Genéricos" class.
+
+
+
+
+
+% Best Model
+\begin{figure}[H]
+	\ffigbox[\FBwidth]
+	{\caption{Confusion Matrix for the Best DL Model (\textbf{\insscbeto}) for "Insultos"}\label{fig:exp_insultos_dl_bestmodel}}
+ % [Aquí ponemos como queremos que aparezca en el índice, sin la referencia]{Aquí como queremos que aparezca en el documento, con la referencia}
+	{\includegraphics[scale=0.15]{Plantilla_TFG_ingles_2019/imagenes/DL_Experiments in _Insultos_ best_model.pdf}}
+\end{figure}
+

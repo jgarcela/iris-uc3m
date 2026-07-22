@@ -1,0 +1,738 @@
+%----------
+%   IMPORTANTE
+%----------
+
+% Si nunca has utilizado LaTeX es conveniente que aprendas una serie de conceptos básicos antes de utilizar esta plantilla. Te aconsejamos que leas previamente algún tutorial (puedes encontar muchos en Internet).
+
+% Esta plantilla está basada en las recomendaciones de la guía "Trabajo fin de Grado: Escribir el TFG", que encontrarás en http://uc3m.libguides.com/TFG/escribir
+% contiene recomendaciones de la Biblioteca basadas principalmente en estilos APA e IEEE, pero debes seguir siempre las orientaciones de tu Tutor de TFG y la normativa de TFG para tu titulación.
+
+% Encontrarás un ejemplo de TFG realizado con esta misma plantilla en la carpeta "_ejemplo_TFG_2019". Consúltalo porque contiene ejemplos útiles para incorporar tablas, figuras, listados de código, bibliografía, etc.
+
+
+%----------
+%	CONFIGURACIÓN DEL DOCUMENTO
+%----------
+
+% Definimos las características del documento y añadimos una serie de paquetes (\usepackage{package}) que agregan funcionalidades a LaTeX.
+
+\documentclass[12pt]{report} %fuente a 12pt
+
+% MÁRGENES: 2,5 cm sup. e inf.; 3 cm izdo. y dcho.
+\usepackage[
+a4paper,
+vmargin=2.5cm,
+hmargin=3cm
+]{geometry}
+
+% INTERLINEADO: Estrecho (6 ptos./interlineado 1,15) o Moderado (6 ptos./interlineado 1,5)
+\renewcommand{\baselinestretch}{1.15}
+\parskip=6pt
+
+% DEFINICIÓN DE COLORES para portada y listados de código
+\usepackage[table]{xcolor}
+\definecolor{azulUC3M}{RGB}{0,0,102}
+\definecolor{gray97}{gray}{.97}
+\definecolor{gray75}{gray}{.75}
+\definecolor{gray45}{gray}{.45}
+
+% Soporte para GENERAR PDF/A --es importante de cara a su inclusión en e-Archivo porque es el formato óptimo de preservación y a la generación de metadatos, tal y como se describe en http://uc3m.libguides.com/ld.php?content_id=31389625. En la carpeta incluímos el archivo plantilla_tfg_2017.xmpdata en el que puedes incluir los metadatos que se incorporarán al archivo PDF cuando lo compiles. Ese archivo debe llamarse igual que tu archivo .tex. Puedes ver un ejemplo en esta misma carpeta.
+\usepackage[a-1b]{pdfx}
+
+% ENLACES
+\usepackage{hyperref}
+\hypersetup{colorlinks=true,
+	linkcolor=black, % enlaces a partes del documento (p.e. índice) en color negro
+	urlcolor=blue} % enlaces a recursos fuera del documento en azul
+
+% EXPRESIONES MATEMATICAS
+\usepackage{amsmath,amssymb,amsfonts,amsthm}
+
+\usepackage{txfonts} 
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+
+%\usepackage[english]{babel} 
+%\usepackage[babel, english=american]{csquotes}
+\usepackage[spanish,es-tabla,es-noshorthands]{babel} 
+\usepackage[autostyle=true]{csquotes}
+
+\AtBeginEnvironment{quote}{\small}
+% diseño de PIE DE PÁGINA
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0pt}
+\rfoot{\thepage}
+\fancypagestyle{plain}{\pagestyle{fancy}}
+
+% DISEÑO DE LOS TÍTULOS de las partes del trabajo (capítulos y epígrafes o subcapítulos)
+\usepackage{titlesec}
+\usepackage{titletoc}
+\titleformat{\chapter}[block]
+{\large\bfseries\filcenter}
+{\thechapter.}
+{5pt}
+{\MakeUppercase}
+{}
+\titlespacing{\chapter}{0pt}{0pt}{*3}
+\titlecontents{chapter}
+[0pt]                                               
+{}
+{\contentsmargin{0pt}\thecontentslabel.\enspace\uppercase}
+{\contentsmargin{0pt}\uppercase}                        
+{\titlerule*[.7pc]{.}\contentspage}                 
+
+\titleformat{\section}
+{\bfseries}
+{\thesection.}
+{5pt}
+{}
+\titlecontents{section}
+[5pt]                                               
+{}
+{\contentsmargin{0pt}\thecontentslabel.\enspace}
+{\contentsmargin{0pt}}
+{\titlerule*[.7pc]{.}\contentspage}
+
+\titleformat{\subsection}
+{\normalsize\bfseries}
+{\thesubsection.}
+{5pt}
+{}
+\titlecontents{subsection}
+[10pt]                                               
+{}
+{\contentsmargin{0pt}                          
+	\thecontentslabel.\enspace}
+{\contentsmargin{0pt}}                        
+{\titlerule*[.7pc]{.}\contentspage}  
+
+
+% DISEÑO DE TABLAS. Puedes elegir entre el estilo para ingeniería o para ciencias sociales y humanidades. Por defecto, está activado el estilo de ingeniería. Si deseas utilizar el otro, comenta las líneas del diseño de ingeniería y descomenta las del diseño de ciencias sociales y humanidades
+\usepackage{multirow} %permite combinar celdas 
+\usepackage{caption} %para personalizar el título de tablas y figuras
+\usepackage{floatrow} %utilizamos este paquete y sus macros \ttabbox y \ffigbox para alinear los nombres de tablas y figuras de acuerdo con el estilo definido. Para su uso ver archivo de ejemplo 
+\usepackage{array} % con este paquete podemos definir en la siguiente línea un nuevo tipo de columna para tablas: ancho personalizado y contenido centrado
+\newcolumntype{P}[1]{>{\centering\arraybackslash}p{#1}}
+\DeclareCaptionFormat{upper}{#1#2\uppercase{#3}\par}
+
+% Diseño de tabla para ingeniería
+\captionsetup[table]{
+	format=upper,
+	justification=centering,
+	labelsep=period,
+	width=.75\linewidth,
+	labelfont=small,
+	font=small,
+}
+
+%Diseño de tabla para ciencias sociales y humanidades
+%\captionsetup[table]{
+%	justification=raggedright,
+%	labelsep=period,
+%	labelfont=small,
+%	singlelinecheck=false,
+%	font={small,bf}
+%}
+
+\usepackage{tabularx}
+
+% DISEÑO DE FIGURAS. Puedes elegir entre el estilo para ingeniería o para ciencias sociales y humanidades. Por defecto, está activado el estilo de ingeniería. Si deseas utilizar el otro, comenta las líneas del diseño de ingeniería y descomenta las del diseño de ciencias sociales y humanidades
+\usepackage{graphicx}
+\graphicspath{{imagenes/}} %ruta a la carpeta de imágenes
+
+% Diseño de figuras para ingeniería
+\captionsetup[figure]{
+	format=hang,
+	name=Fig.,
+	singlelinecheck=off,
+	labelsep=period,
+	labelfont=small,
+	font=small		
+}
+
+% Diseño de figuras para ciencias sociales y humanidades
+%\captionsetup[figure]{
+%	format=hang,
+%	name=Figure,
+%	singlelinecheck=off,
+%	labelsep=period,
+%	labelfont=small,
+%	font=small		
+%}
+
+
+% NOTAS A PIE DE PÁGINA
+\usepackage{chngcntr} %para numeración contínua de las notas al pie
+\counterwithout{footnote}{chapter}
+
+% LISTADOS DE CÓDIGO
+% soporte y estilo para listados de código. Más información en https://es.wikibooks.org/wiki/Manual_de_LaTeX/Listados_de_código/Listados_con_listings
+\usepackage{listings}
+
+% definimos un estilo de listings
+\lstdefinestyle{estilo}{ frame=Ltb,
+	framerule=0pt,
+	aboveskip=0.5cm,
+	framextopmargin=3pt,
+	framexbottommargin=3pt,
+	framexleftmargin=0.4cm,
+	framesep=0pt,
+	rulesep=.4pt,
+	backgroundcolor=\color{gray97},
+	rulesepcolor=\color{black},
+	%
+	basicstyle=\ttfamily\footnotesize,
+	keywordstyle=\bfseries,
+	stringstyle=\ttfamily,
+	showstringspaces = false,
+	commentstyle=\color{gray45},     
+	%
+	numbers=left,
+	numbersep=15pt,
+	numberstyle=\tiny,
+	numberfirstline = false,
+	breaklines=true,
+	xleftmargin=\parindent
+}
+
+\captionsetup[lstlisting]{font=small, labelsep=period}
+% fijamos el estilo a utilizar 
+\lstset{style=estilo}
+\renewcommand{\lstlistingname}{\uppercase{Código}}
+
+
+%BIBLIOGRAFÍA - PUEDES ELEGIR ENTRE ESTILO IEEE O APA. POR DEFECTO ESTÁ CONFIGURADO IEEE. SI DESEAS USAR APA, COMENTA LAS LÍNEA DE IEEE Y DESCOMENTA LAS DE APA. Si haces cambios en la configuración de la bibliografía y no obtienes los resultados esperados, es recomendable limpiar los archivos auxiliares y volver a compilar en este orden: COMPILAR-BIBLIOGRAFIA-COMPILAR
+% Tienes más información sobre cómo generar bibliografía en http://tex.stackexchange.com/questions/154751/biblatex-with-biber-configuring-my-editor-to-avoid-undefined-citations , https://es.sharelatex.com/learn/Bibliography_management_in_LaTeX y en http://www.ctan.org/tex-archive/macros/latex/exptl/biblatex-contrib
+% También te recomendamos consultar la guía temática de la Biblioteca sobre citas bibliográficas: http://uc3m.libguides.com/guias_tematicas/citas_bibliograficas/inicio
+
+% CONFIGURACIÓN PARA LA BIBLIOGRAFÍA IEEE
+\usepackage[backend=biber, style=ieee, isbn=false,sortcites, maxbibnames=5, minbibnames=1]{biblatex} % Configuración para el estilo de citas de IEEE, recomendado para el área de ingeniería. "maxbibnames" indica que a partir de 5 autores trunque la lista el primero (minbibnames) y añada "et al." tal y como se utiliza en el estilo IEEE.
+
+%CONFIGURACIÓN PARA LA BIBLIOGRAFÍA APA
+%\usepackage[style=apa, backend=biber, natbib=true, hyperref=true, uniquelist=false, sortcites]{biblatex}
+%\DeclareLanguageMapping{spanish}{spanish-apa}
+
+\addbibresource{bibliografia/bibliografia.bib} % llama al archivo bibliografia.bib que utilizamos de ejemplo
+
+\usepackage{pdflscape}
+
+
+
+%-------------
+%	DOCUMENTO
+%-------------
+
+\begin{document}
+\pagenumbering{roman} % Se utilizan cifras romanas en la numeración de las páginas previas al cuerpo del trabajo
+	
+%----------
+%	PORTADA
+%----------	
+\begin{titlepage}
+	\begin{sffamily}
+	\color{azulUC3M}
+	\begin{center}
+		% Logo Universidad - Tamaño ajustado
+        \includegraphics[width=6cm]{uc3m-logo-171x60.png} 
+        
+        \vspace{0.8cm} % Espacio entre logos
+        
+        % Logo RTVE Impulsa - Mucho más pequeño para que no domine la página
+        \includegraphics[width=5.5cm]{impulsa_rtve.jpeg}
+        
+        \vspace{1.5cm}
+
+        {\Huge ``Postedición Asistida por IA: \\Detección de Sesgos de Género en la Representación Mediática de la Mujer''}\\
+		 	\vspace*{0.5cm}
+	 		\rule{10.5cm}{0.1mm}\\
+			\vspace*{0.9cm}
+			{\LARGE Jorge Garcelán Gómez}\\ 
+			\vspace*{1cm}
+            
+		\begin{Large}
+			Máster en Inteligencia Artificial Aplicada\\			
+			2025-2026 \\
+			\vspace{2cm}		
+			\textsl{Trabajo Final de Máster}
+			\bigskip
+			
+		\end{Large}
+		 	
+		\begin{Large}
+			Carmen Peláez Moreno\\
+			Teresa Onorati\\
+			Madrid, Julio 2026\\
+		\end{Large}
+	\end{center}
+	\vfill
+	\color{black}
+	% si nuestro trabajo se va a publicar con una licencia Creative Commons, incluir estas líneas. Es la opción recomendada.
+	\includegraphics[width=4.2cm]{imagenes/creativecommons.png}\\  %incluimos el logotipo de creativecommons
+	This work is licensed under Creative Commons \textbf{Attribution – Non Commercial – Non Derivatives}
+	\end{sffamily}
+\end{titlepage}
+
+\newpage %página en blanco o de cortesía
+\thispagestyle{empty}
+\mbox{}
+
+%----------
+%	RESUMEN Y PALABRAS CLAVE
+%----------	
+\renewcommand\abstractname{\large\uppercase{Resumen}}
+\begin{abstract}
+\thispagestyle{plain}
+\setcounter{page}{3}
+	
+	% ESCRIBIR EL RESUMEN AQUÍ
+    \color{red}
+    
+    La transformación digital del periodismo y los medios de comunicación ha impulsado la integración de herramientas de Inteligencia Artificial (IA) en las redacciones, una oportunidad que, no obstante, conlleva riesgos significativos si no se gestiona bajo una perspectiva ética y socialmente responsable. En particular, la representación de la mujer en las noticias sigue padeciendo de desequilibrios estructurales, tanto cuantitativos, con una presencia minoritaria de mujeres como fuentes expertas y protagonistas \cite{unwomen2025gmmp}, como cualitativos, a través de discursos que perpetúan estereotipos de género (Kotek, 2023). Esta problemática se puede agravar con el uso de Grandes Modelos de Lenguaje, que al haber sido entrenados con inmensos volúmenes de datos, pueden tender a alucinar y amplificar sesgos preexistentes (Navigli 2023). Ante este escenario, las soluciones actuales de detección de sesgos resultan insuficientes (Lai et al. 2021): los métodos manuales carecen de escalabilidad para el ritmo de una redacción moderna, mientras que los sistemas totalmente automatizados a menudo fallan en captar los matices sutiles del lenguaje periodístico.
+    
+    En respuesta a este desafío, el presente proyecto propone una solución tecnológica híbrida bajo el paradigma human-in-the-loop (“persona en el bucle”). El objetivo principal es investigar y desarrollar una herramienta de apoyo a la postedición que permita a los periodistas identificar y corregir sesgos de género antes de la publicación, sin sustituir su criterio editorial. Para lograrlo, se plantea una arquitectura de software innovadora basada en sistemas multi-agente (Li et al., 2023) y en el uso de técnicas avanzadas de prompt engineering (“ingeniería de instrucciones”), específicamente la metodología Chain-of-Thought (“Cadena de Pensamiento”) (Wei et al., 2022), que obliga a los modelos a razonar y explicitar los motivos por los que consideran un fragmento sesgado, aumentando así la transparencia y la confianza del usuario final. Además, para mitigar las alucinaciones propias de los LLM, se diseñará un sistema de Generación Aumentada por Recuperación (RAG). Esto permitirá al sistema contrastar la información generada con una base de conocimiento validada y experta, asegurando que las sugerencias de corrección no solo sean gramaticalmente correctas, sino periodísticamente rigurosas.
+
+    Finalmente, la robustez de la propuesta reside en su metodología de validación. Para garantizar la eficacia del sistema, se utilizará como ground truth (verdad absoluta) el corpus del proyecto IRIS\_IAMEDIA, un conjunto de datos previamente analizado y etiquetado por expertas en comunicación y género. Este enfoque permitirá entrenar y evaluar los modelos comparando sus diagnósticos directamente con el criterio humano experto, asegurando así que la herramienta se alinee con los estándares éticos requeridos para su transferencia real a los medios de comunicación.
+
+    \color{black}
+	
+	\textbf{Palabras Clave:}
+	% Escribir las palabras clave aquí
+     \textit{Sesgos de género, Inteligencia Artificial, Periodismo Computacional, Agentes Autónomos, Grandes Modelos de Lenguaje, Persona en el bucle.}
+	
+	\vfill
+\end{abstract}
+	\newpage % página en blanco o de cortesía
+	\thispagestyle{empty}
+	\mbox{}
+
+
+%----------
+%	DEDICATORIA
+%----------	
+\chapter*{Dedicatoria}
+
+\setcounter{page}{5}
+	
+	% ESCRIBIR LA DEDICATORIA AQUÍ	
+Llegar hasta aquí ha sido un reto enorme, y ver este TFM terminado me llena de orgullo. Este trabajo está dedicado, antes que a nadie, a mi familia: a mis padres, al yayo y a la yaya, y a mis familiares más cercanos. Gracias por ser ese empujón constante y por ser mi lugar seguro siempre.
+
+A mis amigos, por ser mi vía de escape favorita con nuestras charlas y risas, y por llenar esta etapa de anécdotas y momentos que valen oro.
+
+A nivel profesional, me llevo grandes aprendizajes de esta etapa. Por un lado, quiero dar las gracias a mis compañeros y compañeras de AWS por acompañarme durante mi etapa allí y hacer de esos meses una experiencia fantástica.
+
+\color{red}
+Quiero agradecer también a RTVE...
+\color{black}
+
+Por otro lado, y para terminar, gracias de corazón a Carmen y Teresa. Haber podido compaginar este máster con mi contrato en el proyecto IRIS ha marcado un antes y un después. Trabajar codo con codo en un entorno de investigación real me ha dado una perspectiva del mundo académico increíble. Gracias por aterrizar mis ideas y por remar conmigo para que este proyecto saliera adelante; trabajar a vuestro lado ha sido un lujo.
+
+		
+	\vfill
+	
+	\newpage % página en blanco o de cortesía
+	\thispagestyle{empty}
+	\mbox{}
+	
+
+%----------
+%	ÍNDICES
+%----------	
+
+%--
+%Índice general
+%-
+\tableofcontents
+\thispagestyle{fancy}
+
+\newpage % página en blanco o de cortesía
+\thispagestyle{empty}
+\mbox{}
+
+%--
+% Índice de figuras. Si no se incluyen, comenta las líneas siguientes
+%-
+\listoffigures
+\thispagestyle{fancy}
+
+\newpage % página en blanco o de cortesía
+\thispagestyle{empty}
+\mbox{}
+
+%--
+% Índice de tablas. Si no se incluyen, comenta las líneas siguientes
+%-
+\listoftables
+\thispagestyle{fancy}
+
+\newpage % página en blanco o de cortesía
+\thispagestyle{empty}
+\mbox{}
+
+
+%----------
+%	TRABAJO
+%----------	
+\clearpage
+\pagenumbering{arabic} % numeración con múmeros arábigos para el resto de la publicación	
+\renewcommand{\footnotesize}{\tiny}  % Changes footnote size to \scriptsize
+
+    %----------
+    %	INTRODUCTION
+    %----------	
+
+\chapter{Introducción}
+\label{introduction}
+\input{chapters/1 introduction/introduction}
+
+\section{Objetivos y Motivación}
+\label{sec:objectives_motivation}
+\input{chapters/1 introduction/objectives_and_motivation}
+
+\section{Paquetes de Trabajo (PT) y Planificación}
+\label{sec:workmethodology_planning}
+\input{chapters/1 introduction/work_methodology_and_planning}
+
+\section{Estructura}
+\label{sec:thesis_structure}
+\input{chapters/1 introduction/thesis_structure}
+
+\section{Marco Regulatorio}
+\label{sec:reg_framework}
+\input{chapters/1 introduction/reg_framework}
+
+\section{Impacto Socio-Económico}
+\label{sec:socioeconomic_impact}
+\input{chapters/1 introduction/socioeconomic_impact}
+
+\section{Riesgos y Medidas de Mitigación}
+\label{sec:risks}
+\input{chapters/1 introduction/risks}
+
+\section{Contexto de la Investigación}
+\label{sec:research_context}
+\input{chapters/1 introduction/research_context}
+
+
+
+	%----------
+    %	STATE-OF-THE-ART
+    %----------	
+
+\chapter{Estado del Arte}
+\label{state-of-the-art}
+Este capítulo establece el marco teórico y tecnológico sobre el que se fundamenta esta investigación. En primer lugar, se analiza la evolución histórica y actual de la representación de las mujeres en los medios de comunicación, evidenciando la persistencia de sesgos de género. Posteriormente, se realiza una revisión exhaustiva de las metodologías y herramientas desarrolladas para la detección de dichos sesgos, abarcando desde el análisis manual hasta las aproximaciones más recientes basadas en Inteligencia Artificial.
+
+\section{Representación de las Mujeres en los Medios}
+\label{sec:rep_women_media}
+\input{chapters/2 state-of-the-art/rep_women_media}
+
+
+\section{Métodos para la Detección de Sesgos de Género}
+\label{sec:det_sesgos}
+\input{chapters/2 state-of-the-art/det_sesgos}
+
+
+% \section{Hate Speech in Social Media}
+% \label{sec:hs_socialmedia}
+% \input{chapters/2 state-of-the-art/hs_socialmedia}
+
+
+% \section{Hate Speech Detection}
+% \label{sec:hs_detection}
+% \input{chapters/2 state-of-the-art/hs_detection}
+
+
+\section{Justificación de la Solución}
+\label{sec:justification_solution}
+\input{chapters/2 state-of-the-art/justification_solution}
+
+    %----------
+    %	METHODOLOGY
+    %----------	
+
+\chapter{Metodología}
+\label{sec:methodology}
+This Chapter provides a detailed presentation of the different methods, models and procedures that have been used for the elaboration of this thesis.
+
+
+\section{Análisis experto y perspectiva de género}
+\label{sec:experts}
+\input{chapters/3 methodology/iris_analisis_experto}
+
+\subsection{Fuente de datos}
+\label{data_source}
+\input{chapters/3 methodology/iris_corpus}
+
+\subsection{Variables del análisis}
+\label{target_variables_defs}
+\input{chapters/3 methodology/iris_variables}
+
+% Versiones residuales del TFG anterior (corpus de Twitter / #SeAcabó).
+% Se conservan en disco por trazabilidad; no se compilan.
+%\input{chapters/3 methodology/experts}
+%\input{chapters/3 methodology/data_source}
+%\input{chapters/3 methodology/eda_targetvariables}
+
+
+
+\section{Solución tecnológica basada en Inteligencia Artificial}
+\label{sec:ai_solution}
+\input{chapters/3 methodology/ai_solution}
+
+\subsection{Generative AI}
+\label{sec:llms_models}
+\input{chapters/3 methodology/llms_models}
+
+\subsection{Generative Models}
+\label{genai_models}
+\input{chapters/3 methodology/genai_models}
+
+\subsection{Zero-shot}
+\label{zero_shot}
+\input{chapters/3 methodology/zero_shot}
+
+
+    %----------
+    %	IMPLEMENTATION
+    %----------	
+
+\chapter{Implementación}
+\label{implementation}
+This Chapter provides an overview of the implementation of our proposed solution, detailing the process and technical setup, and explaining in detail the data used, preprocessing steps, analysis conducted, and the techniques and approaches employed. To handle the project's computational demands, we utilized a 2020 HP Omen, equipped with an Intel(R) Core(TM) i7-10750H CPU @ 2.60GHz, 16GB of RAM, and an NVIDIA GeForce RTX 2070 with Max-Q Design. Additionally, the source code for the thesis can be found in Appendix~\ref{appendix_code}.
+
+
+
+
+
+
+
+% \section{Data Pre-Processing}
+% \label{sec:data_preprocessing}
+% \input{Plantilla_TFG_ingles_2019/chapters/4 % implementation/data_preprocessing}
+
+% \subsection{Target Variables}
+% \label{target_variables}
+% \input{chapters/4 implementation/preprocess_targetvariables}
+
+% \subsection{Languages}
+% \label{languages}
+% \input{chapters/4 implementation/preprocess_languages}
+
+% \subsection{Lower Casing}
+% \input{chapters/4 implementation/preprocess_lowercasing}
+
+% \subsection{Lexicons}
+% \label{lexicons}
+% \input{chapters/4 implementation/preprocess_lexicons}
+
+% \subsection{Special Tokens}
+% \label{special_tokens}
+% \input{chapters/4 implementation/preprocess_specialtokens}
+
+% \subsection{Stylistic Features}
+% \label{stylistic_features}
+% \input{chapters/4 implementation/preprocess_stylisticfeatures}
+
+% \subsection{View Count}
+% \input{chapters/4 implementation/preprocess_viewcount}
+
+% \subsection{Emojis}
+% \input{chapters/4 implementation/preprocess_emojis}
+
+% \subsection{Stop-words Removal}
+% \input{chapters/4 implementation/preprocess_stopwords}
+
+% \subsection{Stemming}
+% \input{chapters/4 implementation/preprocess_stemming}
+
+
+% \section{Data Balancing}
+% \label{sec:class_imbalance}
+% \input{chapters/4 implementation/class_imbalance}
+
+
+% \section{Data Splitting}
+% \label{sec:splitting}
+% \input{chapters/4 implementation/data_splitting}
+
+
+\section{Arquitectura y diseño agéntico}
+\label{agents}
+\input{chapters/4 implementation/agents}
+
+\section{Prompts y herramientas de análisis}
+\label{prompts}
+\input{chapters/4 implementation/prompts}
+
+\section{Representaciones: RAG, recuperación y similitud}
+\label{rag}
+\input{chapters/4 implementation/rag}
+
+\section{Evaluación de modelos resultantes}
+\label{eval}
+\input{chapters/4 implementation/eval}
+
+\section{Prueba de concepto de aplicabilidad editorial}
+\label{poc}
+\input{chapters/4 implementation/poc}
+
+
+% \section{Classification Models}
+% In the following Section, we will discuss the implementation of the classification models explained in Chapter \ref{sec:methodology}.
+
+% \subsection{Machine Learning}
+% \label{machine_learning_models}
+% \input{chapters/4 implementation/machine_learning}
+
+% \subsection{Deep Learning}
+% \label{implementation_dl}
+% \input{chapters/4 implementation/deep_learning}
+
+% \subsection{Generative AI}
+% \label{implementation_genai}
+% \input{chapters/4 implementation/llms}
+
+
+
+
+
+
+    %----------
+    %	RESULTS AND DISCUSSION
+    %----------	
+
+\chapter{Resultados y Discusión}
+\label{results_and_discussion}
+\input{Plantilla_TFG_ingles_2019/chapters/5 results and discussion/results_and_discussion}
+
+
+\section{Detección de lenguaje sexista con agentes especializados}
+\label{sec:iris_exp21}
+\input{chapters/5 results and discussion/iris_experimento21}
+
+
+% ---------------------------------------------------------------------
+% TODO: las secciones siguientes son residuales del TFG anterior
+% (#SeAcabó / Análisis General / Insultos) y deben eliminarse o
+% reubicarse. Ver Experimentos/TFM/ESTADO_LATEX.md
+% ---------------------------------------------------------------------
+\section{Análisis General}
+\label{sec:ageneral}
+The first task involved the classification of \textit{"Análisis General"} into two classes: "Comentario Positivo" and "Comentario Negativo", as detailed in Section \ref{target_variables}.
+ 
+
+\subsection{Generative AI}
+\newcommand{\insllamathreeonea}{INS-llama3.1-c0-p0en-0.1}
+\newcommand{\insgemmatwoba}{INS-gemma2b-c0-p0en-0.1}
+\newcommand{\insgemmatwobb}{INS-gemma2b-c1-p0en-0.5}
+\newcommand{\insllamathreeoneb}{INS-llama3.1-c1-p0en-0.1}
+\newcommand{\insllamathreeonec}{INS-llama3-c1-p0en-0.1}
+\input{chapters/5 results and discussion/insultos_llms}
+
+
+\section{Discusión}
+\label{sec:discussion}
+\input{Plantilla_TFG_ingles_2019/chapters/5 results and discussion/discussion}
+
+
+    %----------
+    %	CONCLUSIONS AND FUTURE WORK
+    %----------	
+
+\chapter{Conclusiones y Líneas Futuras}
+\input{chapters/6 conclusions and future work/conclusion}
+
+\section{Conclusiones}
+\label{sec:conclusions}
+\input{chapters/6 conclusions and future work/conclusions}
+
+\section{Líneas Futuras}
+\label{sec:futurework_usecases}
+\input{chapters/6 conclusions and future work/futurework_usecases}
+
+%----------
+%	BIBLIOGRAFÍA
+%----------	
+
+%\nocite{*} % Si quieres que aparezcan en la bibliografía todos los documentos que la componen (también los que no estén citados en el texto) descomenta está lína
+
+\clearpage
+\addcontentsline{toc}{chapter}{Bibliografía}
+
+\printbibliography
+
+
+
+%----------
+%	ANEXOS
+%----------	
+\appendix
+\chapter{Presupuesto}
+\label{appendix_budget}
+\pagenumbering{gobble} % Las páginas de los anexos no se numeran
+\input{Plantilla_TFG_ingles_2019/appendix/budget}
+
+\chapter{Código}
+\label{appendix_code}
+\pagenumbering{gobble} % Las páginas de los anexos no se numeran
+\input{Plantilla_TFG_ingles_2019/appendix/source_code}
+
+\chapter{AI Act Compliance}
+\label{appendix_ai_act}
+\pagenumbering{gobble} % Las páginas de los anexos no se numeran
+\input{Plantilla_TFG_ingles_2019/appendix/ai_act}
+
+\chapter{Context}
+\label{appendix_zeroshot_context}
+\pagenumbering{gobble} % Las páginas de los anexos no se numeran
+\input{Plantilla_TFG_ingles_2019/appendix/zeroshot_context}
+
+\chapter{Prompts for Análisis General}
+\label{appendix_zeroshot_prompts_ageneral}
+\pagenumbering{gobble} % Las páginas de los anexos no se numeran
+\input{Plantilla_TFG_ingles_2019/appendix/zeroshot_prompts_ageneral}
+
+\chapter{Prompts for Contenido Negativo}
+\label{appendix_zeroshot_prompts_cnegativo}
+\pagenumbering{gobble} % Las páginas de los anexos no se numeran
+\input{Plantilla_TFG_ingles_2019/appendix/zeroshot_prompts_cnegativo}
+
+\chapter{Prompts for Insultos}
+\label{appendix_zeroshot_prompts_insultos}
+\pagenumbering{gobble} % Las páginas de los anexos no se numeran
+\input{Plantilla_TFG_ingles_2019/appendix/zeroshot_prompts_insultos}
+
+%\chapter* {Appendix X: Performance - Análisis General}
+%\label{appendix_results_ml_ageneral}
+%\pagenumbering{gobble} % Las páginas de los anexos no se numeran
+%\input{Plantilla_TFG_ingles_2019/appendix/performance_ageneral}
+
+%\chapter* {Appendix X: Performance - Contenido Negativo}
+%\label{appendix_results_ml_cnegativo}
+%\pagenumbering{gobble} % Las páginas de los anexos no se numeran
+%\input{Plantilla_TFG_ingles_2019/appendix/performance_cnegativo}
+
+%\chapter* {Appendix X: Performance - Insultos}
+%\label{appendix_results_ml_insultos}
+%\pagenumbering{gobble} % Las páginas de los anexos no se numeran
+%\input{Plantilla_TFG_ingles_2019/appendix/performance_insultos}
+
+%\chapter* {Appendix X: Results - ML - Análisis General}
+%\label{appendix_results_ml_ageneral}
+%\pagenumbering{gobble} % Las páginas de los anexos no se numeran
+%\input{Plantilla_TFG_ingles_2019/appendix/results_ml_ageneral}
+
+%\chapter* {Appendix X: Results - ML - Contenido Negativo}
+%\label{appendix_results_ml_cnegativo}
+%\pagenumbering{gobble} % Las páginas de los anexos no se numeran
+%\input{Plantilla_TFG_ingles_2019/appendix/results_ml_cnegativo}
+
+%\chapter* {Appendix X: Results - ML - Insultos}
+%\label{appendix_results_ml_insultos}
+%\pagenumbering{gobble} % Las páginas de los anexos no se numeran
+%\input{Plantilla_TFG_ingles_2019/appendix/results_ml_insultos}
+
+
+\end{document}

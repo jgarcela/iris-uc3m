@@ -1,0 +1,9 @@
+%----------
+%	ZERO-SHOT MODELS
+%----------	
+
+Another approach that was followed was exploring the zero-shot capabilities of recent open-source generative models such as the ones detailed above. 
+
+Zero-shot learning, formerly introduced in 2008 by \cite{chang-2008} as "dataless classification", is a technique where a model is asked to perform a task without having seen any examples of that task during its training. This is particularly powerful because it allows the model to generalize from its existing knowledge to new tasks without needing additional training data \cite{xian-2017}. For instance, when prompted to identify hate speech, a zero-shot model leverages its pre-trained knowledge to classify text without having seen specific examples of hate speech. This is extremely useful when dealing with small amounts of data but it is also important to point out that we could miss the context of the field of our classification, therefore requiring a human presence for supervising and including specific "expertise on the social context, which goes beyond literal or key-word-based discovery" \cite{hollauer-2023}. In particular, in Appendices~\ref{appendix_zeroshot_prompts_ageneral}-\ref{appendix_zeroshot_prompts_insultos}, we detailed the different prompts employed for Section~\ref{implementation_genai}.
+
+As previously mentioned, one of the significant advantages of zero-shot learning techniques is that they do not require extensive labelled datasets for training, thereby making the process much more efficient and less resource-intensive. These characteristics also ensure that the content remains safe, as the models do not need to see or store training data that might contain sensitive information. Moreover, because these models do not rely on traditional training data, the issue of data balancing becomes less critical, as detailed in Section~\ref{sec:class_imbalance}.

@@ -1,0 +1,228 @@
+%----------
+%	INSULTOS - MACHINE LEARNING
+%----------	
+
+In this case, we have followed a similar approach as in Sections \ref{sec:ageneral_ml} and \ref{sec:cnegativo_ml}, totalling 713 experiments in the span of seven months (13/02/24 - 20/07/24), and defining eight different windows as seen in Figures~\ref{fig:exp_insultos} and ~\ref{fig:exp_insultos_classes}. 
+
+In particular, Figure \ref{fig:exp_insultos} shows the overall trend in weighted average F1 score, and we can see that the global trend line, with an $R^2 = 0$, highlights a constant trend for the changes made in each window. This phenomenon could be due to the fact that in W1 to W6 we obtain relatively good results in terms of weighted average F1-Score, influenced by the class "Genéricos" but it is not consistent across the other two remaining classes, as seen in Table~\ref{tab:window-metrics-insultos} and Figure~\ref{fig:exp_insultos_classes}. However, we appreciate a positive evolution in the final two windows, as in W7 we obtain more consistent F1-Scores for all classes, and in W8 we achieve the best overall results in general and for all classes.
+
+
+\begin{figure}[H]
+	\ffigbox[\FBwidth]
+	{\caption{Distribution of the experiments conducted for "Insultos" over time with the different windows and trend line.}\label{fig:exp_insultos}}
+ % [Aquí ponemos como queremos que aparezca en el índice, sin la referencia]{Aquí como queremos que aparezca en el documento, con la referencia}
+	{\includegraphics[scale=0.25]{Plantilla_TFG_ingles_2019/imagenes/Experiments in _Insultos_ over time.png}}
+\end{figure}
+
+\begin{figure}[H]
+	\ffigbox[\FBwidth]
+	{\caption{Distribution of the experiments conducted for "Insultos" per class over time with the different windows and trend line}\label{fig:exp_insultos_classes}}
+ % [Aquí ponemos como queremos que aparezca en el índice, sin la referencia]{Aquí como queremos que aparezca en el documento, con la referencia}
+	{\includegraphics[scale=0.25]{Plantilla_TFG_ingles_2019/imagenes/Experiments in _Insultos_ over time_ perclass_ trendline.png}}
+\end{figure}
+
+
+\begin{table}[H]
+    \centering
+    \begingroup
+    \small % Change to desired font size
+    \ttabbox[\FBwidth]{
+        \caption{Average Metrics for Each Window}
+        \label{tab:window-metrics-insultos} % Unique label for the table
+    }{
+        \begin{tabularx}{\textwidth}{
+            X
+            >{\centering\arraybackslash}X
+            >{\centering\arraybackslash}X
+            >{\centering\arraybackslash}X
+            >{\centering\arraybackslash}X
+            >{\columncolor{gray!15}\centering\arraybackslash}X % Highlight this column
+            >{\centering\arraybackslash}X
+            >{\centering\arraybackslash}X
+            >{\centering\arraybackslash}X
+        }
+            \hline
+            \rowcolor{gray!30} % Adding a gray color to the header row
+            \textbf{} & \textbf{Acc. (Std.)} & \textbf{Time (s)} & \textbf{W. Avg. Prec.} & \textbf{W. Avg. Rec.} & \textbf{W. Avg. F1-Score} & \textbf{Sex./Mis. F1-Score} & \textbf{Gen. F1-Score} & \textbf{D. Dañar F1-Score} \\
+            \hline
+            W1 & 0.390 (0.059) & 51.545 & 0.377 & 0.390 & 0.357 & 0.291 & 0.467 & 0.345 \\
+            \hline
+            W2 & 0.449 (0.058) & 191.774 & 0.438 & 0.449 & 0.438 & 0.282 & 0.522 & 0.489 \\
+            \hline
+            W3 & 0.402 (0.070) & 143.901 & 0.406 & 0.402 & 0.381 & 0.420 & 0.387 & 0.315 \\
+            \hline
+            W4 & 0.565 (0.036) & 580.884 & 0.585 & 0.565 & 0.550 & 0.207 & 0.703 & 0.102 \\
+            \hline
+            W5 & 0.627 (0.037) & 900.540 & 0.628 & 0.627 & 0.618 & 0.314 & 0.764 & 0.179 \\
+            \hline
+            W6 & 0.563 (0.038) & 700.298 & 0.509 & 0.563 & 0.523 & 0.283 & 0.660 & 0.113 \\
+            \hline
+            W7 & 0.415 (0.070) & 291.499 & 0.390 & 0.415 & 0.385 & 0.370 & 0.474 & 0.238 \\
+            \hline
+            W8 & 0.596 (0.075) & 1030.188 & 0.602 & 0.596 & 0.574 & 0.685 & 0.631 & 0.376 \\
+            \hline
+            \multicolumn{9}{l}{Source: 'Training.xlsx'} \\
+            \hline
+        \end{tabularx}
+    }
+    \endgroup
+\end{table}
+
+
+
+\begin{itemize}
+    \item \textbf{W1: Baseline Establishment (13-12-2023):} In this initial phase, the dataset remained unmodified, and traditional embeddings (Section~\ref{text_encoding_ml}) were used. No balancing techniques were applied, and Logistic Regression and Random Forest were the models tested. The mean performance in terms of weighted F1-Score was 0.357. The 'Genéricos' class had the highest mean F1-Score of 0.467, while 'Sexistas/misóginos' and 'Deseo de Dañar' classes had F1-Scores of 0.291 and 0.345, respectively, as seen in Table~\ref{tab:window-metrics-insultos}.
+
+    \item \textbf{W2: Introduction of XGBoost and TFIDF Embeddings (31-12-2024):} During this period, the dataset and balancing technique (None) remained as in W1, but several significant changes were introduced:
+        \begin{itemize}
+            \item \textbf{Embedding:} TFIDF embeddings were incorporated.
+            \item \textbf{Models:} XGBoost was added to the list of models.
+        \end{itemize}
+        From Table~\ref{tab:window-metrics-insultos} we can see that the mean F1-scores showed a consistent improvement with these modifications unless for 'Sexistas/Misóginos', with the overall accuracy improving to 0.449 and a mean weighted average F1-Score of 0.438. The 'Genéricos' class showed the highest F1-Score of 0.522, while 'Deseo de Dañar' improved to 0.489.
+        
+    \item \textbf{W3: Introduction of Downsampling and Additional Models (29-02-2024):} This phase involved introducing downsampling for data balancing and adding MLP and Naive Bayes models, while maintaining the embeddings of W2:
+        \begin{itemize}
+            \item \textbf{Balancing:} Downsampling was employed.
+            \item \textbf{Models:} MLP and Naive Bayes were added.
+        \end{itemize}
+    In this case, the mean performance metrics revealed a mixed improvement in F1-Scores, with 'Sexistas/misóginos' achieving a notable F1-Score of 0.420. However, 'Genéricos' and 'Deseo de Dañar' showed lower performance with F1-Scores of 0.387 and 0.315, respectively.
+    
+    \item \textbf{W4: Testing of Balancing Techniques (09-03-2024):} This window served to test various balancing techniques with embeddings and models of previous windows:
+        \begin{itemize}
+            \item \textbf{Balancing:} Upsampling, SMOTE, and ADASYN were tested.
+        \end{itemize}
+    From Table \ref{tab:window-metrics-insultos}, the results showed a significant improvement, with the overall mean weighted F1-Score reaching 0.550. The 'Genéricos' class achieved the highest F1-Score of 0.703, although for the other two classes performed poorly with an F1-Score of 0.207 and 0.102.
+    
+    \item \textbf{W5: Introduction of Advanced Embeddings and Preprocessing (07-04-2024):} In this window we introduced advanced embeddings (Section~\ref{text_encoding_dl}) and significant changes to the dataset, and were tested for previous models and with SMOTE technique:
+        \begin{itemize}
+            \item \textbf{Embedding:} Advanced embeddings were added.
+            \item \textbf{Data:} Comprehensive text preprocessing, including normalization and emoji handling, was applied.
+        \end{itemize}
+    This window saw the highest mean overall performance, with an accuracy of 0.627 and a weighted F1-Score of 0.618. The 'Genéricos' class continued to perform well with an F1-Score of 0.764, while 'Sexistas/Misóginos' and 'Deseo de Dañar' showed some improvement to 0.314 and 0.179, respectively.
+
+    \item \textbf{W6: Tokenization and Testing of All Techniques (23-04-2024):} This phase included tokenization and a thorough evaluation of all prior techniques:
+        \begin{itemize}
+            \item \textbf{Data:} Tokens detailed in Section~\ref{special_tokens} were added to the preprocessing pipeline.
+        \end{itemize}
+    In general, the mean performance metrics for this window decreased, with a weighted F1-Score of 0.523.
+
+    \item \textbf{W7: Testing All Modifications Together (04-05-2024):} This window was dedicated to testing all previously introduced modifications
+    The results showed a slight decline across all categories, with a weighted F1-Score of 0.385, while 'Sexistas/Misóginos' and 'Deseo de Dañar' improved marginally to 0.370 and 0.238, respectively.
+
+    \item \textbf{W8: Introduction of OpenAI Embedding (04-07-2024):} In the final phase, OpenAI embedding "text-embedding-3-large" was introduced:
+        \begin{itemize}
+            \item \textbf{Embedding:} OpenAI embedding was added, as introduced in Section~\ref{text_encoding_dl}.
+        \end{itemize}
+    This phase achieved the highest overall mean performance, with an accuracy of 0.596 and a weighted F1-Score of 0.574. The 'Sexistas/misóginos' class had a major improvement and it had the highest F1-Score of 0.685, 'Genéricos' obtained 0.631 while 'Deseo de Dañar' improved to 0.376.
+    
+    
+\end{itemize}
+
+
+
+As results of this analysis, in Table~\ref{tab:insultos-bestmodels} we have collected the best overall models with their correspondent parameters, and in Table~\ref{tab:insultos-bestmodels_metrics} we show the performance metrics for these models. Following the same approach as in Sections~\ref{sec:ageneral_ml} and ~\ref{sec:cnegativo_ml}, for models {\insmajor} and {\insrandom} we are assuming that the Standard Deviation is zero and that for the latter one F1-Score is approximately equal to the probabilities of each class.
+
+\begin{table}[H]
+    \centering
+    \begingroup
+    \small % Change to desired font size
+    \ttabbox[\FBwidth]{
+        \caption{Best Models for \textit{Insultos}}
+        \label{tab:insultos-bestmodels} % Unique label for the table
+    }{
+        \begin{tabularx}{\textwidth}{
+            X  % Name
+            X  % Model
+            X  % Embedding
+            >{\hsize=0.5\hsize\centering\arraybackslas}X  % Embed. Size
+            >{\hsize=0.3\hsize\centering\arraybackslas}X  % CV
+            X  % Balance
+            }
+            \hline
+            \rowcolor{gray!30} % Adding a gray color to the header row
+            \textbf{} & \textbf{Model} & \textbf{Embedding} & \textbf{Embed. Size} & \textbf{CV} & \textbf{Balance} \\
+            \hline
+            \multicolumn{6}{l}{\textbf{Näive Models}} \\
+            \hline
+            \insmajor & - & - & - & - & - \\
+            \hline
+            \insrandom & - & - & - & - & - \\
+            \hline
+            \multicolumn{6}{l}{\textbf{Finetuned Models}} \\
+            \hline
+            \insmlptea & MLP & text-embedding-3-large & - & 5 & ADASYN \\
+            \hline
+            \inslrtes & Logistic Regression & text-embedding-3-large & - & 5 & SMOTE \\
+            \hline
+            \insxgbros & XGBoost & Robertuito & 500 & 5 & SMOTE \\
+            \hline
+            \insrfros & Random Forest & Robertuito & 500 & 5 & SMOTE \\
+            \hline
+            \inslrtea & Logistic Regression & text-embedding-3-large & - & 5 & ADASYN \\
+            \hline
+            \multicolumn{6}{l}{Source: 'Training.xlsx'} \\
+            \hline
+        \end{tabularx}
+    }
+    \endgroup
+\end{table}
+
+
+
+\begin{table}[H]
+    \centering
+    \begingroup
+    \small % Change to desired font size
+    \ttabbox[\FBwidth]{
+        \caption{Metrics for the Best Models for \textit{Insultos}}
+        \label{tab:insultos-bestmodels_metrics} % Unique label for the table
+    }{
+        \begin{tabularx}{\textwidth}{
+            X
+            >{\centering\arraybackslash}X
+            >{\columncolor{gray!15}\centering\arraybackslash}X % Highlight this column
+            >{\centering\arraybackslash}X
+            >{\centering\arraybackslash}X
+            >{\centering\arraybackslash}X
+        }
+            \hline
+            \rowcolor{gray!30} % Adding a gray color to the header row
+            \textbf{} & \textbf{Acc. (Std.)} & \textbf{W. Avg. F1-Score} & \textbf{Sex./Mis. F1-Score} & \textbf{Genéricos F1-Score} & \textbf{D. Dañar F1-Score} \\
+            \hline
+            \multicolumn{6}{l}{\textbf{Näive Models}} \\
+            \hline
+            \insmajor &  0.485 (0.000) & 0.485 & 0.000 & 1.000 & 0.000 \\
+            \hline
+            \insrandom & 0.344 (0.000) & 0.344 & 0.233 & 0.485 & 0.282 \\
+            \hline
+            \multicolumn{6}{l}{\textbf{Finetuned Models}} \\
+            \hline
+            \insmlptea & 0.738 (0.047) & 0.740 & 0.889 & 0.744 & 0.609 \\
+            \hline
+            \inslrtes & 0.738 (0.061) & 0.732 & 0.842 & 0.772 & 0.571 \\
+            \hline
+            \insxgbros & 0.723 (0.059) & 0.715 & 0.222 & 0.852 & 0.462 \\
+            \hline
+            \insrfros & 0.699 (0.065) & 0.696 & 0.222 & 0.833 & 0.429 \\
+            \hline
+            \inslrtea & 0.690 (0.067) & 0.683 & 0.842 & 0.727 & 0.476 \\
+            \hline
+            \multicolumn{6}{l}{Source: 'Training.xlsx'} \\
+            \hline
+        \end{tabularx}
+    }
+    \endgroup
+\end{table}
+
+
+Unlike in Section~\ref{sec:ageneral_ml} and Section~\ref{sec:cnegativo_ml}, where we were interested in achieving high performance in one specific class due to the dependency of subsequent analyses on that particular class, in this case our objective here is to obtain high metrics across all classes. Therefore, we selected model \textbf{\insmlptea} as the best performing model for this task, with weighted average F1-Score of 0.74 and surpassing 0.6 in all classes. Moreover, it demonstrated the lowest standard deviation among the models listed in Table~\ref{tab:insultos-bestmodels_metrics}, and significant improvements in all metrics compared to näive models {\insmajor} and {\insrandom}.
+
+Additionally, Figure~\ref{fig:exp_insultos_metrics_best_model} illustrates that the model performs particularly well in the 'Genéricos' category with an F1-Score of 0.74 and in the 'Sexistas/misóginos' category with an F1-Score of 0.89. However, the model shows weaker performance in the 'Deseo de Dañar' category, achieving a lower F1-Score of 0.609. Specifically, the model frequently misclassifies 'Deseo de Dañar' and 'Sexistas/misóginos' instances as 'Genéricos'. This misclassification might be attributed to the broad and general nature of the 'Genéricos' class, which is also the majority class in the dataset.
+
+
+\begin{figure}[H]
+	\ffigbox[\FBwidth]
+	{\caption{Confusion Matrix for the best overall model (\textbf{\insmlptea}) of the Machine Learning experiments conducted for "Insultos"}\label{fig:exp_insultos_metrics_best_model}}
+ % [Aquí ponemos como queremos que aparezca en el índice, sin la referencia]{Aquí como queremos que aparezca en el documento, con la referencia}
+	{\includegraphics[scale=0.65]{Plantilla_TFG_ingles_2019/imagenes/Experiments in _Insultos_ best_model.png}}
+\end{figure}

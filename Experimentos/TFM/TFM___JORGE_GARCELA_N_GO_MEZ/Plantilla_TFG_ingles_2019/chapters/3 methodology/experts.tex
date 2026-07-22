@@ -1,0 +1,37 @@
+%----------
+%	CLASSIFICATION PROCEDURE
+%----------	
+
+As explained in Section~\ref{sec:objectives_motivation}, the main objective of this thesis is to correctly assist in the detection of hate speech against women in social media, especially in the \textit{"\#SeAcabó"} context. Following the nature of our dataset explained in Section~\ref{target_variables}, the work methodology is divided into three complementary hierarchical classification tasks that are interconnected: "Análisis General", "Contenido Negativo" and "Insultos", as depicted in Figure~\ref{fig:methodology_classification_tasks}. In particular, the "Contenido Negativo" task is derived from the subset of tweets that have been labelled as "Comentario Negativo" in the "Análisis General" task, narrowing down the focus to tweets whose content is harmful. Moreover, the "Insultos" task focuses on identifying insults within the tweets classified as "Contenido Negativo". It is important to note that while all tweets of the "Insultos" task are also labelled as "Contenido Negativo", not all "Contenido Negativo" tweets contain insults. 
+
+
+\begin{figure}[H]
+	\ffigbox[\FBwidth]
+	{\caption{Diagram of the Different Classification Tasks with the Labels Considered in this Work}\label{fig:methodology_classification_tasks}} 
+ % [Aquí ponemos como queremos que aparezca en el índice, sin la referencia]{Aquí como queremos que aparezca en el documento, con la referencia}
+	{\includegraphics[scale=0.28]{Plantilla_TFG_ingles_2019/imagenes/TFG Pipeline-Classification Tasks.drawio.pdf}}
+\end{figure}
+
+
+Therefore, we can define the classification procedure for the three different problems as in Figure \ref{fig:methodology}. It is important to notice that although the steps for these tasks are mainly shared between the different experiments, some steps could be different and may be included or replaced with others (for example, not including Data Splitting in zero-shot learning).
+
+
+\begin{figure}[H]
+	\ffigbox[\FBwidth]
+	{\caption{Diagram of the General Procedure for the Different Classification Tasks}\label{fig:methodology}} 
+ % [Aquí ponemos como queremos que aparezca en el índice, sin la referencia]{Aquí como queremos que aparezca en el documento, con la referencia}
+	{\includegraphics[scale=0.35]{Plantilla_TFG_ingles_2019/imagenes/TFG Pipeline-TFG.drawio.pdf}}
+\end{figure}
+
+
+The first step in this procedure involves a thorough data analysis to understand the structure, nature, and implications of the different columns within our dataset. This includes preprocessing tasks such as cleaning the data, normalizing text, and extracting meaningful features. These modifications are explained in more detail in Section~\ref{sec:data_preprocessing}.
+
+A fundamental challenge in NLP is converting unstructured text into a structured form that algorithms can interpret. This process is crucial because, unlike humans, machines do not understand text directly. Therefore, the next step in our classification problem includes state-of-the-art techniques for transforming text into vectors, such as vectorization and word embeddings.
+
+One difficulty of hate speech detection is that as stated in \cite{cao-2020}, training datasets for this task are highly imbalanced. This was also our case so we decided to apply different data balancing techniques, such as random over-sampling (ROS), SMOTE and ADASYN, to overcome this issue. More in-depth details are found in Section~\ref{sec:class_imbalance}.
+
+As seen in Section~\ref{sec:hs_detection}, the initial approaches in text classification tasks typically involve traditional machine learning models. In this thesis, we have decided to use the following ML models (Random Forest, Logistic Regression, Extreme Gradient Boosting, Maximum Layer Perceptron and naive Bayes) as they are popular choices among researchers and practitioners across various fields.  While these models can achieve substantial accuracy, their main limitation lies in the inability to capture the context and semantic meanings in sequences of words. This is highly important, given the limitation of available data for the \textit{"\#SeAcabó"} context, as detailed in Section~\ref{target_variables}.
+
+To overcome these limitations of traditional models and following Figure \ref{fig:ai_landscape}, deep learning with Transformer-based models were employed. These involved models such as BERT (Bidirectional Encoder Representations from Transformers) \cite{devlin-2018} and the ones based in this architecture, like RoBERTa \cite{liu-2019}, BETO \cite{cañete-2023} or XLM-RoBERTa \cite{conneau-2020}. These Large Language Models have revolutionized the field by leveraging vast amounts of data and advanced architectures to understand context at a deeper level.
+
+Recently, the latest advancements in the field have focused on generative models and their zero-shot learning capabilities. These cutting-edge models, such as the ones developed by OpenAI and other open-source models, such as Gemma, Llama 3, and Mistral, have significantly enhanced the landscape of NLP. By integrating these LLMs, we can effectively compare ML, DL, and GenAI approaches, as well as test their applicability in our particular context. 

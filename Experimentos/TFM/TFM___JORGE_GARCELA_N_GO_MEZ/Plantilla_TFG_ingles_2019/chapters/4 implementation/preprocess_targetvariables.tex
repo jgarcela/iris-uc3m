@@ -1,0 +1,114 @@
+%----------
+%	DATA PRE-PROCESSING - TARGET VARIABLES
+%----------	
+
+In Tables~\ref{tab:ageneral-support},~\ref{tab:cnegativo-support},~\ref{tab:insultos-support} we can see the support for each label in each of the three target variables that we are considering. Notice that it has been considered to remove low-represented classes in each category, in order to facilitate the classification. In particular, for AG we have discarded "Comentario Neutro", in CNEG "Sexualización/Objetivización", "Estereotipos de Género" and "Violencia de Género", and for INS we have added "Sarcasmo", "Imposición" and "Objetivización Sexual" to "Genéricos".
+
+
+\begin{table}[H]
+    \centering
+    \begingroup
+    \small % Change to desired font size
+    \ttabbox[\FBwidth]{
+        \caption{Support of AG Before and After Preprocessing}
+        \label{tab:ageneral-support} % Etiqueta única para la tabla
+    }{
+        \begin{tabularx}{\textwidth}{
+            >{\hsize=1.5\hsize}X
+            >{\hsize=0.75\hsize\centering\arraybackslash}X
+            >{\hsize=0.75\hsize\centering\arraybackslash}X
+        }
+            \hline
+            \rowcolor{gray!30} % Adding a gray color to the header row
+            \textbf{Análisis General} & \textbf{Count Before} & \textbf{Count After} \\
+            \hline
+            Comentario Positivo & 2117 & 1283 \\
+            \hline
+            Comentario Negativo & 435 & 367 \\
+            \hline
+            Comentario Neutro & 120 & - \\
+            \hline
+            \textbf{Total} & \textbf{2627} & \textbf{1650} \\
+            \hline
+        \end{tabularx}
+    }
+    \endgroup
+\end{table}
+
+
+\begin{table}[H]
+    \centering
+    \begingroup
+    \small % Change to desired font size
+    \ttabbox[\FBwidth]{
+        \caption{Support of CNEG Before and After Preprocessing}
+        \label{tab:cnegativo-support} % Etiqueta única para la tabla
+    }{
+        \begin{tabularx}{\textwidth}{
+            >{\hsize=1.5\hsize}X
+            >{\hsize=0.75\hsize\centering\arraybackslash}X
+            >{\hsize=0.75\hsize\centering\arraybackslash}X
+        }
+            \hline
+            \rowcolor{gray!30} % Adding a gray color to the header row
+            \textbf{Contenido Negativo} & \textbf{Count Before} & \textbf{Count After} \\
+            \hline
+            Desprestigiar Deportista Autora & 180 & 148 \\
+            \hline
+            Desprestigiar Víctima & 89 & 71 \\
+            \hline
+            Desprestigiar Acto & 81 & 73 \\
+            \hline
+            Insultos & 70 & 60 \\
+            \hline
+            Sexualización / Objetivización & 8 & - \\
+            \hline
+            Estereotipos de Género & 6 & - \\
+            \hline
+            Violencia de Género & 1 & - \\
+            \hline
+            \textbf{Total} & \textbf{435} & \textbf{352} \\
+            \hline
+        \end{tabularx}
+    }
+    \endgroup
+\end{table}
+
+
+\begin{table}[H]
+    \centering
+    \begingroup
+    \small % Change to desired font size
+    \ttabbox[\FBwidth]{
+        \caption{Support of INS Before and After Preprocessing}
+        \label{tab:insultos-support} % Etiqueta única para la tabla
+    }{
+        \begin{tabularx}{\textwidth}{
+            >{\hsize=1.5\hsize}X
+            >{\hsize=0.75\hsize\centering\arraybackslash}X
+            >{\hsize=0.75\hsize\centering\arraybackslash}X
+        }
+            \hline
+            \rowcolor{gray!30} % Adding a gray color to the header row
+            \textbf{Insultos} & \textbf{Count Before} & \textbf{Count After} \\
+            \hline
+            Deseo de Dañar & 67 & 58 \\
+            \hline
+            Genéricos & 64 & 100 \\
+            \hline
+            Sexistas / Misóginos & 53 & 48 \\
+            \hline
+            Sarcasmo & 31 & - \\
+            \hline
+            Imposición & 13 & - \\
+            \hline
+            Objetivización Sexual & 4 & - \\
+            \hline
+            \textbf{Total} & \textbf{232} & \textbf{206} \\
+            \hline
+        \end{tabularx}
+    }
+    \endgroup
+\end{table}
+
+\newpage

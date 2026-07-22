@@ -1,0 +1,169 @@
+%----------
+%	CONTENIDO NEGATIVO - DEEP LEARNING
+%----------	
+
+
+Following the approach defined in Section~\ref{implementation_dl}, we considered 15 total experiments for the Deep Learning approach in this task. However, the RoBERTuito model for "Full Context" ({\cnegfcrobertuito}) did not execute entirely due to exceeding its context window.
+
+From Table~\ref{tab:cnegativo-dl-bestmodels_metrics} and Figure~\ref{fig:exp_cnegativo_dl_max_f1}, we can appreciate that the presence of context did not always lead to better performance across all classes. Specifically, the "Tweet Context" and "Full Context" settings showed a decrease in performance for several classes, with "Desprestigiar Deportista Autora" being the only class that maintained a relatively high F1-Score across all contexts, likely due to being the majority class. Moreover, for "Desprestigiar Víctima" we can see that we achieved the highest F1-Score in "Full Context" for model {\cnegfcroberta}, but for the other models, we obtained zero performance. Notably, the "Desprestigiar Acto" and "Insultos" classes saw an increase of F1-Score in "Tweet Context", but a decline when moving to "Full Context", suggesting that adding more contextual information, in this case, may have introduced noise or complexity to the models. 
+
+
+% Max Weighted F1
+\begin{figure}[H]
+	\ffigbox[\FBwidth]
+	{\caption{Maximum Weighted F1-Score Achieved across all DL Models for Each Type of Context within "Contenido Negativo"}\label{fig:exp_cnegativo_dl_max_f1}}
+ % [Aquí ponemos como queremos que aparezca en el índice, sin la referencia]{Aquí como queremos que aparezca en el documento, con la referencia}
+	{\includegraphics[scale=0.17]{Plantilla_TFG_ingles_2019/imagenes/DL_Experiments in _ContenidoNegativo_ weightedF1_max.pdf}}
+\end{figure}
+
+
+\begin{table}[H]
+    \centering
+    \begingroup
+    \scriptsize % Change to desired font size
+    \ttabbox[\FBwidth]{
+        \caption{CNEG Evaluation Metrics for the DL Models after 10 Epochs}
+        \label{tab:cnegativo-dl-bestmodels_metrics} % Unique label for the table
+    }{
+        \begin{tabularx}{\textwidth}{
+            X
+            >{\columncolor{gray!15}\centering\arraybackslash}X % Highlight this column
+            >{\centering\arraybackslash}X
+            >{\centering\arraybackslash}X
+            >{\centering\arraybackslash}X
+            >{\centering\arraybackslash}X
+        }
+            \hline
+            \rowcolor{gray!30} % Adding a gray color to the header row
+            \textbf{} & \textbf{W. Avg. F1-Score} & \textbf{D. Vic. F1-Score} & \textbf{D. Act. F1-Score} & \textbf{Ins. F1-Score} & \textbf{D. D. Aut. F1-Score}\\
+            \hline
+            \multicolumn{6}{l}{\textbf{Without Context}} \\
+            \hline
+            \cnegscroberta & 0.498 & 0.640 & 0.160 & 0.381 & 0.648 \\
+            \hline
+            \cnegscbeto & 0.483 & 0.412 & 0.375 & 0.444 & 0.586 \\
+            \hline
+            \cnegscbertmulti & 0.474 & 0.296 & 0.222 & 0.353 & 0.732 \\
+            \hline
+            \cnegscxlmroberta & 0.419 & 0.444 & 0.364 & 0.000 & 0.603 \\
+            \hline
+            \cnegscrobertuito & 0.407 & 0.235 & 0.320 & 0.125 & 0.643 \\
+            \hline
+            
+            \multicolumn{6}{l}{\textbf{Tweet Context}} \\
+            \hline
+            \cnegtcbeto & 0.531 & 0.417 & 0.471 & 0.375 & 0.676 \\
+            \hline
+            \cnegtcroberta & 0.519 & 0.545 & 0.250 & 0.455 & 0.667 \\
+            \hline
+            \cnegtcrobertuito & 0.516 & 0.421 & 0.400 & 0.316 & 0.568 \\
+            \hline
+            \cnegtcbertmulti & 0.388 & 0.240 & 0.267 & 0.211 & 0.588 \\
+            \hline
+            \cnegtcxlmroberta & 0.251 & 0.000 & 0.000 & 0.000 & 0.594 \\
+            \hline
+            
+            \multicolumn{6}{l}{\textbf{Full Context}} \\
+            \hline
+            \cnegfcroberta & 0.442 & 0.706 & 0.148 & 0.333 & 0.510 \\
+            \hline
+            \cnegfcbeto & 0.418 & 0.000 & 0.303 & 0.316 & 0.711 \\
+            \hline
+            \cnegfcbertmulti & 0.349 & 0.000 & 0.240 & 0.000 & 0.706 \\
+            \hline
+            \cnegfcxlmroberta & 0.251 & 0.000 & 0.000 & 0.000 & 0.594 \\
+            \hline
+            \cnegfcrobertuito & - & - & - & - & - \\
+            \hline
+            
+            \multicolumn{6}{l}{Source: 'DL2\_Contenido Negativo.xlsx', 'DL2\_Training\_Contenido Negativo.xlsx'} \\
+            \hline
+        \end{tabularx}
+    }
+    \endgroup
+\end{table}
+
+
+
+
+%\begin{table}[H]
+%    \centering
+%    \begingroup
+%    \tiny % Change to desired font size
+%    \ttabbox[\FBwidth]{
+%        \caption{CNEG Metrics for the Models after 10 Epochs}
+%        \label{tab:cnegativo-dl-bestmodels_metrics} % Unique label for the table
+%    }{
+%        \begin{tabularx}{\textwidth}{
+%            X
+%            >{\columncolor{gray!15}\centering\arraybackslash}X % Highlight this column
+%            >{\columncolor{gray!15}\centering\arraybackslash}X % Highlight this column
+%            >{\centering\arraybackslash}X
+%            >{\centering\arraybackslash}X
+%            >{\centering\arraybackslash}X
+%            >{\centering\arraybackslash}X
+%            >{\centering\arraybackslash}X
+%            >{\centering\arraybackslash}X
+%            >{\centering\arraybackslash}X
+%            >{\centering\arraybackslash}X
+%        }
+%            \hline
+%            \rowcolor{gray!30} % Adding a gray color to the header row
+%            \textbf{} & \textbf{Train. Weighted. F1-Score} & \textbf{Eval. Weighted F1-Score} & %\textbf{Train. D. Vic. F1-Score} &  \textbf{Eval. D. Vic. F1-Score} & \textbf{Train. D. Act. F1-Score} %& \textbf{Eval. D. Act. F1-Score} & \textbf{Train. Ins. F1-Score} & \textbf{Eval. Ins. F1-Score} & %\textbf{Train. D. D. Aut. F1-Score} & \textbf{Eval. D. D. Aut. F1-Score}\\
+%            \hline
+%            \multicolumn{11}{l}{\textbf{Without Context}} \\
+%            \hline
+%            \cnegscbeto & 0.459 & 0.483 & 0.500 & 0.412 & 0.267 & 0.375 & 0.200 & 0.444 & 0.645 & 0.586 %\\
+%            \hline
+%            \cnegscroberta & 0.660 & 0.498 & 0.769 & 0.640 & 0.400 & 0.160 & 0.500 & 0.381 & 0.811 & %0.648 \\
+%            \hline
+%            \cnegscbertmulti & 0.485 & 0.474 & 0.533 & 0.296 & 0.222 & 0.222 & 0.286 & 0.353 & 0.683 & %0.732 \\
+%            \hline
+%            \cnegscrobertuito & 0.586 & 0.407 & 0.600 & 0.235 & 0.333 & 0.320 & 0.667 & 0.125 & 0.683 & %0.643 \\
+%            \hline
+%            \cnegscxlmroberta & 0.449 & 0.419 & 0.522 & 0.444 & 0.200 & 0.364 & 0.000 & 0.000 & 0.727 & %0.603 \\
+%            \hline
+%            
+%            \multicolumn{11}{l}{\textbf{Tweet Context}} \\
+%            \hline
+%            \cnegtcroberta & 0.762 & 0.519 & 0.750 & 0.545 & 0.667 & 0.250 & 0.667 & 0.455 & 0.857 & %0.667 \\
+%            \hline
+%            \cnegtcbeto & 0.543 & 0.531 & 0.363 & 0.417 & 0.333 & 0.471 & 0.545 & 0.375 & 0.737 & 0.676 %\\
+%            \hline
+%            \cnegtcrobertuito & 0.484 & 0.516 & 0.400 & 0.421 & 0.167 & 0.400 & 0.545 & 0.316 & 0.667 & %0.568 \\
+%            \hline
+%            \cnegtcbertmulti & 0.416 & 0.388 & 0.400 & 0.240 & 0.167 & 0.267 & 0.000 & 0.211 & 0.722 & %0.588 \\
+%            \hline
+%            \cnegtcxlmroberta & 0.245 & 0.251 & 0.000 & 0.000 & 0.000 & 0.000 & 0.000 & 0.000 & 0.588 & %0.594 \\
+%            \hline
+%            
+%            \multicolumn{11}{l}{\textbf{Full Context}} \\
+%            \hline
+%            \cnegfcroberta & 0.556 & 0.442 & 0.625 & 0.706 & 0.307 & 0.148 & 0.500 & 0.333 & 0.645 & %0.510 \\
+%            \hline
+%            \cnegfcbeto & 0.401 & 0.418 & 0.000 & 0.000 & 0.421 & 0.303 & 0.000 & 0.316 & 0.737 & 0.711 %\\
+%            \hline
+%            \cnegfcbertmulti & 0.464 & 0.349 & 0.727 & 0.000 & 0.200 & 0.240 & 0.000 & 0.000 & 0.667 & %0.706 \\
+%            \hline
+%            \cnegfcxlmroberta & 0.245 & 0.251 & 0.000 & 0.000 & 0.000 & 0.000 & 0.000 & 0.000 & 0.588 & %0.594 \\
+%            \hline
+%            \cnegfcrobertuito & - & - & - & - & - & - & - & - & - & - \\
+%            \hline
+%            
+%            \multicolumn{11}{l}{Source: 'DL2\_Contenido Negativo.xlsx', 'DL2\_Training\_Contenido Negativo.xlsx'} \\
+%            \hline
+%        \end{tabularx}
+%    }
+%    \endgroup
+%\end{table}
+
+
+Similarly as in Section~\ref{sec:cnegativo_ml}, we have decided to choose \textbf{\cnegtcbeto} as the best DL model for "Contenido Negativo" because it scored the highest Weighted F1-Score 0.531, with also good performance for the classes with 0.417, 0.471, 0.375 and 0.676 for "Desprestigiar Víctima", "Desprestigiar Acto", "Insultos" and "Desprestigiar Deportista Autora", respectively. In particular, in Figure~\ref{fig:exp_cnegativo_dl_bestmodel} we can see in more detail the confusion matrix for this model. From this figure, we notice that the model behaved well in predicting "Desprestigiar Deportista Autora", with a high true positive rate of 0.767 (23 correct out of 30 total instances). However, we can also see that there was a tendency to confuse "Desprestigiar Acto" with "Desprestigiar Deportista Autora" and "Desprestigiar Víctima". Moreover, the misclassification between these two classes was somewhat expected and occurred in a reasonable manner, as the categories share similar meanings.
+
+% Best Model
+\begin{figure}[H]
+	\ffigbox[\FBwidth]
+	{\caption{Confusion Matrix for the Best Overall Model (\textbf{\cnegtcroberta}) of the DL Experiments for "Contenido Negativo"}\label{fig:exp_cnegativo_dl_bestmodel}}
+ % [Aquí ponemos como queremos que aparezca en el índice, sin la referencia]{Aquí como queremos que aparezca en el documento, con la referencia}
+	{\includegraphics[scale=0.11]{Plantilla_TFG_ingles_2019/imagenes/DL_Experiments in _ContenidoNegativo_ best_model.pdf}}
+\end{figure}

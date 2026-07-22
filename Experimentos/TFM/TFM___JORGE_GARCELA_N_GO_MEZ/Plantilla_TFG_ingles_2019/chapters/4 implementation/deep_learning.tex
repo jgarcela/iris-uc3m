@@ -1,0 +1,60 @@
+%----------
+%	MODELS - DEEP LEARNING
+%----------	
+
+In this Section, the implementation of deep learning models is described, which is illustrated in detail in the following picture:
+
+\begin{figure}[H]
+	\ffigbox[\FBwidth]
+	{\caption{Diagram of the Implementation of DL Models}\label{fig:dl_models_implementation}} 
+ % [Aquí ponemos como queremos que aparezca en el índice, sin la referencia]{Aquí como queremos que aparezca en el documento, con la referencia}
+	{\includegraphics[scale=0.31]{Plantilla_TFG_ingles_2019/imagenes/TFG Pipeline-DL.drawio.pdf}}
+\end{figure}
+
+
+Figure \ref{fig:dl_models_implementation} illustrates the workflow followed when utilizing deep learning models. The first step of the implementation, which involved the pre-processing of the data, was equivalent to the one performed when using machine learning models in Section~\ref{machine_learning_models}. Following the same approach, we have included special tokens as defined in Section~\ref{special_tokens}, which were added to the data using a custom function to ensure their inclusion in the classification model. Before proceeding to text encoding, we incorporated a contextual information approach, as described in Section~\ref{contextual_information}, to improve model performance by providing relevant context for the classification task. Subsequently, we used the HuggingFace library to encode the preprocessed text, employing the text encoding techniques explained in Section~\ref{text_encoding_dl}, and the same label mapping as in Section~\ref{machine_learning_models}. Once the data was preprocessed and encoded, it was split into training, validation, and evaluation sets, as detailed in Section~\ref{sec:splitting}. The next step involved loading various pre-trained models using the HuggingFace library, as outlined in Section~\ref{transformers_models}. These models were optimized through training and validation across 10 epochs, with different hyperparameters, as detailed in Table~\ref{table:dl_hyperparameters}. Finally, the results of these experiments were stored in two separate Excel files: \texttt{"DL2\_Training\_\{Task\}.xlsx"} and \texttt{"DL2\_\{Task\}.xlsx"} (Appendix~\ref{appendix_code}). The first file logged performance metrics for each epoch, while the second provided a general summary of the experiments. It is important to note that the final results correspond to the last epoch, ensuring consistent comparisons across all models and allowing us to track model improvements over time.
+
+
+\begin{table}[H]
+    \centering
+    \begingroup
+    \scriptsize % Reduce the font size
+    \ttabbox[\FBwidth]{
+        \caption{Hyperparameters for DL Models}
+        \label{table:dl_hyperparameters} % Unique label for the table
+    }{
+        \begin{tabularx}{\textwidth}{
+            >{\hsize=1\hsize}X
+            >{\hsize=1\hsize\centering\arraybackslash}X
+        }
+            \hline
+            \rowcolor{gray!30} % Adding a gray color to the header row
+            \textbf{Hyperparameter} & \textbf{Value} \\ \hline
+            \texttt{Padding} & \texttt{True} \\ \hline
+            \texttt{Truncation} & \texttt{True} \\ \hline
+            \texttt{Max Length} & \texttt{512} \\ \hline
+            \texttt{Number of Training Epochs} & \texttt{10} \\ \hline
+            \texttt{Per Device Training Batch Size} & \texttt{16} \\ \hline
+            \texttt{Per Device Evaluation Batch Size} & \texttt{8} \\ \hline
+            \texttt{Warmup Steps} & \texttt{500} \\ \hline
+            \texttt{Weight Decay} & \texttt{0.01} \\ \hline
+            \texttt{Logging Steps }& \texttt{10} \\ \hline
+            \texttt{Learning Rate Scheduler Type} & \texttt{Cosine} \\ \hline
+        \end{tabularx}
+    }
+    \endgroup
+\end{table}
+
+
+Due to performance considerations, only a specific set of parameters was tested to ensure that all experiments could be completed within a reasonable timeframe. Figure~\ref{fig:dl_models_total_performance} illustrates the total time required to run the complete set of experiments for each classification task.
+Notice that only 15 experiments (5 models and 3 types of contexts) were performed per task, although the actual number of successful experiments varied slightly: 11 for "Análisis General", 14 for "Contenido Negativo" and 14 for "Insultos". The reason behind that is that the computational cost for the RoBERTa model in "Full Context" was so high that it caused the kernels to crash, preventing further progress. Additionally, for the RoBERTuito model, the context window was exceeded in the "Full Context" for all tasks and in the "Tweet Context" for "Análisis General".
+
+
+\begin{figure}[H]
+	\ffigbox[\FBwidth]
+	{\caption{Total Performance Time (in hours) per Classification Task for DL Experiments}\label{fig:dl_models_total_performance}} 
+ % [Aquí ponemos como queremos que aparezca en el índice, sin la referencia]{Aquí como queremos que aparezca en el documento, con la referencia}
+	{\includegraphics[scale=0.25]{Plantilla_TFG_ingles_2019/imagenes/DL_total_performance_time.pdf}}
+\end{figure}
+
+

@@ -1,0 +1,151 @@
+%----------
+%	ANALISIS GENERAL - DEEP LEARNING
+%----------	
+
+The second approach followed in this task was applying Deep Learning models, as defined in Section~\ref{sec:dl_models}. We have considered a total of 15 experiments of 5 different models and 3 different types of contexts, following the approach defined in Section~\ref{implementation_dl}. However, as presented in Table~\ref{tab:ageneral-dl-bestmodels_metrics} for "Tweet Context" and "Full Context" there were some models that were not able to be executed entirely. This is due to insufficient computational resources from our computer in the case of RoBERTa (\agfcroberta), and due to exceeding the context window of RoBERTuito ({\agscrobertuito}, {\agtcrobertuito} and {\agfcrobertuito}).
+
+In Table~\ref{tab:ageneral-dl-bestmodels_metrics} we can see a summary of all the models and their metrics, grouped per context type. From this table and Figure~\ref{fig:exp_ageneral_dl_max_f1} we can see that the performance between "Without Context" and "Tweet Context" was very similar. The reason for that is that, as explained in Section~\ref{contextual_information}, "Tweet Context" only added the context of the tweet in Figure~\ref{tweet_seacabo}, hence not adding much information. However, we see that in "Full Context" for identifying negative comments it offered a significant performance boost, achieving a "Comentario Negativo" F1-Score of 0.815, and 0.944 for "Comentario Positivo". Moreover, in terms of model performance, we can see that the \textit{'xlm-roberta-base'} model consistently performed well across all contexts ({\agscxlmroberta}, {\agtcxlmroberta} and {\agfcxlmroberta}), with others showing similar trends. Therefore, we can conclude that including context generally improves performance but the choice of model is also beneficial.
+
+% Max Weighted F1
+\begin{figure}[H]
+	\ffigbox[\FBwidth]
+	{\caption{Maximum Weighted F1-Score Achieved across all DL Models for Each Type of Context within "Análisis General"}\label{fig:exp_ageneral_dl_max_f1}}
+ % [Aquí ponemos como queremos que aparezca en el índice, sin la referencia]{Aquí como queremos que aparezca en el documento, con la referencia}
+	{\includegraphics[scale=0.25]{Plantilla_TFG_ingles_2019/imagenes/DL_Experiments in _Análisis General_ weightedF1_max.pdf}}
+\end{figure}
+
+\begin{table}[H]
+    \centering
+    \begingroup
+    \small % Change to desired font size
+    \ttabbox[\FBwidth]{
+        \caption{AG Evaluation Metrics for the DL Models after 10 Epochs}
+        \label{tab:ageneral-dl-bestmodels_metrics} % Unique label for the table
+    }{
+        \begin{tabularx}{\textwidth}{
+            X
+            >{\centering\arraybackslash}X
+            >{\centering\arraybackslash}X
+            >{\columncolor{gray!15}\centering\arraybackslash}X % Highlight this column
+        }
+            \hline
+            \rowcolor{gray!30} % Adding a gray color to the header row
+            \textbf{} & \textbf{W. Avg. F1-Score} & \textbf{C. Pos. F1-Score} & \textbf{C. Neg. F1-Score}\\
+            \hline
+            \multicolumn{4}{l}{\textbf{Without Context}} \\
+            \hline
+            \agscxlmroberta & 0.912 & 0.946 & 0.794  \\
+            \hline
+            \agscbeto & 0.902 & 0.940 & 0.768 \\
+            \hline
+            \agscbertmulti & 0.892 & 0.929 & 0.761 \\
+            \hline
+            \agscroberta & 0.882 & 0.927 & 0.719 \\
+            \hline
+            \agscrobertuito & - & - & - \\
+            \hline
+            \multicolumn{5}{l}{\textbf{Tweet Context}} \\
+            \hline
+            \agtcxlmroberta & 0.915 & 0.944 & 0.813 \\
+            \hline
+            \agtcbertmulti & 0.912 & 0.943 & 0.803 \\
+            \hline
+            \agtcroberta & 0.905 & 0.939 & 0.781 \\
+            \hline
+            \agtcbeto & 0.897 & 0.933 & 0.771 \\
+            \hline
+            \agtcrobertuito & - & - & - \\
+            \hline
+            \multicolumn{5}{l}{\textbf{Full Context}} \\
+            \hline
+            \agfcbeto & 0.916 & 0.944 & 0.815 \\
+            \hline
+            \agfcbertmulti & 0.900 & 0.935 & 0.776 \\
+            \hline
+            \agfcxlmroberta & 0.684 & 0.877 & 0.000 \\
+            \hline
+            \agfcroberta & - & - & - \\
+            \hline
+            \agfcrobertuito & - & - & - \\
+            \hline
+            \multicolumn{4}{l}{Source: 'DL2\_Análisis General.xlsx', 'DL2\_Training\_Análisis General.xlsx'} \\
+            \hline
+        \end{tabularx}
+    }
+    \endgroup
+\end{table}
+
+%\begin{table}[H]
+%    \centering
+%    \begingroup
+%    \tiny % Change to desired font size
+%    \ttabbox[\FBwidth]{
+%        \caption{AG Metrics for the Models after 10 Epochs}
+%        \label{tab:ageneral-dl-bestmodels_metrics} % Unique label for the table
+%    }{
+%        \begin{tabularx}{\textwidth}{
+%            X
+%            >{\centering\arraybackslash}X
+%            >{\centering\arraybackslash}X
+%            >{\centering\arraybackslash}X
+%            >{\centering\arraybackslash}X
+%            >{\columncolor{gray!15}\centering\arraybackslash}X % Highlight this column
+%            >{\columncolor{gray!15}\centering\arraybackslash}X % Highlight this column
+%        }
+%            \hline
+%            \rowcolor{gray!30} % Adding a gray color to the header row
+%            \textbf{} & \textbf{Train. Weighted. F1-Score} & \textbf{Eval. Weighted F1-Score} & \textbf{Train. C. Pos. F1-Score} &  \textbf{Eval. C. Pos. F1-Score} & \textbf{Train. C. Neg. F1-Score} & \textbf{Eval. C. Neg. F1-Score}\\
+%            \hline
+%            \multicolumn{7}{l}{\textbf{Without Context}} \\
+%            \hline
+%            \agscxlmroberta & 0.941 & 0.912 & 0.962 & 0.946 & 0.868 & 0.794  \\
+%            \hline
+%            \agscbeto & 0.926 & 0.902 & 0.955 & 0.940 & 0.824 & 0.768 \\
+%            \hline
+%            \agscbertmulti & 0.911 & 0.892 & 0.943 & 0.929 & 0.800 & 0.761 \\
+%            \hline
+%            \agscroberta & 0.926 & 0.882 & 0.955 & 0.927 & 0.824 & 0.719 \\
+%            \hline
+%            \agscrobertuito & - & - & - & - & - & - \\
+%            \hline
+%            \multicolumn{7}{l}{\textbf{Tweet Context}} \\
+%            \hline
+%            \agtcxlmroberta & 0.930 & 0.915 & 0.953 & 0.944 & 0.850 & 0.813 \\
+%            \hline
+%            \agtcbertmulti & 0.899 & 0.912 & 0.935 & 0.943 & 0.773 & 0.803 \\
+%            \hline
+%            \agtcroberta & 0.921 & 0.905 & 0.951 & 0.939 & 0.817 & 0.781 \\
+%            \hline
+%            \agtcbeto & 0.935 & 0.897 & 0.958 & 0.933 & 0.853 & 0.771 \\
+%            \hline
+%            \agtcrobertuito & - & - & - & - & - & - \\
+%            \hline
+%            \multicolumn{7}{l}{\textbf{Full Context}} \\
+%            \hline
+%            \agfcbeto & 0.926 & 0.916 & 0.955 & 0.944 & 0.824 & 0.815 \\
+%            \hline
+%            \agfcbertmulti & 0.912 & 0.900 & 0.942 & 0.935 & 0.805 & 0.776 \\
+%            \hline
+%            \agfcxlmroberta & 0.683 & 0.684 & 0.876 & 0.877 & 0.000 & 0.000 \\
+%            \hline
+%            \agfcroberta & - & - & - & - & - & - \\
+%            \hline
+%            \agfcrobertuito & - & - & - & - & - & - \\
+%            \hline
+%            \multicolumn{7}{l}{Source: 'DL2\_Análisis General.xlsx', 'DL2\_Training\_Análisis General.xlsx'} \\
+%            \hline
+%        \end{tabularx}
+%    }
+%    \endgroup
+%\end{table}
+
+After this analysis, we chose \textbf{\agfcbeto} as the best DL model. Similarly as in Section~\ref{sec:ageneral_ml}, the reason for making this choice is that this model is the one with the highest "Comentario Negativo" metrics, in particular with 0.815 of F1-Score. In Figure~\ref{fig:exp_ageneral_dl_bestmodel} we can see the confusion matrix for this model, where we notice that the model behaved similarly in terms of false positives and false negatives, with 10 and 19 respectively. 
+
+
+% Best Model
+\begin{figure}[H]
+	\ffigbox[\FBwidth]
+	{\caption{Confusion Matrix for the Best DL Model (\textbf{\agfcbeto}) for "Análisis General"}\label{fig:exp_ageneral_dl_bestmodel}}
+ % [Aquí ponemos como queremos que aparezca en el índice, sin la referencia]{Aquí como queremos que aparezca en el documento, con la referencia}
+	{\includegraphics[scale=0.14]{Plantilla_TFG_ingles_2019/imagenes/DL_Experiments in _Análisis General_ best_model.pdf}}
+\end{figure}

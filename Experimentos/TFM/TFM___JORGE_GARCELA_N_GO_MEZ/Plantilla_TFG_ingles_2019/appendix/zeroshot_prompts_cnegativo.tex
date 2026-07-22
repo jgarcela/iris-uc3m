@@ -1,0 +1,88 @@
+%----------
+%	APPENDIX X: ZERO SHOT - PROMPTS FOR CONTENIDO NEGATIVO
+%----------	
+
+\lstset{
+  basicstyle=\ttfamily\scriptsize,
+  breaklines=true,
+  breakatwhitespace=true,
+  columns=fullflexible,
+  frame=single,
+  inputencoding=utf8,
+  extendedchars=true,
+  literate=%
+    {á}{{\'a}}1 {é}{{\'e}}1 {í}{{\'i}}1 {ó}{{\'o}}1 {ú}{{\'u}}1
+    {Á}{{\'A}}1 {É}{{\'E}}1 {Í}{{\'I}}1 {Ó}{{\'O}}1 {Ú}{{\'U}}1
+    {à}{{\`a}}1 {è}{{\`e}}1 {ì}{{\`i}}1 {ò}{{\`o}}1 {ù}{{\`u}}1
+    {À}{{\`A}}1 {È}{{\`E}}1 {Ì}{{\`I}}1 {Ò}{{\`O}}1 {Ù}{{\`U}}1
+    {ä}{{\"a}}1 {ë}{{\"e}}1 {ï}{{\"i}}1 {ö}{{\"o}}1 {ü}{{\"u}}1
+    {Ä}{{\"A}}1 {Ë}{{\"E}}1 {Ï}{{\"I}}1 {Ö}{{\"O}}1 {Ü}{{\"U}}1
+    {â}{{\^a}}1 {ê}{{\^e}}1 {î}{{\^i}}1 {ô}{{\^o}}1 {û}{{\^u}}1
+    {Â}{{\^A}}1 {Ê}{{\^E}}1 {Î}{{\^I}}1 {Ô}{{\^O}}1 {Û}{{\^U}}1
+    {ã}{{\~a}}1 {õ}{{\~o}}1 {Ã}{{\~A}}1 {Õ}{{\~O}}1
+    {æ}{{\ae}}1 {Æ}{{\AE}}1 {ç}{{\c c}}1 {Ç}{{\c C}}1
+    {ø}{{\o}}1 {Ø}{{\O}}1 {å}{{\r a}}1 {Å}{{\r A}}1
+    {œ}{{\oe}}1 {Œ}{{\OE}}1 {ß}{{\ss}}1
+    {ñ}{{\~n}}1 {Ñ}{{\~N}}1
+}
+
+
+% PROMPT 0
+\textbf{Prompt 0 (Without class definitions)}
+\begin{lstlisting}
+Este modelo está diseñado para analizar tuits y clasificarlos en las siguientes categorías. Por favor, siga el formato de respuesta y utilice las etiquetas proporcionadas para cada categoría:
+
+Categorías:
+0 para Desacreditar Víctima
+1 para Desacreditar Acto
+2 para Insultos
+3 para Desacreditar Deportista Autora
+
+[Instrucciones detalladas sobre el análisis a realizar]
+Evalúe el tuit en función del uso de palabras clave y frases asociadas a la incitación al odio, el contexto del mensaje, la intención que subyace en el mensaje, el impacto potencial del mensaje, el refuerzo de estereotipos o prejuicios de género, la presencia de amenazas o incitación a la violencia y el análisis del contenido multimedia. Tener en cuenta las políticas de incitación al odio de la plataforma y la legislación aplicable en materia de incitación al odio y discriminación. El objetivo es identificar mensajes que puedan ser ofensivos, discriminatorios o incitar al odio contra las mujeres en contextos deportivos, contribuyendo a un entorno seguro e inclusivo en el deporte.
+
+Para cada tuit, facilite la clasificación de acuerdo con estas directrices y utilice un solo número. Ejemplos:
+
+Tweet: "@Jennihermoso Vete a un Juzgado entonces. No lo harás porque sabes que es mentira." Response: {"prediction":"0"}
+
+Tweet: "@Jennihermoso Jenni con todo el respeto del mundo, ¿agresión? Por favor..." Response: {"prediction":"1"}
+
+Tweet: "@Jennihermoso Sinvergüenza!!! Mentirosa, jugar con algo tan serio. Se te tendría que caer la cara de vergüenza" Response: {"prediction":"2"}
+
+Tweet: "@alexiaputellas @Jennihermoso Quieres otro balón de oro regalado eh." Response: {"prediction":"3"}
+\end{lstlisting}
+\newpage
+
+% PROMPT 1
+\textbf{Prompt 1 (With class definitions)}
+\begin{lstlisting}
+Este modelo está diseñado para analizar tuits y clasificarlos en las siguientes categorías. Por favor, siga el formato de respuesta y utilice las etiquetas proporcionadas para cada categoría:
+
+Categorías:
+0 para Desacreditar Víctima
+1 para Desacreditar Acto
+2 para Insultos
+3 para Desacreditar Deportista Autora
+
+Desacreditar Víctima: Comentarios que se centran en dañar la reputación de la víctima (en este caso Jennifer Hermoso).
+
+Desacreditar Acto: Información que se basa en desacreditar lo sucedido, quitarle importancia al acto del beso no consentido.
+
+Insultos: El usuario/a usa un lenguaje ofensivo, abusivo y vulgar dirigido sistemáticamente a una persona o grupos de personas.
+
+Desacreditar Deportista Autora: Comentarios que se centran en dañar la reputación de la persona que escribe el tuit.
+
+[Instrucciones detalladas sobre el análisis a realizar].
+Evalúe el tuit en función del uso de palabras clave y frases asociadas a la incitación al odio, el contexto del mensaje, la intención que subyace en el mensaje, el impacto potencial del mensaje, el refuerzo de estereotipos o prejuicios de género, la presencia de amenazas o incitación a la violencia y el análisis del contenido multimedia. Tener en cuenta las políticas de incitación al odio de la plataforma y la legislación aplicable en materia de incitación al odio y discriminación. El objetivo es identificar mensajes que puedan ser ofensivos, discriminatorios o incitar al odio contra las mujeres en contextos deportivos, contribuyendo a un entorno seguro e inclusivo en el deporte.
+
+Para cada tuit, facilite la clasificación de acuerdo con estas directrices y utilice un solo número. Ejemplos:
+
+Tweet: "@Jennihermoso Vete a un Juzgado entonces. No lo harás porque sabes que es mentira." Response: {"prediction":"0"}
+
+Tweet: "@Jennihermoso Jenni con todo el respeto del mundo, ¿agresión? Por favor..." Response: {"prediction":"1"}
+
+Tweet: "@Jennihermoso Sinvergüenza!!! Mentirosa, jugar con algo tan serio. Se te tendría que caer la cara de vergüenza" Response: {"prediction":"2"}
+
+Tweet: "@alexiaputellas @Jennihermoso Quieres otro balón de oro regalado eh." Response: {"prediction":"3"}
+\end{lstlisting}
+\newpage

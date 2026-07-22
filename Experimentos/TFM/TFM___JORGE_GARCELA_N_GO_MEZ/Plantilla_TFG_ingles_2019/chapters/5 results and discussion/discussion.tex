@@ -1,0 +1,151 @@
+%----------
+% DISCUSSION
+%----------	
+
+In Table~\ref{table:classification_tasks_performance} we present a comparison of the performance of the three different approaches followed. As discussed in Section~\ref{implementation_dl}, the DL approach was limited by the high computational cost, which prevented us from testing a broad range of hyperparameters. Consequently, the time spent in these experiments was 2.978 times less than in the ML approach. The reason was that although the total time for ML experiments was higher, we performed more different experiments, in particular 18.956 times more. As a result, the total average time per experiment for DL was 6.369 times higher, which explains the fewer number of experiments. Moreover, while the number of experiments for each DL task in Table~\ref{table:classification_tasks_performance} was 15, the actual number of successful experiments varied slightly: 11 for"Análisis General", 14 for "Contenido Negativo" and 14 for "Insultos", as explained in Section~\ref{implementation_dl}.
+
+Another interesting highlight was the performance of the zero-shot capabilities in the Generative AI approach, especially for the "Contenido Negativo" task, where the mean time per experiment was just 0.043 hours and 0.026 hours for "Insultos". Remarkably, in 4.186 times less time, we were able to conduct 4.267 times more experiments than with the DL approach. However, when compared to the ML approach, we performed 4.443 times more experiments in ML, investing 12.467 times more in total time, yet achieving a better Mean Time per Experiment of 0.214 hours, compared to 0.254 for the GenAI approach.
+
+
+\begin{table}[H]
+    \centering
+    \begingroup
+    \small % Change to desired font size
+    \ttabbox[\FBwidth]{
+        \caption{Computational Cost Metrics for the Different Approaches and Tasks}
+        \label{table:classification_tasks_performance} % Unique label for the table
+    }{
+        \begin{tabularx}{\textwidth}{
+            X
+            >{\hsize=1.5\hsize}X
+            >{\hsize=0.5\hsize\centering\arraybackslash}X
+            >{\hsize=0.5\hsize\centering\arraybackslash}X
+            >{\hsize=0.5\hsize\centering\arraybackslash}X
+            }
+            
+            \hline
+            \rowcolor{gray!30} % Adding a gray color to the header row
+             \textbf{Approach} & \textbf{Classification Task} & \textbf{Number of Exp.}  & \textbf{Total Time (h)} & \textbf{Mean Time per Exp. (h)}\\ \hline
+            \multirow{4}{*}{Machine Learning} & Análisis General & 163 & 68.946 & 0.423\\ \cline{2-5}
+                                              & Contenido Negativo & 102 & 39.900 & 0.391\\ \cline{2-5}
+                                              & Insultos & 588 & 73.800 & 0.126\\ \cline{2-5}
+                                              & \textbf{Total} & \textbf{853} & \textbf{182.646} & \textbf{0.214}\\ \hline
+                                              
+            \multirow{4}{*}{Deep Learning} & Análisis General & 15 & 49.486 & 3.299\\ \cline{2-5}
+                                                & Contenido Negativo & 15 & 7.417 & 4.494\\ \cline{2-5}
+                                                & Insultos & 15 & 4.422 & 0.295\\ \cline{2-5}
+                                                & \textbf{Total} & \textbf{45} & \textbf{61.325} & \textbf{1.363}\\ \hline
+                                                
+            \multirow{4}{*}{Generative AI} & Análisis General & 64 & 11.850 & 0.185\\ \cline{2-5}
+                                      & Contenido Negativo & 64 & 2.774 & 0.043\\ \cline{2-5}
+                                      & Insultos & 64 & 1.638 & 0.026\\ \cline{2-5}
+                                      & \textbf{Total} & \textbf{192} & \textbf{14.650} & \textbf{0.254}\\ \hline
+            %\multicolumn{5}{l}{Source: 'Training.xlsx', 'DL2\_Análisis General.xlsx', 'DL2\_Contenido Negativo.xlsx', 'DL2\_Insultos.xlsx' and 'Training\_LLM.xlsx'} \\
+            %\hline
+        \end{tabularx}
+    }
+    \endgroup
+\end{table}
+
+\newpage
+
+
+
+Overall, the ML approach consistently delivered the best results across all tasks, while DL and GenAI approaches, though promising, still required significant improvements. Additionally, it is worth noting that the GenAI models were the quickest, primarily due to the zero-shot learning approach. However, this came at the cost of accuracy, as the lack of training made it hard for these general models to handle complex classifications, such as "Contenido Negativo" and "Insultos".
+
+In the "Análisis General" task, as seen in Table~\ref{table:AG_performance}, the ML model ({\agmlpteup}) demonstrated the highest overall performance, achieving a weighted average F1-Score of 0.946. It performed exceptionally well in both the "Comentario Positivo" (F1 of 0.966) and "Comentario Negativo" (F1 of 0.878) categories and completed the task in a relatively efficient time of 1166.859 seconds. The DL model ({\agfcbeto}) also delivered strong results, particularly in "Comentario Positivo" (F1 of 0.944), but required significantly more processing time (12331.273 seconds) and showed weaker performance in handling "Comentario Negativo" (F1 of 0.815). The GenAI model ({\agmistralsevenb}), while the fastest, completing the task in just 708.685 seconds, decreased in accuracy, especially in the "Comentario Negativo" category, where it only achieved an F1 score of 0.690, leading to a lower weighted average F1 score of 0.802.
+
+\begin{table}[H]
+    \centering
+    \begingroup
+    \small % Change to desired font size
+    \ttabbox[\FBwidth]{
+        \caption{Best Performance Metrics for AG}
+        \label{table:AG_performance} % Unique label for the table
+    }{
+        \begin{tabularx}{\textwidth}{
+            X
+            >{\hsize=0.5\hsize\centering\arraybackslash}X
+            >{\hsize=0.4\hsize\centering\arraybackslash}X
+            >{\hsize=0.4\hsize\centering\arraybackslash}X
+            >{\hsize=0.4\hsize\centering\arraybackslash}X
+            >{\hsize=0.4\hsize\centering\arraybackslash}X
+            }
+            
+            \hline
+            \rowcolor{gray!30} % Adding a gray color to the header row
+            \textbf{Approach} & \textbf{Accuracy} & \textbf{W.Avg. F1-Score} & \textbf{C.Pos. F1-Score} & \textbf{C.Neg. F1-Score} & \textbf{Time (s)} \\ \hline
+            ML    & 0.946 & 0.946 & 0.966 & 0.878 & 1166.859 \\ \hline
+            DL    & 0.914 & 0.916 & 0.944 & 0.815 & 12331.273 \\ \hline
+            GenAI & 0.815 & 0.802 & 0.868 & 0.690 & 708.685 \\ \hline
+        \end{tabularx}
+    }
+    \endgroup
+\end{table}
+
+
+In the "Contenido Negativo" task, the ML model ({\cnegmlptead}) obtained the best performance, with a weighted average F1-Score of 0.630, while excelling in "Desprestigiar Deportista Autora" (F1 of 0.767), with a total execution time of 493.449 seconds. Moreover, the DL model ({\cnegtcroberta}) achieved lower performance in weighted average F1-Score with 0.519, although the computational time was 2786.814 (5,647 times more). Finally, the GenAI model ({\cneggemmatwob}) had the weakest performance overall, with a weighted average F1 score of 0.341 and particularly poor results in "Desprestigiar Acto" (F1 of 0.186) and "Desprestigiar Deportista Autora" (F1 of 0.099). Despite this, it was the fastest to complete the task, requiring only 155.661 seconds.
+
+\begin{table}[H]
+    \centering
+    \begingroup
+    \small % Change to desired font size
+    \ttabbox[\FBwidth]{
+        \caption{Best Performance Metrics for CNEG}
+        \label{table:CNEG_performance} % Unique label for the table
+    }{
+        \begin{tabularx}{\textwidth}{
+            X
+            >{\hsize=0.6\hsize\centering\arraybackslash}X
+            >{\hsize=0.5\hsize\centering\arraybackslash}X
+            >{\hsize=0.5\hsize\centering\arraybackslash}X
+            >{\hsize=0.5\hsize\centering\arraybackslash}X
+            >{\hsize=0.5\hsize\centering\arraybackslash}X
+            >{\hsize=0.5\hsize\centering\arraybackslash}X
+            >{\hsize=0.5\hsize\centering\arraybackslash}X
+            }
+            
+            \hline
+            \rowcolor{gray!30} % Adding a gray color to the header row
+            \textbf{Approach} & \textbf{Accuracy} & \textbf{W.Avg. F1-Score} & \textbf{D.Víc. F1-Score} & \textbf{D.Acto F1-Score} & \textbf{Ins. F1-Score} & \textbf{D.D.Aut. F1-Score} & \textbf{Time (s)} \\ \hline
+            ML    & 0.634 & 0.630 & 0.645 & 0.483 & 0.455 & 0.767 & 493.449 \\ \hline
+            DL    & 0.535 & 0.519 & 0.545 & 0.250 & 0.455 & 0.667 & 2786.814 \\ \hline
+            GenAI & 0.278 & 0.341 & 0.347 & 0.186 & 0.382 & 0.099 & 155.661 \\ \hline
+        \end{tabularx}
+    }
+    \endgroup
+\end{table}
+
+
+In the "Insultos" task, the ML model ({\insmlptea}) emerged as the strongest performer, achieving a weighted average F1 score of 0.740. It was particularly effective in "Sexistas/Misóginos" (F1 of 0.889) and "Genéricos" (F1 of 0.744), consuming 215.794 seconds. Additionally, the DL model ({\insscbeto}) fell behind, with a weighted average F1 score of 0.516, and 488.321 seconds. Surprisingly, the GenAI model ({\insllamathreeonea}) outperformed the DL approach while taking just 100.201 seconds, and offered a middle ground, with a weighted average F1 score of 0.607 and solid performance for "Genéricos" and "Deseo de Dañar". Moreover, we can see that the DL and GenAI approach struggled to classify accurately "Sexistas/Misóginos", while the ML approach achieved the best performance across all classes.
+
+
+\begin{table}[H]
+    \centering
+    \begingroup
+    \small % Change to desired font size
+    \ttabbox[\FBwidth]{
+        \caption{Best Performance Metrics for INS}
+        \label{table:INS_performance} % Unique label for the table
+    }{
+        \begin{tabularx}{\textwidth}{
+            X
+            >{\hsize=0.6\hsize\centering\arraybackslash}X
+            >{\hsize=0.5\hsize\centering\arraybackslash}X
+            >{\hsize=0.5\hsize\centering\arraybackslash}X
+            >{\hsize=0.5\hsize\centering\arraybackslash}X
+            >{\hsize=0.5\hsize\centering\arraybackslash}X
+            >{\hsize=0.5\hsize\centering\arraybackslash}X
+            }
+            
+            \hline
+            \rowcolor{gray!30} % Adding a gray color to the header row
+            \textbf{Approach} & \textbf{Accuracy} & \textbf{W.Avg. F1-Score} & \textbf{Sex./Mis. F1-Score} & \textbf{Gen. F1-Score} & \textbf{D.Dañar F1-Score} & \textbf{Time (s)} \\ \hline
+            ML    & 0.738 & 0.740 & 0.889 & 0.744 & 0.609 & 215.794 \\ \hline
+            DL    & 0.524 & 0.516 & 0.375 & 0.619 & 0.462 & 488.321 \\ \hline
+            GenAI & 0.490 & 0.607 & 0.133 & 0.651 & 0.600 & 100.201 \\ \hline
+        \end{tabularx}
+    }
+    \endgroup
+\end{table}
+

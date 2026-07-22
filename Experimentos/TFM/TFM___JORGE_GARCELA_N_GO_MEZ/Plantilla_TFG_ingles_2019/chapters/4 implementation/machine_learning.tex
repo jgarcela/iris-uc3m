@@ -1,0 +1,112 @@
+%----------
+%	MODELS - MACHINE LEARNING
+%----------	
+
+In this Section, we describe the implementation of the Machine Learning models, which is illustrated in detail in Figure \ref{fig:ml_models_implementation}.
+
+\begin{figure}[H]
+	\ffigbox[\FBwidth]
+	{\caption{Diagram of the Implementation of ML Models}\label{fig:ml_models_implementation}} 
+ % [Aquí ponemos como queremos que aparezca en el índice, sin la referencia]{Aquí como queremos que aparezca en el documento, con la referencia}
+	{\includegraphics[scale=0.35]{Plantilla_TFG_ingles_2019/imagenes/TFG Pipeline-ML.drawio.pdf}}
+\end{figure}
+
+
+The first step in the implementation of the Machine Learning approach involved data pre-processing, as detailed in Section~\ref{sec:data_preprocessing}. During this stage, we also established specific label mappings for each classification task:
+
+\begin{itemize}
+    \item \textbf{Análisis General}:
+    \begin{itemize}
+        \item \texttt{Comentario Positivo}: 0
+        \item \texttt{Comentario Negativo}: 1
+    \end{itemize}
+    
+    \item \textbf{Contenido Negativo}:
+    \begin{itemize}
+        \item \texttt{Desprestigiar Víctima}: 0
+        \item \texttt{Desprestigiar Acto}: 1
+        \item \texttt{Insultos}: 2
+        \item \texttt{Desprestigiar Deportista Autora}: 3
+    \end{itemize}
+    
+    \item \textbf{Insultos}:
+    \begin{itemize}
+        \item \texttt{Sexistas/misóginos}: 0
+        \item \texttt{Genéricos}: 1
+        \item \texttt{Deseo de Dañar}: 2
+    \end{itemize}
+\end{itemize}
+
+
+Following the pre-processing, we proceeded with text encoding, where we applied different encoding techniques like Bag of Words (BoW), FastText, TF-IDF, and Word2Vec, as discussed in Section~\ref{text_encoding_ml}, as well as using HuggingFace and the OpenAI API with the "Embeddings" endpoint to generate more advanced embeddings, as detailed in Section~\ref{text_encoding_dl}. Once the text was encoded, the data was divided into training and testing sets as detailed in Section~\ref{sec:splitting}, during which data balancing techniques discussed in Section~\ref{sec:class_imbalance} were applied. After that, the processed and balanced data was then fed into the machine learning models described in Section~\ref{sec:ml_models}, including Random Forest, Logistic Regression, XGBoost, Multi-layer Perceptron (MLP), and Naive Bayes. Additionally, in order to improve the models' performance, different sets of hyperparameters were explored during the training and validation stages, as detailed in Table~\ref{table:ml_hyperparameters}, using a 5-fold Cross-Validation strategy. Finally, the evaluation of these models was based on different metrics such as accuracy, weighted average F1-score, standard deviation, and execution time, and stored in an Excel file called \texttt{"Training.xlsx"} (Appendix~\ref{appendix_code}).
+
+
+\begin{table}[H]
+    \centering
+    \begingroup
+    \scriptsize % Change to desired font size
+    \ttabbox[\FBwidth]{
+        \caption{Hyperparameters for ML Models}
+        \label{table:ml_hyperparameters} % Unique label for the table
+    }{
+        \begin{tabularx}{\textwidth}{
+            >{\hsize=0.5\hsize}X
+            >{\hsize=1.5\hsize}X
+        }
+            \hline
+            \rowcolor{gray!30} % Adding a gray color to the header row
+            \textbf{Model} & \textbf{Hyperparameters} \\ \hline
+            Random Forest & 
+            \begin{itemize}
+                \item \texttt{n\_estimators}: [10, 50, 100, 200]
+                \item \texttt{max\_depth}: [None, 10, 20, 30, 40]
+                \item \texttt{min\_samples\_split}: [2, 5, 10]
+                \item \texttt{min\_samples\_leaf}: [1, 2, 4]
+            \end{itemize} \\ \hline
+            Logistic Regression & 
+            \begin{itemize}
+                \item \texttt{penalty}: ['l1', 'l2', 'elasticnet', 'none']
+                \item \texttt{C}: [0.001, 0.01, 0.1, 1, 10, 100]
+                \item \texttt{solver}: ['newton-cg', 'lbfgs', 'liblinear', 'sag', 'saga']
+                \item \texttt{max\_iter}: [50, 100, 200]
+            \end{itemize} \\ \hline
+            XGBoost & 
+            \begin{itemize}
+                \item \texttt{n\_estimators}: [50, 100, 200]
+                \item \texttt{max\_depth}: [3, 6, 9]
+                \item \texttt{learning\_rate}: [0.01, 0.1, 0.2]
+                \item \texttt{subsample}: [0.5, 0.7, 1.0]
+                \item \texttt{colsample\_bytree}: [0.5, 0.7, 1.0]
+            \end{itemize} \\ \hline
+            MLP & 
+            \begin{itemize}
+                \item \texttt{hidden\_layer\_sizes}: [(50,), (100,), (50,50), (100,100)]
+                \item \texttt{activation}: ['tanh', 'relu']
+                \item \texttt{solver}: ['sgd', 'adam']
+                \item \texttt{alpha}: [0.0001, 0.05]
+                \item \texttt{learning\_rate}: ['constant', 'adaptive']
+            \end{itemize} \\ \hline
+            Naive Bayes & 
+            \begin{itemize}
+                \item \texttt{var\_smoothing}: [1e-9, 1e-8, 1e-7, 1e-6]
+            \end{itemize} \\ \hline
+        \end{tabularx}
+    }
+    \endgroup
+\end{table}
+
+
+In Figure~\ref{fig:ml_models_total_performance} we can see the distribution of time spent on each classification task. Notably, the task where the most time was spent was on "Insultos", although "Análisis General" was similar, with 68.946 and 73.800 hours, respectively. However, 3.607 times more experiments were conducted for "Insultos", which aligns with the fact that it had the lowest mean time per experiment with 0.116 hours, compared to 0.423 hours for "Análisis General", and 0.391 for "Contenido Negativo". This difference in the number of experiments per task can be attributed to the complexity of the "Insultos" task, as it required more experimentation due to the close similarity in the meaning of the classes.
+
+
+\begin{figure}[H]
+	\ffigbox[\FBwidth]
+	{\caption{Total Performance Time (in hours) per Classification Task for ML Experiments}\label{fig:ml_models_total_performance}} 
+ % [Aquí ponemos como queremos que aparezca en el índice, sin la referencia]{Aquí como queremos que aparezca en el documento, con la referencia}
+	{\includegraphics[scale=0.25]{Plantilla_TFG_ingles_2019/imagenes/ML_total_performance_time.pdf}}
+\end{figure}
+
+
+
+
+
