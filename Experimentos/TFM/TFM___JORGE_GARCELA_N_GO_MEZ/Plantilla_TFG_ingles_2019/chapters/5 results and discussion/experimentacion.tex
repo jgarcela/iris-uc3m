@@ -1,12 +1,13 @@
 % =====================================================================
-% Resultados del Experimento 21 — Agentes especializados y Agent Skills
+% Experimentación y resultados — Agentes especializados y Agent Skills
 % Datos: Experimentos/experiments/experimento_21_agentskills/results/
 % Corpus de evaluación: 1.313 noticias anotadas en las cinco variables
 % =====================================================================
 
-Esta sección presenta los resultados de la evaluación de la arquitectura de
-agentes especializados descrita en el Capítulo~\ref{implementation}. Todas las
-cifras se calculan sobre el subconjunto de \textbf{1.313 noticias} del corpus
+Esta sección presenta la experimentación y los resultados de la evaluación de la
+arquitectura de agentes especializados descrita en el
+Capítulo~\ref{implementation}. Todas las cifras se calculan sobre el subconjunto
+de \textbf{1.313 noticias} del corpus
 IMIO que cuentan con anotación experta simultánea en las cinco variables de
 lenguaje sexista consideradas (V25, V26, V30, V33 y V35).
 
@@ -86,7 +87,8 @@ especialmente severo.
 \label{subsec:iris_core}
 
 La Tabla~\ref{tab:iris-b0b1} presenta la comparación agregada entre ambos
-niveles para los tres proveedores evaluados.
+niveles para los tres modelos de API evaluados; el modelo local se analiza aparte
+en la Sección~\ref{subsec:iris_local}.
 
 \begin{table}[H]
     \centering
@@ -165,6 +167,56 @@ acuerdo con las anotadoras expertas.
     \label{fig:iris-b0b1-metricas}
 \end{figure}
 
+\subsection{Un modelo local de código abierto}
+\label{subsec:iris_local}
+
+Los resultados anteriores emplean modelos accesibles por API de pago. Para un
+proyecto como IRIS, que maneja material periodístico sujeto a consideraciones de
+privacidad, importa saber si un modelo ejecutado en infraestructura propia rinde
+a la altura. Se evaluó \texttt{gemma4:e4b}, un modelo abierto de tamaño reducido,
+sobre la granja de computación del Departamento de Teoría de la Señal y
+Comunicaciones (TSC) de la Universidad Carlos III de Madrid, equipada con GPU
+NVIDIA RTX 3090 y 4090, en los dos niveles y sobre las mismas 1.313 noticias. La
+Tabla~\ref{tab:iris-local} recoge el resultado.
+
+\begin{table}[H]
+    \centering
+    \begingroup
+    \small
+    \ttabbox[\FBwidth]{
+        \caption{Modelo local \texttt{gemma4:e4b}: B0 frente a B1 ($N=1.313$)}
+        \label{tab:iris-local}
+    }{
+        \begin{tabularx}{\textwidth}{
+            X
+            >{\centering\arraybackslash}X
+            >{\columncolor{gray!15}\centering\arraybackslash}X
+            >{\centering\arraybackslash}X
+        }
+            \hline
+            \textbf{Nivel} & \textbf{Exactitud} & \textbf{$\kappa$} & \textbf{F1 macro} \\
+            \hline
+            B0 (control) & 0,596 & $\mathbf{+0,061}$ & 0,409 \\
+            B1 (Agent Skills) & 0,605 & $+0,043$ & 0,400 \\
+            \hline
+        \end{tabularx}
+    }
+    \endgroup
+\end{table}
+
+En el nivel de control, \texttt{gemma4:e4b} obtiene el \textbf{mayor $\kappa$
+medio de los cuatro modelos evaluados} ($+0,061$), por encima de las tres API de
+pago ($+0,026$, $+0,033$ y $+0,052$). Un modelo gratuito y desplegable en local
+iguala, y en esta métrica supera, a los servicios comerciales. Para un proyecto
+con datos sensibles el resultado tiene consecuencias prácticas: la privacidad y
+el coste nulo de inferencia no obligan a renunciar a rendimiento.
+
+Ante las \textit{Agent Skills}, el modelo local se comporta como los de OpenAI y
+no como \texttt{gemini}. El nivel B1 rebaja el acuerdo de $+0,061$ a $+0,043$ y la
+F1 de 0,409 a 0,400. La arquitectura tampoco ayuda aquí. De los cuatro modelos,
+solo \texttt{gemini-3.1-flash-lite} mejora con las \textit{skills}; los otros
+tres, dos comerciales y uno local, quedan igual o peor.
+
 \subsection{Divergencia entre exactitud y \texorpdfstring{$\kappa$}{kappa}}
 \label{subsec:iris_divergencia}
 
@@ -198,11 +250,9 @@ azar, no lo hace.
 
 La consecuencia práctica es directa: \emph{un trabajo que reportase únicamente
 exactitud concluiría que la arquitectura de Agent Skills mejora el sistema, y
-tal conclusión sería incorrecta}. Este mismo patrón se observó de forma
-independiente en las tres ablaciones descritas en la
-Sección~\ref{subsec:iris_ablaciones}, lo que refuerza la recomendación de
-reportar siempre exactitud, $\kappa$ y prevalencia de forma conjunta en tareas
-de clasificación desbalanceadas.
+tal conclusión sería incorrecta}. De ahí la recomendación de reportar siempre
+exactitud, $\kappa$ y prevalencia de forma conjunta en tareas de clasificación
+desbalanceadas.
 
 \subsection{Diagnóstico por variable: análisis de \textit{lift}}
 \label{subsec:iris_lift}
@@ -277,66 +327,62 @@ un acuerdo apreciable ($\kappa = 0,261$), siendo además el único caso en que
 exactitud y $\kappa$ mejoran simultáneamente respecto al \textit{baseline}, lo
 que descarta el artefacto de marginales y confirma una ganancia genuina.
 
-\subsection{Ablaciones}
-\label{subsec:iris_ablaciones}
+\subsection{Descomposición de la arquitectura por componentes}
+\label{subsec:iris_descomposicion}
 
-Con objeto de descartar que el bajo rendimiento obedeciese a decisiones de
-configuración, se ejecutaron tres ablaciones controladas sobre
-\texttt{gpt-4o-mini}, modificando en cada caso un único factor. La
-Tabla~\ref{tab:iris-ablaciones} sintetiza sus resultados.
+El nivel B1 combina tres ingredientes: la carga de \textit{skills} bajo demanda
+con verificación de evidencias, un catálogo de resúmenes de las guías expertas
+descubrible por el agente, y una herramienta de recuperación en vivo sobre esas
+guías (\texttt{CONSULTAR\_GUIA}). Para averiguar cuál de ellos explica el efecto
+observado se ejecutaron cinco variantes por modelo, activando y desactivando cada
+componente de forma independiente, sobre los cuatro modelos y las 1.313 noticias.
+La Tabla~\ref{tab:iris-descomposicion} recoge el $\kappa$ medio de cada
+combinación.
 
 \begin{table}[H]
     \centering
     \begingroup
     \small
     \ttabbox[\FBwidth]{
-        \caption{Ablaciones controladas sobre \texttt{gpt-4o-mini}}
-        \label{tab:iris-ablaciones}
+        \caption{Descomposición de B1 en componentes. $\kappa$ medio sobre las cinco variables, por modelo ($N=1.313$)}
+        \label{tab:iris-descomposicion}
     }{
         \begin{tabularx}{\textwidth}{
             X
-            X
+            >{\centering\arraybackslash}X
+            >{\centering\arraybackslash}X
+            >{\centering\arraybackslash}X
             >{\centering\arraybackslash}X
         }
             \hline
-            \textbf{Factor} & \textbf{Efecto observado} & \textbf{$\Delta$ coste} \\
+            \textbf{Configuración} & \textbf{Gemini} & \textbf{GPT-4o-mini} & \textbf{GPT-5.4-nano} & \textbf{Gemma} \\
             \hline
-            \textit{Prompt caching} &
-            Sin efecto sobre $\kappa$. Altera el comportamiento del agente:
-            al reestructurar el \textit{prompt} en roles \textit{system}/\textit{user},
-            duplica el uso de herramientas. &
-            $+87\,\%$ \\
-            \hline
-            \textit{Skills}-resumen de guías &
-            Sin efecto claro sobre $\kappa$. &
-            $-20\,\%$ \\
-            \hline
-            Umbral de detección (estricto \textit{vs.} permisivo) &
-            Incrementa la exactitud (0,644 $\rightarrow$ 0,688) \emph{destruyendo}
-            señal: el \textit{lift} de \texttt{masc\_generico} cae de 1,25 a 1,01.
-            $\kappa$ no mejora de forma real. &
-            --- \\
+            B0 (metodología inyectada) & $+0,026$ & $+0,033$ & $+0,052$ & $+0,061$ \\
+            Solo \textit{skills} & $+0,061$ & $+0,025$ & $+0,000$ & $+0,065$ \\
+            \textit{Skills} + resúmenes & $\mathbf{+0,075}$ & $+0,024$ & $+0,015$ & $+0,061$ \\
+            \textit{Skills} + herramienta & $+0,063$ & $+0,028$ & $+0,012$ & $+0,038$ \\
+            Completo (resúmenes + herram.) & $+0,066$ & $+0,014$ & $+0,004$ & $+0,043$ \\
             \hline
         \end{tabularx}
     }
     \endgroup
 \end{table}
 
-La ablación del umbral merece comentario específico por su relevancia
-metodológica. El régimen permisivo mejora la exactitud de forma apreciable,
-resultado que en trabajos previos del proyecto se interpretó como una mejora
-del sistema. El análisis de \textit{lift} revela, sin embargo, que la
-precisión de \texttt{masc\_generico} desciende hasta igualar exactamente su
-prevalencia: el clasificador deja de discriminar y pasa a acertar por
-distribución. Se reproduce así, por tercera vez y de manera independiente, el
-fenómeno descrito en la Sección~\ref{subsec:iris_divergencia}.
+Dos conclusiones se sostienen en los cuatro modelos. La primera afecta a la
+herramienta de recuperación en vivo: no aporta, y con frecuencia perjudica. En
+todos los modelos la mejor variante prescinde de ella. En \texttt{gemma4:e4b} el
+contraste es nítido: sin la herramienta el $\kappa$ se sitúa entre $+0,061$ y
+$+0,065$, y al activarla cae a valores entre $+0,038$ y $+0,043$. La recuperación
+por TF-IDF sobre textos periodísticos cortos introduce más ruido que señal.
 
-En cuanto al \textit{prompt caching}, su efecto resultó contraintuitivo. Aunque
-la técnica reduce en un 33\,\% el coste unitario por \textit{token}, la
-reestructuración del \textit{prompt} que exige duplica el volumen total
-consumido, de modo que el coste neto se incrementa. Cabe señalar que la
-implementación de esta técnica no es neutra respecto al comportamiento del
-agente, extremo que rara vez se documenta en la literatura aplicada.
+La segunda conclusión concierne al mecanismo de \textit{skills}: solo mejora el
+acuerdo en \texttt{gemini}. En ese modelo, la variante que se limita a cargar la
+metodología como \textit{skill} verificable, sin guías de ningún tipo, ya recupera
+la mayor parte de la mejora sobre el control, de $+0,026$ a $+0,061$. En los otros
+tres modelos esa misma variante iguala el control (\texttt{gemma}) o lo empeora
+(los dos de OpenAI). Cuando hay ganancia, la configuración con mejor acuerdo es
+\textit{skills} más resúmenes sin herramienta: más simple y más barata que el
+sistema completo, y en ningún modelo peor.
 
 \subsection{Análisis de errores y validez de la tarea}
 \label{subsec:iris_errores}
@@ -465,6 +511,125 @@ una heterogeneidad sustancial entre anotadores y de la ambigüedad de algunas
 definiciones del codebook. El coeficiente $\kappa$ mide, en buena medida, esa
 distancia de criterio.
 
+\subsection{El sistema como una anotadora más}
+\label{subsec:iris_equipo_ia}
+
+Los análisis anteriores comparan cada modelo contra la anotación experta tomada
+como referencia. Un enfoque complementario invierte la pregunta: en vez de medir
+cuánto se equivoca el modelo respecto a un patrón fijo, lo sitúa como \textbf{una
+anotadora más} dentro del espacio de criterios de las personas que codificaron el
+corpus. La cuestión deja de ser «¿acierta el modelo?» y pasa a ser «¿dónde cae su
+criterio respecto al de las expertas?». El sistema se trata así como un tercer
+equipo de anotación, junto a Indexa y UCM3.
+
+Una restricción del corpus condiciona el diseño. Cada noticia la codificó una
+sola persona, de modo que no hay solape humano-humano y la fiabilidad
+intercodificadora entre personas no es calculable. Lo que sí compara a todos sin
+solape es la \textbf{prevalencia de «Sí»}: la proporción de piezas en que cada
+codificador, humano o modelo, marca la variable. La Tabla~\ref{tab:iris-criterios}
+ordena por esa proporción, promediada sobre las cinco variables, a los ocho
+anotadores humanos y a los tres modelos API.
+
+\begin{table}[H]
+    \centering
+    \begingroup
+    \small
+    \ttabbox[\FBwidth]{
+        \caption{Espacio de criterios: prevalencia media de «Sí» por anotador (humano y modelo)}
+        \label{tab:iris-criterios}
+    }{
+        \begin{tabularx}{\textwidth}{
+            X
+            >{\centering\arraybackslash}X
+            >{\centering\arraybackslash}X
+            >{\columncolor{gray!15}\centering\arraybackslash}X
+        }
+            \hline
+            \textbf{Anotador} & \textbf{Equipo} & \textbf{$n$} & \textbf{Prev. «Sí» media} \\
+            \hline
+            UCM3 3 & UCM3 & 363 & 0,639 \\
+            UCM3 4 & UCM3 & 166 & 0,465 \\
+            Indexa 1 & Indexa & 127 & 0,408 \\
+            Indexa 5 & Indexa & 50 & 0,396 \\
+            UCM3 5 & UCM3 & 235 & 0,371 \\
+            Indexa 2 & Indexa & 128 & 0,325 \\
+            Indexa 3 & Indexa & 231 & 0,289 \\
+            Indexa 4 & Indexa & 12 & 0,283 \\
+            \hline
+            \texttt{gpt-4o-mini} & IA & 1.313 & 0,180 \\
+            \texttt{gemini-3.1-flash-lite} & IA & 1.313 & 0,155 \\
+            \texttt{gpt-5.4-nano} & IA & 1.313 & 0,043 \\
+            \hline
+        \end{tabularx}
+    }
+    \endgroup
+\end{table}
+
+Los tres modelos ocupan el extremo permisivo de la escala, por debajo de la
+anotadora humana más contenida. No se sitúan entre Indexa y UCM3: caen fuera del
+rango humano completo. Es la infradetección sistemática de la subsección anterior,
+leída ahora sobre una escala común a personas y máquinas. Como cada humano vio
+piezas distintas, la prevalencia mezcla criterio y muestra; al usar el modelo como
+instrumento común, aplicado a las mismas piezas que vio cada persona, para aislar
+el criterio, el orden se mantiene y UCM3-3 sigue siendo la anotadora más permisiva
+con diferencia.
+
+Un segundo análisis mide el acuerdo \emph{entre} modelos, que sí tienen solape
+total porque los tres codificaron las 1.313 piezas. El resultado es inesperado y
+se recoge en la Tabla~\ref{tab:iris-intraia}.
+
+\begin{table}[H]
+    \centering
+    \begingroup
+    \small
+    \ttabbox[\FBwidth]{
+        \caption{Acuerdo entre modelos ($\kappa$ media sobre las cinco variables), por nivel}
+        \label{tab:iris-intraia}
+    }{
+        \begin{tabularx}{\textwidth}{
+            X
+            >{\centering\arraybackslash}X
+            >{\columncolor{gray!15}\centering\arraybackslash}X
+        }
+            \hline
+            \textbf{Par de modelos} & \textbf{$\kappa$ (B0)} & \textbf{$\kappa$ (B1)} \\
+            \hline
+            \texttt{gemini} $\leftrightarrow$ \texttt{gpt-4o-mini}     & 0,079 & 0,052 \\
+            \texttt{gemini} $\leftrightarrow$ \texttt{gpt-5.4-nano}    & 0,067 & 0,014 \\
+            \texttt{gpt-4o-mini} $\leftrightarrow$ \texttt{gpt-5.4-nano} & 0,280 & 0,084 \\
+            \hline
+        \end{tabularx}
+    }
+    \endgroup
+\end{table}
+
+Los modelos concuerdan entre sí tan poco como con las personas ($\kappa$ entre
+0,014 y 0,084 en B1). Un «equipo de IA» con criterio compartido no existe: cada
+modelo es idiosincrásico, y lo único que tienen en común es la dirección del
+sesgo, no los casos concretos. Esto desmonta la lectura fácil de que «la IA tiene
+un sesgo» uniforme; hay tres sesgos distintos que solo coinciden en ser
+permisivos.
+
+Repetir el análisis sin la arquitectura de agentes (nivel B0) deja el patrón
+intacto: los modelos permanecen en el extremo permisivo y la distancia de criterio
+apenas se mueve, de modo que el sesgo es del modelo y no del sistema de
+\textit{skills}. Un matiz sí cambia y merece registro. Las \textit{Agent Skills}
+\textbf{reducen} el acuerdo entre modelos en los tres pares: el par
+\texttt{gpt-4o-mini} y \texttt{gpt-5.4-nano}, por ejemplo, baja de $\kappa = 0,280$
+a $0,084$. Dar herramientas y metodología cargable no acerca a los modelos hacia
+un criterio común, sino que acentúa las diferencias de cada uno. Concuerda con el
+resultado del núcleo: la arquitectura amplifica lo que cada modelo ya traía, para
+bien en \texttt{gemini} y para mal en el resto.
+
+Este encuadre aporta tres cosas al argumento del capítulo. Sitúa a modelos y
+humanas en una única escala sin necesitar doble codificación, lo que mitiga en
+parte la limitación de fiabilidad de la Sección~\ref{subsec:limitacion_fiabilidad}.
+Convierte «el modelo falla» en «el modelo es sistemáticamente más permisivo que
+cualquier anotadora», una afirmación descriptiva y defendible. Y refuerza la tesis
+de fondo: la variabilidad entre personas, con prevalencias medias que van de 0,283
+a 0,639, es del mismo orden que la distancia entre humanas y máquinas. El techo lo
+pone la tarea, no el modelo.
+
 \subsection{Coste computacional}
 \label{subsec:iris_coste}
 
@@ -474,8 +639,10 @@ arquitectura de agentes multiplica por 2,2 el coste respecto al \textit{baseline
 requerir aproximadamente diez llamadas por variable frente a una única llamada.
 
 Esta diferencia condiciona la viabilidad de la aproximación con modelos
-desplegados localmente. Las mediciones efectuadas sobre \texttt{gemma4:e4b}
-arrojan un tiempo aproximado de ocho minutos por artículo, lo que situaría el
-procesamiento del corpus de evaluación en torno a las 175 horas. El coste
-computacional de las arquitecturas agénticas constituye, por tanto, una
-limitación estructural para su despliegue fuera de infraestructura dedicada.
+desplegados localmente. El nivel B1 de \texttt{gemma4:e4b} se ejecutó sobre la
+granja del TSC ya citada (Sección~\ref{subsec:iris_local}), con un rendimiento
+medido de unos 54 segundos por artículo y agente. Repartiendo la carga en cuatro GPU, cada variante del corpus de
+evaluación tardó alrededor de cinco horas; en una sola GPU, el mismo cómputo
+superaría las diecinueve horas. El coste computacional de las arquitecturas
+agénticas constituye, por tanto, una limitación estructural para su despliegue
+fuera de infraestructura dedicada.

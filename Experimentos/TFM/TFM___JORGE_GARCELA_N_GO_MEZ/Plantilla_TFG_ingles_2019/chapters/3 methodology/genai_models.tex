@@ -14,7 +14,7 @@ los modelos considerados.
     \begingroup
     \small
     \ttabbox[\FBwidth]{
-        \caption{Modelos evaluados y vía de acceso}
+        \caption{Modelos considerados y vía de acceso}
         \label{tab:iris-modelos}
     }{
         \begin{tabularx}{\textwidth}{
@@ -26,18 +26,18 @@ los modelos considerados.
             \textbf{Proveedor} & \textbf{Modelo} & \textbf{Vía / observaciones} \\
             \hline
             Local (Ollama) & \texttt{gemma4:e4b} & Granja GPU TSC; modelo abierto de Google \\
-            Local (Ollama) & \texttt{qwen3:8b} & Granja GPU TSC; segundo local (opcional) \\
             OpenAI & \texttt{gpt-4o-mini} & API \\
             OpenAI & \texttt{gpt-5.4-nano} & API; variante de razonamiento (desactivado) \\
             Google & \texttt{gemini-3.1-flash-lite} & API \\
-            Anthropic & \texttt{claude-haiku-4-5} & API; excluido del núcleo por coste \\
             \hline
         \end{tabularx}
     }
     \endgroup
 \end{table}
 
-Tres decisiones sobre esta selección merecen justificarse.
+La evaluación del Capítulo~\ref{results_and_discussion} cubre estos cuatro
+modelos: \texttt{gemma4:e4b} en local y las tres variantes comerciales de API.
+Tres decisiones sobre la selección merecen justificarse.
 
 Para que la comparación entre proveedores sea justa, se desactivó el razonamiento
 explícito en los modelos que lo admiten (el parámetro \texttt{reasoning\_effort}
@@ -47,11 +47,6 @@ cómputo extra del que carezcan los demás.
 Los modelos locales no cuestan dinero, porque corren en infraestructura propia,
 pero sí tienen un coste computacional alto que condiciona su viabilidad a escala
 (Sección~\ref{subsec:iris_coste}).
-
-El representante de Anthropic queda fuera del núcleo experimental por coste. Al
-carecer de \textit{caching} automático, procesar el corpus con él sale del orden
-de un orden de magnitud más caro que con el resto, para un rendimiento
-comparable.
 
 La preferencia por variantes ligeras (\textit{mini}, \textit{nano},
 \textit{flash-lite}, modelos locales de pocos miles de millones de parámetros) es

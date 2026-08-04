@@ -438,16 +438,6 @@ Este capítulo establece el marco teórico y tecnológico sobre el que se fundam
 \input{chapters/2 state-of-the-art/det_sesgos}
 
 
-% \section{Hate Speech in Social Media}
-% \label{sec:hs_socialmedia}
-% \input{chapters/2 state-of-the-art/hs_socialmedia}
-
-
-% \section{Hate Speech Detection}
-% \label{sec:hs_detection}
-% \input{chapters/2 state-of-the-art/hs_detection}
-
-
 \section{Justificación de la Solución}
 \label{sec:justification_solution}
 \input{chapters/2 state-of-the-art/justification_solution}
@@ -472,13 +462,6 @@ This Chapter provides a detailed presentation of the different methods, models a
 \subsection{Variables del análisis}
 \label{target_variables_defs}
 \input{chapters/3 methodology/iris_variables}
-
-% Versiones residuales del TFG anterior (corpus de Twitter / #SeAcabó).
-% Se conservan en disco por trazabilidad; no se compilan.
-%\input{chapters/3 methodology/experts}
-%\input{chapters/3 methodology/data_source}
-%\input{chapters/3 methodology/eda_targetvariables}
-
 
 
 \section{Solución tecnológica basada en Inteligencia Artificial}
@@ -512,9 +495,9 @@ expertas (Sección~\ref{rag}), la instrumentación de la evaluación
 (Sección~\ref{eval}) y la prueba de concepto de aplicabilidad editorial
 (Sección~\ref{poc}).
 
-La infraestructura combina tres entornos, unidos por una tubería común y agnóstica
-al proveedor. Los modelos comerciales se acceden por API (OpenAI, Google,
-Anthropic). Los modelos de pesos abiertos se ejecutan mediante \textit{Ollama}
+La infraestructura combina dos entornos, unidos por una tubería común y agnóstica
+al proveedor. Los modelos comerciales se acceden por API (OpenAI, Google). Los
+modelos de pesos abiertos se ejecutan mediante \textit{Ollama}
 sobre la granja de GPU del Departamento de Teoría de la Señal y Comunicaciones, a
 la que se envían las peticiones desde un equipo cliente del laboratorio. El código
 fuente completo se recoge en el Apéndice~\ref{appendix_code}.
@@ -523,56 +506,6 @@ fuente completo se recoge en el Apéndice~\ref{appendix_code}.
 
 
 
-
-
-% \section{Data Pre-Processing}
-% \label{sec:data_preprocessing}
-% \input{Plantilla_TFG_ingles_2019/chapters/4 % implementation/data_preprocessing}
-
-% \subsection{Target Variables}
-% \label{target_variables}
-% \input{chapters/4 implementation/preprocess_targetvariables}
-
-% \subsection{Languages}
-% \label{languages}
-% \input{chapters/4 implementation/preprocess_languages}
-
-% \subsection{Lower Casing}
-% \input{chapters/4 implementation/preprocess_lowercasing}
-
-% \subsection{Lexicons}
-% \label{lexicons}
-% \input{chapters/4 implementation/preprocess_lexicons}
-
-% \subsection{Special Tokens}
-% \label{special_tokens}
-% \input{chapters/4 implementation/preprocess_specialtokens}
-
-% \subsection{Stylistic Features}
-% \label{stylistic_features}
-% \input{chapters/4 implementation/preprocess_stylisticfeatures}
-
-% \subsection{View Count}
-% \input{chapters/4 implementation/preprocess_viewcount}
-
-% \subsection{Emojis}
-% \input{chapters/4 implementation/preprocess_emojis}
-
-% \subsection{Stop-words Removal}
-% \input{chapters/4 implementation/preprocess_stopwords}
-
-% \subsection{Stemming}
-% \input{chapters/4 implementation/preprocess_stemming}
-
-
-% \section{Data Balancing}
-% \label{sec:class_imbalance}
-% \input{chapters/4 implementation/class_imbalance}
-
-
-% \section{Data Splitting}
-% \label{sec:splitting}
-% \input{chapters/4 implementation/data_splitting}
 
 
 \section{Arquitectura y diseño agéntico}
@@ -596,20 +529,6 @@ fuente completo se recoge en el Apéndice~\ref{appendix_code}.
 \input{chapters/4 implementation/poc}
 
 
-% \section{Classification Models}
-% In the following Section, we will discuss the implementation of the classification models explained in Chapter \ref{sec:methodology}.
-
-% \subsection{Machine Learning}
-% \label{machine_learning_models}
-% \input{chapters/4 implementation/machine_learning}
-
-% \subsection{Deep Learning}
-% \label{implementation_dl}
-% \input{chapters/4 implementation/deep_learning}
-
-% \subsection{Generative AI}
-% \label{implementation_genai}
-% \input{chapters/4 implementation/llms}
 
 
 
@@ -622,48 +541,22 @@ fuente completo se recoge en el Apéndice~\ref{appendix_code}.
 
 \chapter{Resultados y Discusión}
 \label{results_and_discussion}
-% [TFM] Intro de capítulo del TFG anterior (tabla 1090 exps. / Análisis General /
-% Insultos, corpus Twitter). Comentada; conservada por trazabilidad.
-\iffalse
-\input{Plantilla_TFG_ingles_2019/chapters/5 results and discussion/results_and_discussion}
-\fi
+\input{chapters/5 results and discussion/results_and_discussion}
 
 
 \section{Detección de lenguaje sexista con agentes especializados}
-\label{sec:iris_exp21}
-\input{chapters/5 results and discussion/iris_experimento21}
-
-
-% ---------------------------------------------------------------------
-% [TFM] SECCIONES RESIDUALES DEL TFG ANTERIOR (#SeAcabó / Análisis General /
-% Insultos, corpus Twitter). Comentadas con \iffalse...\fi (texto conservado).
-% La "Discusión" nueva de este TFM está pendiente de redactar.
-% Ver Experimentos/TFM/ESTADO_LATEX.md
-% ---------------------------------------------------------------------
-\iffalse
-\section{Análisis General}
-\label{sec:ageneral}
-The first task involved the classification of \textit{"Análisis General"} into two classes: "Comentario Positivo" and "Comentario Negativo", as detailed in Section \ref{target_variables}.
-
-
-\subsection{Generative AI}
-\newcommand{\insllamathreeonea}{INS-llama3.1-c0-p0en-0.1}
-\newcommand{\insgemmatwoba}{INS-gemma2b-c0-p0en-0.1}
-\newcommand{\insgemmatwobb}{INS-gemma2b-c1-p0en-0.5}
-\newcommand{\insllamathreeoneb}{INS-llama3.1-c1-p0en-0.1}
-\newcommand{\insllamathreeonec}{INS-llama3-c1-p0en-0.1}
-\input{chapters/5 results and discussion/insultos_llms}
+\label{sec:iris_experimentacion}
+\input{chapters/5 results and discussion/experimentacion}
 
 
 \section{Discusión}
 \label{sec:discussion}
-\input{Plantilla_TFG_ingles_2019/chapters/5 results and discussion/discussion}
-\fi
+\input{chapters/5 results and discussion/discussion}
 
 
-    %----------
-    %	CONCLUSIONS AND FUTURE WORK
-    %----------	
+%----------
+%	CONCLUSIONES Y LÍNEAS FUTURAS
+%----------
 
 \chapter{Conclusiones y Líneas Futuras}
 \input{chapters/6 conclusions and future work/conclusion}
@@ -707,63 +600,5 @@ The first task involved the classification of \textit{"Análisis General"} into 
 \label{appendix_ai_act}
 \pagenumbering{gobble} % Las páginas de los anexos no se numeran
 \input{Plantilla_TFG_ingles_2019/appendix/ai_act}
-
-% ---------------------------------------------------------------------
-% [TFM] ANEXOS DE PROMPTS ZERO-SHOT DEL TFG ANTERIOR (Análisis General /
-% Contenido Negativo / Insultos). Comentados con \iffalse...\fi (texto
-% conservado). Sustituir por los prompts e1/e2/e3 y las skills de este TFM.
-% ---------------------------------------------------------------------
-\iffalse
-\chapter{Context}
-\label{appendix_zeroshot_context}
-\pagenumbering{gobble} % Las páginas de los anexos no se numeran
-\input{Plantilla_TFG_ingles_2019/appendix/zeroshot_context}
-
-\chapter{Prompts for Análisis General}
-\label{appendix_zeroshot_prompts_ageneral}
-\pagenumbering{gobble} % Las páginas de los anexos no se numeran
-\input{Plantilla_TFG_ingles_2019/appendix/zeroshot_prompts_ageneral}
-
-\chapter{Prompts for Contenido Negativo}
-\label{appendix_zeroshot_prompts_cnegativo}
-\pagenumbering{gobble} % Las páginas de los anexos no se numeran
-\input{Plantilla_TFG_ingles_2019/appendix/zeroshot_prompts_cnegativo}
-
-\chapter{Prompts for Insultos}
-\label{appendix_zeroshot_prompts_insultos}
-\pagenumbering{gobble} % Las páginas de los anexos no se numeran
-\input{Plantilla_TFG_ingles_2019/appendix/zeroshot_prompts_insultos}
-\fi
-
-%\chapter* {Appendix X: Performance - Análisis General}
-%\label{appendix_results_ml_ageneral}
-%\pagenumbering{gobble} % Las páginas de los anexos no se numeran
-%\input{Plantilla_TFG_ingles_2019/appendix/performance_ageneral}
-
-%\chapter* {Appendix X: Performance - Contenido Negativo}
-%\label{appendix_results_ml_cnegativo}
-%\pagenumbering{gobble} % Las páginas de los anexos no se numeran
-%\input{Plantilla_TFG_ingles_2019/appendix/performance_cnegativo}
-
-%\chapter* {Appendix X: Performance - Insultos}
-%\label{appendix_results_ml_insultos}
-%\pagenumbering{gobble} % Las páginas de los anexos no se numeran
-%\input{Plantilla_TFG_ingles_2019/appendix/performance_insultos}
-
-%\chapter* {Appendix X: Results - ML - Análisis General}
-%\label{appendix_results_ml_ageneral}
-%\pagenumbering{gobble} % Las páginas de los anexos no se numeran
-%\input{Plantilla_TFG_ingles_2019/appendix/results_ml_ageneral}
-
-%\chapter* {Appendix X: Results - ML - Contenido Negativo}
-%\label{appendix_results_ml_cnegativo}
-%\pagenumbering{gobble} % Las páginas de los anexos no se numeran
-%\input{Plantilla_TFG_ingles_2019/appendix/results_ml_cnegativo}
-
-%\chapter* {Appendix X: Results - ML - Insultos}
-%\label{appendix_results_ml_insultos}
-%\pagenumbering{gobble} % Las páginas de los anexos no se numeran
-%\input{Plantilla_TFG_ingles_2019/appendix/results_ml_insultos}
-
 
 \end{document}

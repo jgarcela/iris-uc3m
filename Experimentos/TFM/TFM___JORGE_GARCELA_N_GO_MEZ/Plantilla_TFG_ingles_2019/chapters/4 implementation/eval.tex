@@ -14,13 +14,14 @@ el acuerdo esperable por azar, y la F1 macro pondera por igual ambas clases. La
 divergencia entre estas métricas resulta ser, de hecho, uno de los hallazgos del
 trabajo (Capítulo~\ref{results_and_discussion}).
 
-\subsection{Partición dev/test}
+\subsection{Evaluación \textit{zero-shot} sobre el corpus completo}
 
-Las decisiones de configuración que dependen de mirar los datos, como la elección
-de un umbral, se toman sobre un subconjunto de desarrollo (\textit{dev}) de 300
-piezas, y el resultado se reporta sobre el conjunto de prueba (\textit{test})
-restante. La partición es determinista. Sin esta separación, ajustar y medir
-sobre el mismo conjunto sobreestimaría el rendimiento.
+La evaluación es \textit{zero-shot}: el modelo recibe la metodología en el
+\textit{prompt} y no se ajusta ningún parámetro mirando los datos. Por eso todas
+las cifras del Capítulo~\ref{results_and_discussion} se calculan sobre las 1.313
+piezas etiquetadas, sin reservar un subconjunto de ajuste. Al no haber
+entrenamiento ni selección de umbrales sobre los datos, no existe el riesgo de
+sobreajustar a un conjunto y medir el rendimiento en él.
 
 \subsection{Instrumentación y reproducibilidad}
 

@@ -12,17 +12,12 @@ dispone a gran escala, y cambiar la supervisión por ejemplos por otra cosa: la
 \textbf{supervisión mediante libro de códigos}. La metodología experta va en el
 \textit{prompt} y el modelo la aplica a cada texto.
 
-\subsubsection{De la definición experta a la especificación ejecutable}
-
-Cada una de las cinco variables se formaliza en una especificación estructurada,
-generada a partir de \texttt{variables.json}, que traslada la definición del
-codebook a un formato que el modelo pueda seguir. Esa especificación va más allá
-de la definición conceptual. Incluye un criterio operativo de decisión, una
-metodología paso a paso, ejemplos positivos y contraejemplos comentados, casos
-límite documentados y las fronteras que separan la variable de sus contiguas. De
-esta misma fuente parten las dos arquitecturas que se comparan en el
-Capítulo~\ref{implementation}, así que ambas trabajan con idéntico contenido y
-difieren solo en cómo lo reciben.
+La metodología que se traslada al \textit{prompt} procede de la especificación
+estructurada de cada variable descrita en la Sección~\ref{sec:iris_variables}:
+criterio de decisión, pasos, ejemplos y fronteras, generados a partir de
+\texttt{variables.json}. Esa misma fuente alimenta las dos arquitecturas que se
+comparan en el Capítulo~\ref{implementation}, de modo que ambas parten de
+idéntico contenido y difieren solo en cómo lo reciben.
 
 \subsubsection{Salida estructurada y trazabilidad}
 
