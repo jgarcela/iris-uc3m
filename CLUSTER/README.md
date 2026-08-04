@@ -47,6 +47,7 @@ ssh jggomez@amaterasu.tsc.uc3m.es
 ## 3. Preparar el lanzador en amaterasu (una vez)
 
 Desde **queron**, sube los 3 ficheros del lanzador (deben ir juntos):
+
 ```bash
 ssh jggomez@amaterasu.tsc.uc3m.es 'mkdir -p ~/ollama_launcher'
 rsync -avz \
@@ -57,6 +58,7 @@ rsync -avz \
 ```
 
 En **amaterasu**, crea la carpeta de logs:
+
 ```bash
 mkdir -p /export/usuarios01/$USER/logs_llm
 ```
@@ -69,6 +71,7 @@ y un directorio de modelos por puerto: `/data/tmp/jggomez/models_{port}`).
 ## 4. Levantar los servidores Ollama (cada sesión)
 
 En **amaterasu**, dentro de un `screen` (para poder dejarlo y volver):
+
 ```bash
 # Asegúrate de NO estar ya dentro de un screen:
 echo $STY                 # si imprime algo, sal con: exit
@@ -76,10 +79,12 @@ screen -S ollama
 cd ~/ollama_launcher
 python3 launch_process.py -c llm.json
 ```
+
 Para salir dejándolo vivo: **Ctrl+A** y luego **D**. Para volver: `screen -r ollama`.
 NO lo mates con `screen -X ... quit` (deja los jobs huérfanos, ver §8).
 
 Comprueba dónde cayó cada servidor:
+
 ```bash
 squeue -u $USER -o "%.10i %.30j %.2t %R"          # nodo de cada job
 grep -H "OLLAMA_HOST:http" ~/logs_llm/*.err       # puerto de cada log
@@ -90,12 +95,14 @@ grep -H "OLLAMA_HOST:http" ~/logs_llm/*.err       # puerto de cada log
 ## 5. Verificar servidores y modelo (desde queron)
 
 Qué servidores están vivos Y alcanzables (ajusta host:puerto a lo del §4):
+
 ```bash
 for hp in bastet07:11434 bastet07:11435 bastet08:11436 bastet09:11437; do
   echo -n "$hp -> "; curl -s -m5 http://$hp/api/tags >/dev/null && echo OK || echo NO; done
 ```
 
 Descarga el modelo en cada servidor vivo (directorio por puerto → uno a uno):
+
 ```bash
 for hp in bastet07:11434 bastet07:11435 bastet08:11436; do
   echo "=== $hp ==="
@@ -103,6 +110,7 @@ for hp in bastet07:11434 bastet07:11435 bastet08:11436; do
   OLLAMA_HOST=$hp ollama list
 done
 ```
+
 Modelos disponibles y tamaño: `gemma4:e4b` (9.6 GB), `qwen3:8b` (5.2 GB, más rápido).
 Puedes tener los dos a la vez; eliges cuál con `--model` en el cliente.
 
@@ -114,6 +122,7 @@ Puedes tener los dos a la vez; eliges cuál con `--model` en el cliente.
 Usa siempre el python del venv (`.venv`), que tiene las dependencias.
 
 Prueba rápida (1 shard, 20 artículos):
+
 ```bash
 cd /home/jggomez/Desktop/IRIS/iris-uc3m
 OLLAMA_HOST=bastet07:11434 .venv/bin/python3 CLUSTER/experimento_12_cluster/main_cluster.py \
@@ -124,6 +133,7 @@ OLLAMA_HOST=bastet07:11434 .venv/bin/python3 CLUSTER/experimento_12_cluster/main
 ```
 
 Corrida completa (ejemplo con 3 servidores → 3 shards):
+
 ```bash
 cd /home/jggomez/Desktop/IRIS/iris-uc3m
 DATA="$PWD/data/2026_02_10_imio_def_todo_envio_heidy.xlsx - 2026_02_09_imio_def_todo_clara_scrape.csv"
@@ -137,6 +147,7 @@ OLLAMA_HOST=bastet07:11434 $PY $CLI/main_cluster.py --model $M --shard 0 --n-sha
 OLLAMA_HOST=bastet07:11435 $PY $CLI/main_cluster.py --model $M --shard 1 --n-shards 3 --workers 4 --experimentos-dir "$EXP" --data "$DATA" --output-dir "$OUT" > $CLI/cli1.log 2>&1 &
 OLLAMA_HOST=bastet08:11436 $PY $CLI/main_cluster.py --model $M --shard 2 --n-shards 3 --workers 4 --experimentos-dir "$EXP" --data "$DATA" --output-dir "$OUT" > $CLI/cli2.log 2>&1 &
 ```
+
 Seguir el avance: `tail -n3 CLUSTER/experimento_12_cluster/cli*.log` y `jobs -l`.
 
 Reanudación: si un shard se corta, relanza el mismo comando; salta los `IdNoticia`

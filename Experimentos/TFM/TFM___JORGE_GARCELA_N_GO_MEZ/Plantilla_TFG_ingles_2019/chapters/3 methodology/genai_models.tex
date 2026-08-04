@@ -1,22 +1,61 @@
 %----------
-%	GENAI MODELS
-%----------	
- 
+%	MODELOS EVALUADOS (multi-proveedor)
+%----------
 
+\label{sec:genai_models_iris}
 
-Considering all this information and the hardware employed (detailed in Section~\ref{implementation}), we have decided to employ the following four open-source generative models, ordered by release date:
+La selección cubre las dos vías de despliegue y las principales familias
+comerciales. En cada caso se eligen variantes ligeras y económicas, aptas para
+procesar un corpus periodístico completo. La Tabla~\ref{tab:iris-modelos} recoge
+los modelos considerados.
 
-\begin{itemize}
+\begin{table}[H]
+    \centering
+    \begingroup
+    \small
+    \ttabbox[\FBwidth]{
+        \caption{Modelos evaluados y vía de acceso}
+        \label{tab:iris-modelos}
+    }{
+        \begin{tabularx}{\textwidth}{
+            l
+            l
+            >{\raggedright\arraybackslash}X
+        }
+            \hline
+            \textbf{Proveedor} & \textbf{Modelo} & \textbf{Vía / observaciones} \\
+            \hline
+            Local (Ollama) & \texttt{gemma4:e4b} & Granja GPU TSC; modelo abierto de Google \\
+            Local (Ollama) & \texttt{qwen3:8b} & Granja GPU TSC; segundo local (opcional) \\
+            OpenAI & \texttt{gpt-4o-mini} & API \\
+            OpenAI & \texttt{gpt-5.4-nano} & API; variante de razonamiento (desactivado) \\
+            Google & \texttt{gemini-3.1-flash-lite} & API \\
+            Anthropic & \texttt{claude-haiku-4-5} & API; excluido del núcleo por coste \\
+            \hline
+        \end{tabularx}
+    }
+    \endgroup
+\end{table}
 
-    \item  \textbf{Mistral 7B Instruct}\footnote{From \url{https://huggingface.co/TheBloke/Mistral-7B-Instruct-v0.2-GGUF}, last visited 01/08/24}: In particular, this model is a fine-tuned version of Mistral-7B \cite{jiang-2023}, released on 27th September 2023, and it is a 7-billion-parameter language model, with a 32k context window and specific parameter adjustments. Designed for advanced natural language processing tasks, Mistral models excel in applications such as dialogue generation and summarization, making them highly efficient and effective in complex tasks. In our project, we are using the \textit{"7B Instruct v0.2 Q4"} model.
+Tres decisiones sobre esta selección merecen justificarse.
 
-    \item  \textbf{Gemma 2B IT}\footnote{From \url{https://huggingface.co/lmstudio-ai/gemma-2b-it-GGUF}, last visited 01/08/2024}: It is a model \cite{gemma-2024} that belongs to a family of lightweight, state-of-the-art open models from Google, released on 21st February 2024, trained on a 6-trillion-token dataset and designed for various text generation tasks like question answering and summarization. In this case, we are using the\textit{ "2B IT Q8"} version.
+Para que la comparación entre proveedores sea justa, se desactivó el razonamiento
+explícito en los modelos que lo admiten (el parámetro \texttt{reasoning\_effort}
+en OpenAI, \texttt{thinking\_budget} en Google). Así ningún modelo dispone de
+cómputo extra del que carezcan los demás.
 
-    \item  \textbf{Llama 3 8B Instruct}\footnote{From \url{https://huggingface.co/lmstudio-community/Meta-Llama-3-8B-Instruct-GGUF}, last visited 01/08/24}: This model \cite{llama31-2024} belongs to the Meta Llama 3 family of large language models developed by Meta and released on 18th April 2024. It was trained on over 15 trillion tokens from publicly available sources, and optimized for dialogue, is said to outperform many open-source chat models on diverse benchmarks\footnote{From \url{https://huggingface.co/meta-llama/Meta-Llama-3-8B-Instruct}}. For this thesis, we are using the \textit{"8B Instruct Q4"} model.
+Los modelos locales no cuestan dinero, porque corren en infraestructura propia,
+pero sí tienen un coste computacional alto que condiciona su viabilidad a escala
+(Sección~\ref{subsec:iris_coste}).
 
-    \item \textbf{Llama 3.1 8B Instruct}\footnote{From \url{https://huggingface.co/lmstudio-community/Meta-Llama-3.1-8B-Instruct-GGUF}, last visited 08/08/24}: Llama 3.1 \cite{llama31-2024} is a recent update to the Llama 3 family, released on 23rd July 2024, which offers state-of-the-art performance in open-source models, excelling in multilingual tasks. It features a 128k context window and has been trained on 15T tokens, making it versatile for a wide range of applications. In our case, due to hardware and software restrictions, we are using version \textit{"8B Instruct Q4"}.
-\end{itemize}
+El representante de Anthropic queda fuera del núcleo experimental por coste. Al
+carecer de \textit{caching} automático, procesar el corpus con él sale del orden
+de un orden de magnitud más caro que con el resto, para un rendimiento
+comparable.
 
-%a\color{red} Mention GrokAI \color{black}
-
-\newpage
+La preferencia por variantes ligeras (\textit{mini}, \textit{nano},
+\textit{flash-lite}, modelos locales de pocos miles de millones de parámetros) es
+deliberada. Un sistema de asistencia editorial que procese miles de piezas
+necesita un coste por documento contenido. Esa elección tiene un precio, menor
+capacidad frente a los modelos punteros, que se discute a la luz de los
+resultados en el Capítulo~\ref{results_and_discussion}.

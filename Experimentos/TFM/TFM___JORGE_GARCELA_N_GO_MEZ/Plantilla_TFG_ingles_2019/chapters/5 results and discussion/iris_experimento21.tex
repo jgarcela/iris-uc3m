@@ -13,26 +13,32 @@ lenguaje sexista consideradas (V25, V26, V30, V33 y V35).
 \subsection{Diseño experimental y condiciones controladas}
 \label{subsec:iris_diseno}
 
-La comparación se articula en dos niveles que comparten corpus, modelos,
-número de llamadas al modelo (cinco por artículo, una por variable) y formato
-de salida. La única diferencia entre ambos es \emph{cómo llega la metodología
-experta al modelo}:
+La aportación central de este trabajo es la arquitectura de agentes
+especializados con \textit{Agent Skills}, descrita en el
+Capítulo~\ref{implementation} y denotada aquí como \textbf{nivel B1}. Para
+evaluarla con honestidad no basta con medir su rendimiento en aislado: hace falta
+una \textbf{condición de control} que reciba exactamente la misma metodología por
+una vía más simple. Esa condición es el \textbf{nivel B0}. Ambos niveles comparten
+corpus, modelos, número de llamadas (cinco por artículo, una por variable) y
+formato de salida. Solo cambia \emph{cómo llega la metodología al modelo}:
 
 \begin{itemize}
-    \item \textbf{Nivel B0 (\textit{baseline}).} La metodología de cada variable
-    se inyecta íntegramente en el \textit{prompt}. El modelo emite su veredicto
-    en una única llamada, sin herramientas.
-    \item \textbf{Nivel B1 (\textit{Agent Skills}).} El agente recibe únicamente
-    los metadatos (\texttt{name} y \texttt{description}) de las \textit{skills}
-    disponibles y carga bajo demanda el cuerpo de la que necesita
+    \item \textbf{Nivel B1 (\textit{Agent Skills}, sistema propuesto).} El agente
+    recibe únicamente los metadatos (\texttt{name} y \texttt{description}) de las
+    \textit{skills} disponibles y carga bajo demanda el cuerpo de la que necesita
     (\textit{progressive disclosure}), pudiendo además consultar las guías
     expertas y verificar sus evidencias mediante herramientas.
+    \item \textbf{Nivel B0 (\textit{baseline}, control).} La metodología de cada
+    variable se inyecta íntegramente en el \textit{prompt}. El modelo emite su
+    veredicto en una única llamada, sin herramientas.
 \end{itemize}
 
-Este diseño evita el sesgo de comparación presente en trabajos previos del
-proyecto, donde el nivel con \textit{skills} empleaba una única llamada
-conjunta frente a cinco llamadas independientes del \textit{baseline}, de modo
-que cualquier diferencia observada resultaba inatribuible. Para garantizar la
+El papel del control es aislar la aportación de la arquitectura. Que B0 y B1
+compartan todo salvo el mecanismo de entrega evita el sesgo de comparación
+presente en trabajos previos del proyecto, donde el nivel con \textit{skills}
+empleaba una única llamada conjunta frente a cinco llamadas independientes del
+\textit{baseline}, de modo que cualquier diferencia observada resultaba
+inatribuible. Para garantizar la
 comparabilidad entre proveedores se desactivó el razonamiento explícito en
 todos los modelos (\texttt{reasoning\_effort} en OpenAI,
 \texttt{thinking\_budget} en Google) y se empleó el mismo fichero de
@@ -125,14 +131,39 @@ niveles para los tres proveedores evaluados.
     \endgroup
 \end{table}
 
-El resultado principal es que \textbf{el empaquetado de la metodología como
-Agent Skills no mejora el acuerdo con las anotadoras expertas}. En promedio, el
-coeficiente $\kappa$ resulta incluso ligeramente inferior en el nivel B1
-($+0,028$) que en el \textit{baseline} ($+0,037$), a pesar de que B1 multiplica
-por 2,2 el coste de inferencia. El efecto es además dependiente del modelo:
-únicamente \texttt{gemini-3.1-flash-lite} mejora ($\Delta\kappa = +0,040$),
-mientras que \texttt{gpt-4o-mini} y \texttt{gpt-5.4-nano} empeoran
-($-0,019$ y $-0,048$ respectivamente).
+El hallazgo más matizado, y el más informativo, es que \textbf{el efecto de las
+\textit{Agent Skills} depende del modelo}. En \texttt{gemini-3.1-flash-lite}, la
+arquitectura propuesta mejora el acuerdo de forma clara: el coeficiente $\kappa$
+pasa de $+0,026$ a $+0,066$ ($\Delta\kappa = +0,040$), y lo hace acompañado de
+subidas simultáneas en exactitud y F1, señal de una ganancia genuina y no de un
+artefacto de la distribución (Sección~\ref{subsec:iris_divergencia}). En los dos
+modelos de OpenAI, en cambio, las \textit{skills} no ayudan e incluso perjudican
+($\Delta\kappa = -0,019$ en \texttt{gpt-4o-mini} y $-0,048$ en
+\texttt{gpt-5.4-nano}).
+
+Esta dependencia del modelo tiene una explicación en el comportamiento del agente
+(Sección~\ref{subsec:iris_lift}): las \textit{Agent Skills} aportan cuando el
+modelo aprovecha de verdad la carga bajo demanda y las herramientas, y estorban
+cuando el modelo sobrecarga el catálogo o infrautiliza las acciones. La
+arquitectura, por tanto, no es útil ni inútil en abstracto: su valor está
+condicionado a la capacidad del modelo para explotarla.
+
+En términos \emph{agregados}, ese balance desigual se salda en tablas: el $\kappa$
+medio de B1 ($+0,028$) queda incluso por debajo del control B0 ($+0,037$), y a un
+coste de inferencia 2,2 veces mayor. Conviene ser explícito al respecto. La
+evaluación mide la arquitectura, no la defiende: en media, y sobre estos tres
+modelos, empaquetar la metodología como \textit{Agent Skills} no mejora el
+acuerdo con las anotadoras expertas.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{fig_b0b1_metricas.pdf}
+    \caption{Comparación B0 (\textit{baseline}) frente a B1 (Agent Skills) en las
+    tres métricas, para los tres modelos ($N=1.313$). La exactitud mejora con B1
+    en dos de tres modelos, pero el coeficiente $\kappa$ solo mejora en
+    \texttt{gemini-3.1-flash-lite}.}
+    \label{fig:iris-b0b1-metricas}
+\end{figure}
 
 \subsection{Divergencia entre exactitud y \texorpdfstring{$\kappa$}{kappa}}
 \label{subsec:iris_divergencia}
@@ -141,7 +172,20 @@ La Tabla~\ref{tab:iris-b0b1} revela un fenómeno que constituye, a juicio de
 este trabajo, su hallazgo metodológico más relevante: \textbf{la exactitud y el
 coeficiente $\kappa$ apuntan en direcciones opuestas}. Considerando las medias,
 el nivel B1 mejora la exactitud en $+0,036$ mientras empeora $\kappa$ en
-$-0,009$.
+$-0,009$. La Figura~\ref{fig:iris-divergencia} lo visualiza: al pasar de B0 a B1,
+las flechas se desplazan a la derecha (más exactitud) pero descienden o se
+mantienen en altura ($\kappa$ que no mejora), salvo en \texttt{gemini}.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.72\textwidth]{fig_divergencia.pdf}
+    \caption{Trayectoria de cada modelo de B0 a B1 en el plano
+    exactitud--$\kappa$. Un desplazamiento hacia la derecha indica más exactitud;
+    hacia arriba, más acuerdo. En dos de tres modelos la exactitud sube mientras
+    $\kappa$ baja, señal de que la mejora aparente es un artefacto de la
+    distribución marginal y no de la capacidad discriminativa.}
+    \label{fig:iris-divergencia}
+\end{figure}
 
 El mecanismo subyacente es identificable. Las \textit{skills} vuelven al modelo
 menos conservador: en \texttt{gpt-4o-mini} la proporción de respuestas «Sí»
@@ -293,6 +337,133 @@ reestructuración del \textit{prompt} que exige duplica el volumen total
 consumido, de modo que el coste neto se incrementa. Cabe señalar que la
 implementación de esta técnica no es neutra respecto al comportamiento del
 agente, extremo que rara vez se documenta en la literatura aplicada.
+
+\subsection{Análisis de errores y validez de la tarea}
+\label{subsec:iris_errores}
+
+El bajo acuerdo absoluto observado en las secciones anteriores plantea una
+pregunta que condiciona la interpretación de todo el capítulo: ¿refleja una
+limitación de los modelos, o un límite intrínseco de la propia tarea? Esta
+sección aborda esa cuestión mediante tres análisis complementarios.
+
+\subsubsection{Heterogeneidad entre anotadores}
+
+El corpus registra, para cada pieza, la persona que la codificó. Las 1.313
+noticias anotadas se reparten entre dos equipos —Indexa (548 piezas) y UCM3
+(765)—. Aunque la ausencia de doble codificación
+(Sección~\ref{subsec:limitacion_fiabilidad}) impide calcular la fiabilidad
+intercodificadora, sí es posible medir el acuerdo del sistema con cada equipo
+por separado, a modo de análisis de sensibilidad. La
+Tabla~\ref{tab:iris-sensibilidad} recoge el resultado para el nivel B1.
+
+\begin{table}[H]
+    \centering
+    \begingroup
+    \small
+    \ttabbox[\FBwidth]{
+        \caption{Análisis de sensibilidad: acuerdo (B1) según el equipo de anotación}
+        \label{tab:iris-sensibilidad}
+    }{
+        \begin{tabularx}{\textwidth}{
+            X
+            X
+            >{\centering\arraybackslash}X
+            >{\centering\arraybackslash}X
+            >{\columncolor{gray!15}\centering\arraybackslash}X
+        }
+            \hline
+            \textbf{Modelo} & \textbf{Subconjunto} & \textbf{Exactitud} & \textbf{F1 macro} & \textbf{$\kappa$} \\
+            \hline
+            \multirow{3}{*}{\texttt{gemini-3.1-flash-lite}}
+              & Todas (1.313)   & 0,661 & 0,443 & $+0,066$ \\
+              & Solo Indexa (548) & \textbf{0,741} & \textbf{0,503} & $\mathbf{+0,118}$ \\
+              & Solo UCM3 (765)  & 0,604 & 0,398 & $+0,043$ \\
+            \hline
+            \multirow{3}{*}{\texttt{gpt-4o-mini}}
+              & Todas           & 0,612 & 0,438 & $+0,014$ \\
+              & Solo Indexa     & 0,693 & 0,482 & $+0,042$ \\
+              & Solo UCM3       & 0,554 & 0,398 & $+0,001$ \\
+            \hline
+            \multirow{3}{*}{\texttt{gpt-5.4-nano}}
+              & Todas           & 0,569 & 0,364 & $+0,004$ \\
+              & Solo Indexa     & 0,661 & 0,406 & $+0,014$ \\
+              & Solo UCM3       & 0,502 & 0,323 & $-0,001$ \\
+            \hline
+        \end{tabularx}
+    }
+    \endgroup
+\end{table}
+
+El acuerdo con Indexa es sistemáticamente muy superior al obtenido con UCM3, en
+los tres modelos y en las tres métricas de forma coherente. Para
+\texttt{gemini-3.1-flash-lite}, restringir la evaluación a Indexa prácticamente
+duplica el coeficiente $\kappa$ (de $0,066$ a $0,118$) y eleva la exactitud
+ocho puntos; contra UCM3 en solitario, $\kappa$ desciende hacia el azar (hasta
+valores negativos en \texttt{gpt-5.4-nano}). \textbf{La magnitud de esta
+variabilidad entre equipos es comparable a la diferencia entre modelos}, lo que
+indica que el origen de la anotación pesa en el acuerdo tanto como la elección
+del modelo.
+
+Debe subrayarse que este resultado \emph{no} autoriza a reportar únicamente el
+subconjunto más favorable: al no existir doble codificación, no puede
+determinarse qué equipo refleja mejor el constructo, y la diferencia está además
+confundida con el hecho de que cada equipo codificó piezas distintas. El
+análisis acota el techo alcanzable, pero no lo atribuye a un error de anotación.
+
+\subsubsection{Casos de consenso de los modelos frente al \textit{ground truth}}
+
+Un segundo análisis examina las celdas en las que \textbf{los tres modelos
+coinciden entre sí} pero difieren de la anotación experta: son las más
+diagnósticas, pues descartan el error idiosincrásico de un modelo concreto. De
+las 6.565 celdas evaluadas (1.313 piezas $\times$ 5 variables), 1.439 presentan
+consenso de los tres modelos en contra del \textit{ground truth}. Su dirección
+es prácticamente unánime: en \textbf{1.436 casos} los tres modelos responden «No»
+donde la anotación dice «Sí», y solo en 3 casos ocurre lo contrario. El
+desacuerdo es, por tanto, un \textbf{sesgo sistemático de infradetección}: los
+modelos detectan de forma consistente menos sexismo que las anotadoras, y no de
+manera aleatoria.
+
+Se descartó empíricamente que este fenómeno obedeciese a defectos en la
+extracción del texto: solo 49 de las 1.313 piezas (3,7\,\%) presentan
+contenido sospechoso —muy corto o compuesto por texto auxiliar de la web
+(avisos de suscripción, fichas de autoría)— y su exclusión no altera las
+métricas (para \texttt{gemini-3.1-flash-lite}, la exactitud pasa de $0,661$ a
+$0,660$). El desacuerdo se produce, por tanto, sobre artículos completos y
+correctamente extraídos.
+
+\subsubsection{Lectura cualitativa}
+
+La revisión manual de casos de consenso permite atribuir el desacuerdo a tres
+mecanismos, ninguno de los cuales constituye un fallo de detección en sentido
+estricto:
+
+\begin{itemize}
+    \item \textbf{Contradicción interna del codebook (V25).} La definición de
+    \texttt{lenguaje\_sexista} combina una regla estricta —la regla de inversión—
+    con una cláusula agregadora según la cual todo subtipo de sexismo lingüístico
+    implica marcar V25. Los modelos aplican la primera; la anotación, a menudo,
+    la segunda. Ambas lecturas son defendibles porque el propio criterio es
+    ambiguo.
+
+    \item \textbf{Umbral del masculino genérico (V26).} El español emplea el
+    masculino genérico de forma pervasiva (\textit{los trabajadores}, \textit{los
+    ciudadanos}). La anotación tiende a marcarlo sistemáticamente —lo que explica
+    su prevalencia del 81\,\%—, mientras que los modelos aplican un umbral más
+    alto y solo lo señalan cuando resulta evitable e invisibilizador. Sistema y
+    anotadoras responden, de hecho, a preguntas distintas.
+
+    \item \textbf{Anotación sobre-inclusiva (V30).} En una fracción de los casos
+    de \texttt{sexismo\_discurso} no se aprecia, en una lectura atenta del texto,
+    el fenómeno codificado; estos casos se concentran en el anotador de menor
+    acuerdo global.
+\end{itemize}
+
+En conjunto, estos análisis reencuadran el resultado principal: la baja
+concordancia \textbf{no debe leerse como incapacidad de los modelos para detectar
+sexismo}, sino como el producto de un criterio experto notablemente amplio, de
+una heterogeneidad sustancial entre anotadores y de la ambigüedad de algunas
+definiciones del codebook. El coeficiente $\kappa$ mide, en buena medida, esa
+distancia de criterio.
 
 \subsection{Coste computacional}
 \label{subsec:iris_coste}

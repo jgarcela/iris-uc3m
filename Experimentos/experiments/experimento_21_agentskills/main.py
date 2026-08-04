@@ -90,6 +90,8 @@ def main() -> int:
                     help="Sólo filas con GT en las 5 variables (para métricas)")
     ap.add_argument("--sin-resumenes-guias", action="store_true",
                     help="Ablación: no listar las skills-resumen de guías en el catálogo")
+    ap.add_argument("--sin-consultar-guia", action="store_true",
+                    help="Ablación: desactivar la tool RAG en vivo CONSULTAR_GUIA")
     ap.add_argument("--sin-cache", action="store_true",
                     help="Ablación: desactivar prompt caching (prompt en un único mensaje)")
     ap.add_argument("--baseline", action="store_true",
@@ -100,6 +102,9 @@ def main() -> int:
     if args.sin_resumenes_guias:
         agente.INCLUIR_RESUMENES_GUIAS = False
         print("Ablación: catálogo SIN skills-resumen de guías.")
+    if args.sin_consultar_guia:
+        agente.HABILITAR_CONSULTAR_GUIA = False
+        print("Ablación: SIN tool RAG en vivo CONSULTAR_GUIA.")
     if args.sin_cache:
         agente.USAR_PROMPT_CACHE = False
         print("Ablación: SIN prompt caching (prompt en un único mensaje).")

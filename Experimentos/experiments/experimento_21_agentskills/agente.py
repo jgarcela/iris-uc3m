@@ -49,11 +49,7 @@ Trabaja por acciones. En cada turno responde con UNA sola acción, exactamente e
       Carga el cuerpo de esa skill. Carga SIEMPRE primero tu skill de variable ({variable}).
       Carga una skill auxiliar sólo si la metodología lo pide o si dudas.
 
-  CONSULTAR_GUIA: <consulta en lenguaje natural>
-      Recupera pasajes LITERALES de las guías expertas de lenguaje (Sainz de Baranda,
-      CSD, guías de lenguaje inclusivo…) para fundamentar un caso dudoso. Cita la fuente.
-
-  VERIFICAR: ["evidencia 1", "evidencia 2"]
+{bloque_guia}  VERIFICAR: ["evidencia 1", "evidencia 2"]
       Comprueba que esos fragmentos son literales del texto antes de cerrar.
 
   FINAL: {{"codigo": <n>, "explicacion": "...", "evidencias": [...]}}
@@ -66,6 +62,16 @@ Reglas: no inventes el contenido de una skill sin haberla leído. No mezcles otr
 # Ablación de catálogo: si es False, las skills-resumen de guías no se listan ni se
 # pueden cargar (el agente sigue teniendo su skill de variable + auxiliares + CONSULTAR_GUIA).
 INCLUIR_RESUMENES_GUIAS = True
+
+# Ablación de la tool RAG en vivo: si es False, ni se ofrece CONSULTAR_GUIA en el
+# system prompt ni se atiende la acción (se ignora como acción desconocida).
+HABILITAR_CONSULTAR_GUIA = True
+
+_BLOQUE_GUIA = """  CONSULTAR_GUIA: <consulta en lenguaje natural>
+      Recupera pasajes LITERALES de las guías expertas de lenguaje (Sainz de Baranda,
+      CSD, guías de lenguaje inclusivo…) para fundamentar un caso dudoso. Cita la fuente.
+
+"""
 
 # Ablación de prompt caching: si es True se inserta IRIS_CACHE_BREAK, que además de
 # habilitar la caché reestructura el prompt (prefijo→system, sufijo→user). Ese cambio
@@ -181,7 +187,9 @@ def clasificar_variable(
     Ejecuta el agente especializado en `variable` sobre `texto`.
     Devuelve (resultado, traza). traza = métricas de comportamiento del agente.
     """
-    system = SYSTEM_TMPL.format(variable=variable, catalogo=_construir_catalogo(variable))
+    system = SYSTEM_TMPL.format(
+        variable=variable, catalogo=_construir_catalogo(variable),
+        bloque_guia=_BLOQUE_GUIA if HABILITAR_CONSULTAR_GUIA else "")
     permitidas = _permitidas(variable)
     historial = [f"=== TEXTO A CLASIFICAR ===\n{texto}\n=== FIN TEXTO ==="]
 
@@ -230,7 +238,7 @@ def clasificar_variable(
             traza["skills_cargadas"].append(arg)
             historial.append(f"[Acción] LEER_SKILL: {arg}")
             historial.append(f"[Resultado skill {arg}]\n{cuerpo}")
-        elif accion == "CONSULTAR_GUIA":
+        elif accion == "CONSULTAR_GUIA" and HABILITAR_CONSULTAR_GUIA:
             traza["n_tools"] += 1
             traza["guias_consultadas"].append(arg)
             pasajes = guias.consultar_guia(arg, k=2)

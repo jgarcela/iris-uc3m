@@ -1,12 +1,57 @@
 %----------
-%	PROMPTS
-%----------	
+%	SKILLS, PROMPTS Y HERRAMIENTAS
+%----------
 
-To ensure robust evaluation of our experiments, we split the dataset into the same training and test sets for the machine and deep learning models, as detailed in Figures~\ref{fig:ml_models_implementation} and~\ref{fig:dl_models_implementation} respectively. Notice that for generative models we have not applied any data splitting as we are following the zero-shot learning approach, as commented in Section~\ref{zero_shot}.
+Toda la metodología del sistema vive en ficheros \texttt{SKILL.md}: un documento
+por unidad de conocimiento, con un encabezado (nombre y descripción) y el cuerpo
+con las instrucciones. La descripción es lo que el agente ve antes de decidir si
+carga la skill, y por tanto lo que gobierna el enrutado. El cuerpo solo se lee
+cuando hace falta.
 
-For the ML experiments, this was done using the \textit{"Sklearn"} python library and the \texttt{train\_test\_split} function with the \texttt{random\_state=0} parameter and \texttt{stratify} to maintain the original class distribution in both sets. The stratified splitting ensures that both the training and test sets have a similar distribution of classes as the original dataset. Specifically, we allocated 80\% of the data for training and 20\% for testing. 
+\subsection{Tipos de skill}
 
-For the DL experiments, we followed a similar approach also utilizing a stratified splitting technique and with the \texttt{random\_state=0} parameter. In this case, the process involved an initial split of 80\% of the data for training and validation and 20\% for testing. Subsequently, the training and validation set was further divided, allocating 90\% of the remaining data to training and 10\% to validation. 
+Hay tres tipos, con papeles distintos:
 
-\newpage
+\begin{itemize}
+    \item \textbf{Skills de variable} (cinco). Contienen la metodología paso a
+    paso de cada variable. Se generan automáticamente desde
+    \texttt{variables.json}, de modo que el codebook y las skills nunca se
+    desincronizan. Cada agente carga la suya.
+    \item \textbf{Skills auxiliares} (tres): \texttt{guia\_regla\_inversion},
+    \texttt{guia\_lenguaje\_inclusivo} y \texttt{verificar\_evidencias}.
+    Cualquier agente las carga bajo demanda cuando duda.
+    \item \textbf{Resúmenes de guías}. Condensaciones de las guías reales de
+    lenguaje no sexista (Sección~\ref{rag}), disponibles como orientación rápida.
+\end{itemize}
 
+Que las skills de variable se generen desde \texttt{variables.json} tiene una
+consecuencia importante para la validez del experimento: el nivel B0 y el nivel
+B1 parten del mismo fichero fuente. El \textit{baseline} recibe ese contenido
+inyectado en el \textit{prompt}; el agente lo carga como skill. El contenido es
+byte a byte el mismo, así que la comparación aísla el mecanismo de entrega y no
+un cambio en la metodología.
+
+\subsection{Herramientas}
+
+Las herramientas del agente son deliberadamente pocas y de propósito claro:
+
+\begin{itemize}
+    \item \texttt{list\_skills} devuelve solo los metadatos (nombre y
+    descripción) de las skills visibles. Es lo que hace efectiva la
+    \textit{progressive disclosure}: el agente elige a ciegas del cuerpo.
+    \item \texttt{read\_skill} entrega el cuerpo completo de una skill concreta.
+    \item \texttt{verificar\_evidencias} comprueba, contra el mismo texto que vio
+    el modelo, qué fragmentos citados son literales.
+\end{itemize}
+
+\subsection{Salida estructurada y verificación de evidencias}
+
+Cada agente cierra con un objeto JSON de tres campos (\texttt{codigo},
+\texttt{explicacion}, \texttt{evidencias}), descrito en la
+Sección~\ref{sec:zeroshot_iris}. Sobre las evidencias se aplica una comprobación
+automática: solo se conservan los fragmentos que aparecen \emph{literalmente} en
+el texto original. Esta verificación cumple dos funciones. Refuerza la
+trazabilidad exigida por el marco \textit{human-in-the-loop}, y evita un fallo
+sutil que arrastraban implementaciones anteriores, donde el texto se alteraba
+antes de contrastar las evidencias y estas se descartaban por error. Aquí la
+comprobación se hace contra el texto exacto que recibió el modelo.

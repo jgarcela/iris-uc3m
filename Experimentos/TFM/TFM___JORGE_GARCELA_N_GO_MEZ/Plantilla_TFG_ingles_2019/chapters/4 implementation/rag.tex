@@ -1,12 +1,31 @@
 %----------
-%	RAG
-%----------	
+%	RECUPERACIÓN SOBRE GUÍAS EXPERTAS (RAG)
+%----------
 
-To ensure robust evaluation of our experiments, we split the dataset into the same training and test sets for the machine and deep learning models, as detailed in Figures~\ref{fig:ml_models_implementation} and~\ref{fig:dl_models_implementation} respectively. Notice that for generative models we have not applied any data splitting as we are following the zero-shot learning approach, as commented in Section~\ref{zero_shot}.
+El codebook del proyecto se inspira en guías institucionales de lenguaje no
+sexista (Sección~\ref{sec:experts}). Esas guías cumplen dos papeles distintos en
+el sistema, y conviene no confundirlos.
 
-For the ML experiments, this was done using the \textit{"Sklearn"} python library and the \texttt{train\_test\_split} function with the \texttt{random\_state=0} parameter and \texttt{stratify} to maintain the original class distribution in both sets. The stratified splitting ensures that both the training and test sets have a similar distribution of classes as the original dataset. Specifically, we allocated 80\% of the data for training and 20\% for testing. 
+Como \textbf{fuente}, son el material del que se destila la metodología de cada
+variable. Ese uso es indirecto: la analista y quien redacta las skills se apoyan
+en ellas, pero el modelo no las lee.
 
-For the DL experiments, we followed a similar approach also utilizing a stratified splitting technique and with the \texttt{random\_state=0} parameter. In this case, the process involved an initial split of 80\% of the data for training and validation and 20\% for testing. Subsequently, the training and validation set was further divided, allocating 90\% of the remaining data to training and 10\% to validation. 
+Como \textbf{herramienta en vivo}, en cambio, el agente puede consultarlas
+durante la inferencia. La acción \texttt{CONSULTAR\_GUIA} implementa una
+recuperación (\textit{Retrieval-Augmented Generation}, RAG) sobre el texto real
+de las guías. La implementación es deliberadamente ligera: un índice TF-IDF en
+memoria sobre los pasajes de las guías, sin dependencias externas. Ante una
+consulta, devuelve los pasajes más relevantes con su cita de fuente y sección.
 
-\newpage
+Esta distinción importa para la honestidad del trabajo. Sin la herramienta, la
+conexión con las guías sería solo conceptual, y afirmar que «el agente se apoya en
+las guías expertas» sería inexacto. Con \texttt{CONSULTAR\_GUIA}, esa afirmación
+se sostiene: el agente recupera texto literal de las fuentes en tiempo de
+inferencia y puede citarlo en su justificación.
 
+La recuperación se basa en coincidencia léxica (TF-IDF), no semántica. Funciona
+bien para términos precisos, como «masculino genérico» o «feminización de
+cargos», pero es sensible a sinónimos y paráfrasis. Una recuperación por
+\textit{embeddings} mejoraría esa robustez y queda como línea de mejora; para el
+alcance de este trabajo, el índice léxico captura la mayor parte de las consultas
+útiles.

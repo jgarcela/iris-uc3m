@@ -142,6 +142,10 @@ hmargin=3cm
 \usepackage{graphicx}
 \graphicspath{{imagenes/}} %ruta a la carpeta de imágenes
 
+% Diagramas conceptuales (TikZ) — pipeline, arquitectura de agentes
+\usepackage{tikz}
+\usetikzlibrary{positioning, arrows.meta, shapes.geometric, fit, backgrounds, calc}
+
 % Diseño de figuras para ingeniería
 \captionsetup[figure]{
 	format=hang,
@@ -481,15 +485,15 @@ This Chapter provides a detailed presentation of the different methods, models a
 \label{sec:ai_solution}
 \input{chapters/3 methodology/ai_solution}
 
-\subsection{Generative AI}
+\subsection{Modelos generativos de lenguaje}
 \label{sec:llms_models}
 \input{chapters/3 methodology/llms_models}
 
-\subsection{Generative Models}
+\subsection{Modelos evaluados}
 \label{genai_models}
 \input{chapters/3 methodology/genai_models}
 
-\subsection{Zero-shot}
+\subsection{Clasificación zero-shot con libro de códigos}
 \label{zero_shot}
 \input{chapters/3 methodology/zero_shot}
 
@@ -500,7 +504,20 @@ This Chapter provides a detailed presentation of the different methods, models a
 
 \chapter{Implementación}
 \label{implementation}
-This Chapter provides an overview of the implementation of our proposed solution, detailing the process and technical setup, and explaining in detail the data used, preprocessing steps, analysis conducted, and the techniques and approaches employed. To handle the project's computational demands, we utilized a 2020 HP Omen, equipped with an Intel(R) Core(TM) i7-10750H CPU @ 2.60GHz, 16GB of RAM, and an NVIDIA GeForce RTX 2070 with Max-Q Design. Additionally, the source code for the thesis can be found in Appendix~\ref{appendix_code}.
+Este capítulo describe cómo se lleva a la práctica la solución planteada en el
+Capítulo~\ref{sec:methodology}. Se detallan la arquitectura de agentes y sus dos
+niveles de comparación (Sección~\ref{agents}), las \textit{skills} y herramientas
+que la sostienen (Sección~\ref{prompts}), la recuperación sobre las guías
+expertas (Sección~\ref{rag}), la instrumentación de la evaluación
+(Sección~\ref{eval}) y la prueba de concepto de aplicabilidad editorial
+(Sección~\ref{poc}).
+
+La infraestructura combina tres entornos, unidos por una tubería común y agnóstica
+al proveedor. Los modelos comerciales se acceden por API (OpenAI, Google,
+Anthropic). Los modelos de pesos abiertos se ejecutan mediante \textit{Ollama}
+sobre la granja de GPU del Departamento de Teoría de la Señal y Comunicaciones, a
+la que se envían las peticiones desde un equipo cliente del laboratorio. El código
+fuente completo se recoge en el Apéndice~\ref{appendix_code}.
 
 
 
@@ -605,7 +622,11 @@ This Chapter provides an overview of the implementation of our proposed solution
 
 \chapter{Resultados y Discusión}
 \label{results_and_discussion}
+% [TFM] Intro de capítulo del TFG anterior (tabla 1090 exps. / Análisis General /
+% Insultos, corpus Twitter). Comentada; conservada por trazabilidad.
+\iffalse
 \input{Plantilla_TFG_ingles_2019/chapters/5 results and discussion/results_and_discussion}
+\fi
 
 
 \section{Detección de lenguaje sexista con agentes especializados}
@@ -614,14 +635,16 @@ This Chapter provides an overview of the implementation of our proposed solution
 
 
 % ---------------------------------------------------------------------
-% TODO: las secciones siguientes son residuales del TFG anterior
-% (#SeAcabó / Análisis General / Insultos) y deben eliminarse o
-% reubicarse. Ver Experimentos/TFM/ESTADO_LATEX.md
+% [TFM] SECCIONES RESIDUALES DEL TFG ANTERIOR (#SeAcabó / Análisis General /
+% Insultos, corpus Twitter). Comentadas con \iffalse...\fi (texto conservado).
+% La "Discusión" nueva de este TFM está pendiente de redactar.
+% Ver Experimentos/TFM/ESTADO_LATEX.md
 % ---------------------------------------------------------------------
+\iffalse
 \section{Análisis General}
 \label{sec:ageneral}
 The first task involved the classification of \textit{"Análisis General"} into two classes: "Comentario Positivo" and "Comentario Negativo", as detailed in Section \ref{target_variables}.
- 
+
 
 \subsection{Generative AI}
 \newcommand{\insllamathreeonea}{INS-llama3.1-c0-p0en-0.1}
@@ -635,6 +658,7 @@ The first task involved the classification of \textit{"Análisis General"} into 
 \section{Discusión}
 \label{sec:discussion}
 \input{Plantilla_TFG_ingles_2019/chapters/5 results and discussion/discussion}
+\fi
 
 
     %----------
@@ -684,6 +708,12 @@ The first task involved the classification of \textit{"Análisis General"} into 
 \pagenumbering{gobble} % Las páginas de los anexos no se numeran
 \input{Plantilla_TFG_ingles_2019/appendix/ai_act}
 
+% ---------------------------------------------------------------------
+% [TFM] ANEXOS DE PROMPTS ZERO-SHOT DEL TFG ANTERIOR (Análisis General /
+% Contenido Negativo / Insultos). Comentados con \iffalse...\fi (texto
+% conservado). Sustituir por los prompts e1/e2/e3 y las skills de este TFM.
+% ---------------------------------------------------------------------
+\iffalse
 \chapter{Context}
 \label{appendix_zeroshot_context}
 \pagenumbering{gobble} % Las páginas de los anexos no se numeran
@@ -703,6 +733,7 @@ The first task involved the classification of \textit{"Análisis General"} into 
 \label{appendix_zeroshot_prompts_insultos}
 \pagenumbering{gobble} % Las páginas de los anexos no se numeran
 \input{Plantilla_TFG_ingles_2019/appendix/zeroshot_prompts_insultos}
+\fi
 
 %\chapter* {Appendix X: Performance - Análisis General}
 %\label{appendix_results_ml_ageneral}

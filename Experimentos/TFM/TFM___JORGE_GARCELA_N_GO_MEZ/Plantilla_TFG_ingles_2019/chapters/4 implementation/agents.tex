@@ -1,12 +1,103 @@
 %----------
-%	AGENTS
-%----------	
+%	ARQUITECTURA Y DISEÑO AGÉNTICO
+%----------
 
-To ensure robust evaluation of our experiments, we split the dataset into the same training and test sets for the machine and deep learning models, as detailed in Figures~\ref{fig:ml_models_implementation} and~\ref{fig:dl_models_implementation} respectively. Notice that for generative models we have not applied any data splitting as we are following the zero-shot learning approach, as commented in Section~\ref{zero_shot}.
+El núcleo de este trabajo compara dos formas de poner la metodología experta a
+disposición del modelo. Ambas resuelven la misma tarea, sobre el mismo corpus y
+con el mismo número de llamadas al modelo. Lo único que cambia entre ellas es
+cómo llega esa metodología.
 
-For the ML experiments, this was done using the \textit{"Sklearn"} python library and the \texttt{train\_test\_split} function with the \texttt{random\_state=0} parameter and \texttt{stratify} to maintain the original class distribution in both sets. The stratified splitting ensures that both the training and test sets have a similar distribution of classes as the original dataset. Specifically, we allocated 80\% of the data for training and 20\% for testing. 
+\begin{itemize}
+    \item \textbf{Nivel B0 (\textit{baseline}).} La metodología de cada variable
+    se inyecta entera en el \textit{prompt}. El modelo emite su veredicto en una
+    sola llamada, sin herramientas.
+    \item \textbf{Nivel B1 (\textit{Agent Skills}).} El modelo recibe únicamente
+    los metadatos de las \textit{skills} disponibles (su nombre y una
+    descripción) y carga bajo demanda el cuerpo de la que necesita. Este mecanismo
+    se conoce como \textit{progressive disclosure}. Además puede consultar las
+    guías expertas y verificar sus evidencias mediante herramientas.
+\end{itemize}
 
-For the DL experiments, we followed a similar approach also utilizing a stratified splitting technique and with the \texttt{random\_state=0} parameter. In this case, the process involved an initial split of 80\% of the data for training and validation and 20\% for testing. Subsequently, the training and validation set was further divided, allocating 90\% of the remaining data to training and 10\% to validation. 
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[
+  font=\small,
+  caja/.style={draw, rounded corners=3pt, align=center, inner sep=4pt,
+               minimum width=38mm, minimum height=9mm},
+  b0/.style={caja, fill=orange!12, draw=orange!65},
+  b1/.style={caja, fill=teal!12, draw=teal!65},
+  cab/.style={font=\small\bfseries},
+  arr/.style={-{Latex[length=2mm]}, semithick, gray}
+]
+  \node[caja, fill=black!6] (art) {Artículo · una variable};
 
-\newpage
+  % --- B0 (izquierda) ---
+  \node[cab, below=9mm of art, xshift=-32mm] (b0h) {B0 · baseline};
+  \node[b0, below=3mm of b0h] (b0p) {Metodología inyectada + texto};
+  \node[b0, below=6mm of b0p] (b0f) {\texttt{FINAL} (1 llamada)};
 
+  % --- B1 (derecha) ---
+  \node[cab, below=9mm of art, xshift=32mm] (b1h) {B1 · Agent Skills};
+  \node[b1, below=3mm of b1h] (b1c) {Catálogo: nombre + descripción};
+  \node[b1, below=6mm of b1c] (b1l)
+        {\texttt{LEER\_SKILL} · \texttt{CONSULTAR\_GUIA}\\ · \texttt{VERIFICAR}};
+  \node[b1, below=6mm of b1l] (b1f) {\texttt{FINAL}};
+
+  \draw[arr] (art) -- (b0p);
+  \draw[arr] (art) -- (b1c);
+  \draw[arr] (b0p) -- (b0f);
+  \draw[arr] (b1c) -- (b1l);
+  \draw[arr] (b1l) -- (b1f);
+  % bucle de decisión en B1
+  \draw[arr] (b1l.east) .. controls +(right:9mm) and +(right:9mm) .. (b1c.east);
+\end{tikzpicture}
+\caption{Los dos niveles comparados. Ambos hacen cinco llamadas por artículo (una
+por variable) y comparten formato de salida. En B0 la metodología llega inyectada
+en el \textit{prompt}; en B1 el agente la carga bajo demanda y puede iterar
+usando herramientas (\textit{progressive disclosure}).}
+\label{fig:iris-b0b1}
+\end{figure}
+
+Este diseño corrige un sesgo de comparación presente en trabajos previos del
+proyecto, donde el nivel con \textit{skills} usaba una única llamada conjunta y el
+\textit{baseline} cinco llamadas independientes. Al variar dos factores a la vez,
+cualquier diferencia resultaba inatribuible. Aquí se fija todo salvo un factor:
+ambos niveles hacen \textbf{cinco llamadas por artículo}, una por variable, con
+idéntico formato de salida. Así, el delta de acuerdo se debe al empaquetado como
+\textit{Agent Skills}, y no al número de llamadas.
+
+\subsection{Agentes especializados}
+
+En el nivel B1, cada variable la resuelve un \textbf{agente especializado}: un
+proceso con un único objetivo (clasificar su variable) que decide por sí mismo
+qué skills leer y cuándo verificar. Cinco variables, cinco agentes independientes
+por artículo. Conviene distinguir aquí dos conceptos que a menudo se confunden.
+Una \textit{skill} es conocimiento empaquetado, un fichero de metodología; es
+pasiva, se carga pero no decide. Un agente es un ejecutor con un bucle de
+decisión. «Una skill por variable» no es un agente; «un agente especializado que
+carga su skill bajo demanda» sí lo es, y es lo que aquí se implementa.
+
+\subsection{Protocolo de acciones}
+
+El agente opera mediante un bucle estilo ReAct sobre acciones expresadas en
+texto, no mediante el \textit{tool-calling} nativo de cada proveedor. La razón es
+práctica. El enrutado multi-proveedor se apoya en una interfaz de texto común, y
+el \textit{tool-calling} nativo es frágil e incompatible entre modelos, sobre
+todo en los locales pequeños. Con un protocolo de texto, el mismo mecanismo
+funciona igual en los cuatro proveedores. En cada turno el agente emite una de
+estas acciones y el sistema le devuelve el resultado:
+
+\begin{itemize}
+    \item \texttt{LEER\_SKILL <id>}: carga el cuerpo de una skill.
+    \item \texttt{CONSULTAR\_GUIA <consulta>}: recupera pasajes literales de las
+    guías expertas (Sección~\ref{rag}).
+    \item \texttt{VERIFICAR ["..."]}: comprueba que las evidencias son literales
+    del texto.
+    \item \texttt{FINAL \{...\}}: cierra con el veredicto de la variable.
+\end{itemize}
+
+El bucle admite hasta unas ocho iteraciones. Si el agente emite \texttt{FINAL}
+sin haber usado ninguna herramienta, su comportamiento equivale al del
+\textit{baseline}, y ese «colapso a B0» se registra como una métrica más. Saber
+cuántas veces cada modelo usa de verdad las herramientas es, en sí, un resultado:
+distingue a los modelos que explotan la arquitectura de los que la ignoran.

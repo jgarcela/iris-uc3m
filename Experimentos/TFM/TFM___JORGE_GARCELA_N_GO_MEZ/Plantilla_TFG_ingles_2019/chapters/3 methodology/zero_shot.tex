@@ -1,9 +1,57 @@
 %----------
-%	ZERO-SHOT MODELS
-%----------	
+%	CLASIFICACIÓN ZERO-SHOT CON LIBRO DE CÓDIGOS
+%----------
 
-Another approach that was followed was exploring the zero-shot capabilities of recent open-source generative models such as the ones detailed above. 
+\label{sec:zeroshot_iris}
 
-Zero-shot learning, formerly introduced in 2008 by \cite{chang-2008} as "dataless classification", is a technique where a model is asked to perform a task without having seen any examples of that task during its training. This is particularly powerful because it allows the model to generalize from its existing knowledge to new tasks without needing additional training data \cite{xian-2017}. For instance, when prompted to identify hate speech, a zero-shot model leverages its pre-trained knowledge to classify text without having seen specific examples of hate speech. This is extremely useful when dealing with small amounts of data but it is also important to point out that we could miss the context of the field of our classification, therefore requiring a human presence for supervising and including specific "expertise on the social context, which goes beyond literal or key-word-based discovery" \cite{hollauer-2023}. In particular, in Appendices~\ref{appendix_zeroshot_prompts_ageneral}-\ref{appendix_zeroshot_prompts_insultos}, we detailed the different prompts employed for Section~\ref{implementation_genai}.
+La clasificación se aborda en régimen \textit{zero-shot}: se pide al modelo que
+realice la tarea sin haber visto ejemplos etiquetados de ella durante su
+entrenamiento, de modo que generaliza a partir del conocimiento que ya tiene.
+Esto permite prescindir de un corpus de entrenamiento etiquetado, del que no se
+dispone a gran escala, y cambiar la supervisión por ejemplos por otra cosa: la
+\textbf{supervisión mediante libro de códigos}. La metodología experta va en el
+\textit{prompt} y el modelo la aplica a cada texto.
 
-As previously mentioned, one of the significant advantages of zero-shot learning techniques is that they do not require extensive labelled datasets for training, thereby making the process much more efficient and less resource-intensive. These characteristics also ensure that the content remains safe, as the models do not need to see or store training data that might contain sensitive information. Moreover, because these models do not rely on traditional training data, the issue of data balancing becomes less critical, as detailed in Section~\ref{sec:class_imbalance}.
+\subsubsection{De la definición experta a la especificación ejecutable}
+
+Cada una de las cinco variables se formaliza en una especificación estructurada,
+generada a partir de \texttt{variables.json}, que traslada la definición del
+codebook a un formato que el modelo pueda seguir. Esa especificación va más allá
+de la definición conceptual. Incluye un criterio operativo de decisión, una
+metodología paso a paso, ejemplos positivos y contraejemplos comentados, casos
+límite documentados y las fronteras que separan la variable de sus contiguas. De
+esta misma fuente parten las dos arquitecturas que se comparan en el
+Capítulo~\ref{implementation}, así que ambas trabajan con idéntico contenido y
+difieren solo en cómo lo reciben.
+
+\subsubsection{Salida estructurada y trazabilidad}
+
+Por cada pieza y variable, el modelo devuelve un JSON con tres campos:
+
+\begin{itemize}
+    \item \texttt{codigo}: el valor asignado según la escala de la variable
+    (1 = ausencia, 2 = presencia; V25 admite además 3 para el salto semántico).
+    \item \texttt{explicacion}: la justificación, que debe citar los pasos de la
+    metodología aplicados.
+    \item \texttt{evidencias}: fragmentos literales del texto que sostienen la
+    decisión (lista vacía cuando \texttt{codigo}\,=\,1).
+\end{itemize}
+
+Este formato no es una comodidad. Materializa el marco
+\textit{human-in-the-loop}. La explicación y las evidencias hacen la predicción
+auditable: la analista lee la justificación y decide si acepta, rechaza o matiza
+el veredicto. La detección de sesgos requiere una pericia sobre el contexto
+social que no se reduce a la coincidencia literal de palabras clave, y esa
+pericia es humana. Por eso el sistema asiste a la analista en lugar de
+sustituirla.
+
+\subsubsection{Ventajas y límites del enfoque}
+
+El régimen \textit{zero-shot} sale barato: no exige conjuntos de entrenamiento
+etiquetados ni el preprocesamiento intensivo de los enfoques clásicos. También es
+flexible, porque cambiar el codebook no obliga a reentrenar. Su límite es la otra
+cara de lo mismo. El rendimiento depende por completo de cómo se traslade la
+metodología al \textit{prompt} y de la capacidad del propio modelo, sin ejemplos
+con los que corregir sesgos. Medir ese límite, y averiguar si el cuello de
+botella está en el modelo, en su empaquetado o en cómo se ha operacionalizado la
+tarea, es el objeto del Capítulo~\ref{results_and_discussion}.
