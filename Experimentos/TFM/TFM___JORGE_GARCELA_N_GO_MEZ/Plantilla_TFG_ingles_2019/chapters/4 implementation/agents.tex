@@ -37,37 +37,27 @@ al número de llamadas ni al formato de la respuesta.
 
 Antes de describir cómo se organiza la arquitectura  multi-agéntica, conviene fijar de qué se
 compone \emph{uno}. Para ello hay que distinguir dos conceptos que a menudo se
-confunden. Una \textit{skill}\footnote{El concepto de \textit{Agent Skills} fue
-formalizado por Anthropic a finales de 2025 como un estándar abierto para la
-portabilidad entre plataformas: \url{https://www.anthropic.com/engineering/equipping-agents-for-the-real-world-with-agent-skills} [Último acceso: 05/08/2026]}
-es conocimiento empaquetado: un fichero de metodología, pasivo, que se carga pero
-no decide. Un \textbf{agente} es un ejecutor con un bucle de decisión, que elige
+confunden. Una \textit{skill}, en el sentido de \textit{Agent Skills} introducido
+en la Sección~\ref{sec:agentes_ia}, es conocimiento empaquetado: un fichero de
+metodología, pasivo, que se carga pero no decide. Un \textbf{agente} es un ejecutor con un bucle de decisión, que elige
 qué skills cargar y cuándo verificar. \textit{Una skill por variable no es un agente} pero
 \textit{un agente que carga su skill bajo demanda} sí lo es, y es lo que aquí se
 implementa.
 
 Cada agente dispone de un \textbf{catálogo de skills} del que, de entrada, solo ve
 el nombre y una descripción; carga el cuerpo de una skill únicamente cuando la
-necesita. Este mecanismo se conoce como \textit{progressive disclosure}, un
-principio del diseño de interacción persona-máquina (HCI por sus siglas en inglés), mostrar solo lo esencial y revelar el detalle
-bajo demanda, que se popularizó en el ámbito de la
-usabilidad~\cite{nielsen1994} y que la comunidad de agentes ha tomado
-prestado para el diseño del contexto. La idea es la misma: cargar únicamente lo
-relevante para la tarea en curso evita saturar la ventana de contexto con
-información que no viene al caso, algo que degrada la respuesta y encarece la
-inferencia. No procede de una fuente académica primaria sobre agentes, sino de esa
-tradición de usabilidad; su formulación operativa para modelos es la del marco de
-\textit{Agent Skills} citado más arriba. El catálogo reúne tres tipos de skill: la
-de la propia variable (obligatoria), unas auxiliares compartidas y unos resúmenes
-de las guías expertas, cuyo formato y generación se detallan en la
-Sección~\ref{prompts}.
+necesita. Es la aplicación directa del mecanismo de \textit{progressive
+disclosure} descrito en la Sección~\ref{sec:agentes_ia}: cargar solo lo relevante
+para la tarea en curso evita saturar la ventana de contexto y encarecer la
+inferencia. El catálogo reúne tres tipos de skill: la de la propia variable
+(obligatoria), unas auxiliares compartidas y unos resúmenes de las guías expertas,
+cuyo formato y generación se detallan en la Sección~\ref{prompts}.
 
-El agente opera mediante un \textbf{bucle estilo ReAct}~\cite{yao2023react} (de
-\textit{Reasoning} y \textit{Acting}), un patrón que entrelaza razonamiento y
-acción en vez de pedir la respuesta de un solo tirón. En cada turno el modelo razona sobre qué le falta,
-emite \emph{una} acción, observa el resultado que le devuelve el sistema y vuelve a
-razonar con esa nueva información; el ciclo se repite hasta que cierra con su
-veredicto. Ese entrelazado es lo que le permite, por ejemplo, cargar su skill,
+El agente opera mediante un \textbf{bucle estilo ReAct}~\cite{yao2023react}, el
+patrón de razonamiento y acción presentado en la Sección~\ref{sec:agentes_ia}. En
+cada turno el modelo razona sobre qué le falta, emite \emph{una} acción, observa el
+resultado que le devuelve el sistema y vuelve a razonar con esa nueva información;
+el ciclo se repite hasta que cierra con su veredicto. Ese entrelazado es lo que le permite, por ejemplo, cargar su skill,
 consultar una guía si duda y verificar sus evidencias antes de responder, en lugar
 de contestar a ciegas.
 

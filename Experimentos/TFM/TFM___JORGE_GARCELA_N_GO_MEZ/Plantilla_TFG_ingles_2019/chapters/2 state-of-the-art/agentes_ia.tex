@@ -1,0 +1,81 @@
+%----------
+%	LLMs, AGENTES Y AGENT SKILLS PARA LA DETECCIÓN DE SESGO
+%----------
+
+Las herramientas descritas en la sección anterior comparten un límite: operan
+sobre reglas fijas, léxicos cerrados o clasificadores entrenados para una
+etiqueta concreta. La irrupción de los grandes modelos de lenguaje (LLM) y, sobre
+ellos, de las arquitecturas de agentes ha abierto una vía distinta, en la que el
+conocimiento experto ya no se codifica en un diccionario sino que se comunica al
+modelo en lenguaje natural. Esta sección revisa esa frontera, que es la que
+enmarca la propuesta de este trabajo.
+
+\subsection{De los sistemas de reglas a los modelos de lenguaje}
+
+Frente a los clasificadores supervisados clásicos, un LLM puede abordar la
+detección de sesgo sin entrenamiento específico, guiado únicamente por
+instrucciones. Este cambio es especialmente útil en lenguas con género gramatical
+marcado, como el español, donde el fenómeno es más sutil que en inglés. El trabajo
+de Derner et~al.~\cite{derner2024gender} es una de las primeras propuestas de usar
+LLMs para identificar y clasificar el sesgo de representación de género en corpus
+en español, con una disparidad masculino:femenino que oscila entre 4:1 y 6:1 según
+el corpus. En paralelo, han surgido marcos de evaluación pensados para el español y
+su contexto cultural, como SESGO~\cite{robles2025sesgo}, que mide la tendencia de
+los modelos a reproducir estereotipos en escenarios ambiguos, o el
+\textit{toolkit} E.D.I.A.~\cite{edia2024} de la Fundación Vía Libre, que permite
+auditar sesgos y estereotipos sin necesidad de conocimientos técnicos. Estos
+trabajos confirman que el problema no desaparece al pasar a los LLM: los modelos
+heredan el sesgo de sus datos, y detectarlo requiere método, no solo capacidad.
+
+\subsection{Arquitecturas de agentes basadas en LLM}
+
+Un \textit{agente} basado en LLM va más allá de una única llamada al modelo: combina
+razonamiento, uso de herramientas y observación de los resultados en un bucle,
+de modo que el modelo decide qué hacer a continuación en función de lo que
+descubre. El patrón de referencia es ReAct~\cite{yao2023react}, que entrelaza
+razonamiento y acción para reducir alucinaciones respecto a responder de un solo
+tirón. Sobre esa base se han construido sistemas multiagente en los que varios
+agentes especializados se reparten una tarea compleja. En el ámbito periodístico,
+AI-Press~\cite{liu2025aipress} asigna agentes a roles editoriales (recuperación,
+redacción, revisión) apoyados en recuperación aumentada. Ahora bien, la
+introducción de estos sistemas en las redacciones reactiva una exigencia clásica
+del periodismo algorítmico: la rendición de cuentas y la trazabilidad, es decir,
+que ningún sistema opere como una caja negra y que toda afirmación pueda rastrearse
+hasta su fuente~\cite{diakopoulos2019}. Ese requisito es precisamente uno de los
+que guía el diseño del sistema propuesto en este trabajo.
+
+\subsection{Agent Skills: conocimiento experto portable}
+
+Un desarrollo reciente y directamente relevante para esta propuesta es el de las
+\textit{Agent Skills}, formalizadas por Anthropic en 2025 como un formato abierto
+para dotar a un agente de conocimiento especializado~\cite{anthropic2025skills}.
+Una \textit{skill} es una carpeta con un fichero de metodología en lenguaje natural
+y sus recursos asociados; su mecanismo característico es la \textit{divulgación
+progresiva} (\textit{progressive disclosure}): el agente solo ve el nombre y la
+descripción de cada skill, y carga el cuerpo completo únicamente cuando la tarea lo
+requiere, lo que evita saturar la ventana de contexto. Este principio no nace en el
+ámbito de los agentes: procede del diseño de interacción persona-máquina (Human-Computer Interaction, HCI en inglés), donde se
+formuló como mostrar solo lo esencial y revelar el detalle bajo demanda, y se
+popularizó en la literatura de usabilidad~\cite{nielsen1994}; el marco de
+\textit{Agent Skills} le da una formulación operativa para modelos de lenguaje. La observación empírica que
+motiva este enfoque es que, en muchas tareas, una instrucción profesional bien
+redactada supera a infraestructura más sofisticada como un sistema de recuperación
+vectorial. Este resultado, contraintuitivo, sitúa el conocimiento experto en el centro del diseño, y es la idea sobre la que se
+articula la arquitectura del Capítulo~\ref{implementation}.
+
+\subsection{La intersección: agentes para detectar sesgo}
+
+La combinación de agentes y detección de sesgo es la frontera más reciente y donde
+se sitúa este trabajo. Bias-Aware Agent~\cite{singh2025biasaware} incorpora la
+detección de sesgo como una \textit{herramienta} del agente en lugar de como un
+paso posterior, y hace explícito qué fuentes se han usado y cuánto sesgo arrastra
+cada una. Huang y Fan~\cite{huang2025fairness} proponen un sistema multiagente que
+separa hecho de opinión antes de puntuar la intensidad del sesgo, y Huang y
+Somasundaram~\cite{huang2024queer} muestran que una arquitectura de agentes
+especializados mejora de forma notable a un único modelo generalista en una tarea
+de equidad lingüística. En el terreno específico del sesgo político y de género,
+\textit{benchmarks} como EuroParlVote~\cite{yang2025europarlvote} evalúan estas
+disparidades sobre datos parlamentarios europeos. Con todo, ninguno de estos
+trabajos aborda la detección de lenguaje sexista en prensa escrita en español
+mediante agentes especializados que encapsulen la metodología experta como
+\textit{skills}: ese es el hueco que este Trabajo de Fin de Máster pretende cubrir.
