@@ -8,48 +8,35 @@ tarea determinan la aproximación tecnológica. El primero: no hay un conjunto d
 entrenamiento etiquetado grande, porque la anotación experta es cara y cubre
 1.313 piezas. El segundo: codificar no consiste en buscar palabras clave, sino
 en aplicar una metodología interpretativa (definiciones, reglas de decisión,
-fronteras entre variables) tomada del libro de códigos del proyecto.
+fronteras entre variables) tomada del libro de códigos de IRIS.
 
-Estos dos rasgos desaconsejan el aprendizaje supervisado clásico, que necesitaría
-miles de ejemplos etiquetados. En su lugar se recurre a modelos generativos de
-lenguaje (LLM) en régimen \textit{zero-shot}: el modelo no aprende la tarea a
+Estos dos rasgos desaconsejan el aprendizaje supervisado clásico~\cite{lecun2015deep},
+que necesitaría miles de ejemplos etiquetados. En su lugar se recurre a modelos
+generativos de lenguaje (LLM) en régimen \textit{zero-shot}~\cite{radford2019, brown2020}: el
+modelo no aprende la tarea a
 partir de ejemplos, sino que recibe la metodología en el propio \textit{prompt} y
 la aplica sobre cada texto. El libro de códigos hace de supervisión en tiempo de
 inferencia, sin reentrenar nada.
 
-La solución es una tubería común, independiente del proveedor. Por cada pieza y
-variable, el sistema construye una entrada con la metodología y el texto, la
-envía a un modelo y recupera una salida estructurada con tres campos: un código,
-una explicación razonada y las evidencias literales que la sustentan. Esa misma
-tubería se enruta, según el identificador del modelo, tanto a modelos locales
-como a las API de OpenAI y Google (Sección~\ref{sec:llms_models_iris}).
-Así, las diferencias que se observen entre modelos no se confunden con
-diferencias de implementación.
+La solución es una tubería común, independiente del proveedor
+(Figura~\ref{fig:iris-pipeline}). Por cada pieza y variable, el sistema construye
+una entrada con la metodología y el texto, la envía a un modelo y recupera una
+salida estructurada con tres campos: un código, una explicación razonada y las
+evidencias literales que la sustentan. Esa misma tubería se enruta, según el
+identificador del modelo, tanto a modelos locales como a las API de OpenAI y Google
+(Sección~\ref{sec:llms_models_iris}). Así, las diferencias que se observen entre
+modelos no se confunden con diferencias de implementación.
 
 \begin{figure}[H]
-\centering
-\begin{tikzpicture}[
-  node distance=8mm and 12mm,
-  caja/.style={draw, rounded corners=3pt, align=center, minimum height=12mm,
-               inner sep=5pt, font=\small},
-  io/.style={caja, fill=black!5},
-  proc/.style={caja, fill=black!2},
-  arr/.style={-{Latex[length=2.4mm]}, thick, gray}
-]
-  \node[io] (art) {Artículo};
-  \node[proc, right=of art] (prompt) {Metodología\\ + texto};
-  \node[proc, right=of prompt] (modelo) {Modelo\\ (LLM)};
-  \node[io, right=of modelo, align=left] (out)
-        {\texttt{codigo}\\ \texttt{explicacion}\\ \texttt{evidencias}};
-  \draw[arr] (art) -- (prompt);
-  \draw[arr] (prompt) -- (modelo);
-  \draw[arr] (modelo) -- (out);
-\end{tikzpicture}
-\caption{Tubería de clasificación. Por cada pieza y variable, la metodología del
-libro de códigos y el texto forman la entrada del modelo, que devuelve una salida
-estructurada y auditable.}
-\label{fig:iris-pipeline}
+  \centering
+  \includegraphics[width=\textwidth]{pipeline_iris_vertical_blanco.pdf}
+  \caption{Tubería de clasificación común e independiente del proveedor. Por cada
+  pieza y variable, la metodología del libro de códigos y el texto del artículo
+  forman la entrada del modelo, que devuelve una salida estructurada (código,
+  explicación y evidencias literales) auditable por la analista.}
+  \label{fig:iris-pipeline}
 \end{figure}
+
 
 La salida estructurada responde al marco \textit{human-in-the-loop} del proyecto.
 Pedir explicación y evidencias no es un capricho de formato: convierte cada

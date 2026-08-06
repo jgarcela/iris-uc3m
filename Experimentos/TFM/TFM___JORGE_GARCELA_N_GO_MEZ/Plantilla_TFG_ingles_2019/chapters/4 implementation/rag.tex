@@ -12,7 +12,7 @@ en ellas, pero el modelo no las lee.
 
 Como \textbf{herramienta en vivo}, en cambio, el agente puede consultarlas
 durante la inferencia. La acción \texttt{CONSULTAR\_GUIA} implementa una
-recuperación (\textit{Retrieval-Augmented Generation}, RAG) sobre el texto real
+recuperación (\textit{Retrieval-Augmented Generation}, RAG por sus siglas en inglés)~\cite{lewis2020rag} sobre el texto real
 de las guías. La implementación es deliberadamente ligera: un índice TF-IDF en
 memoria sobre los pasajes de las guías, sin dependencias externas. Ante una
 consulta, devuelve los pasajes más relevantes con su cita de fuente y sección.
@@ -23,11 +23,10 @@ las guías expertas» sería inexacto. Con \texttt{CONSULTAR\_GUIA}, esa afirmac
 se sostiene: el agente recupera texto literal de las fuentes en tiempo de
 inferencia y puede citarlo en su justificación.
 
-La recuperación se basa en coincidencia léxica (TF-IDF), no semántica. Funciona
-bien para términos precisos, como «masculino genérico» o «feminización de
-cargos», pero es sensible a sinónimos y paráfrasis. Una recuperación por
-\textit{embeddings} mejoraría esa robustez y queda como línea de mejora; para el
-alcance de este trabajo, el índice léxico captura la mayor parte de las consultas
-útiles. Cuestión distinta es si esa recuperación mejora el acuerdo final: su
+La recuperación se basa en coincidencia léxica (TF-IDF)~\cite{sparckjones1972}, no semántica. Funciona
+bien para términos precisos, como \textit{masculino genérico} o \textit{feminización de
+cargos}, pero es sensible a sinónimos y paráfrasis. Una recuperación por
+\textit{embeddings} mejoraría esa robustez y queda como línea de mejora. Para el
+alcance de este trabajo, el índice léxico es suficiente. Cuestión distinta es si esa recuperación mejora el acuerdo final: su
 efecto se evalúa por separado en la Sección~\ref{subsec:iris_descomposicion}, y
 resulta, en la práctica, prescindible.

@@ -5,8 +5,8 @@
 \label{sec:llms_models_iris}
 
 Un modelo generativo de lenguaje (\textit{Large Language Model}, LLM) es una red
-neuronal entrenada sobre grandes volúmenes de texto para predecir la
-continuación de una secuencia. De ese entrenamiento sale una competencia
+neuronal, habitualmente de tipo \textit{Transformer}~\cite{vaswani2017}, entrenada
+sobre grandes volúmenes de texto para predecir la continuación de una secuencia. De ese entrenamiento sale una competencia
 lingüística general que puede orientarse a tareas concretas mediante
 instrucciones en lenguaje natural, sin entrenar un modelo distinto para cada
 tarea. Este trabajo explota justamente esa competencia: la metodología de
@@ -16,12 +16,15 @@ Para desplegar estos modelos hay dos vías, y la diferencia entre ellas importa 
 un proyecto como IRIS.
 
 Los \textbf{modelos locales} son modelos de pesos abiertos que se ejecutan en
-infraestructura propia. En este trabajo se usan a través de \textit{Ollama} sobre
-la granja de GPU del Departamento de Teoría de la Señal y Comunicaciones. Su
-ventaja es la privacidad: el texto nunca sale de la infraestructura de la
-institución, algo relevante cuando se trabaja con contenido periodístico y datos
-de investigación. A cambio, exigen hardware especializado y suelen ser más
-pequeños y menos capaces que los modelos comerciales punteros.
+infraestructura propia. En este trabajo se usan a través de
+\textit{Ollama}\footnote{\url{https://ollama.com} [Último acceso: 05/08/2026]} sobre la granja de GPU del
+Departamento de Teoría de la Señal y Comunicaciones. Tienen
+dos ventajas principalmente. La primera es la privacidad: el texto nunca sale de la
+infraestructura de la institución, algo relevante cuando se trabaja con contenido
+periodístico y datos de investigación. La segunda es el coste: la inferencia no se
+paga por uso, a diferencia de las API comerciales, por lo que procesar el corpus
+completo no tiene coste marginal. A cambio, exigen hardware especializado y suelen
+ser más pequeños y menos capaces que los modelos comerciales punteros.
 
 Los \textbf{modelos comerciales vía API} los alojan los proveedores (OpenAI,
 Google) y se acceden por red. Ofrecen más capacidad y no requieren

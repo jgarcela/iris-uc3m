@@ -9,8 +9,8 @@ realice la tarea sin haber visto ejemplos etiquetados de ella durante su
 entrenamiento, de modo que generaliza a partir del conocimiento que ya tiene.
 Esto permite prescindir de un corpus de entrenamiento etiquetado, del que no se
 dispone a gran escala, y cambiar la supervisión por ejemplos por otra cosa: la
-\textbf{supervisión mediante libro de códigos}. La metodología experta va en el
-\textit{prompt} y el modelo la aplica a cada texto.
+\textbf{supervisión mediante libro de códigos}~\cite{ziems2024css, hollauer_plastics}.
+La metodología experta va en el \textit{prompt} y el modelo la aplica a cada texto.
 
 La metodología que se traslada al \textit{prompt} procede de la especificación
 estructurada de cada variable descrita en la Sección~\ref{sec:iris_variables}:
@@ -24,15 +24,24 @@ idéntico contenido y difieren solo en cómo lo reciben.
 Por cada pieza y variable, el modelo devuelve un JSON con tres campos:
 
 \begin{itemize}
-    \item \texttt{codigo}: el valor asignado según la escala de la variable
+    \item \texttt{codigo}: el valor en la escala cruda de la variable
     (1 = ausencia, 2 = presencia; V25 admite además 3 para el salto semántico).
+    El modelo emite este código sin agrupar; solo al calcular las métricas los
+    valores 2 y 3 se unen como clase positiva (Sección~\ref{sec:iris_variables}).
     \item \texttt{explicacion}: la justificación, que debe citar los pasos de la
     metodología aplicados.
     \item \texttt{evidencias}: fragmentos literales del texto que sostienen la
-    decisión (lista vacía cuando \texttt{codigo}\,=\,1).
+    decisión (lista vacía cuando \texttt{codigo}\,=\,1, es decir, en los negativos).
 \end{itemize}
 
-Este formato no es una comodidad. Materializa el marco
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{salida_trazabilidad_blanco.pdf}
+    \caption{Salida estructurada y trazable de una predicción.}
+    \label{fig:iris-salida}
+\end{figure}
+
+Este formato materializa el marco
 \textit{human-in-the-loop}. La explicación y las evidencias hacen la predicción
 auditable: la analista lee la justificación y decide si acepta, rechaza o matiza
 el veredicto. La detección de sesgos requiere una pericia sobre el contexto

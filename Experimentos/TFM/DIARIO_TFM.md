@@ -45,6 +45,45 @@ Sirve como memoria operativa para redactar la memoria del TFM (metodología, abl
 
 ## Entradas diarias
 
+### 2026-08-04 — gemma B1 en cluster, ablación cruzada, equipo_ia y redacción Cap 3–5
+
+**Contexto:** cerrar la parte experimental que faltaba (modelo local B1 y desglose de componentes), añadir el análisis del modelo como anotador, y reescribir el Cap 5 entero + consistencia Cap 3–4 + limpieza del TFG anterior en el `.tex`.
+
+#### Experimentos nuevos
+
+| # | Qué | Rutas | Resultado |
+|---|-----|-------|-----------|
+| 1 | **Ablación por componentes (5 brazos × 4 modelos)** | flags `--sin-consultar-guia` y `--sin-resumenes-guias` en `agente.py`/`main.py` | La **tool RAG en vivo nunca ayuda** (peor o casi peor κ en los 4 modelos); el mecanismo de skills solo mejora a **gemini**. Mejor config = skills + resúmenes **sin tool** |
+| 2 | **gemma B1 en cluster (5 brazos)** | `CLUSTER/experimento_21_cluster/` (RTX 4090, sharded), flags añadidos a `main_cluster.py`; `lanzar_b1_ablacion.sh`, `estado_b1.sh` | gemma B0 tiene el **mayor κ de control** de los 4 (+0,061); B1 lo empeora (como los gpt), no como gemini. ~54 s/artículo, ~5 h/variante con 4 GPU |
+| 3 | **El sistema como tercer anotador** | `experimento_21_agentskills/equipo_ia.py` (B0 y B1) | Los 3 modelos caen **fuera del rango humano** (extremo permisivo). κ intra-IA 0,014–0,084: **no hay "equipo IA"**, cada modelo es idiosincrásico. B1 los hace aún más dispares |
+
+#### Redacción (LaTeX)
+
+- **Cap 5 reescrito**: `iris_experimento21.tex` → **`experimentacion.tex`**; añadidos modelo local (gemma), descomposición 5 brazos × 4 modelos, y "el sistema como anotadora"; quitada la ablación de configuración (caching/umbral). `results_and_discussion.tex` (intro) y `discussion.tex` reescritos.
+- **Consistencia Cap 3–4**: `eval` = evaluación zero-shot sobre las 1.313 (fuera dev/test); `rag` con nota de que la tool es prescindible; jerarquía de `iris_analisis_experto` y dedup del bloque "definición ejecutable".
+- **qwen3 y claude eliminados de todo el TFM** (tablas, prosa, menciones de Anthropic).
+- **Limpieza `.tex`**: 42 ficheros residuales del TFG viejo borrados; `main.tex` sin `\iffalse` ni `%\input`/`%\section` comentados; intros de capítulo en español.
+- **REUNION_DIRECTORA.md** ampliado (métricas por variable, por anotador Indexa/UCM3 e intra-equipo, infra-detección, ablación cruzada).
+
+#### Decisiones
+
+- **exp22 (confianza) queda FUERA del TFM.** El experimento existe (`experimento_22_confianza/`) pero no se redacta.
+- **Estructura Cap 5** = intro + "Experimentación" (experimentacion.tex) + "Discusión". No se crea capítulo aparte de experimentación.
+- Nota de infra: gemma B0 se corrió en RTX 3090 y B1 en RTX 4090 por disponibilidad; la GPU afecta al throughput, no a las salidas.
+
+#### Pendiente
+
+- [ ] Cap. 6 (conclusiones + líneas futuras) — sigue siendo #SeAcabó.
+- [ ] Abstract: alinear con lo hecho (Agent Skills, B0/B1); ahora describe la propuesta antigua.
+- [ ] Backup de `results_b1_*` del cluster (git los ignora).
+
+#### Commits del día (git)
+
+- `9d68d09` — Exp 21: ablación 4 modelos × 5 brazos, exp22 confianza y redacción TFM (Caps. 3 y 5).
+- `981cded` — TFM: reescritura del Cap 5, consistencia Cap 3-4 y limpieza del TFG anterior.
+
+---
+
 ### 2026-07-21 — Exp 21 a escala: Eje A + core B0 vs B1 sobre las 1 313
 
 **Contexto:** cerrar el Exp 21 con corridas a escala real y ablaciones controladas.

@@ -3,6 +3,16 @@
 Documento **canónico de diseño** del core (Eje B). Complementa:
 [`PLAN_EXPERIMENTOS_TFM.md`](PLAN_EXPERIMENTOS_TFM.md) (alcance), [`ESTADO_LATEX.md`](ESTADO_LATEX.md) (huecos `.tex`), [`DIARIO_TFM.md`](DIARIO_TFM.md) (día a día).
 
+> ⚠️ **ESTADO 2026-08-04 — el diseño de las secciones 0–4 sigue vigente; el plan y las hipótesis (§5–7) ya están ejecutados.** Lo que cambió respecto a lo planeado:
+> - **Ejecutado en `experimento_21_agentskills/`** sobre **4 modelos**: gemma4:e4b (local) + gpt-4o-mini, gpt-5.4-nano, gemini-3.1-flash-lite. **Claude y qwen3 fuera.**
+> - **Resultado (contradice la hipótesis de §5):** las Agent Skills **solo mejoran a gemini** (y ahí, casi todo en `masc_generico`); en gpt empeoran y en el local igualan al control.
+> - **La tool `CONSULTAR_GUIA` (RAG en vivo) nunca ayuda** (ablación 5 brazos × 4 modelos); mejor config = skills + resúmenes sin tool.
+> - **Prompt caching descartado** de la config canónica (no ayuda, altera el comportamiento) — no es una "mejora a incorporar".
+> - Añadido no previsto: **el sistema como tercer anotador** (`equipo_ia.py`) → los modelos caen fuera del rango humano; no forman "equipo".
+> - **B2 multi-agente**: confirmado como línea futura. **Exp 22 (confianza): fuera del TFM.**
+>
+> Redacción final en `chapters/5 .../experimentacion.tex`. Verdad del `.tex`: `ESTADO_LATEX.md`.
+
 > **Tarea invariante:** clasificar 5 variables de lenguaje sexista (V25 `lenguaje_sexista`, V26 `masc_generico`, V30 `sexismo_discurso`, V33 `asimetria_mujer_hombre`, V35 `denominacion_sexualizada`) sobre el mismo corpus (~7 115), evaluando en las 1 315 anotadas. Lo único que cambia entre niveles es **cómo se estructura la inferencia**.
 
 ---
@@ -116,7 +126,7 @@ Justificación:
 3. Progressive disclosure real: el modelo sólo ve `name`+`description` (`list_skills`) y decide qué cargar.
 4. Permite **medir la tasa de uso de tools** por modelo (métrica del core).
 
-Bucle (`agente.py`): máx. ~4 iteraciones; si el modelo emite `FINAL` sin haber cargado ninguna skill → **colapso a B0**, se registra en la traza. Implementado en `experiments/experimento_21_agentskills/`.
+Bucle (`agente.py`): hasta **8 iteraciones** (`MAX_ITERS`); si el modelo emite `FINAL` sin haber usado ninguna tool → **colapso a B0**, se registra en la traza. Implementado en `experiments/experimento_21_agentskills/`.
 
 Mejoras heredadas del Exp 16 a incorporar:
 - Prompt caching en el system prompt (Anthropic) para las corridas a 7k.
@@ -150,12 +160,12 @@ Sobre las 1 315 anotadas, por modelo y variable:
 7. Prompt caching del bloque de skills a escala 7k. ⬜
 8. Redactar Cap. 4 (arquitectura) y Cap. 5 (resultados core) del LaTeX. ⬜
 
-## 7. Decisiones abiertas
+## 7. Decisiones (cerradas)
 
 | # | Pregunta | Decisión |
 |---|----------|----------|
-| 1 | ¿Nº de experimento para B1? (propuesto: 21) | |
-| 2 | ¿Skills auxiliares: cuántas guías reales de `methodology/` se convierten en skill? | |
-| 3 | ¿B1 sobre los 5 modelos del Eje A o subconjunto por coste? | |
-| 4 | ¿`verificar_evidencias` como tool (agente decide) o post-proceso siempre? | |
-| 5 | ¿B2 multi-agente entra o queda como línea futura? (plan actual: futura) | |
+| 1 | ¿Nº de experimento para B1? | **Exp 21** (`experimento_21_agentskills/`). |
+| 2 | ¿Cuántas guías de `methodology/` como skill auxiliar? | 3 auxiliares (`guia_regla_inversion`, `guia_lenguaje_inclusivo`, `verificar_evidencias`) + resúmenes de guías descubribles; la tool `CONSULTAR_GUIA` resultó prescindible. |
+| 3 | ¿B1 sobre los 5 modelos o subconjunto? | **4 modelos**: gemma local + gpt-4o-mini, gpt-5.4-nano, gemini. **Claude y qwen fuera** (coste / alcance). |
+| 4 | ¿`verificar_evidencias` como tool o post-proceso? | **Tool** (el agente decide); su uso se registra en la traza. |
+| 5 | ¿B2 multi-agente? | **Línea futura** (no entra en esta entrega). |

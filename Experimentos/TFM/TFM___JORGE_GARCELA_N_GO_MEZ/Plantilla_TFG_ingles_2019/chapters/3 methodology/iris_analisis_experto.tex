@@ -2,52 +2,88 @@
 %	ANÁLISIS EXPERTO Y PERSPECTIVA DE GÉNERO — proyecto IRIS
 %----------
 
-El presente trabajo se enmarca en el proyecto IRIS del Instituto Universitario
-de Estudios de Género de la Universidad Carlos~III de Madrid, cuyo objetivo es
-analizar de forma sistemática la representación de las mujeres en la prensa
-española. A diferencia de aproximaciones que abordan la detección de discurso
-de odio sobre mensajes breves en redes sociales, el objeto de estudio aquí son
-\textbf{piezas periodísticas completas} y el fenómeno analizado no es la
-agresión explícita, sino el \textbf{sexismo lingüístico}: los usos del lenguaje
-que reproducen desigualdad de forma frecuentemente inadvertida por quien los
-emplea.
+Esta investigación se enmarca en el proyecto IRIS\footnote{Ficha del proyecto en
+el portal de investigación de la UC3M: \url{https://researchportal.uc3m.es/display/act565092} [Último acceso: 05/08/2026]}
+del Instituto Universitario de Estudios de Género de la Universidad Carlos~III de
+Madrid, cuyo objetivo es analizar de forma sistemática, mediante Inteligencia
+Artificial, la representación de las mujeres en la prensa española. A diferencia de
+aproximaciones que abordan la detección de discurso de odio sobre mensajes breves
+en redes sociales~\cite{garcelan2024}, el objeto de estudio aquí son
+\textbf{piezas periodísticas completas} y el fenómeno analizado no es la agresión
+explícita, sino el \textbf{sexismo lingüístico}: los usos del lenguaje que
+reproducen desigualdad de forma frecuentemente inadvertida por quien los emplea.
+
+En el marco de IRIS se ha desarrollado, además, una herramienta web
+pública\footnote{\url{https://dei.inf.uc3m.es/iris/} [Último acceso: 05/08/2026]} que difunde los análisis del
+proyecto; el sistema de detección descrito en este trabajo se integra en esa misma
+línea de investigación.
 
 \subsection{Fundamentación metodológica}
 
 El libro de códigos empleado se apoya en la tradición del análisis de contenido
 con perspectiva de género aplicada a medios de comunicación
-\cite{sainzdebaranda2013, sainzdebaranda2026}, y operacionaliza criterios
-procedentes de guías institucionales de lenguaje no sexista elaboradas por
-organismos públicos españoles. Estas guías proporcionan tanto los principios
+\cite{sainzdebaranda2013, sainzdebaranda2026}, e integra criterios
+procedentes de guías institucionales de lenguaje no sexista
+\cite{csd_deporte2022, csd_diagnostico2022, yufera2023, guerrero_malaga,
+iortv_mujer_violencia, coe_violenciasexual, guia_igualdad_rtve, guias_no_sexista,
+guia_actuacion_lecturafacil}. Estas guías proporcionan tanto los principios
 generales como la casuística concreta a partir de la cual se han derivado las
 reglas de decisión de cada variable.
 
-Un concepto resulta central en esta fundamentación: la \textbf{regla de
-inversión}. Ante un pasaje candidato, el procedimiento consiste en reescribirlo
-intercambiando el género de todas las referencias personales y evaluar si el
-resultado se publicaría con naturalidad. Si la versión invertida resulta
-extraña, ridícula o irrespetuosa, cabe concluir que la formulación original
-incorpora sexismo lingüístico. Este criterio permite distinguir con precisión
-entre textos que \emph{hablan sobre} desigualdad —informativos y no
-necesariamente sexistas— y textos que \emph{reproducen} la desigualdad en su
-forma.
+De cara al análisis de los artículos es conveniente tener en cuenta y distinguir la \textbf{forma} del \textbf{fondo}. El sexismo lingüístico
+está en \emph{cómo} se dice algo, no en \emph{qué} se cuenta. Una noticia puede
+tratar un asunto no sexista con un lenguaje sexista (por ejemplo, nombrar a un
+grupo mixto solo en masculino) y, a la inversa, una noticia sobre desigualdad
+puede estar redactada sin sexismo en su lenguaje. Por eso el libro de códigos
+separa las variables de \emph{forma} (el lenguaje) de las de \emph{fondo} (el
+contenido), como se detalla en la Sección~\ref{sec:iris_variables}.
 
-Conviene subrayar que el sexismo lingüístico opera sobre la forma del mensaje y
-no sobre su fondo. Una pieza puede presentar un contenido no sexista expresado
-mediante formas sexistas, o a la inversa. Esta distinción justifica que el libro
-de códigos separe explícitamente las variables de forma de aquellas de
-contenido, tal como se detalla en la Sección~\ref{sec:iris_variables}.
+El libro de códigos completo del proyecto no se limita al lenguaje: organiza el
+análisis de cada pieza en cuatro bloques temáticos, con alrededor de cuarenta
+variables en total.
+
+\begin{itemize}
+    \item \textbf{Contenido general}: autoría de la pieza y su género, personas
+    mencionadas y su género, tema tratado, etc.
+    \item \textbf{Lenguaje}: los usos sexistas de la lengua; quince variables, de
+    las que este trabajo aborda cinco (Sección~\ref{sec:iris_variables}), si bien
+    el enfoque es extrapolable al resto.
+    \item \textbf{Imágenes}: número de imágenes de la pieza, personas que
+    aparecen en ellas y su género.
+    \item \textbf{Fuentes de información}: declaraciones citadas, tipo de fuente y
+    género de la fuente.
+\end{itemize}
+
+Este trabajo se centra en el bloque de \textbf{Lenguaje}, el más directamente
+ligado al sexismo lingüístico.
 
 \subsection{Procedimiento de anotación}
 
 La anotación del corpus fue realizada por especialistas en comunicación y
-estudios de género vinculadas al proyecto, aplicando el libro de códigos sobre
-la pieza completa. La unidad de análisis es, por tanto, \textbf{el artículo}: cada
-variable recibe un único veredicto por pieza, con independencia del número de
-ocurrencias del fenómeno en el texto. Esta decisión, coherente con la práctica
-habitual en análisis de contenido, tiene implicaciones relevantes para la
-interpretación de los resultados, pues basta una sola ocurrencia para que una
-pieza extensa quede codificada como positiva.
+estudios de género vinculadas al proyecto~\cite{sainzdebaranda2026}, aplicando el
+libro de códigos sobre la pieza completa. La unidad de análisis es \textbf{el
+artículo completo}: cada variable recibe un solo veredicto por pieza (sí o no),
+sin contar cuántas veces aparece el fenómeno en el texto. Basta con que ocurra una
+vez para que la pieza se marque como positiva. Conviene tenerlo presente al leer
+los resultados, porque una noticia larga con un único caso de sexismo cuenta lo
+mismo que otra plagada de ellos.
+
+El análisis de contenido experto se desarrolla en dos planos complementarios. El
+\textbf{análisis cuantitativo} trabaja sobre las etiquetas: una vez codificada
+cada variable como presencia o ausencia, se analizan estadísticamente esas
+etiquetas sobre el conjunto del corpus (frecuencias, distribuciones,
+comparaciones). El \textbf{análisis cualitativo} trabaja sobre el marcado en el
+texto: la lectura atenta de los fragmentos concretos en que se manifiesta el
+fenómeno, que interpreta y da sentido a las cifras.
+
+De esa metodología, la referencia disponible para este trabajo es únicamente la
+etiqueta por variable, que sostiene el análisis cuantitativo. El sistema propuesto
+produce, además de la etiqueta, el marcado de las evidencias literales en el texto
+y una explicación del veredicto (Sección~\ref{sec:zeroshot_iris}), material que
+habilitaría el análisis cualitativo. Ahora bien, al no disponer de un marcado
+experto de referencia con el que contrastarlo, esa salida no puede validarse de
+forma sistemática y queda como línea de trabajo futura
+(Sección~\ref{sec:futurework_usecases}).
 
 \subsection{Limitación: ausencia de doble codificación}
 \label{subsec:limitacion_fiabilidad}
@@ -66,8 +102,3 @@ alcanzan valores próximos a la unidad. Al carecer de esa referencia, cualquier
 discrepancia observada entre el sistema y la anotación experta \emph{no puede
 atribuirse inequívocamente al error del modelo}: parte de ella podría
 corresponder a la variabilidad inherente a la propia tarea de codificación.
-
-Se recomienda, como línea de trabajo futura de bajo coste y alto valor, la doble
-codificación de una submuestra del corpus (habitualmente entre el 10\,\% y el
-20\,\% en la literatura de análisis de contenido), suficiente para obtener una
-estimación defendible de dicha fiabilidad.

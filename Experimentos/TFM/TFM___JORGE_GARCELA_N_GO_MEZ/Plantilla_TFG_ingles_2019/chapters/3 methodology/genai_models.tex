@@ -36,8 +36,19 @@ los modelos considerados.
 \end{table}
 
 La evaluación del Capítulo~\ref{results_and_discussion} cubre estos cuatro
-modelos: \texttt{gemma4:e4b} en local y las tres variantes comerciales de API.
-Tres decisiones sobre la selección merecen justificarse.
+modelos, repartidos de forma equilibrada entre dos proveedores: 
+\begin{itemize}
+    \item \textbf{Google} con \texttt{gemma4:e4b} (local) y \texttt{gemini-3.1-flash-lite}(API)
+    \item \textbf{OpenAI} con \texttt{gpt-4o-mini} y \texttt{gpt-5.4-nano} (ambos API). 
+\end{itemize}
+
+Varias decisiones sobre la selección merecen justificarse. La presencia de dos modelos de OpenAI responde a un criterio de vigencia.
+\texttt{gpt-4o-mini} es un modelo muy adoptado y económico, pero OpenAI ha ido
+retirando modelos de su interfaz de ChatGPT\footnote{\url{https://help.openai.com/es-es/articles/20001051-retiring-gpt-4o-and-other-chatgpt-models} [Último acceso: 05/08/2026]}
+(aunque \texttt{gpt-4o-mini} sigue disponible por API) y no cabe descartar que
+acabe deprecándose también ahí. Para no depender de un único modelo comercial y
+contar con una referencia más reciente, se añade \texttt{gpt-5.4-nano}, una
+variante posterior más actualizada.
 
 Para que la comparación entre proveedores sea justa, se desactivó el razonamiento
 explícito en los modelos que lo admiten (el parámetro \texttt{reasoning\_effort}

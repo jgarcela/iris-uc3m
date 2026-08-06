@@ -2,27 +2,32 @@
 %	PRUEBA DE CONCEPTO DE APLICABILIDAD EDITORIAL
 %----------
 
-La evaluación se hace sobre las 1.313 piezas anotadas, pero la finalidad última
-del sistema es asistir en el análisis de todo el corpus, incluidas las piezas sin
-anotar. Sobre ellas no cabe medir acuerdo, por falta de referencia, pero sí
-producir un análisis descriptivo: qué medios, secciones o periodos concentran más
-usos marcados, cómo evolucionan en el tiempo. Esa es la prueba de concepto de
-aplicabilidad editorial.
+La finalidad última del sistema no es puntuar en una evaluación, sino asistir el
+trabajo de análisis sobre el corpus, incluidas las miles de piezas sin anotar.
+Para materializar esa aplicabilidad, el sistema de detección se integra en la
+\textbf{herramienta web del proyecto IRIS}\footnote{\url{https://dei.inf.uc3m.es/iris/} [Último acceso: 05/08/2026]},
+y la prueba de concepto consiste en usar esa herramienta para acompañar a expertas
+y periodistas en el análisis de un corpus de prueba.
 
-El sistema no automatiza la decisión. La produce en un formato que la analista
-puede revisar: por cada pieza y variable, un código, una justificación que cita
-los pasos aplicados y las evidencias literales del texto. La analista acepta,
-rechaza o matiza cada veredicto a la vista de esa justificación. Encaja con el
-marco \textit{human-in-the-loop} del proyecto IRIS: el objetivo es acelerar y
-sistematizar el trabajo experto, no reemplazarlo.
+La asistencia cubre los dos planos del análisis de contenido experto
+(Sección~\ref{sec:experts}). En el plano \textbf{cuantitativo}, la herramienta
+agrega las etiquetas que produce el sistema y permite explorar qué medios,
+secciones o periodos concentran más usos marcados y cómo evolucionan en el tiempo.
+En el \textbf{cualitativo}, para cada pieza muestra el marcado de las evidencias
+sobre el texto y la explicación del veredicto, de modo que quien analiza puede leer
+por qué el sistema ha decidido lo que ha decidido.
+
+El sistema no automatiza la decisión: la produce en un formato revisable (código,
+justificación y evidencias literales) y la analista acepta, rechaza o matiza cada
+veredicto.
 
 Los resultados del Capítulo~\ref{results_and_discussion} obligan a matizar el
-alcance de esta prueba de concepto. El acuerdo entre el sistema y las anotadoras
-es bajo, y buena parte de ese desacuerdo tiene que ver con lo amplio y variable
-del criterio experto, más que con un fallo de detección. En este escenario, el
-valor del sistema no está en sustituir el juicio de la analista, sino en dos usos
-más modestos y realistas: señalar piezas candidatas para su revisión, y aportar,
-en cada una, una justificación trazable que la analista puede validar en
-segundos. Presentar la herramienta como un clasificador autónomo, a la vista de
-las métricas, sería deshonesto; presentarla como un asistente de cribado con
-trazabilidad es coherente con lo medido.
+alcance. El acuerdo entre el sistema y las anotadoras es bajo, y buena parte de ese
+desacuerdo podría tener que ver con lo amplio y variable del criterio experto más que con
+un fallo de detección. Por eso la herramienta se plantea como un \textbf{asistente
+de cribado con trazabilidad}: señala piezas candidatas y aporta en cada una una
+justificación que la analista valida en segundos, y no como un clasificador
+autónomo, lo que a la vista de las métricas sería deshonesto.
+
+% [FIGURA pendiente] captura de la herramienta web de IRIS
+\color{red} [FIGURA pendiente] captura de la herramienta web de IRIS \color{black}

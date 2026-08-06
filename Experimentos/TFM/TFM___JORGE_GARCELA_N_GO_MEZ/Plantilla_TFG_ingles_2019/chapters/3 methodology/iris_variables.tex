@@ -2,7 +2,7 @@
 %	VARIABLES DEL ANÁLISIS — sexismo lingüístico
 %----------
 
-El libro de códigos del proyecto define quince variables de sexismo lingüístico,
+El libro de códigos de IRIS define quince variables de sexismo lingüístico,
 codificadas como V25 a V39, que se recogen en la
 Tabla~\ref{tab:iris-inventario-variables}. Cada una captura un mecanismo
 distinto mediante el cual el lenguaje periodístico puede reproducir
@@ -47,11 +47,8 @@ desigualdad.
 
 \subsubsection{Selección de las cinco variables}
 
-El alcance de este trabajo se restringe a cinco variables (V25, V26, V30, V33 y
-V35), seleccionadas por el equipo experto del proyecto atendiendo a dos
-criterios: su relevancia teórica dentro del marco de análisis y su frecuencia de
-aparición en el corpus, que garantiza un número de casos suficiente para una
-evaluación con sentido estadístico. Las diez variables restantes permanecen como
+El alcance de este trabajo se restringe a cinco del bloque de Lenguaje (V25, V26, V30, V33 y
+V35), seleccionadas por el equipo experto del proyecto atendiendo a su relevancia teórica dentro del marco de análisis. Las diez variables restantes permanecen como
 marco teórico del libro de códigos, pero no se someten a evaluación automática.
 
 Esta restricción responde asimismo a una consideración de diseño experimental:
@@ -62,7 +59,8 @@ conclusiones, a una cobertura amplia pero superficial de las quince.
 \subsubsection{Definición operativa de las variables evaluadas}
 \label{sec:iris_variables}
 
-Las cinco variables seleccionadas se definen del modo siguiente:
+Las cinco variables seleccionadas, definidas a partir de las guías de lenguaje no
+sexista y del conocimiento experto del proyecto, son las siguientes:
 
 \begin{itemize}
     \item \textbf{V25 --- \texttt{lenguaje\_sexista}.} Uso discriminatorio del
@@ -102,24 +100,54 @@ se agrupan como clase positiva.
 
 La distribución de las clases en la anotación experta resulta marcadamente
 desigual y condiciona de forma decisiva la elección de métricas de evaluación,
-tal como se analiza en la Sección~\ref{subsec:iris_divergencia}. Mientras V25 y
-V26 presentan una prevalencia del 81\,\% de casos positivos, V33 y V35 se
-sitúan en el 6,2\,\% y el 10,0\,\% respectivamente.
+tal como se analiza en la Sección~\ref{subsec:iris_divergencia}. La
+Tabla~\ref{tab:iris-prevalencia-imp} recoge la prevalencia de la clase positiva de
+cada variable y, junto a ella, la exactitud que alcanzaría un clasificador trivial
+que respondiese siempre la clase mayoritaria.
 
-Esta circunstancia implica que un clasificador trivial que respondiese siempre
-con la clase mayoritaria alcanzaría exactitudes de 0,810 en V25 y V26, y de
-0,938 y 0,900 en V33 y V35. Por consiguiente, \textbf{la exactitud no constituye
-por sí sola una métrica informativa} en esta tarea, y todos los resultados de
-este trabajo se acompañan del coeficiente $\kappa$ de Cohen —que descuenta el
-acuerdo esperable por azar— y de la prevalencia de referencia.
+\begin{table}[H]
+    \centering
+    \begingroup
+    \small
+    \ttabbox[\FBwidth]{
+        \caption{Prevalencia de la clase positiva y exactitud del clasificador trivial ($N=1.313$)}
+        \label{tab:iris-prevalencia-imp}
+    }{
+        \begin{tabularx}{\textwidth}{
+            l
+            X
+            >{\centering\arraybackslash}X
+            >{\columncolor{gray!15}\centering\arraybackslash}X
+        }
+            \hline
+            \textbf{Cód.} & \textbf{Variable} & \textbf{Prevalencia «Sí»} & \textbf{Exactitud trivial} \\
+            \hline
+            V25 & \texttt{lenguaje\_sexista}         & 0,810 & 0,810 \\
+            V26 & \texttt{masc\_generico}            & 0,810 & 0,810 \\
+            V30 & \texttt{sexismo\_discurso}         & 0,428 & 0,572 \\
+            V33 & \texttt{asimetria\_mujer\_hombre}  & 0,062 & 0,938 \\
+            V35 & \texttt{denominacion\_sexualizada} & 0,100 & 0,900 \\
+            \hline
+        \end{tabularx}
+    }
+    \endgroup
+\end{table}
+
+La lectura de la última columna es reveladora: en V33 y V35, un modelo que no
+detecte nada y responda siempre «No» acertaría el 93,8\,\% y el 90,0\,\% de las
+veces. Por consiguiente, \textbf{la exactitud no constituye por sí sola una
+métrica informativa} en esta tarea. Todos los resultados de este trabajo se
+acompañan del coeficiente $\kappa$ de Cohen~\cite{cohen1960}, que descuenta el acuerdo esperable por
+azar, de métricas F1 y de la prevalencia de cada variable.
 
 \subsubsection{De la definición experta a la especificación ejecutable}
 
-Para su empleo por sistemas automáticos, cada variable se formaliza en una
-especificación estructurada que recoge, además de la definición conceptual: un
-criterio operativo de decisión, una metodología paso a paso, ejemplos positivos
-y contraejemplos comentados, casos límite documentados y las fronteras que la
-separan de las variables contiguas. Esta especificación constituye la fuente
+Para su empleo por sistemas automáticos, cada variable, partiendo de las guías de
+lenguaje no sexista y del criterio experto, se formaliza en una especificación
+estructurada que recoge, además de la definición conceptual: un criterio operativo
+de decisión, una metodología paso a paso, ejemplos positivos y contraejemplos
+comentados, casos límite documentados y las fronteras que la separan de las
+variables contiguas. Esta especificación constituye la fuente
 única a partir de la cual se generan tanto los \textit{prompts} del sistema de
 referencia como las \textit{skills} de la arquitectura de agentes, garantizando
 que ambos niveles experimentales operan con \emph{idéntico} contenido

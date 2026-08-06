@@ -1,6 +1,19 @@
 # Plan de experimentos del TFM
 
-Documento **canónico** de qué experimentos entran en la memoria (y cuáles no).
+> ⚠️ **ESTADO 2026-08-04 — documento de planificación histórico.** El alcance ya
+> está cerrado y ejecutado; este plan se conserva como registro. Lo que de verdad
+> entró en la memoria difiere en varios puntos:
+> - **Core = Exp 21** (Agent Skills, 5 agentes especializados), no el Exp 16 (descartado).
+> - **4 modelos evaluados**: `gemma4:e4b` (local) + `gpt-4o-mini`, `gpt-5.4-nano`, `gemini-3.1-flash-lite` (API). **Claude y qwen3 quedan fuera del TFM.**
+> - **Umbral bajo** pasa a ablación descartada (artefacto de marginales), no tabla principal.
+> - Añadidos no previstos aquí: **ablación por componentes (5 brazos × 4 modelos)**, **gemma B1 en cluster** y **el sistema como tercer anotador** (`equipo_ia`).
+> - **Exp 22 (confianza) NO entra** en la memoria.
+>
+> Verdad actual del estado del `.tex`: `ESTADO_LATEX.md`. Detalle día a día: `DIARIO_TFM.md`.
+
+---
+
+Documento de qué experimentos entran en la memoria (y cuáles no).
  complementary: `DIARIO_TFM.md` (día a día), `ESTADO_LATEX.md` (huecos del `.tex`), notebook `Experimentos.ipynb` (números).
 
 > **Idea central**  

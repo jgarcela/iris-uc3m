@@ -28,7 +28,7 @@ sobreajustar a un conjunto y medir el rendimiento en él.
 Cada corrida registra, además del veredicto, información para el análisis:
 \textit{tokens} consumidos, coste estimado por artículo y latencia, más las
 métricas de comportamiento del agente ya descritas (uso de herramientas, colapso
-a B0). El coste se calcula por proveedor a partir de una tabla de tarifas.
+a B0). El coste se calcula por proveedor a partir de las tablas de tarifas públicas de cada API.
 
 La ejecución es incremental y \textbf{reanudable} por identificador de pieza: si
 una corrida se interrumpe, al relanzarla continúa donde iba, sin repetir ni
@@ -43,7 +43,9 @@ métricas.
 La misma tubería sirve para todos los modelos gracias al enrutado por
 identificador (Sección~\ref{sec:llms_models_iris}). Para los modelos comerciales,
 las peticiones van a la API correspondiente. Para los locales, se ejecutan sobre
-la granja de GPU del TSC mediante \textit{Ollama}, repartiendo el corpus en
-fragmentos (\textit{shards}) que corren en paralelo sobre varios servidores. El
-coste computacional de esta vía local se cuantifica en la
-Sección~\ref{subsec:iris_coste}.
+la granja de GPU del Departamento de Teoría de la Señal y Comunicaciones mediante
+\textit{Ollama}, repartiendo el corpus en fragmentos (\textit{shards}) que corren
+en paralelo sobre varios servidores, con las peticiones lanzadas desde un equipo
+cliente del laboratorio. El coste computacional de esta vía local se cuantifica en
+la Sección~\ref{subsec:iris_coste}. El código fuente completo se recoge en el
+Apéndice~\ref{appendix_code}.

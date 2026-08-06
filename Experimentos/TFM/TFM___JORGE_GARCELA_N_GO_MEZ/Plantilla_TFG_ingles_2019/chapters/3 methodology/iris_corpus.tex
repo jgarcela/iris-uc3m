@@ -3,10 +3,9 @@
 %----------
 
 El corpus empleado en este trabajo ha sido construido en el marco del proyecto
-IRIS y está formado por \textbf{7.115 piezas periodísticas} publicadas en prensa
-generalista española. A diferencia de los corpus de redes sociales, habituales
-en la detección automática de discurso de odio, se trata de textos extensos
-—con una longitud mediana de \textbf{5.881 caracteres}— redactados por
+IRIS~\cite{sainzdebaranda2026} y está formado por \textbf{7.115 piezas
+periodísticas} publicadas en prensa generalista española. A diferencia de los corpus de redes sociales, habituales
+en la detección automática de discurso de odio, se trata de textos extensos, con una longitud mediana de \textbf{5.881 caracteres}, redactados por
 profesionales y sometidos a procesos editoriales, lo que sitúa el fenómeno
 analizado en el terreno del sesgo sutil antes que en el de la agresión
 explícita.
@@ -15,7 +14,9 @@ explícita.
 
 El corpus abarca dos periodos diferenciados, según se recoge en la
 Tabla~\ref{tab:iris-corpus-anios}: una serie histórica que cubre de 2017 a 2021
-y una campaña de recogida correspondiente a 2024.
+y una campaña de recogida correspondiente a 2024. Las piezas proceden de siete cabeceras, con una distribución desigual: la
+cabecera más representada aporta 3.117 piezas (43,8\,\% del total) y la menos
+representada 63 (0,9\,\%).
 
 \begin{table}[H]
     \centering
@@ -44,32 +45,16 @@ y una campaña de recogida correspondiente a 2024.
     \endgroup
 \end{table}
 
-Las piezas proceden de siete cabeceras, con una distribución desigual: la
-cabecera más representada aporta 3.117 piezas (43,8\,\% del total) y la menos
-representada 63 (0,9\,\%). Esta asimetría, propia de un corpus construido con
-criterios de relevancia editorial antes que de balanceo estadístico, no afecta
-al diseño experimental de este trabajo —que evalúa el acuerdo pieza a pieza—
-pero debe considerarse si se pretendiese extraer conclusiones agregadas sobre
-el comportamiento comparado de los medios.
 
-\subsubsection{Obtención del texto completo}
-
-La base de datos original recoge los metadatos de cada pieza (fecha, cabecera,
-titular, autoría, sección y sus correspondientes codificaciones), pero no su
-cuerpo. Dado que el análisis del sexismo lingüístico requiere necesariamente el
-texto íntegro, se desarrolló un proceso de extracción automática que recupera el
-contenido a partir de la URL de cada pieza. El resultado se incorpora al corpus
-en el campo \texttt{contenido\_articulo}, que constituye la entrada de todos los
-experimentos descritos en este trabajo.
 
 \subsubsection{Subconjunto de evaluación}
 \label{subsec:iris_subconjunto}
 
 De las 7.115 piezas del corpus, \textbf{1.315 cuentan con anotación experta
 simultánea en las cinco variables} objeto de estudio, y son las que constituyen
-el conjunto de evaluación. De ellas, 1.313 disponen de texto recuperado con
-extensión suficiente para el análisis, cifra sobre la que se calculan todas las
-métricas del Capítulo~\ref{results_and_discussion}.
+el conjunto de evaluación. De ellas se usan \textbf{1.313}: las otras 2 se
+descartan por no contar con el texto del artículo aprovechable. Todas las métricas
+del Capítulo~\ref{results_and_discussion} se calculan sobre esas 1.313 piezas.
 
 Este subconjunto presenta dos particularidades que condicionan el alcance de las
 conclusiones:
@@ -85,7 +70,5 @@ conclusiones:
 \end{itemize}
 
 Las 5.800 piezas restantes carecen de anotación de referencia y, por tanto, no
-intervienen en el cálculo de las métricas de acuerdo. Su procesamiento resulta
-de interés únicamente para el análisis descriptivo y para la prueba de concepto
-editorial, escenarios en los que no se dispone de verdad de referencia contra la
-que contrastar.
+intervienen en el cálculo de las métricas de acuerdo.
+

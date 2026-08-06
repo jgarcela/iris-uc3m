@@ -48,9 +48,19 @@ hmargin=3cm
 % EXPRESIONES MATEMATICAS
 \usepackage{amsmath,amssymb,amsfonts,amsthm}
 
-\usepackage{txfonts} 
+\usepackage{txfonts}
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
+
+% \texttt un pelín más pequeño: el tipo monoespaciado de txfonts se ve más grande
+% que el texto del cuerpo. Se compensa reduciendo el tamaño dentro de \texttt.
+\let\oldtexttt\texttt
+\renewcommand{\texttt}[1]{{\small\oldtexttt{#1}}}
+
+% Permitir cortar identificadores largos (p. ej. \texttt{verificar\_evidencias})
+% justo tras el guion bajo, sin guion de división, para que no desborden el margen.
+\let\origunderscore\_
+\renewcommand{\_}{\origunderscore\allowbreak}
 
 %\usepackage[english]{babel} 
 %\usepackage[babel, english=american]{csquotes}
@@ -448,7 +458,14 @@ Este capítulo establece el marco teórico y tecnológico sobre el que se fundam
 
 \chapter{Metodología}
 \label{sec:methodology}
-This Chapter provides a detailed presentation of the different methods, models and procedures that have been used for the elaboration of this thesis.
+Este capítulo detalla los fundamentos sobre los que se asienta el trabajo, antes
+de entrar en su implementación. Se parte del análisis experto y la perspectiva de
+género del proyecto IRIS, del que proceden el corpus, el libro de códigos y las
+cinco variables de sexismo lingüístico evaluadas
+(Sección~\ref{sec:experts}). A continuación se describe la solución tecnológica:
+los modelos generativos considerados, las dos vías de despliegue (local y
+comercial) y el paradigma \textit{zero-shot} con libro de códigos
+(Sección~\ref{sec:ai_solution}).
 
 
 \section{Análisis experto y perspectiva de género}
@@ -495,28 +512,15 @@ expertas (Sección~\ref{rag}), la instrumentación de la evaluación
 (Sección~\ref{eval}) y la prueba de concepto de aplicabilidad editorial
 (Sección~\ref{poc}).
 
-La infraestructura combina dos entornos, unidos por una tubería común y agnóstica
-al proveedor. Los modelos comerciales se acceden por API (OpenAI, Google). Los
-modelos de pesos abiertos se ejecutan mediante \textit{Ollama}
-sobre la granja de GPU del Departamento de Teoría de la Señal y Comunicaciones, a
-la que se envían las peticiones desde un equipo cliente del laboratorio. El código
-fuente completo se recoge en el Apéndice~\ref{appendix_code}.
-
-
-
-
-
-
-
 \section{Arquitectura y diseño agéntico}
 \label{agents}
 \input{chapters/4 implementation/agents}
 
-\section{Prompts y herramientas de análisis}
+\section{Skills y salida verificable}
 \label{prompts}
 \input{chapters/4 implementation/prompts}
 
-\section{Representaciones: RAG, recuperación y similitud}
+\section{Recuperación sobre guías expertas (RAG)}
 \label{rag}
 \input{chapters/4 implementation/rag}
 
