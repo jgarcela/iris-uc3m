@@ -21,25 +21,25 @@ desigualdad.
             X
             >{\columncolor{gray!15}\centering\arraybackslash}p{2.2cm}
         }
-            \hline
+            \toprule
             \textbf{Cód.} & \textbf{Variable} & \textbf{En este trabajo} \\
-            \hline
-            V25 & \texttt{lenguaje\_sexista} & \textbf{Sí} \\
-            V26 & \texttt{masc\_generico} & \textbf{Sí} \\
+            \midrule
+            \textbf{V25} & \textbf{\texttt{lenguaje\_sexista}} & \textbf{Sí} \\
+            \textbf{V26} & \textbf{\texttt{masc\_generico}} & \textbf{Sí} \\
             V27 & \texttt{hombre\_denominar\_humanidad} & No \\
             V28 & \texttt{uso\_dual\_zorr} & No \\
             V29 & \texttt{uso\_cargo\_mujer} & No \\
-            V30 & \texttt{sexismo\_discurso} & \textbf{Sí} \\
+            \textbf{V30} & \textbf{\texttt{sexismo\_discurso}} & \textbf{Sí} \\
             V31 & \texttt{androcentrismo} & No \\
             V32 & \texttt{mencion\_nombre\_investigadora} & No \\
-            V33 & \texttt{asimetria\_mujer\_hombre} & \textbf{Sí} \\
+            \textbf{V33} & \textbf{\texttt{asimetria\_mujer\_hombre}} & \textbf{Sí} \\
             V34 & \texttt{disminutivos\_infantilizacion} & No \\
-            V35 & \texttt{denominacion\_sexualizada} & \textbf{Sí} \\
+            \textbf{V35} & \textbf{\texttt{denominacion\_sexualizada}} & \textbf{Sí} \\
             V36 & \texttt{denominacion\_redundante} & No \\
             V37 & \texttt{denominacion\_dependiente} & No \\
             V38 & \texttt{criterios\_excepcion} & No \\
             V39 & \texttt{comparacion\_mujer\_hombre} & No \\
-            \hline
+            \bottomrule
         \end{tabularx}
     }
     \endgroup
@@ -63,35 +63,43 @@ Las cinco variables seleccionadas, definidas a partir de las guías de lenguaje 
 sexista y del conocimiento experto del proyecto, son las siguientes:
 
 \begin{itemize}
-    \item \textbf{V25 --- \texttt{lenguaje\_sexista}.} Uso discriminatorio del
-    lenguaje por razón de sexo. Opera como categoría agregadora: engloba todo
-    sexismo lingüístico de forma, de modo que la detección de cualquiera de sus
-    subtipos debería implicar su marcado. Admite un tercer valor específico para
-    el \emph{salto semántico}, esto es, el caso en que un masculino presentado
+    \item \textbf{V25 (\texttt{lenguaje\_sexista}).} Uso discriminatorio del
+    lenguaje por razón de sexo. Admite un tercer valor específico para el
+    \emph{salto semántico}, esto es, el caso en que un masculino presentado
     como genérico se revela posteriormente no inclusivo al aparecer una marca
     explícita de mujer.
 
-    \item \textbf{V26 --- \texttt{masc\_generico}.} Empleo del masculino
+    \item \textbf{V26 (\texttt{masc\_generico}).} Empleo del masculino
     gramatical como pretendido genérico cuando existe alternativa inclusiva.
-    Constituye un subtipo específico de V25.
 
-    \item \textbf{V30 --- \texttt{sexismo\_discurso}.} Sexismo situado en el
-    \emph{fondo} del mensaje —en aquello que se cuenta— y no en la forma
-    lingüística elegida. Es la única de las cinco que no constituye un subtipo
-    de V25, lo que permite que una pieza presente una variable sin la otra.
+    \item \textbf{V30 (\texttt{sexismo\_discurso}).} Sexismo situado en el
+    \emph{fondo} del mensaje (en aquello que se cuenta) y no en la forma
+    lingüística elegida. Es la única de las cinco que atañe al contenido y no a la
+    forma, de modo que una pieza puede presentarla con independencia de las demás.
 
-    \item \textbf{V33 --- \texttt{asimetria\_mujer\_hombre}.} Tratamiento
+    \item \textbf{V33 (\texttt{asimetria\_mujer\_hombre}).} Tratamiento
     asimétrico de mujeres y hombres dentro de una misma pieza: diferencias en el
     uso del nombre, el apellido, el título profesional o el tratamiento.
 
-    \item \textbf{V35 --- \texttt{denominacion\_sexualizada}.} Identificación de
+    \item \textbf{V35 (\texttt{denominacion\_sexualizada}).} Identificación de
     la mujer por su aspecto físico, su rol familiar o su relación con un varón,
     en detrimento de su función profesional o del motivo informativo por el que
     aparece en la pieza.
 \end{itemize}
 
+La Figura~\ref{fig:iris-variables-ejemplos} ilustra cada variable con un ejemplo,
+resaltando el fragmento del texto que la activa y el motivo por el que lo hace.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{Plantilla_TFG_ingles_2019/imagenes/variables_ejemplos_blanco.pdf}
+    \caption{Las cinco variables evaluadas, con un ejemplo cada una. Se resalta el
+    fragmento que activa la variable y se indica, debajo, la razón.}
+    \label{fig:iris-variables-ejemplos}
+\end{figure}
+
 Todas las variables se codifican en una escala en la que el valor~1 indica
-ausencia del fenómeno y el valor~2 su presencia; V25 admite adicionalmente el
+ausencia del fenómeno y el valor~2 su presencia. V25 admite adicionalmente el
 valor~3 para el caso del salto semántico. En el tratamiento de los resultados,
 y con objeto de homogeneizar la comparación entre variables, los valores 2 y 3
 se agrupan como clase positiva.
@@ -113,28 +121,23 @@ que respondiese siempre la clase mayoritaria.
         \caption{Prevalencia de la clase positiva y exactitud del clasificador trivial ($N=1.313$)}
         \label{tab:iris-prevalencia-imp}
     }{
-        \begin{tabularx}{\textwidth}{
-            l
-            X
-            >{\centering\arraybackslash}X
-            >{\columncolor{gray!15}\centering\arraybackslash}X
-        }
-            \hline
-            \textbf{Cód.} & \textbf{Variable} & \textbf{Prevalencia «Sí»} & \textbf{Exactitud trivial} \\
-            \hline
+        \begin{tabular}{@{}l l c >{\columncolor{gray!15}}c@{}}
+            \toprule
+            \textbf{Cód.} & \textbf{Variable} & \textbf{Prevalencia de \textit{Sí}} & \textbf{Exactitud trivial} \\
+            \midrule
             V25 & \texttt{lenguaje\_sexista}         & 0,810 & 0,810 \\
             V26 & \texttt{masc\_generico}            & 0,810 & 0,810 \\
             V30 & \texttt{sexismo\_discurso}         & 0,428 & 0,572 \\
             V33 & \texttt{asimetria\_mujer\_hombre}  & 0,062 & 0,938 \\
             V35 & \texttt{denominacion\_sexualizada} & 0,100 & 0,900 \\
-            \hline
-        \end{tabularx}
+            \bottomrule
+        \end{tabular}
     }
     \endgroup
 \end{table}
 
 La lectura de la última columna es reveladora: en V33 y V35, un modelo que no
-detecte nada y responda siempre «No» acertaría el 93,8\,\% y el 90,0\,\% de las
+detecte nada y responda siempre \textit{No} acertaría el 93,8\,\% y el 90,0\,\% de las
 veces. Por consiguiente, \textbf{la exactitud no constituye por sí sola una
 métrica informativa} en esta tarea. Todos los resultados de este trabajo se
 acompañan del coeficiente $\kappa$ de Cohen~\cite{cohen1960}, que descuenta el acuerdo esperable por

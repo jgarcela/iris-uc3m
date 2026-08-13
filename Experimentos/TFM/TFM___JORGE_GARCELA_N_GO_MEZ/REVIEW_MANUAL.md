@@ -5,14 +5,12 @@ Por ahora cubre parte del **Capítulo 3**; se irán añadiendo más secciones.
 
 > ✅ **Tanda §3.1–§3.1.5 aplicada (2026-08-04).** Ver "Estado" bajo cada punto.
 >
-> ⚠️ **Verificar metadatos de guías en `bibliografia.bib`.** Se crearon 9 entradas
-> para las guías de `methodology/`. Con datos de portada fiables:
-> `csd_deporte2022`, `csd_diagnostico2022`, `yufera2023` (Irene Yúfera, Madrid 2023),
-> `guerrero_malaga` (Susana Guerrero, U. Málaga), `iortv_mujer_violencia`
-> (Observatorio Igualdad RTVE), `coe_violenciasexual` (UE–Consejo de Europa).
-> **Autor/año a confirmar** (los puse por inferencia, marcados `[s.f.]`):
-> `guia_igualdad_rtve`, `guias_no_sexista` (¿Instituto de la Mujer?),
-> `guia_actuacion_lecturafacil` (¿Ministerio de Igualdad?).
+> ✅ **Metadatos de las 9 guías verificados sobre los PDF de `methodology/` (2026-08).**
+> Años confirmados salvo `guias_no_sexista` (2015, inferido: su PDF no imprime año).
+> Errores corregidos en la verificación: `guerrero_malaga` 2021→**2022**;
+> `guia_actuacion_lecturafacil` autor **Región de Murcia** (Consejería de Mujer, 2022),
+> no Min. Igualdad; `coe_violenciasexual` autor **Unión Europea**, no Comisión Europea.
+> Autoría afinada: CSD + Indexa Geodata; RTVE → Observatorio de Igualdad de RTVE.
 
 **Leyenda de acciones:**
 📚 añadir referencia / footnote · ➕ añadir contenido · ✏️ reescribir / aclarar (no se entiende) · 📍 ubicación por decidir
@@ -140,17 +138,19 @@ Leyenda: ⬜ por hacer · 🔄 en curso · ✅ hecho · ⏸️ depende de tercer
 |---|-----------|:------:|------|
 | 1 | **Referencias de literatura en Cap. 3** | ✅ | Añadidas: **zero-shot / LLM** (`radford2019`, `brown2020` en `ai_solution`; `ziems2024css`, `hollauer_plastics` en `zero_shot`), Transformer (`vaswani2017`), aprendizaje profundo (`lecun2015deep`), κ de Cohen (`cohen1960`), guías institucionales (9 entradas), TFG previo (`garcelan2024`), corpus/análisis experto (`sainzdebaranda2026`). ⚠️ Verificar metadatos de 3 guías `[s.f.]` (ver #3). |
 | 1b | **Estado del arte (Cap 2): LLM / agentes / Agent Skills** | ✅ | Nueva sección `agentes_ia.tex` (§2.3, entre detección y justificación): 4 bloques (LLM para sesgo en español · arquitecturas de agentes · Agent Skills · agentes para detectar sesgo). Cierra el hueco: `det_sesgos` llegaba a RECAST 2021. **11 citas nuevas verificadas una a una** (WebSearch); se corrigieron 2 errores del informe fuente (autores de Derner et~al., y "Elsa Fan"); se priorizó venue publicado (WWW'25, AIES'25, COLING'25, GeBNLP@ACL'25, PLoS ONE). Intro del capítulo actualizada para anunciar la sección. |
-| 1b' | **Revisar Cap. 5** (resultados + discusión) | ⬜ | Repaso manual completo del Cap 5 (experimentación, discusión) tras cerrar Cap 3/4, análogo a lo hecho en Cap 3/4. |
+| 1b' | **Revisar Cap. 5** (resultados + discusión) | 🔄 | Autorrevisión hecha (2026-08-06): 6 correcciones aplicadas — ver abajo. Falta el repaso manual de Jorge. |
 | 1c | **Referencias en Cap. 4 (agentes)** | ✅ | Añadidas en `agents.tex`: **ReAct** (`yao2023react`), **progressive disclosure** (`nielsen1994`), **degradación con contexto largo** (`liu2023lost`) y **alucinaciones** (`huang2025hallucination`, versión ACM TOIS). |
 | 1d | **Referencia de TF-IDF (RAG)** | ✅ | En `rag.tex`: **RAG** (`lewis2020rag`, NeurIPS 2020) y **TF-IDF** (`sparckjones1972`, J. Documentation). |
 | 2 | Captura de la web IRIS (`dei.inf.uc3m.es/iris`) | ⏸️ | La insertas tú; el texto ya la introduce (§3.1) |
-| 3 | Metadatos de 3 guías `[s.f.]` en el `.bib` | ⏸️ | `guia_igualdad_rtve`, `guias_no_sexista`, `guia_actuacion_lecturafacil`: confirmar autor/año |
-| 4 | Propagar los 3 puntos transversales | ⬜ | Cuanti+cuali · complejidad de la tarea · local vs API → abstract, intro, discusión, conclusiones |
+| 3 | Metadatos de las guías `[s.f.]` en el `.bib` | ✅ | Verificado sobre los PDF de `Experimentos/methodology/` (2026-08). Años fijados: guerrero 2022, iortv 2023, coe 2025, rtve 2022, guia_actuacion (Región de Murcia) 2022. Corregidos 3 errores (guerrero 2021→2022, lectura fácil autor→Región de Murcia, coe autor→Unión Europea). Solo `guias_no_sexista`=2015 queda inferido (su PDF no imprime año, anotado en el `.bib`) |
+| 4 | Propagar los 3 puntos transversales | 🔄 | ✅ en **Cap 6** (los tres cerrados). Falta en **abstract**, **intro/objetivos** y reforzar en **§3.1/§3.2** |
 | 5 | Alinear **abstract** con lo hecho | ⬜ | Hoy describe la propuesta antigua (Chain-of-Thought, "entrenar", RAG como eje) |
-| 6 | Reescribir **Cap. 6** (conclusiones + future work) | ⬜ | Sigue siendo #SeAcabó; aquí cierran los puntos transversales |
+| 6 | Reescribir **Cap. 6** (conclusiones + future work) | ✅ | Reescrito de cero en español (2026-08-08): `conclusion.tex` (intro), `conclusions.tex` (recap + hallazgos + cumplimiento OG1/OE1–OE5 + rol asistente), `futurework_usecases.tex` (4 vías: desacuerdo/multietiqueta + doble codificación · few-shot/fine-tuning local · explicabilidad+validación cualitativa+HITL · integración IRIS). Cierra los 3 transversales. Sin citas inventadas |
 | 7 | Repaso manual de Caps. 4 y 5 | ⬜ | Tras terminar el de Cap. 3 |
 | 8 | Compilar en Overleaf y revisar refs/figuras | ⬜ | Comprobar `\ref` y que las figuras PDF están en `imagenes/` |
 | 9 | **§3.2.2 — comentar más `gemma4:e4b`** | ⬜ | Tras revisar referencias de Cap 3/4: valorar explicar mejor el modelo local (p. ej. *effective 4B params* / arquitectura), ya que es el modelo protagonista del hallazgo "local ≥ API". |
+| 10 | **Repasar TODAS las gráficas: tamaño de letra y números** | ⬜ | Revisar en todas las figuras del TFM que el tamaño de letra (títulos, ejes, leyenda) y de los números sea legible y consistente al imprimir (slope, barras, κ por componentes, pipeline, etc.). |
+| 11 | **Citar papers de IRIS (`avi2026`)** | ⬜ | Añadir cita(s) a las publicaciones propias del proyecto IRIS —en particular la de AVI 2026— donde corresponda (intro, Cap 2/3, PoC). Crear entrada `avi2026` en el `.bib` con metadatos verificados. |
 
 ---
 
@@ -192,5 +192,18 @@ Bloque de referencias (#1, #1c, #1d) cerrado paso a paso con confirmación.
 | `sparckjones1972` | `rag.tex` (TF-IDF) | ✅ |
 
 **Nota:** se priorizó venue publicado sobre arXiv (`huang2025hallucination` → ACM TOIS; `lewis2020rag` → NeurIPS; `hollauer_plastics` → AAAI Symposium Series). Sin metadatos inventados.
+
+---
+
+## Autorrevisión del Cap 5 (2026-08-06) — 6 correcciones aplicadas
+
+| # | Problema | Corrección | Verificado con datos |
+|---|---|---|---|
+| 1 | `experimentacion.tex` aludía a "sesgo de comparación de trabajos previos del proyecto" (Jorge pidió NO decir esto) | Reescrito: solo describe que B0/B1 comparten corpus, modelos, nº de llamadas y formato | — |
+| 2 | Coste gemma: "54 s por artículo **y agente**", "~5 h (4 GPU)", ">19 h (1 GPU)" | **Datos reales** (`results_b1_completo/FULL.csv`): **~44 s/agente**, **~220 s/artículo**, **~20 h (4 GPU)**, **~80 h (1 GPU)** | ✅ ambas columnas de tiempo, 1.315 art. |
+| 3 | "aproximadamente **diez** llamadas por variable" (B1) | **~2–3 llamadas/variable** (media `n_tools`=1,71 + veredicto; máx 6 acciones ≈7). El tope de "ocho" del Cap 4 es correcto | ✅ `bench_*` 3 modelos, 1.313 art. |
+| 4 | Caption divergencia: "en dos de tres modelos la exactitud sube mientras κ baja" (falso para nano, exactitud −0,003) | "Salvo en gemini, κ se mantiene o desciende aunque la exactitud no empeore" | ✅ tabla b0b1 |
+| 5 | Frase enrevesada (§equipo_ia, "al usar el modelo como instrumento común… para aislar el criterio…") | Partida en tres oraciones claras | — |
+| 6 | Estilo: "ese balance desigual se salda **en tablas**" | "se salda **en contra de B1**" | — |
 
 *(Pendiente: más secciones de Caps. 3-4-5 cuando continúes el repaso.)*

@@ -3,12 +3,12 @@
 %----------
 
 El corpus empleado en este trabajo ha sido construido en el marco del proyecto
-IRIS~\cite{sainzdebaranda2026} y está formado por \textbf{7.115 piezas
-periodísticas} publicadas en prensa generalista española. A diferencia de los corpus de redes sociales, habituales
+IRIS y está formado por \textbf{7.115 piezas periodísticas} publicadas en prensa
+generalista española. A diferencia de los corpus de redes sociales, habituales
 en la detección automática de discurso de odio, se trata de textos extensos, con una longitud mediana de \textbf{5.881 caracteres}, redactados por
 profesionales y sometidos a procesos editoriales, lo que sitúa el fenómeno
 analizado en el terreno del sesgo sutil antes que en el de la agresión
-explícita.
+explícita, lo que eleva la complejidad de la tarea.
 
 \subsubsection{Composición temporal y por cabecera}
 
@@ -35,15 +35,17 @@ representada 63 (0,9\,\%).
             >{\centering\arraybackslash}X
             >{\columncolor{gray!15}\centering\arraybackslash}X
         }
-            \hline
+            \toprule
             \textbf{2017} & \textbf{2018} & \textbf{2019} & \textbf{2020} & \textbf{2021} & \textbf{2024} & \textbf{Total} \\
-            \hline
+            \midrule
             976 & 1.199 & 866 & 527 & 565 & 2.982 & 7.115 \\
-            \hline
+            \bottomrule
         \end{tabularx}
     }
     \endgroup
 \end{table}
+
+
 
 
 
@@ -56,13 +58,15 @@ el conjunto de evaluación. De ellas se usan \textbf{1.313}: las otras 2 se
 descartan por no contar con el texto del artículo aprovechable. Todas las métricas
 del Capítulo~\ref{results_and_discussion} se calculan sobre esas 1.313 piezas.
 
+
+
 Este subconjunto presenta dos particularidades que condicionan el alcance de las
 conclusiones:
 
 \begin{itemize}
     \item \textbf{Restricción temporal.} La totalidad de las piezas anotadas
     corresponde a \textbf{2024}. Los resultados obtenidos no pueden extrapolarse
-    sin cautela al periodo 2017--2021, cuyas piezas permanecen sin anotar.
+    sin cautela al periodo de 2017 a 2021, cuyas piezas permanecen sin anotar.
 
     \item \textbf{Cobertura parcial.} El subconjunto anotado representa el
     18,5\,\% del corpus y procede de cinco de las siete cabeceras, con

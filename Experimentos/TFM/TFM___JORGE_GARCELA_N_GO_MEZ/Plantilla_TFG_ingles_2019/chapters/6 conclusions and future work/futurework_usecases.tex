@@ -1,13 +1,53 @@
 %----------
-%	FUTURE WORK
-%----------	
+%	LÍNEAS FUTURAS
+%----------
 
-One interesting direction to address the complexities mentioned above is exploring methods that "do not rely on the assumption that a single (gold) interpretation exists for each category", such as multi-label approaches and learning with disagreement \cite{uma-2022}. This direction could help our models better handle the subjective content present in HS, where annotators may disagree on labels or where content might fit into multiple categories at the same time, like in "Contenido Negativo" and "Insultos".
+Los resultados de este trabajo abren varias vías de continuación, ordenadas de la más
+inmediata a la más ambiciosa.
 
-Other areas for future exploration are interpretability and explainability, which remain key challenges in NLP applications, especially in the field of hate speech when it comes to understanding why and how a model flags certain content. We believe our work could improve by exploring these approaches, as it would help researchers to better understand the decisions made by the models, and further create a human-in-the-loop approach, where they could provide feedback and refine these systems. Additionally, incorporating a gender bias analysis into our work could also be highly beneficial in this matter. For instance, examining how sports news \cite{sainzdebaranda-2013} and social media \cite{sainzdebaranda-2020} treat male and female athletes differently could provide deeper insights into the explainability of our models.
+La primera se deriva directamente del principal hallazgo. Si buena parte del desacuerdo
+mide distancia de criterio y no error, tiene poco sentido seguir tratando cada variable
+como si tuviera una única interpretación correcta. Resultaría prometedor explorar
+enfoques que no asuman una etiqueta de oro única por categoría, como el aprendizaje con
+desacuerdo y las aproximaciones multietiqueta, que permitirían al sistema representar la
+ambigüedad de las variables más disputadas en lugar de forzar un veredicto binario. En
+la misma línea, incorporar una doble codificación de una parte del corpus, ausente en
+este estudio (Sección~\ref{subsec:limitacion_fiabilidad}), permitiría medir la
+fiabilidad intercodificadora humana y situar con precisión el techo real de la tarea,
+hoy solo acotado de forma indirecta.
 
-As discussed in Section~\ref{implementation_dl}, the high computational cost of deep learning experiments was a limiting factor in our study, restricting us to only a set of hyperparameters, due to the constraints of the hardware and software available. However, with the rise of cloud computing, particularly Cloud-as-a-Service (CaaS), there is a promising opportunity to overcome these limitations. In particular, future development could be studied to be used in cloud platforms like Google Colab\footnote{From \url{https://colab.research.google.com/}, last visited 24/08/24}, or for more powerful demands, enterprise-level cloud clusters.
+Una segunda vía es refinar el aprovechamiento del contexto experto por parte de los
+modelos. Dado que la ganancia de las \textit{Agent Skills} depende de la capacidad del
+modelo para explotar la carga bajo demanda, conviene estudiar estrategias de
+\textit{few-shot} con ejemplos verificados, así como el ajuste fino (\textit{fine-tuning})
+de modelos abiertos como \texttt{gemma4:e4b} sobre el propio corpus anotado. El modelo
+local, competitivo en acuerdo y sin coste de tarifas
+(Sección~\ref{subsec:iris_local}), es el candidato natural para esta especialización,
+con la ventaja añadida de preservar la privacidad del material.
 
-In terms of Generative AI approaches, one possible direction of improvement is the integration of OpenAI's Moderation API endpoint\footnote{From \url{https://platform.openai.com/docs/guides/moderation/overview}, last visited 24/08/24}, although "support for non-English languages is currently limited". Additionally, implementing GPT-4 turbo and GPT-4o with zero-shot and few-shot learning techniques could significantly enhance the detection capabilities of our system, and with the recent availability of fine-tuning for GPT-4o\footnote{From \url{https://openai.com/index/gpt-4o-fine-tuning/}, last visited 24/08/24} as of August 20th 2024, there is an exciting opportunity to tune these models more closely to our specific context, although careful consideration will be needed for pricing and data privacy.
+Una tercera vía atañe a la explicabilidad y a la validación del plano cualitativo. El
+sistema ya produce, para cada predicción, la explicación y las evidencias literales que
+la sustentan, pero ese marcado no ha podido evaluarse por falta de un marcado experto de
+referencia. Construir ese conjunto de referencia, en el que las analistas señalen sobre
+el texto los fragmentos que motivan cada variable, permitiría medir la calidad de las
+evidencias, no solo de la etiqueta, y cerrar así la evaluación de las dos dimensiones que
+un análisis de contenido experto necesita. Sobre esa misma base trazable cabe construir
+un flujo con humano en el bucle, en el que la codificadora acepte, rechace o corrija cada
+veredicto y esa retroalimentación sirva para reajustar los criterios y los umbrales por
+variable, de forma coherente con el papel de asistente, y no de decisor, que se ha
+argumentado para el sistema.
 
-In particular, one of our immediate goals is to apply our procedures and models to ongoing research being conducted by Professor Alba Adá for the Paris 2024 Summer Olympics. This research, which follows a similar approach as in \cite{lameiras-2021}, could be a valuable next step in testing our solution. Finally, the future goal of this work is to develop a user-friendly tool or interface that allows researchers to deploy and utilize our work easily. By creating this platform, our work could be applied across various tasks and fields, such as monitoring social media for harmful content against women athletes, analyzing sports news for gender bias and hate speech, and helping researchers and content moderators identify and address this content more effectively. Moreover, public institutions and organizations could use this work to create equality and social policies, public awareness campaigns and training resources for journalists, educators and influencers to help them recognize and address HS more effectively.
+Por último, en el plano de la aplicación, el objetivo a medio plazo es la integración
+del sistema en una herramienta de postedición dentro del proyecto IRIS, que ordene el
+corpus, resalte los pasajes candidatos y facilite el trabajo de las analistas. Este
+trabajo se enmarca en la colaboración del proyecto IRIS con RTVE, cuyo Observatorio de
+Igualdad aporta parte de las guías de lenguaje que fundamentan el libro de códigos, de
+modo que un escenario de aplicación natural es el apoyo a los flujos de revisión
+editorial de una corporación de radiotelevisión pública, donde el seguimiento de la
+representación de las mujeres forma parte de su mandato de servicio público. Esa
+herramienta permitiría además extender el análisis a más variables del libro de códigos
+y a otros medios y periodos, y ofrecería a instituciones y equipos de investigación un
+instrumento reproducible para el seguimiento sistemático de la representación de las
+mujeres en los medios. La combinación de un despliegue local respetuoso con la privacidad
+y una salida auditable por personas expertas es, a nuestro juicio, la vía más realista
+para llevar este trabajo del entorno experimental al uso real.

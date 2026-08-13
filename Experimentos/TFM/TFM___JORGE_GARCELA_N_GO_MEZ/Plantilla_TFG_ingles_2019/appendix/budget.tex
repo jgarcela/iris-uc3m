@@ -5,15 +5,12 @@
 En este anexo se desglosa la estimación económica necesaria para el desarrollo del presente TFM, cuyos importes quedan recogidos en la Tabla \ref{tab:budget}.
 
 
-En cuanto a los costes operativos de personal, se ha cuantificado la dedicación del estudiante a razón de 5 horas diarias a lo largo de los 6 meses que ha durado el proyecto. Tomando como referencia el contrato de investigación de IRIS\_IAMEDIA, supone una tarifa total aproximada de 9300€ a razón de 15,5 €/hora. Por su parte, la supervisión y dirección académica ha requerido en torno a 25 reuniones de una hora con las tutoras. Asignando a este rol de dirección una tarifa de 25,64 € por hora (equivalente a un perfil de ingeniería senior o investigador principal\footnote{Fuente: \url{https://es.talent.com/salary?job=senior+data+analyst}, último acceso 28/07/24}), esta partida suma un total de 320,50 €.
+En cuanto a los costes operativos de personal, se ha cuantificado la dedicación del estudiante a razón de 5 horas diarias a lo largo de los 6 meses que ha durado el proyecto. Tomando como referencia el contrato de investigación de IRIS\_IAMEDIA, supone una tarifa total aproximada de 9300€ a razón de 15,5 €/hora. Por su parte, la supervisión y dirección académica ha corrido a cargo de dos tutoras, con las que se han mantenido en torno a 25 reuniones de una hora a lo largo de los seis meses del proyecto, esto es, aproximadamente una reunión semanal. Al asistir ambas tutoras, la dedicación conjunta asciende a unas 50 horas. Asignando a este rol de dirección una tarifa de 25,64 € por hora (equivalente a un perfil de ingeniería senior o investigador principal\footnote{Fuente: \url{https://es.talent.com/salary?job=senior+data+analyst}, último acceso 28/07/24}), esta partida suma un total de 1.282,00 €.
 
 
-\color{red}
-Realmente compute se ha hecho en el lab de la uni\\
-\color{black}
-En cuanto al equipamiento informático, el desarrollo computacional se ha llevado a cabo utilizando un equipo MacBook Pro M4 de 2024, cuyo valor de mercado se sitúa en 2500 €. Siguiendo los criterios contables estandarizados, la vida útil de este dispositivo se amortiza en un periodo de 4 años, lo que se traduce en una depreciación de 625 € anuales. Al circunscribirse el uso de la máquina a los 6 meses de duración de esta investigación, la cantidad imputable al presupuesto general es de 312,50 €.
+En cuanto al equipamiento informático, el desarrollo se ha llevado a cabo utilizando un equipo MacBook Pro M4 de 2024, cuyo valor de mercado se sitúa en 2500 €. Siguiendo los criterios contables estandarizados, la vida útil de este dispositivo se amortiza en un periodo de 4 años, lo que se traduce en una depreciación de 625 € anuales. Al circunscribirse el uso de la máquina a los 6 meses de duración de esta investigación, la cantidad imputable al presupuesto general es de 312,50 €. Adicionalmente, la ejecución del modelo local \texttt{gemma4:e4b} se realizó sobre la granja de GPU (NVIDIA RTX 3090 y 4090) del Departamento de Teoría de la Señal y Comunicaciones (TSC) de la Universidad Carlos III de Madrid. Al tratarse de infraestructura institucional de investigación, su uso no ha supuesto un coste directo para el proyecto y se imputa a 0 €, si bien su disponibilidad ha sido esencial para el despliegue agéntico del modelo local.
 
-Finalmente, el apartado de software contempla 90 € para el acceso a las noticias de pago de los periódicos analizados y 131,94 € para la suscripción al modelo Gemini Pro. Cabe destacar que, en la práctica, estos recursos no han supuesto un desembolso real gracias a las licencias institucionales proporcionadas por la Universidad Carlos III de Madrid y a los beneficios para cuentas de estudiante, respectivamente. De este modo, la ejecución global del proyecto supone un coste estimado de 10.154,94 €.
+Finalmente, el apartado de software contempla tres partidas: 90 € para el acceso a las noticias de pago de los periódicos analizados, 131,94 € para la suscripción al modelo Gemini Pro (Gemini Advanced) durante los seis meses, y el coste de inferencia de las API comerciales empleadas en la evaluación, esto es, Gemini de Google y los modelos de OpenAI, que ascendió a unos 45 USD (en torno a 41,94 €) según el detalle recogido en el Capítulo~\ref{results_and_discussion}. Conviene matizar que el acceso a los periódicos y la suscripción a Gemini Pro no han supuesto un desembolso real, al estar cubiertos por las licencias y suscripciones institucionales de la Universidad Carlos III de Madrid. El coste de inferencia de las API, en cambio, sí ha constituido un gasto efectivo del proyecto. De este modo, la ejecución global del proyecto supone un coste estimado de 11.158,38 €.
 
 
 
@@ -36,39 +33,22 @@ Finalmente, el apartado de software contempla 90 € para el acceso a las notici
         \hline
         \multirow{1}{*}{Coste Humano} & Estudiante & 5 horas/día (15.5€/h) & 6 meses & 9300 \\
         \cline{2-5}
-        & Tutoras & 25 reuniones 1 hora (25.64€/h) & 6 meses & 320.50 \\
+        & Tutoras (2) & 25 reuniones $\times$ 2 tutoras = 50 h (25.64€/h) & 6 meses & 1282.00 \\
         %\cline{2-5}
         %& Expert & Expert consultation and annotation, 4 meetings (25.64€/hour) & 1 month & 769.2 \\
         \hline
-        Hardware & 2024 MacBook Pro M4 & 2500€ valor, amortizado en 2 años (625€/año), 6 meses & 6 meses & 312.50 \\
-        \hline
-        \multirow{1}{*}{Software} & Licencias periódicos & Suscripción digital básica & 6 meses & 90 \\
+        \multirow{2}{*}{Hardware} & 2024 MacBook Pro M4 & 2500€ valor, amortizado en 4 años (625€/año) & 6 meses & 312.50 \\
         \cline{2-5}
-        & Gemini Pro & Suscripción a Gemini Pro & 6 meses & 131.94 \\
+        & Granja de GPU (TSC) & NVIDIA RTX 3090/4090, infraestructura institucional & 6 meses & 0 \\
         \hline
-        \multicolumn{4}{r}{} & \textbf{10154.94} \\
+        \multirow{3}{*}{Software} & Licencias periódicos & Suscripción digital básica & 6 meses & 90 \\
+        \cline{2-5}
+        & Gemini Pro & Suscripción a Gemini Advanced & 6 meses & 131.94 \\
+        \cline{2-5}
+        & APIs de inferencia & Gemini (Google) y OpenAI, $\approx$45 USD & 6 meses & 41.94 \\
+        \hline
+        \multicolumn{4}{r}{} & \textbf{11158.38} \\
         \hline
     \end{tabularx}
 \end{table}
 
-
-
-
-
-
-% - Human Cost 
-    % Student - Part-time 11 months -  4h/day 250 days Junior Engineer (11,79€/hour) -> 11790€ 
-    % https://es.talent.com/salary?job=junior+data+analyst
-
-    % - Tutor - 66 weeks -> 25-30 meetings  Senior Engineer (25,64€/hour) -> 769.2€
-    % https://es.talent.com/salary?job=senior+data+analyst
-
-    % - Researcher - Alba ????
-
-% - Hardware
-%   - HP Omen laptop - 1750€ value - 437.5€/per year amortized (4 years amortized) - 12 months part-% time (6 months full-time) -> 218.75€
-
-% - Software
-%    - Overleaf Standard - One month -> 22.99€
-%    - Twitter Plus - GrokAI - Two months -> 38.72€
-%    - Apify plus - one month -> 55.55€

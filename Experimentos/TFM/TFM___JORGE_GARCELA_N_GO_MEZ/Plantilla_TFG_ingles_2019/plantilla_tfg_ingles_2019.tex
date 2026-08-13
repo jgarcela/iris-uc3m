@@ -133,8 +133,8 @@ hmargin=3cm
 	justification=centering,
 	labelsep=period,
 	width=.75\linewidth,
-	labelfont=small,
-	font=small,
+	labelfont=scriptsize,
+	font=scriptsize,
 }
 
 %Diseño de tabla para ciencias sociales y humanidades
@@ -147,6 +147,7 @@ hmargin=3cm
 %}
 
 \usepackage{tabularx}
+\usepackage{booktabs} % reglas de tabla profesionales (\toprule, \midrule, \bottomrule)
 
 % DISEÑO DE FIGURAS. Puedes elegir entre el estilo para ingeniería o para ciencias sociales y humanidades. Por defecto, está activado el estilo de ingeniería. Si deseas utilizar el otro, comenta las líneas del diseño de ingeniería y descomenta las del diseño de ciencias sociales y humanidades
 \usepackage{graphicx}
@@ -162,8 +163,8 @@ hmargin=3cm
 	name=Fig.,
 	singlelinecheck=off,
 	labelsep=period,
-	labelfont=small,
-	font=small		
+	labelfont=scriptsize,
+	font=scriptsize
 }
 
 % Diseño de figuras para ciencias sociales y humanidades
@@ -334,13 +335,11 @@ Llegar hasta aquí ha sido un reto enorme, y ver este TFM terminado me llena de 
 
 A mis amigos, por ser mi vía de escape favorita con nuestras charlas y risas, y por llenar esta etapa de anécdotas y momentos que valen oro.
 
-A nivel profesional, me llevo grandes aprendizajes de esta etapa. Por un lado, quiero dar las gracias a mis compañeros y compañeras de AWS por acompañarme durante mi etapa allí y hacer de esos meses una experiencia fantástica.
+A nivel profesional, me llevo grandes aprendizajes de esta etapa. Quiero dar las gracias a mis compañeros y compañeras de AWS y de Multiverse Computing por acompañarme durante mis etapas allí y hacer de esos meses una experiencia fantástica.
 
-\color{red}
-Quiero agradecer también a RTVE...
-\color{black}
+Quiero agradecer también a todo el equipo de RTVE y de Impulsa Visión RTVE por confiar en este proyecto. En especial, gracias a Esteban Mayoral por su acompañamiento, y de manera muy especial a Mercedes de Pablos, mentora y responsable de este TFM por parte de RTVE, por su guía, su cercanía y su compromiso con la representación de las mujeres en los medios.
 
-Por otro lado, y para terminar, gracias de corazón a Carmen y Teresa. Haber podido compaginar este máster con mi contrato en el proyecto IRIS ha marcado un antes y un después. Trabajar codo con codo en un entorno de investigación real me ha dado una perspectiva del mundo académico increíble. Gracias por aterrizar mis ideas y por remar conmigo para que este proyecto saliera adelante; trabajar a vuestro lado ha sido un lujo.
+Por otro lado, y para terminar, gracias de corazón a Carmen y Teresa. Haber podido compaginar este máster con mi contrato en el proyecto IRIS ha marcado un antes y un después. Trabajar codo con codo en un entorno de investigación real me ha dado una perspectiva del mundo académico increíble, y me ha permitido incluso participar en conferencias y congresos como parte de la labor investigadora de IRIS. Gracias por aterrizar mis ideas y por remar conmigo para que este proyecto saliera adelante. Trabajar a vuestro lado ha sido un lujo.
 
 		
 	\vfill
@@ -436,7 +435,7 @@ Por otro lado, y para terminar, gracias de corazón a Carmen y Teresa. Haber pod
 
 \chapter{Estado del Arte}
 \label{state-of-the-art}
-Este capítulo establece el marco teórico y tecnológico sobre el que se fundamenta esta investigación. En primer lugar, se analiza la evolución histórica y actual de la representación de las mujeres en los medios de comunicación, evidenciando la persistencia de sesgos de género. Posteriormente, se realiza una revisión exhaustiva de las metodologías y herramientas desarrolladas para la detección de dichos sesgos, abarcando desde el análisis manual hasta las aproximaciones más recientes basadas en Inteligencia Artificial. Por último, se examina la frontera actual —los grandes modelos de lenguaje, las arquitecturas de agentes y las \textit{Agent Skills}— sobre la que se construye la solución propuesta.
+Este capítulo establece el marco teórico y tecnológico sobre el que se fundamenta esta investigación. En primer lugar, se analiza la evolución histórica y actual de la representación de las mujeres en los medios de comunicación, evidenciando la persistencia de sesgos de género. Posteriormente, se realiza una revisión exhaustiva de las metodologías y herramientas desarrolladas para la detección de dichos sesgos, abarcando desde el análisis manual hasta las aproximaciones más recientes basadas en Inteligencia Artificial. Por último, se examina la frontera actual (los grandes modelos de lenguaje, las arquitecturas de agentes y las \textit{Agent Skills}) sobre la que se construye la solución propuesta.
 
 \section{Representación de las Mujeres en los Medios}
 \label{sec:rep_women_media}
@@ -605,7 +604,7 @@ expertas (Sección~\ref{rag}), la instrumentación de la evaluación
 \pagenumbering{gobble} % Las páginas de los anexos no se numeran
 \input{Plantilla_TFG_ingles_2019/appendix/source_code}
 
-\chapter{AI Act Compliance}
+\chapter{Cumplimiento del AI Act}
 \label{appendix_ai_act}
 \pagenumbering{gobble} % Las páginas de los anexos no se numeran
 \input{Plantilla_TFG_ingles_2019/appendix/ai_act}

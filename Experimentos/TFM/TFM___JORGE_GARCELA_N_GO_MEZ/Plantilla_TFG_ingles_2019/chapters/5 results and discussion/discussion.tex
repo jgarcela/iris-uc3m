@@ -2,76 +2,57 @@
 % DISCUSIÓN — lectura transversal de los resultados
 %----------
 
-Los resultados de la Sección~\ref{sec:iris_experimentacion} admiten una lectura
-de conjunto que va más allá de cada tabla. Esta sección la ofrece en torno a
-cuatro ideas: el carácter condicional de las \textit{Agent Skills}, la lección
-metodológica de la divergencia entre exactitud y acuerdo, el techo que impone la
-propia tarea y las implicaciones prácticas para el proyecto.
+Más allá de cada tabla, los resultados del capítulo admiten una lectura de
+conjunto en torno a tres ideas: el carácter condicional de las \textit{Agent
+Skills}, la lección metodológica que deja la evaluación, y el techo que impone la
+propia tarea, del que se derivan las implicaciones para el proyecto.
 
 \subsection{El valor de las \textit{Agent Skills} es condicional al modelo}
 
-El resultado central del capítulo desmiente una lectura simple. Empaquetar la
-metodología experta como \textit{skills} cargables no mejora el acuerdo por sí
-mismo: de los cuatro modelos evaluados, solo \texttt{gemini-3.1-flash-lite} sube
-su concordancia, y al desglosar por variable esa mejora se concentra casi entera
-en el masculino genérico (Sección~\ref{subsec:iris_lift}). Los dos modelos de
-OpenAI empeoran, y el modelo local iguala al control. La arquitectura amplifica lo
-que cada modelo ya trae: donde el modelo sabe explotar la carga bajo demanda y las
-herramientas, ayuda; donde las infrautiliza o se satura con el catálogo, estorba.
+El resultado central desmiente una lectura simple. Empaquetar la metodología
+experta como \textit{skills} cargables no mejora el acuerdo por sí mismo: de los
+cuatro modelos, solo uno se beneficia, mientras el resto queda igual o empeora. La
+arquitectura no es útil ni inútil en abstracto, sino que \textbf{amplifica lo que
+cada modelo ya trae}: donde el modelo sabe explotar la carga bajo demanda, ayuda, y
+donde la infrautiliza o se satura de contexto, estorba. La descomposición por
+componentes (Sección~\ref{subsec:iris_descomposicion}) añade una recomendación
+operativa nítida: la recuperación en vivo sobre las guías nunca compensa, y la
+configuración a elegir para un despliegue real es la de \textit{skills} con sus
+resúmenes, sin herramienta: más simple, más barata y en ningún caso peor.
 
-La descomposición por componentes (Sección~\ref{subsec:iris_descomposicion})
-afina el diagnóstico y deja una recomendación operativa. La herramienta de
-recuperación en vivo sobre las guías no aporta en ningún modelo y con frecuencia
-resta, porque la recuperación léxica sobre textos periodísticos cortos introduce
-más ruido que señal. La configuración con mejor acuerdo, cuando lo hay, se limita
-a las \textit{skills} con sus resúmenes y prescinde de la herramienta: más simple,
-más barata y en ningún caso peor. Para un despliegue real, esa es la variante a
-elegir.
+\subsection{Una lección metodológica: medir el acuerdo, no la exactitud}
 
-\subsection{Exactitud y acuerdo apuntan en direcciones opuestas}
-
-La contribución metodológica del trabajo trasciende el caso concreto. En una tarea
+La lección metodológica trasciende el caso concreto. En una tarea
 con clases muy desbalanceadas, la exactitud y el coeficiente $\kappa$ pueden
-moverse en sentidos contrarios: una intervención que vuelve al modelo menos
-conservador incrementa los aciertos por efecto de la distribución marginal, sin
-mejorar su capacidad discriminativa (Sección~\ref{subsec:iris_divergencia}). El
-fenómeno se observó de forma repetida e independiente a lo largo del capítulo. La
-consecuencia es concreta: un estudio que reportase solo exactitud concluiría que
-las \textit{Agent Skills} mejoran el sistema, y se equivocaría. Reportar de forma
-conjunta exactitud, $\kappa$ y prevalencia es, en tareas desbalanceadas, un
-requisito de validez y no un adorno.
+desacoplarse: una intervención que vuelve al modelo menos
+conservador incrementa los aciertos por puro efecto de la distribución marginal,
+sin mejorar su capacidad discriminativa
+(Sección~\ref{subsec:iris_divergencia}). La consecuencia es concreta: un estudio
+que reportase solo exactitud concluiría que las \textit{Agent Skills} mejoran el
+sistema, y se equivocaría. Reportar de forma conjunta exactitud, $\kappa$ y
+prevalencia es, en tareas desbalanceadas, un requisito de validez y no un adorno.
 
-\subsection{El techo lo pone la tarea, no el modelo}
+\subsection{El techo lo pone la tarea: implicaciones para IRIS}
 
-El acuerdo absoluto es bajo en cuatro de las cinco variables, y el análisis de
-errores (Sección~\ref{subsec:iris_errores}) muestra que la explicación no está,
-sobre todo, en los modelos. Dos equipos de anotación codifican la misma variable
-de forma muy distinta: en \texttt{sexismo\_discurso}, Indexa marca el fenómeno en
-el 11,5\,\% de las piezas y UCM3 en el 65,2\,\%. La variabilidad entre personas es
-del mismo orden que la distancia entre humanas y máquinas, y buena parte de ella
-se concentra en un único anotador. Cuando el propio criterio experto está en
-disputa, no existe un suelo estable contra el que medir al modelo.
+El acuerdo absoluto es bajo, pero el análisis de errores
+(Sección~\ref{subsec:iris_errores}) muestra que la explicación no está, sobre todo,
+en los modelos. Dos equipos codifican la misma variable de forma muy distinta, con
+una variabilidad entre personas del mismo orden que la distancia entre humanas y
+máquinas. Y, situado el sistema como una anotadora más, no cae dentro del rango
+humano sino en su extremo permisivo. Cuando el propio criterio experto está en
+disputa, no existe un suelo estable contra el que medir al modelo: el desacuerdo
+mide, en buena parte, distancia de criterio y no error. Conviene además descartar
+una lectura fácil: los modelos no comparten un ``sesgo de la IA'' homogéneo, sino tres
+sesgos distintos que solo coinciden en la dirección.
 
-Situar al sistema como una anotadora más (Sección~\ref{subsec:iris_equipo_ia})
-lleva esta idea hasta el final. Los modelos no caen entre Indexa y UCM3: se sitúan
-fuera del rango humano completo, en el extremo permisivo, y aplican un criterio
-más estrecho que cualquier persona. Así, el desacuerdo admite una descripción más
-precisa que «el modelo falla»: el modelo es sistemáticamente más permisivo que las
-anotadoras, una afirmación verificable. El análisis revela además que los tres
-modelos no comparten un criterio común entre sí, sino tres sesgos distintos que
-solo coinciden en la dirección. La idea de un «sesgo de la IA» homogéneo no se
-sostiene.
-
-\subsection{Implicaciones para el proyecto IRIS}
-
-De estos resultados se desprenden orientaciones prácticas. La primera afecta al
-despliegue: \texttt{gemma4:e4b}, ejecutado en local, obtiene el mayor acuerdo del
-control entre los cuatro modelos, de modo que la privacidad y el coste nulo de
-inferencia no obligan a renunciar a rendimiento
-(Sección~\ref{subsec:iris_local}). La segunda afecta al papel del sistema. Dado
-que ninguna configuración alcanza un acuerdo alto y que la tarea es
-intrínsecamente disputada, el sistema encaja mejor como asistente que como
-decisor. La salida trazable, con código, explicación y evidencias literales,
-permite que la analista audite, acepte o corrija cada predicción. El valor no está
-en sustituir el criterio experto, sino en ordenar el corpus y señalar los casos
-que merecen una segunda lectura.
+De ahí se desprenden dos orientaciones prácticas para IRIS. En cuanto al
+\textbf{despliegue}, un modelo abierto ejecutado en local (\texttt{gemma4:e4b})
+alcanza el mayor acuerdo de control entre los cuatro
+(Sección~\ref{subsec:iris_local}), de modo que la privacidad y el coste nulo de
+inferencia no obligan a renunciar a rendimiento. En cuanto al \textbf{papel del
+sistema}, dado que ninguna configuración alcanza un acuerdo alto y que la tarea es
+intrínsecamente disputada, encaja mejor como asistente que como decisor: su salida
+trazable (código, explicación y evidencias literales) permite que la analista
+audite, acepte o corrija cada predicción. El valor no está en sustituir el criterio
+experto, sino en ordenar el corpus y señalar los casos que merecen una segunda
+lectura.
