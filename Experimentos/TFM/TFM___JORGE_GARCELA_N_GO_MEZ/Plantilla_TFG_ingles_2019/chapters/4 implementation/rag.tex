@@ -13,16 +13,20 @@ en ellas, pero el modelo no las lee.
 Como \textbf{herramienta en vivo}, en cambio, el agente puede consultarlas
 durante la inferencia. La acción \texttt{CONSULTAR\_GUIA} implementa una
 recuperación (\textit{Retrieval-Augmented Generation}, RAG por sus siglas en inglés)~\cite{lewis2020rag} sobre el texto real
-de las guías. La implementación es deliberadamente ligera: un índice TF-IDF en
-memoria sobre los pasajes de las guías, sin dependencias externas. Ante una
+de las guías. La implementación es deliberadamente ligera: un índice de frecuencia
+de término-frecuencia inversa de documento (\textit{Term Frequency-Inverse Document
+Frequency}, TF-IDF por sus siglas en inglés)~\cite{sparckjones1972} en memoria sobre
+los pasajes de las guías, sin dependencias externas. Ante una
 consulta, devuelve los pasajes más relevantes con su cita de fuente y sección.
 
-Esta distinción importa para la honestidad del trabajo. Sin la herramienta, la
-conexión con las guías sería solo conceptual, y afirmar que \textit{``el agente se apoya en las guías expertas''} sería inexacto. Con \texttt{CONSULTAR\_GUIA}, esa afirmación
-se sostiene: el agente recupera texto literal de las fuentes en tiempo de
-inferencia y puede citarlo en su justificación.
+Esta distinción es relevante para delimitar con precisión el alcance de la
+propuesta. En ausencia de la herramienta, la relación entre el agente y las guías
+sería únicamente conceptual, pues estas habrían intervenido solo durante la
+elaboración de la metodología. La acción \texttt{CONSULTAR\_GUIA} establece un
+vínculo directo y verificable: el agente recupera texto literal de las fuentes en
+tiempo de inferencia y puede incorporarlo a su justificación.
 
-La recuperación se basa en coincidencia léxica (TF-IDF)~\cite{sparckjones1972}, no semántica. Funciona
+La recuperación se basa en coincidencia léxica (TF-IDF), no semántica. Funciona
 bien para términos precisos, como \textit{masculino genérico} o \textit{feminización de
 cargos}, pero es sensible a sinónimos y paráfrasis. Una recuperación por
 \textit{embeddings} mejoraría esa robustez y queda como línea de mejora. Para el

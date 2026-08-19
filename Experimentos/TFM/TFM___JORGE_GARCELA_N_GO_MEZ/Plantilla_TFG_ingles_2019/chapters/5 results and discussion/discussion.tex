@@ -9,41 +9,56 @@ propia tarea, del que se derivan las implicaciones para el proyecto.
 
 \subsection{El valor de las \textit{Agent Skills} es condicional al modelo}
 
-El resultado central desmiente una lectura simple. Empaquetar la metodología
-experta como \textit{skills} cargables no mejora el acuerdo por sí mismo: de los
-cuatro modelos, solo uno se beneficia, mientras el resto queda igual o empeora. La
-arquitectura no es útil ni inútil en abstracto, sino que \textbf{amplifica lo que
-cada modelo ya trae}: donde el modelo sabe explotar la carga bajo demanda, ayuda, y
-donde la infrautiliza o se satura de contexto, estorba. La descomposición por
-componentes (Sección~\ref{subsec:iris_descomposicion}) añade una recomendación
-operativa nítida: la recuperación en vivo sobre las guías nunca compensa, y la
-configuración a elegir para un despliegue real es la de \textit{skills} con sus
-resúmenes, sin herramienta: más simple, más barata y en ningún caso peor.
+El hallazgo central obliga a matizar una expectativa extendida: que dotar a un modelo
+de más componentes (herramientas, conocimiento cargable bajo demanda, capacidad de
+actuar) mejora por sí solo su desempeño. No es lo que se observa. Empaquetar la
+metodología experta como \textit{skills} cargables no eleva el acuerdo de forma
+automática: de los cuatro modelos, solo uno se beneficia, mientras el resto queda
+igual o empeora. La arquitectura no es útil ni inútil en abstracto, sino que
+\textbf{amplifica lo que cada modelo ya trae}. Aprovechar la carga bajo demanda exige
+que el modelo sepa decidir qué necesita y cuándo, una competencia desigual entre
+modelos, y cuando falta, el componente aporta contexto que satura en lugar de ayudar.
+La lectura práctica, respaldada por la descomposición por componentes
+(Sección~\ref{subsec:iris_descomposicion}) es que la recuperación en vivo sobre
+las guías nunca compensa, y la configuración preferible para un despliegue real es la
+de \textit{skills} con sus resúmenes, sin herramienta, más simple, más barata y en
+ningún caso peor.
+
 
 \subsection{Una lección metodológica: medir el acuerdo, no la exactitud}
 
-La lección metodológica trasciende el caso concreto. En una tarea
-con clases muy desbalanceadas, la exactitud y el coeficiente $\kappa$ pueden
-desacoplarse: una intervención que vuelve al modelo menos
-conservador incrementa los aciertos por puro efecto de la distribución marginal,
-sin mejorar su capacidad discriminativa
-(Sección~\ref{subsec:iris_divergencia}). La consecuencia es concreta: un estudio
-que reportase solo exactitud concluiría que las \textit{Agent Skills} mejoran el
-sistema, y se equivocaría. Reportar de forma conjunta exactitud, $\kappa$ y
-prevalencia es, en tareas desbalanceadas, un requisito de validez y no un adorno.
+El segundo aprendizaje es metodológico. En tareas con clases muy desbalanceadas, la
+exactitud y el coeficiente $\kappa$ pueden desacoplarse y llegar a moverse en
+sentidos opuestos. Una intervención que vuelve al modelo menos conservador aumenta
+los aciertos por efecto de la distribución marginal, sin que mejore su capacidad
+discriminativa (Sección~\ref{subsec:iris_divergencia}). Este trabajo lo ilustra:
+apoyarse solo en la exactitud llevaría a concluir que las \textit{Agent Skills}
+mejoran el sistema, cuando el $\kappa$ indica lo contrario. Por eso, en tareas
+desbalanceadas, la exactitud debe interpretarse siempre junto al $\kappa$ y a la
+prevalencia, para no tomar un cambio en la distribución de respuestas por una mejora
+real de criterio.
+
 
 \subsection{El techo lo pone la tarea: implicaciones para IRIS}
 
-El acuerdo absoluto es bajo, pero el análisis de errores
-(Sección~\ref{subsec:iris_errores}) muestra que la explicación no está, sobre todo,
-en los modelos. Dos equipos codifican la misma variable de forma muy distinta, con
-una variabilidad entre personas del mismo orden que la distancia entre humanas y
-máquinas. Y, situado el sistema como una anotadora más, no cae dentro del rango
-humano sino en su extremo permisivo. Cuando el propio criterio experto está en
-disputa, no existe un suelo estable contra el que medir al modelo: el desacuerdo
-mide, en buena parte, distancia de criterio y no error. Conviene además descartar
-una lectura fácil: los modelos no comparten un ``sesgo de la IA'' homogéneo, sino tres
-sesgos distintos que solo coinciden en la dirección.
+El acuerdo absoluto es bajo, pero interpretarlo únicamente como un fallo de los modelos
+sería un error de diagnóstico. El análisis de errores
+(Sección~\ref{subsec:iris_errores}) apunta a una explicación distinta: buena parte
+del desacuerdo nace de la tarea, no del sistema. Que dos equipos expertos codifiquen
+la misma variable con una variabilidad comparable a la que separa a personas de
+máquinas, y que el sistema, situado como una anotadora más, no caiga dentro del rango
+humano sino en su extremo permisivo, sugieren que el sexismo lingüístico, en muchas
+de sus formas, se juzga más que se detecta, y admite lecturas legítimamente
+distintas. Cuando el propio criterio está en disputa, el \textit{ground truth} deja
+de ser un suelo estable y pasa a ser un punto dentro de una franja de criterios: el
+$\kappa$ mide entonces distancia entre criterios más que error. Esto reorienta dónde
+buscar el margen de mejora, que no reside tanto en modelos más capaces como en
+delimitar y explicitar el constructo que se pide anotar. Ese desacuerdo, además, no se
+reparte por igual entre variables, sino que se concentra en las de criterio más
+amplio y mayor prevalencia (\texttt{lenguaje\_sexista} y \texttt{sexismo\_discurso}),
+lo que indica dónde conviene priorizar unas definiciones más precisas en el
+\textit{codebook} antes que un cambio de modelo. Conviene además evitar una
+simplificación: los modelos no comparten un sesgo homogéneo, sino cuatro sesgos distintos que solo coinciden en su dirección.
 
 De ahí se desprenden dos orientaciones prácticas para IRIS. En cuanto al
 \textbf{despliegue}, un modelo abierto ejecutado en local (\texttt{gemma4:e4b})

@@ -32,11 +32,11 @@ a B0). El coste se calcula por proveedor a partir de las tablas de tarifas públ
 
 La ejecución es incremental y \textbf{reanudable} por identificador de pieza: si
 una corrida se interrumpe, al relanzarla continúa donde iba, sin repetir ni
-perder trabajo. Un corta-circuitos aborta la corrida si varios artículos
-consecutivos fallan por completo, síntoma de un problema de infraestructura
-(saldo agotado, servidor caído). Este detalle evita un fallo silencioso: sin él,
-los fallos se escribirían como predicciones negativas y contaminarían las
-métricas.
+perder trabajo. Un mecanismo de corte (\textit{circuit breaker} en inglés) aborta la corrida
+si varios artículos consecutivos fallan por completo, síntoma de un problema de
+infraestructura
+(saldo agotado, servidor caído). 
+
 
 \subsection{Ejecución a escala: enrutado y granja}
 

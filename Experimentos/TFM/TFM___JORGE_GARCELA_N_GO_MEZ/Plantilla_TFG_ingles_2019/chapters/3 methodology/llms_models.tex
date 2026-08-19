@@ -4,7 +4,7 @@
 
 \label{sec:llms_models_iris}
 
-Un modelo generativo de lenguaje (\textit{Large Language Model}, LLM) es una red
+Un modelo generativo de lenguaje, o LLM, es una red
 neuronal, habitualmente de tipo \textit{Transformer}~\cite{vaswani2017}, entrenada
 sobre grandes volúmenes de texto para predecir la continuación de una secuencia. De ese entrenamiento sale una competencia
 lingüística general que puede orientarse a tareas concretas mediante
@@ -19,7 +19,7 @@ Los \textbf{modelos locales} son modelos de pesos abiertos que se ejecutan en
 infraestructura propia. En este trabajo se usan a través de
 \textit{Ollama}\footnote{\url{https://ollama.com} [Último acceso: 05/08/2026]} sobre la granja de GPU del
 Departamento de Teoría de la Señal y Comunicaciones. Tienen
-dos ventajas principalmente. La primera es la privacidad: el texto nunca sale de la
+dos ventajas principales. La primera es la privacidad: el texto nunca sale de la
 infraestructura de la institución, algo relevante cuando se trabaja con contenido
 periodístico y datos de investigación. La segunda es el coste: la inferencia no se
 paga por uso, a diferencia de las API comerciales, por lo que procesar el corpus
@@ -34,7 +34,7 @@ viaja a un tercero, con lo que ello implica en privacidad.
 Comparar ambas vías sobre la misma tarea y el mismo corpus es uno de los
 objetivos metodológicos de este trabajo. Para lograrlo, la tubería de
 clasificación es agnóstica al proveedor: una función de enrutado dirige cada
-petición al backend que corresponda según el identificador del modelo. De este
+petición al \textit{backend} que corresponda según el identificador del modelo. De este
 modo, lo que se observe al comparar modelos procede de los modelos, no de cómo
 está escrito el código que los llama. Los modelos concretos se detallan en la
 Sección~\ref{sec:genai_models_iris}.

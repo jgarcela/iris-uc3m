@@ -12,7 +12,7 @@ fronteras entre variables) tomada del libro de códigos de IRIS.
 
 Estos dos rasgos desaconsejan el aprendizaje supervisado clásico~\cite{lecun2015deep},
 que necesitaría miles de ejemplos etiquetados. En su lugar se recurre a modelos
-generativos de lenguaje (LLM) en régimen \textit{zero-shot}~\cite{radford2019, brown2020}: el
+generativos de lenguaje en régimen \textit{zero-shot}~\cite{radford2019, brown2020}: el
 modelo no aprende la tarea a
 partir de ejemplos, sino que recibe la metodología en el propio \textit{prompt} y
 la aplica sobre cada texto. El libro de códigos hace de supervisión en tiempo de
@@ -41,7 +41,7 @@ modelos no se confunden con diferencias de implementación.
 La salida estructurada responde al marco \textit{human-in-the-loop} del proyecto.
 Pedir explicación y evidencias no es un capricho de formato: convierte cada
 predicción en algo que la analista puede auditar, aceptar o rechazar. El sistema
-asiste; no decide en su lugar.
+asiste, no decide en su lugar.
 
 Las secciones siguientes describen los modelos generativos considerados
 (\ref{sec:llms_models_iris} y \ref{sec:genai_models_iris}) y el paradigma

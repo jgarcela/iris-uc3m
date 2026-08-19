@@ -9,15 +9,16 @@ realice la tarea sin haber visto ejemplos etiquetados de ella durante su
 entrenamiento, de modo que generaliza a partir del conocimiento que ya tiene.
 Esto permite prescindir de un corpus de entrenamiento etiquetado, del que no se
 dispone a gran escala, y cambiar la supervisión por ejemplos por otra cosa: la
-\textbf{supervisión mediante libro de códigos}~\cite{ziems2024css, hollauer_plastics}.
-La metodología experta va en el \textit{prompt} y el modelo la aplica a cada texto.
+\textbf{supervisión mediante libro de códigos}~\cite{ziems2024css, hollauer_2024}.
 
 La metodología que se traslada al \textit{prompt} procede de la especificación
 estructurada de cada variable descrita en la Sección~\ref{sec:iris_variables}:
-criterio de decisión, pasos, ejemplos y fronteras, generados a partir de
-\texttt{variables.json}. Esa misma fuente alimenta las dos arquitecturas que se
-comparan en el Capítulo~\ref{implementation}, de modo que ambas parten de
-idéntico contenido y difieren solo en cómo lo reciben.
+criterio de decisión, pasos, ejemplos y fronteras. Todo ese conocimiento experto
+se centraliza en un único fichero, \texttt{variables.json},
+que actúa como fuente de verdad del sistema. A partir de él se generan de forma
+automática las dos arquitecturas que se comparan en el
+Capítulo~\ref{implementation}, de modo que ambas parten de idéntico contenido y
+difieren solo en cómo lo reciben.
 
 \subsubsection{Salida estructurada y trazabilidad}
 
@@ -25,8 +26,8 @@ Por cada pieza y variable, el modelo devuelve un JSON con tres campos:
 
 \begin{itemize}
     \item \texttt{codigo}: el valor en la escala cruda de la variable
-    (1 = ausencia, 2 = presencia; V25 admite además 3 para el salto semántico).
-    El modelo emite este código sin agrupar; solo al calcular las métricas los
+    (1 = ausencia, 2 = presencia, y V25 admite además el 3 para el salto semántico).
+    El modelo emite este código sin agrupar. Solo al calcular las métricas los
     valores 2 y 3 se unen como clase positiva (Sección~\ref{sec:iris_variables}).
     \item \texttt{explicacion}: la justificación, que debe citar los pasos de la
     metodología aplicados.
@@ -36,7 +37,7 @@ Por cada pieza y variable, el modelo devuelve un JSON con tres campos:
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=\textwidth]{salida_trazabilidad_blanco.pdf}
+    \includegraphics[width=\textwidth]{Plantilla_TFG_ingles_2019/imagenes/salida_trazabilidad_blanco.pdf}
     \caption{Salida estructurada y trazable de una predicción.}
     \label{fig:iris-salida}
 \end{figure}
@@ -44,10 +45,10 @@ Por cada pieza y variable, el modelo devuelve un JSON con tres campos:
 Este formato materializa el marco
 \textit{human-in-the-loop}. La explicación y las evidencias hacen la predicción
 auditable: la analista lee la justificación y decide si acepta, rechaza o matiza
-el veredicto. La detección de sesgos requiere una pericia sobre el contexto
-social que no se reduce a la coincidencia literal de palabras clave, y esa
-pericia es humana. Por eso el sistema asiste a la analista en lugar de
-sustituirla.
+el veredicto. Detectar un sesgo de género no se reduce a localizar palabras
+clave, sino que exige interpretar el contexto social del texto, un criterio que
+sigue siendo competencia humana. Por eso el sistema asiste a la analista en lugar
+de sustituirla.
 
 \subsubsection{Ventajas y límites del enfoque}
 

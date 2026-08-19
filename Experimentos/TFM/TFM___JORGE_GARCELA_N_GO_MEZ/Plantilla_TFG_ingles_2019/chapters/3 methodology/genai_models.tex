@@ -22,14 +22,14 @@ los modelos considerados.
             l
             >{\raggedright\arraybackslash}X
         }
-            \hline
+            \toprule
             \textbf{Proveedor} & \textbf{Modelo} & \textbf{Vía / observaciones} \\
-            \hline
-            Local (Ollama) & \texttt{gemma4:e4b} & Granja GPU TSC; modelo abierto de Google \\
+            \midrule
+            Local (Ollama) & \texttt{gemma4:e4b} & Granja GPU TSC, modelo abierto de Google \\
             OpenAI & \texttt{gpt-4o-mini} & API \\
-            OpenAI & \texttt{gpt-5.4-nano} & API; variante de razonamiento (desactivado) \\
+            OpenAI & \texttt{gpt-5.4-nano} & API, variante de razonamiento (desactivado) \\
             Google & \texttt{gemini-3.1-flash-lite} & API \\
-            \hline
+            \bottomrule
         \end{tabularx}
     }
     \endgroup
@@ -38,9 +38,21 @@ los modelos considerados.
 La evaluación del Capítulo~\ref{results_and_discussion} cubre estos cuatro
 modelos, repartidos de forma equilibrada entre dos proveedores: 
 \begin{itemize}
-    \item \textbf{Google} con \texttt{gemma4:e4b} (local) y \texttt{gemini-3.1-flash-lite}(API)
+    \item \textbf{Google} con \texttt{gemma4:e4b} (local) y \texttt{gemini-3.1-flash-lite} (API)
     \item \textbf{OpenAI} con \texttt{gpt-4o-mini} y \texttt{gpt-5.4-nano} (ambos API). 
 \end{itemize}
+
+El modelo local, \texttt{gemma4:e4b}, pertenece a la familia Gemma~4 de modelos
+abiertos de Google\footnote{Ficha del modelo (E4B): \url{https://ai.google.dev/gemma/docs/core/model_card_4} [Último acceso: 14/08/2026]}.
+La etiqueta \texttt{e4b} indica que se trata de una variante de 4.500~millones de
+parámetros \emph{efectivos} (8.000~millones contando las incorporaciones o
+\textit{embeddings}): mediante la técnica de \textit{Per-Layer Embeddings}, que
+asigna a cada capa una pequeña tabla de \textit{embeddings} por token, el cómputo
+activo en inferencia es sensiblemente menor que su tamaño nominal. Esto la hace apta para ejecución local en
+infraestructura modesta, del orden de 5~GB de memoria de GPU, lo que encaja con el
+objetivo de un despliegue privado y sin coste de inferencia. Aunque es un modelo
+multimodal, en este trabajo se emplea únicamente su capacidad de procesamiento de
+texto.
 
 Varias decisiones sobre la selección merecen justificarse. La presencia de dos modelos de OpenAI responde a un criterio de vigencia.
 \texttt{gpt-4o-mini} es un modelo muy adoptado y económico, pero OpenAI ha ido

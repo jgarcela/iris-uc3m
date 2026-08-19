@@ -51,19 +51,29 @@ de directrices para la integración editorial y la supervisión humana (OE5) se 
 en las directrices que se enuncian al cierre de este capítulo y en las líneas futuras
 que se detallan después.
 
-De todo ello se desprende una conclusión sobre el papel del sistema. Dado que ninguna
-configuración alcanza un acuerdo alto y que la tarea es intrínsecamente disputada, el
-sistema encaja mejor como \textbf{asistente que como decisor}. Su salida trazable,
-código de la variable, explicación y evidencias literales extraídas del texto, permite
-que la analista audite, acepte o corrija cada predicción. Conviene distinguir dos planos
-en esa salida. El plano cuantitativo, la etiqueta, es validable contra la anotación de
-referencia y es el que se ha evaluado en este trabajo. El plano cualitativo, el marcado
-de evidencias y la explicación del veredicto, es justamente lo que un análisis de
-contenido experto necesita en su segunda dimensión, pero hoy no dispone de un marcado
-experto de referencia contra el que contrastarse, de modo que su validación queda como
-línea futura. Aun así, el valor del sistema no está en sustituir el criterio experto,
-sino en ordenar el corpus, señalar los casos que merecen una segunda lectura y descargar
-de trabajo repetitivo a las personas que codifican.
+De todo ello se desprende, en coherencia con la discusión, que el sistema encaja mejor
+como \textbf{asistente que como decisor}. Su salida tiene dos planos, y solo uno se ha
+podido evaluar. El primero es la etiqueta, el plano cuantitativo, que se contrasta con
+la anotación de referencia y es el que se mide aquí. El segundo es el marcado de
+evidencias y la explicación del veredicto, el plano cualitativo, esa segunda dimensión
+que un análisis de contenido experto también necesita. Este último no cuenta todavía
+con un marcado experto de referencia con el que compararse, de modo que su validación
+queda como línea futura. El valor del sistema es, en definitiva, práctico y subordinado
+al criterio experto: ordenar el corpus, señalar los casos que merecen una segunda
+lectura y aliviar el trabajo repetitivo de quienes codifican.
+
+El alcance de estas conclusiones está acotado por varias limitaciones. El corpus
+procede de la prensa española y se analizan cinco de las quince variables de lenguaje
+del libro de códigos, de modo que la generalización a otros medios, idiomas o variables
+queda por comprobar. La evaluación se ha realizado en régimen \textit{zero-shot} y
+sobre modelos ligeros y económicos, sin explorar el ajuste fino (\textit{fine-tuning})
+ni modelos de mayor capacidad. La recuperación sobre las guías se implementó con similitud léxica (TF-IDF),
+y una variante semántica podría comportarse de otro modo. Como cada pieza fue
+codificada por una sola persona, no fue posible calcular la fiabilidad
+intercodificadora, por lo que el techo de la tarea se acota de forma indirecta.
+Por último, y como ya se ha señalado, solo se ha evaluado el plano cuantitativo de la
+salida. Estas limitaciones no invalidan los hallazgos, pero delimitan su alcance y
+orientan las líneas de trabajo que se proponen a continuación.
 
 De cara a una futura integración del sistema en entornos editoriales reales (OE5), el
 trabajo permite formular cinco directrices:
