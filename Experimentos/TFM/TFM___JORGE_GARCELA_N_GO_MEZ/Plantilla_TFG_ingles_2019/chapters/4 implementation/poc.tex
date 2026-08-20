@@ -10,12 +10,14 @@ y la prueba de concepto consiste en usar esa herramienta para acompañar a exper
 y periodistas en el análisis de un corpus de prueba.
 
 La asistencia cubre los dos planos del análisis de contenido experto
-(Sección~\ref{sec:experts}). En el plano \textbf{cuantitativo}, la herramienta
-agrega las etiquetas que produce el sistema y permite explorar qué medios,
-secciones o periodos concentran más usos marcados y cómo evolucionan en el tiempo.
-En el \textbf{cualitativo}, para cada pieza muestra el marcado de las evidencias
-sobre el texto y la explicación del veredicto, de modo que quien analiza puede leer
-por qué el sistema ha decidido lo que ha decidido.
+(Sección~\ref{sec:experts}). En el plano \textbf{cuantitativo}, la herramienta agrega
+las etiquetas que produce el sistema en informes por variable, con tablas de
+frecuencias y porcentajes sobre el conjunto seleccionado y un análisis descriptivo
+automático (Figura~\ref{fig:iris-web-informe}), lo que permite explorar qué medios,
+secciones o periodos concentran más usos marcados. En el plano \textbf{cualitativo},
+para cada pieza muestra el marcado de las evidencias sobre el texto y la explicación
+del veredicto (Figura~\ref{fig:iris-web-analisis}), de modo que quien analiza puede
+leer por qué el sistema ha decidido lo que ha decidido.
 
 El sistema no automatiza la decisión: la produce en un formato revisable (código,
 justificación y evidencias literales) y la analista acepta, rechaza o matiza cada
@@ -33,5 +35,24 @@ justificación del veredicto, de modo que la analista edita ese diagnóstico
 (lo acepta, lo rechaza o lo matiza) en segundos y con plena trazabilidad, en vez
 de partir de cero.
 
-% [FIGURA pendiente] captura de la herramienta web de IRIS
-\color{red} [FIGURA pendiente] captura de la herramienta web de IRIS \color{black}
+Las Figuras~\ref{fig:iris-web-informe} y~\ref{fig:iris-web-analisis} ilustran ambas
+vistas de la herramienta web, la de informe cuantitativo y la de análisis por pieza.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{Plantilla_TFG_ingles_2019/imagenes/iris_3.png}
+    \caption{Vista de informe cuantitativo en la herramienta web del proyecto IRIS.
+    Para las variables seleccionadas genera tablas de frecuencias y porcentajes sobre
+    el conjunto de piezas, acompañadas de un análisis descriptivo automático.}
+    \label{fig:iris-web-informe}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{Plantilla_TFG_ingles_2019/imagenes/iris_2.png}
+    \caption{Vista de resultado del análisis en la herramienta web del proyecto IRIS.
+    Las detecciones se resaltan sobre el texto y se listan por categoría, con los
+    controles para que la analista acepte, edite o rechace cada una (postedición con
+    la persona en el bucle).}
+    \label{fig:iris-web-analisis}
+\end{figure}
