@@ -143,14 +143,14 @@ Leyenda: ⬜ por hacer · 🔄 en curso · ✅ hecho · ⏸️ depende de tercer
 | 1d | **Referencia de TF-IDF (RAG)** | ✅ | En `rag.tex`: **RAG** (`lewis2020rag`, NeurIPS 2020) y **TF-IDF** (`sparckjones1972`, J. Documentation). |
 | 2 | Captura de la web IRIS (`dei.inf.uc3m.es/iris`) | ⏸️ | La insertas tú; el texto ya la introduce (§3.1) |
 | 3 | Metadatos de las guías `[s.f.]` en el `.bib` | ✅ | Verificado sobre los PDF de `Experimentos/methodology/` (2026-08). Años fijados: guerrero 2022, iortv 2023, coe 2025, rtve 2022, guia_actuacion (Región de Murcia) 2022. Corregidos 3 errores (guerrero 2021→2022, lectura fácil autor→Región de Murcia, coe autor→Unión Europea). Solo `guias_no_sexista`=2015 queda inferido (su PDF no imprime año, anotado en el `.bib`) |
-| 4 | Propagar los 3 puntos transversales | 🔄 | ✅ en **Cap 6** y en el **abstract** (los tres presentes). Falta en **intro/objetivos** y reforzar en **§3.1/§3.2** |
+| 4 | Propagar los 3 puntos transversales | ✅ | Presentes en **abstract**, **intro** (cuanti+cuali, local/API y complejidad de la tarea), **objetivos** (OE1 salida, OE4 local/API), **§3.1/§3.2** y **Cap 6**. Verificado que no faltaban en intro/objetivos |
 | 5 | Alinear **abstract** con lo hecho | ✅ | Reescrito de cero (2026-08): Agent Skills (no Chain-of-Thought), control B0/B1, evaluación multiproveedor (4 modelos nombrados), 4 hallazgos (skills condicionales, exactitud/κ, techo de la tarea, local ≥ API), salida cuanti+cuali, asistente no decisor, plano cualitativo como línea futura. Registro TFM, ~1 página, palabras clave actualizadas (fuera "Agentes Autónomos", dentro "Agent Skills") |
 | 6 | Reescribir **Cap. 6** (conclusiones + future work) | ✅ | Reescrito de cero en español (2026-08-08): `conclusion.tex` (intro), `conclusions.tex` (recap + hallazgos + cumplimiento OG1/OE1–OE5 + rol asistente), `futurework_usecases.tex` (4 vías: desacuerdo/multietiqueta + doble codificación · few-shot/fine-tuning local · explicabilidad+validación cualitativa+HITL · integración IRIS). Cierra los 3 transversales. Sin citas inventadas |
 | 7 | Repaso manual de Caps. 4 y 5 | ⬜ | Tras terminar el de Cap. 3 |
 | 8 | Compilar en Overleaf y revisar refs/figuras | ⬜ | Comprobar `\ref` y que las figuras PDF están en `imagenes/` |
 | 9 | **§3.2.2 — comentar más `gemma4:e4b`** | ⬜ | Tras revisar referencias de Cap 3/4: valorar explicar mejor el modelo local (p. ej. *effective 4B params* / arquitectura), ya que es el modelo protagonista del hallazgo "local ≥ API". |
 | 10 | **Repasar TODAS las gráficas: tamaño de letra y números** | ⬜ | Revisar en todas las figuras del TFM que el tamaño de letra (títulos, ejes, leyenda) y de los números sea legible y consistente al imprimir (slope, barras, κ por componentes, pipeline, etc.). |
-| 11 | **Citar papers de IRIS (`avi2026`)** | ⬜ | Añadir cita(s) a las publicaciones propias del proyecto IRIS —en particular la de AVI 2026— donde corresponda (intro, Cap 2/3, PoC). Crear entrada `avi2026` en el `.bib` con metadatos verificados. |
+| 11 | **Citar papers de IRIS (`avi2026`)** | ✅ | Entrada `avi2026` creada en el `.bib` (AVI '26, DOI 10.1145/3811427.3811473, metadatos aportados por Jorge). Citada en **§research_context** (Cap 1, descripción del proyecto), **§3.1** (herramienta web) y **§4.5 PoC** (integración en la web). |
 
 ---
 
