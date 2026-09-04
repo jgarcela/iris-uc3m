@@ -1,0 +1,118 @@
+%----------
+%	GLOSARIO DE TÉRMINOS
+%----------
+
+Esta memoria está redactada en español, pero emplea un número apreciable de
+términos en inglés.
+
+Se traducen al español los términos que cuentan con un equivalente asentado en la
+disciplina correspondiente. Es el caso de \textit{codebook}, que aquí aparece
+siempre como libro de códigos por ser la forma habitual en análisis de contenido.
+
+Se mantienen en inglés tres tipos de término. El primero son los que carecen de un
+equivalente consolidado en español, de modo que traducirlos introduciría ambigüedad
+donde el original es unívoco, como ocurre con \textit{prompt} o \textit{token}. El
+segundo son los nombres propios de una tecnología, una arquitectura o una
+especificación concreta, como \textit{Transformer} o \textit{Agent Skills}, que
+funcionan como denominación oficial y cuya traducción dificultaría reconocerlos. El
+tercero son las expresiones que identifican un régimen experimental reconocible en
+la literatura, como \textit{zero-shot}, cuya versión española obligaría a una
+perífrasis en cada aparición.
+
+En todos los casos, la primera vez que un término aparece en el texto se ofrece su
+equivalente en español junto a la forma inglesa. Las tablas siguientes
+recogen los términos y acrónimos empleados, con su equivalencia y una breve nota
+sobre el criterio aplicado.
+
+Conviene justificar una segunda decisión lingüística, esta vez de género
+gramatical. En inglés, \textit{agent} carece de género. En español, «agente» es un
+sustantivo común en cuanto al género, de modo que admite tanto el masculino como el
+femenino sin alterar su significado~\cite{rae_nueva_gramatica}. Esta memoria emplea
+deliberadamente el femenino, «la agente», por coherencia con su propio objeto de
+estudio. Un trabajo que analiza el masculino genérico como una de sus variables de
+análisis (V26) y que deriva sus criterios de guías de lenguaje no sexista
+difícilmente puede recurrir al masculino por defecto en su redacción cuando la lengua
+ofrece una alternativa igualmente correcta. La decisión sigue el criterio que esas
+mismas guías proponen, el de favorecer «formulaciones que den lugar a
+representaciones menos masculinizadas de las realidades a las que se
+refieren»~\cite{yufera2023}.
+
+\begin{table}[H]
+    \centering
+    \begingroup
+    \scriptsize
+    \setlength{\tabcolsep}{4pt}
+    \ttabbox[\FBwidth]{
+        \caption{Acrónimos en inglés empleados en la memoria}
+        \label{tab:glosario-acronimos}
+    }{
+        \begin{tabularx}{\textwidth}{
+            >{\hsize=0.45\hsize\raggedright\arraybackslash}X
+            >{\hsize=1.25\hsize\raggedright\arraybackslash}X
+            >{\hsize=1.30\hsize\raggedright\arraybackslash}X
+        }
+            \toprule
+            \textbf{Sigla} & \textbf{Forma desarrollada} & \textbf{Equivalente en español} \\
+            \midrule
+            API & \textit{Application Programming Interface} & Interfaz de programación de aplicaciones \\
+            HCI & \textit{Human-Computer Interaction} & Interacción persona-computador \\
+            LLM & \textit{Large Language Model} & Gran modelo de lenguaje \\
+            PLE & \textit{Per-Layer Embeddings} & Representaciones vectoriales por capa \\
+            RAG & \textit{Retrieval-Augmented Generation} & Generación aumentada por recuperación \\
+            TDM & \textit{Text and Data Mining} & Minería de textos y datos \\
+            TF-IDF & \textit{Term Frequency-Inverse Document Frequency} & Frecuencia de término y frecuencia inversa de documento \\
+            \bottomrule
+        \end{tabularx}
+    }
+    \endgroup
+\end{table}
+
+
+
+\begin{table}[H]
+    \centering
+    \begingroup
+    \scriptsize
+    \setlength{\tabcolsep}{4pt}
+    \ttabbox[\FBwidth]{
+        \caption{Glosario de términos en inglés empleados en la memoria}
+        \label{tab:glosario-terminos}
+    }{
+        \begin{tabularx}{\textwidth}{
+            >{\hsize=0.85\hsize\raggedright\arraybackslash}X
+            >{\hsize=0.95\hsize\raggedright\arraybackslash}X
+            >{\hsize=1.20\hsize\raggedright\arraybackslash}X
+        }
+            \toprule
+            \textbf{Término} & \textbf{Equivalente en español} & \textbf{Nota} \\
+            \midrule
+            \textit{Agent Skills} & Habilidades agénticas & Denominación de la especificación que empaqueta conocimiento experto en ficheros cargables bajo demanda. Se conserva el original \\
+            \textit{backend} & Parte servidora & Componente que atiende las peticiones del sistema \\
+            \textit{baseline} & Condición de control & Configuración de referencia contra la que se compara la propuesta \\
+            \textit{benchmark} & Banco de pruebas & Conjunto estandarizado de tareas para comparar sistemas \\
+            \textit{circuit breaker} & Mecanismo de corte & Salvaguarda que aborta una ejecución cuando se acumulan fallos consecutivos \\
+            \textit{codebook} & Libro de códigos & \textbf{Se traduce} en toda la memoria, por ser la forma asentada en análisis de contenido \\
+            \textit{embedding} & Representación vectorial & Vector que codifica un texto. Se conserva el original por su uso mayoritario \\
+            \textit{few-shot} & Con pocos ejemplos & Régimen en que la instrucción incluye algunos casos ya resueltos \\
+            \textit{fine-tuning} & Ajuste fino & Reentrenamiento de un modelo sobre datos específicos de la tarea \\
+            \textit{ground truth} & Anotación de referencia & Etiquetas expertas que sirven de patrón de comparación \\
+            \textit{hardware} & --- & Voz admitida por la Real Academia Española, se emplea sin traducir \\
+            \textit{human-in-the-loop} & Persona en el bucle & Paradigma en que el sistema asiste y la persona conserva la decisión \\
+            \textit{mainstream} & Corriente principal & Referido a los medios de comunicación de mayor difusión \\
+            \textit{progressive disclosure} & Revelación progresiva & Cargar en cada momento solo la información necesaria para la tarea \\
+            \textit{prompt} & Instrucción & Texto que recibe el modelo para resolver la tarea \\
+            \textit{prompting} & Ingeniería de instrucciones & Diseño y formulación de las instrucciones que recibe el modelo \\
+            \textit{shard} & Fragmento & Porción del corpus que se procesa en paralelo \\
+            \textit{skill} & Habilidad & Unidad de conocimiento cargable bajo demanda por la agente \\
+            \textit{software} & --- & Voz admitida por la Real Academia Española, se emplea sin traducir \\
+            \textit{token} & Unidad léxica & Unidad mínima de texto que procesa el modelo. Se conserva por precisión técnica \\
+            \textit{tool-calling} & Llamada a herramientas & Mecanismo nativo de algunos proveedores para invocar funciones \\
+            \textit{toolkit} & Conjunto de herramientas & Paquete de utilidades orientado a una tarea concreta \\
+            \textit{Transformer} & --- & Arquitectura de red neuronal. Nombre propio, no se traduce \\
+            \textit{zero-shot} & Sin ejemplos previos & Régimen en que el modelo resuelve la tarea sin casos resueltos en la instrucción \\
+            \bottomrule
+        \end{tabularx}
+    }
+    \endgroup
+\end{table}
+

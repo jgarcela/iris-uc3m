@@ -1,5 +1,5 @@
 % =====================================================================
-% Experimentación y resultados — Agentes especializados y Agent Skills
+% Experimentación y resultados — Agentes especializadas y Agent Skills
 % Datos: Experimentos/experiments/experimento_21_agentskills/results/
 % Corpus de evaluación: 1.313 noticias anotadas en las cinco variables
 % =====================================================================
@@ -15,7 +15,7 @@ Como se detalla en la Sección~\ref{subsec:diseno_agentico}, el diseño mantiene
 todo salvo el empaquetado (mismo corpus, modelos, variables y formato de salida),
 de modo que cualquier variación en el acuerdo es atribuible a cómo llega la
 metodología al modelo y no a otro factor. Para homogeneizar además el comportamiento
-entre proveedores, se desactivó el razonamiento explícito en los modelos que lo
+entre proveedoras, se desactivó el razonamiento explícito en los modelos que lo
 admiten (Sección~\ref{sec:genai_models_iris}). La
 interpretación de las métricas exige tener presente la prevalencia de cada variable
 y la exactitud trivial asociada, recogidas en la
@@ -86,7 +86,7 @@ misma historia}: el $\kappa$ medio, lejos de acompañar, baja de 0,037 a 0,028, 
 ello a un coste de inferencia que se multiplica por un factor de entre 1,9 y 2,7
 según el modelo (Tabla~\ref{tab:iris-b0b1}). Esta discordancia obliga a precisar
 qué métrica resulta pertinente antes de interpretar el efecto de las \textit{skills}:
-en una tarea con clases fuertemente desbalanceadas, la exactitud es un indicador
+en una tarea con clases fuertemente desequilibradas, la exactitud es un indicador
 engañoso y el análisis debe apoyarse en el coeficiente $\kappa$, según se argumenta
 en la Sección~\ref{subsec:iris_divergencia}.
 
@@ -108,7 +108,7 @@ tabla: \textbf{la mejora en exactitud no se traduce en más acuerdo}. Consideran
 las medias, el nivel B1 sube la exactitud en 0,036 pero el $\kappa$ baja en $-0,009$.
 Exactitud y $\kappa$ pueden, por tanto, moverse de forma independiente e incluso en
 sentidos opuestos. Esto es un efecto conocido de $\kappa$ en
-presencia de clases desbalanceadas~\cite{feinstein1990}, pero aquí resulta determinante: pasarlo por alto
+presencia de clases desequilibradas~\cite{feinstein1990}, pero aquí resulta determinante: pasarlo por alto
 invertiría la conclusión del capítulo. La Figura~\ref{fig:iris-divergencia} lo
 visualiza como trayectorias B0$\to$B1: en el panel de exactitud casi todas las líneas
 ascienden, mientras que en el de $\kappa$ se mantienen o descienden, salvo en
@@ -125,7 +125,7 @@ ascienden, mientras que en el de $\kappa$ se mantienen o descienden, salvo en
 \end{figure}
 
 El motivo de esa divergencia es conocido, y no exige que el modelo conozca la
-distribución de clases: en régimen \textit{zero-shot} no la ve. Al volverse menos
+distribución de clases: en régimen \textit{zero-shot} no influye. Al volverse menos
 conservador (por efecto del empaquetado, no por una estrategia informada), el modelo
 responde \textit{Sí} con más frecuencia. En las variables donde la clase positiva
 resulta ser la mayoritaria, ese desplazamiento eleva la exactitud por simple
@@ -134,9 +134,9 @@ artefacto estadístico de un sesgo ciego de respuesta, no de un mejor criterio. 
 coeficiente $\kappa$, que descuenta el acuerdo esperable por azar, no premia ese
 desplazamiento. La consecuencia práctica
 es directa: \emph{un estudio que reportara solo exactitud concluiría que las Agent
-Skills mejoran el sistema, y se equivocaría}. De ahí la recomendación de reportar
+Skills mejoran el sistema para todos los modelos, y se equivocaría}. De ahí la recomendación de reportar
 siempre exactitud, $\kappa$ y prevalencia de forma conjunta en tareas de
-clasificación desbalanceadas.
+clasificación desequilibradas.
 
 Leído correctamente, por $\kappa$, el efecto de las \textit{Agent Skills}
 \textbf{depende del modelo}. Solo \texttt{gemini-3.1-flash-lite} mejora con la
@@ -150,13 +150,13 @@ efecto dependa del modelo y no eleve el acuerdo en agregado admite varias lectur
 retoman en la discusión (Sección~\ref{sec:discussion}) una vez presentada toda la
 evidencia.
 
-\subsection{Descomposición de la arquitectura por componentes}
+\subsection{Descomposición de la arquitectura por componentes (ablación)}
 \label{subsec:iris_descomposicion}
 
 El nivel B1 combina tres componentes, descritos en el Capítulo~\ref{implementation}:
 la carga de \textit{skills} bajo demanda con verificación de evidencias
 (Sección~\ref{subsec:diseno_agentico}), un catálogo de resúmenes de las guías
-expertas descubrible por el agente (Sección~\ref{prompts}), y una herramienta de
+expertas descubrible por la agente (Sección~\ref{prompts}), y una herramienta de
 recuperación en vivo sobre esas guías (RAG, implementada como \texttt{CONSULTAR\_GUIA},
 Sección~\ref{rag}). Para averiguar cuál de ellos explica el efecto
 observado se ejecutaron cinco variantes por modelo, activando y desactivando cada
@@ -170,7 +170,7 @@ exactitud y el F1 macro medios de cada combinación.
     \begingroup
     \scriptsize
     \ttabbox[\FBwidth]{
-        \caption{Descomposición de la arquitectura por componentes. $\kappa$ medio sobre las cinco variables, por modelo ($N=1.313$)}
+        \caption{Descomposición de la arquitectura por componentes. $\kappa$ promedio sobre las cinco variables, por modelo ($N=1.313$)}
         \label{tab:iris-descomposicion}
     }{
         \begin{tabularx}{\textwidth}{
@@ -199,7 +199,7 @@ exactitud y el F1 macro medios de cada combinación.
     \begingroup
     \scriptsize
     \ttabbox[\FBwidth]{
-        \caption{Descomposición de la arquitectura por componentes. \textbf{Exactitud} media sobre las cinco variables, por modelo ($N=1.313$)}
+        \caption{Descomposición de la arquitectura por componentes. \textbf{Exactitud} promedio sobre las cinco variables, por modelo ($N=1.313$)}
         \label{tab:iris-descomposicion-acc}
     }{
         \begin{tabularx}{\textwidth}{
@@ -228,7 +228,7 @@ exactitud y el F1 macro medios de cada combinación.
     \begingroup
     \scriptsize
     \ttabbox[\FBwidth]{
-        \caption{Descomposición de la arquitectura por componentes. \textbf{F1 macro} media sobre las cinco variables, por modelo ($N=1.313$)}
+        \caption{Descomposición de la arquitectura por componentes. \textbf{F1 macro} promedio sobre las cinco variables, por modelo ($N=1.313$)}
         \label{tab:iris-descomposicion-f1}
     }{
         \begin{tabularx}{\textwidth}{
@@ -255,7 +255,7 @@ exactitud y el F1 macro medios de cada combinación.
 \begin{figure}[H]
     \centering
     \includegraphics[width=\textwidth]{fig_kappa_componentes_blanco.pdf}
-    \caption{Coeficiente $\kappa$ medio al activar cada componente, por modelo
+    \caption{Coeficiente $\kappa$ promedio al activar cada componente, por modelo
     ($N=1.313$). La mejor configuración de cada modelo prescinde de la recuperación
     en vivo (RAG, franja sombreada). El mecanismo de \textit{skills} solo eleva el
     acuerdo en \texttt{gemini-3.1-flash-lite}.}
@@ -385,7 +385,7 @@ no el acuerdo.
 \subsubsection{Comportamiento por variable en el nivel B1}
 
 Para cada una se reportan, sobre la clase positiva (\textit{Sí}), la \textbf{precisión} (de
-las piezas que el modelo marca como \textit{Sí}, cuántas lo son de verdad) y el
+las piezas que el modelo marca como \textit{positivas}, cuántas lo son de verdad) y el
 \textbf{recall} o sensibilidad (del sexismo que marcan las expertas, cuánto detecta el
 modelo), junto a la \textbf{exactitud} (el acierto global sobre todas las piezas, que
 no debe confundirse con la precisión) y el coeficiente $\kappa$. El recall es aquí el
@@ -438,9 +438,8 @@ para el nivel B1.
     no es que el modelo se equivoque al marcar, sino que sistema y anotadoras no
     coinciden en \emph{cuándo} hay que marcar. La causa está en el propio criterio de
     V25, que es intrínsecamente amplio y admite dos lecturas. Al ser la variable más
-    general del bloque (el uso discriminatorio del lenguaje por razón de sexo, sin
-    acotar a un mecanismo concreto), las anotadoras se inclinan por una lectura
-    inclusiva y la marcan en casi todas las piezas, de ahí su prevalencia del
+    genérica del bloque (el uso discriminatorio del lenguaje por razón de sexo, sin
+    describir un mecanismo concreto), las anotadoras, que son expertas en detectar este tipo de lenguaje, son capaces de encontrarlo en casi todas las piezas, de ahí su prevalencia del
     81\,\%. La mayoría de los modelos (\texttt{gemini}, \texttt{gpt-5.4-nano} y
     \texttt{gemma}) adopta en cambio una lectura más literal y marca mucho menos, de
     ahí su recall bajísimo. La excepción es \texttt{gpt-4o-mini}, que sí marca de forma
@@ -472,11 +471,11 @@ para el nivel B1.
     criterio amplio en el que sistema y anotación no coinciden en cuándo el discurso
     resulta sexista. Ese desacuerdo es compatible con una detección insuficiente del
     modelo, pero también con la fuerte heterogeneidad de la anotación en esta variable,
-    donde un equipo la marca casi seis veces más que el otro
+    donde un equipo la marca casi seis veces más que el otro como veremos más adelante
     (Sección~\ref{subsec:iris_errores}).
 
     \item \textbf{\texttt{asimetria\_mujer\_hombre} (V33) y
-    \texttt{denominacion\_sexualizada} (V35): desbalance extremo.} Con prevalencias
+    \texttt{denominacion\_sexualizada} (V35): desequilibrio extremo.} Con prevalencias
     del 6,2\,\% y el 10,0\,\%, el modelo casi no marca positivos (recall entre 0,000 y
     0,160) y la precisión, cuando no es nula, descansa sobre un puñado de
     predicciones: \texttt{gpt-5.4-nano} marca \textit{Sí} en \texttt{denominacion\_sexualizada}
@@ -534,8 +533,8 @@ propio umbral por variable.
 Un rasgo atraviesa a las cinco variables: el recall es bajo casi en todas, es decir,
 los modelos detectan solo una fracción del sexismo que marcan las expertas. Esta
 \textbf{infradetección generalizada} es el patrón dominante del capítulo, y se
-examina de frente en la Sección~\ref{subsec:iris_errores} para dirimir si es una
-limitación de los modelos o de la propia tarea.
+examina en la Sección~\ref{subsec:iris_errores} para dirimir si es una
+limitación de los modelos o de la propia tarea. Otra característica que observamos es el comportamiento dispar de los modelos respecto a las variables analizadas.
 
 
 
@@ -556,10 +555,10 @@ La Tabla~\ref{tab:iris-b0b1} recoge el coste real de inferencia. Sobre las 1.313
 noticias, el sistema agéntico (B1) cuesta 30,91 USD en los tres modelos de pago,
 frente a los 13,83 USD del \textit{baseline} (B0), un factor de 2,2. El aumento se
 explica por el número de llamadas al modelo: B0 resuelve cada variable en una única
-llamada, mientras que en B1 el agente encadena varias (entre dos y tres por variable
+llamada, mientras que en B1 la agente encadena varias (entre dos y tres por variable
 en promedio, las acciones de su bucle más el veredicto final). Que el factor no sea
 aún mayor se debe a que cada llamada de B1 es más corta: gracias a la carga bajo
-demanda, el agente solo incluye en el \textit{prompt} lo que necesita, mientras que
+demanda, la agente solo incluye en el \textit{prompt} lo que necesita, mientras que
 B0 inyecta la metodología completa en su única llamada.
 
 
@@ -568,7 +567,7 @@ nivel B1 de \texttt{gemma4:e4b} se ejecutó sobre la granja de GPU (NVIDIA RTX 3
 4090) del Departamento de Teoría de la Señal y Comunicaciones (TSC) de la Universidad
 Carlos III de Madrid, con un rendimiento medido de unos 44 segundos por variable,
 esto es, en torno a 220 segundos por artículo completo. Repartiendo la carga en
-cuatro servidores en paralelo (uno por \textit{shard}), cada corrida sobre el corpus
+cuatro servidores en paralelo (uno por \textit{shard}), cada ejecución sobre el corpus
 de evaluación tardó alrededor de veinte horas. En un solo servidor, el mismo cómputo
 superaría las ochenta horas. Así, el modelo
 local es competitivo en acuerdo y prescinde de tarifas, pero su despliegue agéntico
@@ -784,15 +783,15 @@ Los análisis anteriores comparan cada modelo contra la anotación experta tomad
 como referencia. Un enfoque complementario invierte la pregunta: en vez de medir
 cuánto se equivoca el modelo respecto al \textit{ground truth}, lo sitúa como \textbf{una
 anotadora más} dentro del espacio de criterios de las personas que codificaron el
-corpus. La cuestión deja de ser \textit{``¿acierta el modelo?''} y pasa a ser \textit{``¿dónde cae su
-criterio respecto al de las expertas?''}. El sistema se trata así como un tercer
+corpus. La cuestión deja de ser \textit{``¿acierta o no el modelo?''} y pasa a ser \textit{``¿dónde se sitúa su
+habilidad de detección respecto al de las expertas?''}. Los modelos se tratan así formalmente como un tercer
 equipo de anotación, junto a Indexa y UCM3.
 
-Como cada noticia la codificó una sola persona, no hay solape humano-humano. Lo que
-sí compara a todos sin solape es la \textbf{prevalencia de \textit{Sí}}: la proporción de
-piezas en que cada codificador, humano o modelo, marca la variable. La
+Como cada noticia la codificó una sola persona, no hay solapamiento entre anotadoras. Lo que
+sí compara todos los criterios es la \textbf{prevalencia del \textit{Sí}}: la proporción de
+piezas en que cada entidad codificadora, humana o artificial, marca la variable. La
 Tabla~\ref{tab:iris-criterios} ordena por esa proporción, promediada sobre las cinco
-variables, a los nueve anotadores humanos y a los cuatro modelos evaluados.
+variables, a las nueve personas anotadoras y a los cuatro modelos evaluados.
 
 \begin{table}[H]
     \centering
@@ -800,7 +799,7 @@ variables, a los nueve anotadores humanos y a los cuatro modelos evaluados.
     \scriptsize
     \renewcommand{\texttt}[1]{{\ttfamily #1}}
     \ttabbox[\FBwidth]{
-        \caption{Espacio de criterios: prevalencia de \textit{Sí} por anotador (humano y modelo) y variable. Columnas: V25 \texttt{lenguaje\_sexista}, V26 \texttt{masc\_generico}, V30 \texttt{sexismo\_discurso}, V33 \texttt{asimetria\_mujer\_hombre}, V35 \texttt{denominacion\_sexualizada}. La última columna (sombreada) es la media sobre las cinco.}
+        \caption{Espacio de criterios: prevalencia de \textit{Sí} por entidad anotadora (humana y artificial) y variable. Columnas: V25 \texttt{lenguaje\_sexista}, V26 \texttt{masc\_generico}, V30 \texttt{sexismo\_discurso}, V33 \texttt{asimetria\_mujer\_hombre}, V35 \texttt{denominacion\_sexualizada}. La última columna (sombreada) es la media sobre las cinco.}
         \label{tab:iris-criterios}
     }{
         \begin{tabularx}{\textwidth}{
@@ -814,7 +813,7 @@ variables, a los nueve anotadores humanos y a los cuatro modelos evaluados.
             >{\hsize=0.9\hsize\columncolor{gray!15}\centering\arraybackslash}X
         }
             \toprule
-            \textbf{Anotador} & \boldmath$n$ & \textbf{V25} & \textbf{V26} & \textbf{V30} & \textbf{V33} & \textbf{V35} & \textbf{Media} \\
+            \textbf{Anotador/a} & \boldmath$n$ & \textbf{V25} & \textbf{V26} & \textbf{V30} & \textbf{V33} & \textbf{V35} & \textbf{Media} \\
             \midrule
             UCM3 3 & 363 & 0,986 & 0,975 & 0,978 & 0,041 & 0,215 & 0,639 \\
             UCM3 4 & 166 & 0,831 & 0,855 & 0,283 & 0,271 & 0,084 & 0,465 \\
@@ -846,8 +845,8 @@ cuadro, porque en algunas variables ciertos modelos son más inclusivos que la m
 de las personas. El caso más claro es \texttt{gpt-4o-mini} en
 \texttt{asimetria\_mujer\_hombre}, que marca el fenómeno en el 14,4\,\% de las piezas,
 por encima de todas las anotadoras salvo una (UCM3-4, con el 27,1\,\%). También
-\texttt{gemini} marca \texttt{masc\_generico} (66,9\,\%) dentro del rango humano. La permisividad global de los modelos convive, por tanto, con
-puntos de mayor sensibilidad en variables concretas.
+\texttt{gemini} marca \texttt{masc\_generico} (66,9\,\%) dentro del rango humano. La ceguera global de los modelos convive, por tanto, con
+puntos de mayor sensibilidad en variables concretas, habitualmente las más explícitas y sencillas de definir.
 
 Hay además un segundo dato en la misma tabla: la dispersión \emph{entre las propias personas} es mayor que la que
 separa a los modelos entre sí. La prevalencia media humana va de 0,283 a 0,639 (un
@@ -857,7 +856,7 @@ ancha, y esa amplitud es justamente la que acota el acuerdo alcanzable. Como cad
 codificó piezas distintas, su prevalencia mezcla dos factores: el criterio propio y
 la muestra que le tocó.
 
-Un segundo análisis mide el acuerdo \emph{entre} modelos, que sí tienen solape
+Un segundo análisis mide el acuerdo \emph{entre} modelos, que sí tienen solapamiento
 total porque los cuatro codificaron las 1.313 piezas. El resultado es inesperado y
 se recoge en la Tabla~\ref{tab:iris-intraia}.
 
@@ -898,7 +897,7 @@ modelos. Cada uno presenta su propio patrón de respuesta, y lo que comparten se
 limita a la dirección del sesgo (la tendencia a marcar de menos), no a los casos
 concretos en que lo aplican. Este resultado matiza la idea de un sesgo único y
 uniforme de la inteligencia artificial: se observan, más bien, cuatro sesgos
-distintos que solo coinciden en ser permisivos. El modelo local \texttt{gemma4:e4b}
+distintos que solo coinciden en sus limitaciones de detección. El modelo local \texttt{gemma4:e4b}
 es el que mayor solape mantiene con el resto (hasta 0,156 con \texttt{gemini}), pero
 ni ese máximo alcanza un acuerdo apreciable.
 
@@ -909,7 +908,6 @@ arquitectura introduce, de hecho, un matiz en sentido contrario al esperable: la
 pares (el par formado por \texttt{gpt-4o-mini} y \texttt{gpt-5.4-nano} cae de 0,279 a
 0,084), lo que confirma que acentúan las particularidades de cada modelo en lugar de
 acercarlos a un criterio compartido.
-
 
 Los tres análisis de esta subsección apuntan en la misma dirección. El primero
 mostró que el acuerdo depende del equipo de anotación tanto como del modelo. El

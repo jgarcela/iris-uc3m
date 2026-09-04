@@ -381,10 +381,22 @@ Por otro lado, y para terminar, gracias de corazón a Carmen y Teresa. Haber pod
 \thispagestyle{empty}
 \mbox{}
 
+%--
+% Glosario de términos en inglés
+%-
+\chapter*{Glosario de términos}
+\addcontentsline{toc}{chapter}{Glosario de términos}
+\thispagestyle{fancy}
+\input{chapters/glosario}
+
+\newpage % página en blanco o de cortesía
+\thispagestyle{empty}
+\mbox{}
+
 
 %----------
 %	TRABAJO
-%----------	
+%----------
 \clearpage
 \pagenumbering{arabic} % numeración con múmeros arábigos para el resto de la publicación	
 \renewcommand{\footnotesize}{\tiny}  % Changes footnote size to \scriptsize
@@ -464,7 +476,7 @@ Este capítulo establece el marco teórico y tecnológico sobre el que se fundam
 \label{sec:methodology}
 Este capítulo detalla los fundamentos sobre los que se asienta el trabajo, antes
 de entrar en su implementación. Se parte del análisis experto y la perspectiva de
-género de los proyectos IRIS e InfoIA, del que proceden el corpus, el libro de códigos y las
+género de los proyectos IRIS e InfoIA, de los que proceden el corpus, el libro de códigos y las
 cinco variables de sexismo lingüístico evaluadas
 (Sección~\ref{sec:experts}). A continuación se describe la solución tecnológica:
 los modelos generativos considerados, las dos vías de despliegue (local y

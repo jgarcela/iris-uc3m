@@ -4,26 +4,29 @@
 
 El codebook del proyecto se inspira en guías institucionales de lenguaje no
 sexista (Sección~\ref{sec:experts}). Esas guías cumplen dos papeles distintos en
-el sistema, y conviene no confundirlos.
+el sistema, y conviene no confundirlos:
 
-Como \textbf{fuente}, son el material del que se destila la metodología de cada
+\begin{itemize}
+    \item Como \textbf{fuente}, son el material del que se destila la metodología de cada
 variable. Ese uso es indirecto: la analista y quien redacta las skills se apoyan
 en ellas, pero el modelo no las lee.
 
-Como \textbf{herramienta en vivo}, en cambio, el agente puede consultarlas
+\item Como \textbf{herramienta en vivo}, en cambio, la agente puede consultarlas
 durante la inferencia. La acción \texttt{CONSULTAR\_GUIA} implementa una
 recuperación (\textit{Retrieval-Augmented Generation}, RAG por sus siglas en inglés)~\cite{lewis2020rag} sobre el texto real
-de las guías. La implementación es deliberadamente ligera: un índice de frecuencia
-de término-frecuencia inversa de documento (\textit{Term Frequency-Inverse Document
-Frequency}, TF-IDF por sus siglas en inglés)~\cite{sparckjones1972} en memoria sobre
+de las guías. La implementación es deliberadamente ligera: un índice TF-IDF (\textit{Term Frequency-Inverse Document
+Frequency} en inglés)~\cite{sparckjones1972} en memoria sobre
 los pasajes de las guías, sin dependencias externas. Ante una
 consulta, devuelve los pasajes más relevantes con su cita de fuente y sección.
+\end{itemize}
+
+
 
 Esta distinción es relevante para delimitar con precisión el alcance de la
-propuesta. En ausencia de la herramienta, la relación entre el agente y las guías
+propuesta. En ausencia de la herramienta, la relación entre la agente y las guías
 sería únicamente conceptual, pues estas habrían intervenido solo durante la
 elaboración de la metodología. La acción \texttt{CONSULTAR\_GUIA} establece un
-vínculo directo y verificable: el agente recupera texto literal de las fuentes en
+vínculo directo y verificable: la agente recupera texto literal de las fuentes en
 tiempo de inferencia y puede incorporarlo a su justificación.
 
 La recuperación se basa en coincidencia léxica (TF-IDF), no semántica. Funciona

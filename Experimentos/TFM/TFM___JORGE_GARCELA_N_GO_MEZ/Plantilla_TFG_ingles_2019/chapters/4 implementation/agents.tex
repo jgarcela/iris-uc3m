@@ -13,7 +13,7 @@ metodología.
     variable en una única llamada, sin herramientas.
     \item \textbf{Nivel B1 (\textit{Agent Skills}).} El modelo recibe únicamente
     los metadatos de las \textit{skills} disponibles (su nombre y una
-    descripción) y carga bajo demanda el cuerpo de la que necesita, aplicando \textit{progressive disclosure}. Además puede consultar las guías expertas y
+    descripción) y carga bajo demanda el cuerpo de la que necesita, aplicando un procedimiento de revelación progresiva (\textit{progressive disclosure} en inglés). Además puede consultar las guías expertas y
     verificar sus evidencias mediante herramientas.
 \end{itemize}
 
@@ -21,7 +21,7 @@ metodología.
 \centering
 \includegraphics[width=0.94\textwidth]{Plantilla_TFG_ingles_2019/imagenes/arquitectura_b0_b1_blanco.pdf}
 \caption{Los dos niveles comparados. Ambos procesan cada artículo sobre las mismas
-cinco variables (una por tarea) y comparten formato de salida.}
+cinco variables, mismo corpus y comparten formato de salida.}
 \label{fig:iris-b0b1}
 \end{figure}
 
@@ -32,32 +32,31 @@ metodología al modelo. En B0 cada variable se resuelve en una única llamada,
 mientras que en B1 el agente puede encadenar varias iteraciones de su bucle
 (Sección~\ref{subsec:diseno_agentico}), de modo que ese mayor cómputo forma parte
 del propio mecanismo de \textit{Agent Skills}. Con la tarea, la metodología de
-partida y el formato de respuesta fijos, el delta de acuerdo entre B0 y B1 queda
+partida y el formato de respuesta fijos, el delta de acuerdo entre B0 y B1 es
 atribuible al empaquetado del conocimiento y no a diferencias en la definición de
 la tarea.
 
-\subsection{Diseño agéntico: un agente por dentro}
+\subsection{Diseño agéntico: una agente por dentro}
 \label{subsec:diseno_agentico}
 
 Antes de describir cómo se organiza la arquitectura multiagente, conviene fijar de qué se
-compone \emph{un agente}. Para ello hay que distinguir dos conceptos que a menudo se
+compone \emph{una agente}. Para ello hay que distinguir dos conceptos que a menudo se
 confunden. Una \textit{skill}, en el sentido de \textit{Agent Skills} introducido
 en la Sección~\ref{sec:agentes_ia}, es conocimiento empaquetado: un fichero de
-metodología, pasivo, que se carga pero no decide. Un \textbf{agente} es un ejecutor con un bucle de decisión, que elige
-qué skills cargar y cuándo verificar. \textit{Una skill por variable no es un agente} pero
-\textit{un agente que carga su skill bajo demanda} sí lo es, y es lo que aquí se
+metodología, pasivo, que se carga pero no decide. Una \textbf{agente} es una rutina ejecutora con un bucle de decisión, que elige
+qué \textit{skills} cargar y cuándo verificar. \textit{Una skill por variable no es una agente} pero
+\textit{una agente que carga su skill bajo demanda} sí lo es, y es lo que aquí se
 implementa.
 
 Cada agente dispone de un \textbf{catálogo de skills} del que, de entrada, solo ve
 el nombre y una descripción, y carga el cuerpo de una skill únicamente cuando la
-necesita. Es la aplicación directa del mecanismo de \textit{progressive
-disclosure} descrito en la Sección~\ref{sec:agentes_ia}: cargar solo lo relevante
+necesita. Es la aplicación directa del mecanismo de \textit{revelación progresiva} descrito en la Sección~\ref{sec:agentes_ia}: cargar solo lo relevante
 para la tarea en curso evita saturar la ventana de contexto y encarecer la
 inferencia. El catálogo reúne tres tipos de skill: la de la propia variable
 (obligatoria), unas auxiliares compartidas y unos resúmenes de las guías expertas,
 cuyo formato y generación se detallan en la Sección~\ref{prompts}.
 
-El agente opera mediante un \textbf{bucle estilo ReAct}~\cite{yao2023react}, el
+La agente opera mediante un \textbf{bucle estilo ReAct}~\cite{yao2023react}, el
 patrón de razonamiento y acción presentado en la Sección~\ref{sec:agentes_ia}. En
 cada turno el modelo razona sobre qué le falta, emite \emph{una} acción, observa el
 resultado que le devuelve el sistema y vuelve a razonar con esa nueva información,
@@ -66,11 +65,11 @@ consultar una guía si duda y verificar sus evidencias antes de responder, en lu
 de contestar a ciegas.
 
 Las acciones se expresan \textbf{en texto}, no mediante el \textit{tool-calling}
-nativo de cada proveedor. La razón es práctica: el enrutado multi-proveedor se
+nativo de cada proveedora. La razón es práctica: el enrutado multi-proveedor se
 apoya en una interfaz de texto común, y el \textit{tool-calling} nativo es frágil e
 incompatible entre modelos, sobre todo en los locales pequeños. Con un protocolo de
-texto, el mismo mecanismo funciona igual en los cuatro proveedores. En cada turno
-el agente emite una de estas acciones y el sistema le devuelve el resultado:
+texto, el mismo mecanismo funciona igual en las cuatro proveedoras. En cada turno
+la agente emite una de estas acciones y el sistema le devuelve el resultado:
 
 
 \begin{itemize}
@@ -82,10 +81,10 @@ el agente emite una de estas acciones y el sistema le devuelve el resultado:
     \item \texttt{FINAL \{...\}}: cierra con el veredicto de la variable.
 \end{itemize}
 
-El bucle admite hasta unas ocho iteraciones. Si el agente emitiera \texttt{FINAL}
+El bucle admite hasta unas ocho iteraciones. Si la agente emitiera \texttt{FINAL}
 sin haber usado ninguna herramienta, su comportamiento equivaldría al del
 \textit{baseline}, un \textit{``colapso a B0''} que en la práctica apenas se
-observa, porque todos los agentes cargan al menos su propia skill. Para averiguar
+observa, porque todas las agentes cargan al menos su propia skill. Para averiguar
 qué aporta realmente cada herramienta, el Capítulo~\ref{results_and_discussion}
 descompone la arquitectura activando y desactivando cada componente (\textit{skills},
 resúmenes de guías y recuperación en vivo) y mide su contribución al acuerdo. Ese
@@ -95,7 +94,7 @@ otros.
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{Plantilla_TFG_ingles_2019/imagenes/agente_anatomia_blanco.pdf}
-\caption{Anatomía de un agente especializado, con el ejemplo del agente de
+\caption{Anatomía de una agente especializada, con el ejemplo de la agente de
 \texttt{lenguaje\_sexista}: catálogo de skills (progressive disclosure) y bucle de
 acciones que carga la skill bajo demanda, consulta guías, verifica evidencias y
 cierra con el veredicto.}
@@ -105,17 +104,17 @@ cierra con el veredicto.}
 \subsection{Arquitectura multiagente}
 \label{subsec:multiagente}
 
-Sobre ese diseño se construye la arquitectura del nivel B1: no un único agente que
-juzgue las cinco variables a la vez, sino \textbf{cinco agentes especializados},
-uno por variable (V25, V26, V30, V33 y V35). Cada uno tiene un único objetivo,
-clasificar su variable, y resuelve su tarea de forma independiente de los demás,
+Sobre ese diseño se construye la arquitectura del nivel B1: no una única agente que
+juzgue las cinco variables a la vez, sino \textbf{cinco agentes especializadas},
+uno por variable (V25, V26, V30, V33 y V35). Cada una tiene un único objetivo,
+clasificar su variable, y resuelve su tarea de forma independiente de las demás,
 con su propio catálogo y su propio bucle. Cada artículo se procesa, por tanto, con
-cinco agentes, uno por variable.
+cinco agentes, una por variable.
 
 La especialización responde a una decisión de diseño. Sobrecargar a un modelo con
 mucho contexto tiende a degradar su rendimiento~\cite{liu2023lost}: cuando la
 información relevante se diluye entre la que no lo es, aumentan las
-alucinaciones~\cite{huang2025hallucination} y la confusión entre criterios. Un solo agente encargado de las cinco variables tendría que sostener a
+alucinaciones~\cite{huang2025hallucination} y la confusión entre criterios. Una sola agente encargada de las cinco variables tendría que sostener a
 la vez cinco metodologías y sus fronteras, incurriendo en ese riesgo. Acotar cada
 agente a una variable reduce la carga de contexto, mantiene el foco y hace que su
 traza (qué skills cargó, si verificó, si colapsó a B0) sea interpretable variable a
@@ -125,7 +124,7 @@ variable.
 \centering
 \includegraphics[width=\textwidth]{Plantilla_TFG_ingles_2019/imagenes/agentes_enjambre_blanco.pdf}
 \caption{Arquitectura multiagente del nivel B1: cada artículo se procesa con cinco
-agentes especializados independientes, uno por variable, cada uno con su propio
+agentes especializadas independientes, una por variable, cada una con su propio
 catálogo y su propio bucle.}
 \label{fig:iris-multiagente}
 \end{figure}
