@@ -1,7 +1,7 @@
 %----------
 %	RIESGOS Y MEDIDAS DE MITIGACIÓN
 %----------	
-La Tabla \ref{table:risks} identifica los principales riesgos asociados a los Paquetes de Trabajo (PT) descritos en la Sección \ref{sec:workmethodology_planning}, evaluando su impacto y estableciendo las medidas de mitigación correspondientes.
+La Tabla~\ref{table:risks} recoge los principales riesgos identificados al planificar el trabajo, asociados a los Paquetes de Trabajo (PT) descritos en la Sección~\ref{sec:workmethodology_planning}, junto con su valoración y las medidas de mitigación previstas entonces. Como esta memoria se redacta una vez concluido el trabajo, al análisis inicial le sigue un balance de lo que finalmente ocurrió con cada riesgo y de en qué medida las respuestas previstas resultaron aplicables.
 
 
 \begin{table}[H]
@@ -32,6 +32,50 @@ La Tabla \ref{table:risks} identifica los principales riesgos asociados a los Pa
         \end{tabular}
     }
 \end{table}
+
+Concluido el trabajo, el balance es el siguiente. Tres de los cinco riesgos se
+materializaron, y en ellos las medidas previstas resultaron aplicables, aunque no
+siempre suficientes.
+
+El \textbf{R1} se materializó de forma parcial. El corpus anotado estuvo disponible y
+bastó para evaluar el plano cuantitativo del sistema, pero no incluía doble
+codificación ni marcado experto sobre el texto. Esa carencia impidió calcular la
+fiabilidad intercodificadora y validar el plano cualitativo
+(Sección~\ref{subsec:limitacion_fiabilidad}). Las medidas previstas de anotación
+complementaria y de generación de ejemplos sintéticos no llegaron a emplearse. En su
+lugar, la limitación se convirtió en objeto de análisis, ya que el estudio de
+sensibilidad por equipo de anotación permitió acotar de forma indirecta el techo de
+acuerdo de la tarea (Sección~\ref{subsec:iris_errores}).
+
+El \textbf{R2} se materializó con claridad y acabó siendo uno de los hallazgos del
+trabajo, pues los cuatro modelos evaluados mostraron comportamientos marcadamente
+distintos entre sí. Se aplicaron las medidas previstas de salida estructurada,
+verificación automática de las evidencias, comparación sistemática entre modelos y
+validación contra el corpus experto. A ellas se sumó una medida no contemplada
+inicialmente, la desactivación del razonamiento explícito en los modelos que lo
+admiten, para que la comparación fuese justa
+(Sección~\ref{sec:genai_models_iris}).
+
+El \textbf{R3} se materializó y constituye el resultado central del trabajo. La
+recuperación aumentada (RAG), prevista como medida de mitigación, se implementó y se
+evaluó de forma aislada, con el resultado de que no compensa en este dominio
+(Sección~\ref{subsec:iris_descomposicion}). Poder descartarla con evidencia es en sí
+mismo una aportación. La supervisión \textit{human-in-the-loop}, en cambio, sí se
+incorporó y quedó materializada en la prueba de concepto (Sección~\ref{poc}).
+
+El \textbf{R4} no llegó a evaluarse de forma sistemática. La integración del sistema
+en la herramienta web del proyecto (Sección~\ref{poc}) y las directrices de uso
+editorial que cierran el trabajo (Sección~\ref{sec:conclusions}) responden a la
+medida prevista, pero la validación con redacciones reales queda como línea de
+trabajo futura (Sección~\ref{sec:futurework_usecases}).
+
+El \textbf{R5} se materializó en dos frentes concretos, y en ambos funcionó la
+contingencia prevista. Por un lado, OpenAI anunció la retirada de modelos de su
+interfaz, lo que motivó incorporar un modelo más reciente para no depender de uno
+solo (Sección~\ref{sec:genai_models_iris}). Por otro, las ejecuciones sobre la granja
+de GPU sufrieron interrupciones, para lo que se implementó una ejecución reanudable y
+un mecanismo de corte que evita registrar los fallos de infraestructura como
+predicciones (Sección~\ref{eval}).
 
 
 \newpage
