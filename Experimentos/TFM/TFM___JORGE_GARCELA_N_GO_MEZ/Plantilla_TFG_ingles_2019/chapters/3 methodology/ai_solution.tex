@@ -18,11 +18,11 @@ partir de ejemplos, sino que recibe la metodología en el propio \textit{prompt}
 la aplica sobre cada texto. El libro de códigos hace de supervisión en tiempo de
 inferencia, sin reentrenar nada.
 
-La solución es una tubería común, independiente de la empresa proveedora de los LLM
+La solución es un flujo de procesamiento común, independiente de la empresa proveedora de los LLM
 (Figura~\ref{fig:iris-pipeline}). Por cada pieza y variable, el sistema construye
 una entrada con la metodología y el texto, la envía a un modelo y recupera una
 salida estructurada con tres campos: un código, una explicación razonada y las
-evidencias literales que la sustentan. Esa misma tubería se bifurca, según el
+evidencias literales que la sustentan. Ese mismo flujo se bifurca, según el
 identificador del modelo, tanto a modelos locales como a las API de OpenAI y Google
 (Sección~\ref{sec:llms_models_iris}). Así, las diferencias que se observen entre
 modelos no se pueden confundir con diferencias de implementación.
@@ -30,7 +30,7 @@ modelos no se pueden confundir con diferencias de implementación.
 \begin{figure}[H]
   \centering
   \includegraphics[width=\textwidth]{pipeline_iris_vertical_blanco.pdf}
-  \caption{Tubería de clasificación común e independiente de la empresa proveedora. Por cada
+  \caption{Flujo de clasificación común e independiente de la empresa proveedora. Por cada
   pieza y variable, la metodología del libro de códigos y el texto del artículo
   forman la entrada del modelo, que devuelve una salida estructurada (código,
   explicación y evidencias literales) auditable por la persona analista.}
