@@ -53,7 +53,7 @@ marco teórico del libro de códigos, pero no se someten a evaluación automáti
 
 Esta restricción responde asimismo a una consideración de diseño experimental:
 evaluar cinco variables sobre la totalidad del subconjunto anotado y con varios
-proveedores de modelos resulta preferible, en términos de solidez de las
+proveedoras de modelos resulta preferible, en términos de solidez de las
 conclusiones, a una cobertura amplia pero superficial de las quince.
 
 \subsubsection{Definición operativa de las variables evaluadas}
@@ -147,10 +147,16 @@ azar, de métricas F1 y de la prevalencia de cada variable.
 
 Para su empleo por sistemas automáticos, cada variable, partiendo de las guías de
 lenguaje no sexista y del criterio experto, se formaliza en una especificación
-estructurada que recoge, además de la definición conceptual: un criterio operativo
-de decisión, una metodología paso a paso, ejemplos positivos y contraejemplos
-comentados, casos límite documentados y las fronteras que la separan de las
-variables contiguas. Esta especificación constituye la fuente
+estructurada que recoge, además de la definición conceptual: 
+\begin{enumerate}
+    \item un criterio operativo de decisión, 
+    \item una metodología paso a paso, 
+    \item ejemplos positivos y contraejemplos comentados, 
+    \item casos límite documentados y 
+    \item las fronteras que la separan de las variables contiguas.
+\end{enumerate} 
+
+Esta especificación constituye la fuente
 única a partir de la cual se generan tanto los \textit{prompts} del sistema de
 referencia como las \textit{skills} de la arquitectura de agentes, garantizando
 que ambos niveles experimentales operan con \emph{idéntico} contenido

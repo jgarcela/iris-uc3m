@@ -1,5 +1,5 @@
 %----------
-%	MODELOS EVALUADOS (multi-proveedor)
+%	MODELOS EVALUADOS (multi-proveedora)
 %----------
 
 \label{sec:genai_models_iris}
@@ -23,7 +23,7 @@ los modelos considerados.
             >{\raggedright\arraybackslash}X
         }
             \toprule
-            \textbf{Proveedor} & \textbf{Modelo} & \textbf{Vía / observaciones} \\
+            \textbf{Proveedora} & \textbf{Modelo} & \textbf{Vía / observaciones} \\
             \midrule
             Local (Ollama) & \texttt{gemma4:e4b} & Granja GPU TSC, modelo abierto de Google \\
             OpenAI & \texttt{gpt-4o-mini} & API \\
@@ -36,7 +36,7 @@ los modelos considerados.
 \end{table}
 
 La evaluación del Capítulo~\ref{results_and_discussion} cubre estos cuatro
-modelos, repartidos de forma equilibrada entre dos proveedores: 
+modelos, repartidos de forma equilibrada entre dos proveedoras: 
 \begin{itemize}
     \item \textbf{Google} con \texttt{gemma4:e4b} (local) y \texttt{gemini-3.1-flash-lite} (API)
     \item \textbf{OpenAI} con \texttt{gpt-4o-mini} y \texttt{gpt-5.4-nano} (ambos API). 
@@ -62,12 +62,12 @@ acabe deprecándose también ahí. Para no depender de un único modelo comercia
 contar con una referencia más reciente, se añade \texttt{gpt-5.4-nano}, una
 variante posterior más actualizada.
 
-Para que la comparación entre proveedores sea justa, se desactivó el razonamiento
+Para que la comparación entre proveedoras sea justa, se desactivó el razonamiento
 explícito en los modelos que lo admiten (el parámetro \texttt{reasoning\_effort}
 en OpenAI, \texttt{thinking\_budget} en Google). Así ningún modelo dispone de
 cómputo extra del que carezcan los demás.
 
-Los modelos locales no cuestan dinero, porque corren en infraestructura propia,
+Los modelos locales no cuestan dinero marginal, porque corren en infraestructura propia,
 pero sí tienen un coste computacional alto que condiciona su viabilidad a escala
 (Sección~\ref{subsec:iris_coste}).
 

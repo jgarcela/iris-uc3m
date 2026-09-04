@@ -13,7 +13,7 @@ tarea. Este trabajo explota justamente esa competencia: la metodología de
 codificación se expresa como instrucción y el modelo la aplica a cada pieza.
 
 Para desplegar estos modelos hay dos vías, y la diferencia entre ellas importa en
-un proyecto como IRIS.
+un proyecto como este.
 
 Los \textbf{modelos locales} son modelos de pesos abiertos que se ejecutan en
 infraestructura propia. En este trabajo se usan a través de
@@ -26,14 +26,14 @@ paga por uso, a diferencia de las API comerciales, por lo que procesar el corpus
 completo no tiene coste marginal. A cambio, exigen hardware especializado y suelen
 ser más pequeños y menos capaces que los modelos comerciales punteros.
 
-Los \textbf{modelos comerciales vía API} los alojan los proveedores (OpenAI,
+Los \textbf{modelos comerciales vía API} los alojan las empresas proveedoras (OpenAI,
 Google) y se acceden por red. Ofrecen más capacidad y no requieren
 infraestructura propia. La contrapartida es doble: se paga por uso y el texto
 viaja a un tercero, con lo que ello implica en privacidad.
 
 Comparar ambas vías sobre la misma tarea y el mismo corpus es uno de los
-objetivos metodológicos de este trabajo. Para lograrlo, la tubería de
-clasificación es agnóstica al proveedor: una función de enrutado dirige cada
+objetivos metodológicos de este trabajo. Para lograrlo, la cadena de procesos de
+clasificación es agnóstica a la proveedora: una función de enrutado dirige cada
 petición al \textit{backend} que corresponda según el identificador del modelo. De este
 modo, lo que se observe al comparar modelos procede de los modelos, no de cómo
 está escrito el código que los llama. Los modelos concretos se detallan en la

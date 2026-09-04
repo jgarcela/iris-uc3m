@@ -13,12 +13,11 @@ inyectada en el \textit{prompt} (nivel B0), sobre un corpus de 1.313 noticias an
 y cuatro modelos de lenguaje, tres accesibles por API y uno local.
 
 La evaluación experimental, interpretada en detalle en la Sección~\ref{sec:discussion},
-deja cuatro conclusiones que aquí se recogen de forma sintética. La primera es que
+deja varias conclusiones que aquí se recogen de forma sintética. La primera es que
 empaquetar la metodología como \textit{Agent Skills} \textbf{no mejora el acuerdo por
 sí mismo}: de los cuatro modelos, solo uno se beneficia en coeficiente $\kappa$, de modo
 que la arquitectura amplifica la capacidad que cada modelo ya trae en lugar de
-conferirla, y la herramienta de recuperación en vivo (RAG) no compensa en este dominio
-de textos periodísticos cortos. La segunda es de alcance metodológico: en una tarea con
+conferirla, y la herramienta de recuperación en vivo (RAG) no compensa en este dominio. La segunda es de alcance metodológico: en una tarea con
 clases muy desbalanceadas, la exactitud y $\kappa$ pueden moverse en sentidos opuestos,
 por lo que reportar solo la exactitud llevaría a la conclusión contraria y se impone
 informar de exactitud, $\kappa$ y prevalencia de forma conjunta. La tercera es que el
@@ -29,14 +28,13 @@ sistemas situados en el extremo más permisivo del criterio humano, de manera qu
 desacuerdo mide distancia de criterio tanto como error. La cuarta es que un modelo local
 de pesos abiertos, \texttt{gemma4:e4b}, iguala o supera a los servicios comerciales de
 API en acuerdo de control, preservando la privacidad del material y sin tarifas de
-inferencia, a cambio de trasladar el coste al tiempo de cómputo. Esta comparación
-multiproveedor, sobre la misma tarea y el mismo corpus con una tubería agnóstica al
-proveedor, ha sido uno de los ejes metodológicos del trabajo.
+inferencia, a cambio de trasladar el coste al tiempo de cómputo. Esta comparación sobre la misma tarea y el mismo corpus con una tubería agnóstica a la empresa
+proveedora, ha sido uno de los ejes metodológicos del trabajo.
 
 En cuanto al cumplimiento de los objetivos de la Sección~\ref{sec:objectives_motivation},
 el balance es el siguiente. El objetivo general (OG1) se ha satisfecho al investigar y
 evaluar de forma sistemática una arquitectura basada en agentes y LLM para detectar
-variables cualitativas de representación mediática, delimitando con evidencia empírica
+variables cuantitativas y cualitativas de representación mediática, delimitando con evidencia empírica
 tanto sus prestaciones como sus límites. El diseño conceptual del sistema, con agentes
 especializadas y sus flujos de análisis y verificación (OE1), y las estrategias de
 \textit{prompting} y herramientas asociadas, criterios, plantillas y contextos expertos
@@ -44,7 +42,7 @@ empaquetados como \textit{skills} (OE2), se desarrollaron en el
 Capítulo~\ref{implementation} y se validaron en el Capítulo~\ref{results_and_discussion}.
 Las técnicas de representación y recuperación de información, incluida la RAG y la
 similitud léxica (OE3), se implementaron y evaluaron, con el hallazgo, valioso en sí
-mismo, de que no aportan en este dominio de textos periodísticos cortos. La comparación
+mismo, de que no aportan en este dominio. La comparación
 entre modelos y su idoneidad para detectar sesgos explícitos e implícitos (OE4)
 constituye el núcleo del Capítulo~\ref{results_and_discussion}. Por último, la propuesta
 de directrices para la integración editorial y la supervisión humana (OE5) se concreta
@@ -77,7 +75,6 @@ orientan las líneas de trabajo que se proponen a continuación.
 
 De cara a una futura integración del sistema en entornos editoriales reales (OE5), el
 trabajo permite formular cinco directrices:
-
 \begin{itemize}
     \item Desplegarlo como asistente que ordena y prioriza el corpus, y no como decisor
     automático.
