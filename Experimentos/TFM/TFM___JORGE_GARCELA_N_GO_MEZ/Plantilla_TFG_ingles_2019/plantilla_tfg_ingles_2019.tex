@@ -149,6 +149,7 @@ hmargin=3cm
 \usepackage{tabularx}
 \usepackage{booktabs} % reglas de tabla profesionales (\toprule, \midrule, \bottomrule)
 
+
 % DISEÑO DE FIGURAS. Puedes elegir entre el estilo para ingeniería o para ciencias sociales y humanidades. Por defecto, está activado el estilo de ingeniería. Si deseas utilizar el otro, comenta las líneas del diseño de ingeniería y descomenta las del diseño de ciencias sociales y humanidades
 \usepackage{graphicx}
 \graphicspath{{imagenes/}} %ruta a la carpeta de imágenes
@@ -163,8 +164,8 @@ hmargin=3cm
 	name=Fig.,
 	singlelinecheck=off,
 	labelsep=period,
-	labelfont=scriptsize,
-	font=scriptsize
+	labelfont=small,
+	font=small		
 }
 
 % Diseño de figuras para ciencias sociales y humanidades
@@ -278,7 +279,7 @@ hmargin=3cm
 		\begin{Large}
 			Carmen Peláez Moreno\\
 			Teresa Onorati\\
-			Madrid, Julio 2026\\
+			Madrid, Septiembre 2026\\
 		\end{Large}
 	\end{center}
 	\vfill
@@ -301,14 +302,14 @@ hmargin=3cm
 \thispagestyle{plain}
 \setcounter{page}{3}
 	
-	% ESCRIBIR EL RESUMEN AQUÍ
-	La representación de las mujeres en la prensa presenta desequilibrios persistentes, tanto cuantitativos, por su escasa presencia como fuentes expertas y protagonistas~\cite{unwomen2025gmmp}, como cualitativos, en el modo en que el lenguaje las describe~\cite{kotek2023}. La detección automática de este sesgo plantea una dificultad específica: se trata de un fenómeno de forma más que de contenido, sutil y presente en textos extensos, redactados por profesionales y sometidos a procesos editoriales. En este escenario, la revisión manual no resulta escalable al ritmo de una redacción, mientras que los sistemas de detección plenamente automáticos, concebidos para agresiones explícitas en mensajes breves, no capturan sus matices.
+		% ESCRIBIR EL RESUMEN AQUÍ
 
-    Este Trabajo de Fin de Máster, desarrollado en el marco del proyecto IRIS, propone una herramienta de apoyo a la postedición bajo el paradigma \textit{human-in-the-loop}, orientada a asistir a la persona sin sustituir su criterio editorial. Su contribución central consiste en empaquetar la metodología experta de análisis, esto es, sus criterios, guías y ejemplos, como \textit{Agent Skills}~\cite{anthropic2025skills} cargables bajo demanda, sobre una arquitectura de agentes especializados, uno por cada variable del libro de códigos~\cite{li2023}. Para cada pieza, el sistema devuelve, además de la etiqueta, las evidencias literales del texto y una explicación del veredicto, y cubre así los dos planos, cuantitativo y cualitativo, que un análisis de contenido experto requiere. La propuesta se evaluó de forma sistemática, en régimen \textit{zero-shot} y con una tubería agnóstica al proveedor, sobre un corpus de 1.313 noticias anotadas por expertas y cuatro modelos ligeros: tres accesibles por API (\texttt{gpt-4o-mini} y \texttt{gpt-5.4-nano} de OpenAI, y \texttt{gemini-3.1-flash-lite} de Google) y uno local de pesos abiertos (\texttt{gemma4:e4b}). Para aislar el efecto del empaquetado, la arquitectura de \textit{Agent Skills} se comparó con una condición de control que recibía la misma metodología inyectada en la instrucción.
+    La representación de las mujeres en la prensa presenta desequilibrios persistentes, tanto cuantitativos, por su escasa presencia como fuentes expertas y protagonistas~\cite{unwomen2025gmmp}, como cualitativos, en el modo en que el lenguaje las describe~\cite{kotek2023}. La detección automática de este sesgo plantea una dificultad específica: se trata de un fenómeno de forma más que de contenido, sutil y presente en textos extensos, redactados por profesionales y sometidos a procesos editoriales. En este escenario, la revisión manual no resulta escalable al ritmo de una redacción, mientras que los sistemas de detección plenamente automáticos, concebidos para agresiones explícitas en mensajes breves, no capturan sus matices.
+
+    Este Trabajo de Fin de Máster, desarrollado con la metodología del proyecto IRIS, propone una herramienta de apoyo a la postedición bajo el paradigma \textit{human-in-the-loop}, orientada a asistir a la persona sin sustituir su criterio editorial. Su contribución central consiste en empaquetar la metodología experta de análisis, esto es, sus criterios, guías y ejemplos, como \textit{Agent Skills}~\cite{anthropic2025skills} cargables bajo demanda, sobre una arquitectura de agentes especializados, uno por cada variable del libro de códigos~\cite{li2023}. Para cada pieza, el sistema devuelve, además de la etiqueta, las evidencias literales del texto y una explicación del veredicto, y cubre así los dos planos, cuantitativo y cualitativo, que un análisis de contenido experto requiere. La propuesta se evaluó de forma sistemática, en régimen \textit{zero-shot} y con una tubería agnóstica a la empresa proveedora de los modelos de lenguaje, sobre un corpus de 1.313 noticias anotadas por expertas y cuatro modelos ligeros: tres accesibles por API (\texttt{gpt-4o-mini} y \texttt{gpt-5.4-nano} de OpenAI, y \texttt{gemini-3.1-flash-lite} de Google) y uno local de pesos abiertos (\texttt{gemma4:e4b}). Para aislar el efecto del empaquetado, la arquitectura de \textit{Agent Skills} se comparó con una condición de control que recibía la misma metodología inyectada en la instrucción.
 
     Los resultados obligan a matizar las expectativas. El empaquetado como \textit{Agent Skills} no incrementa el acuerdo por sí mismo: de los cuatro modelos, solo uno mejora en el coeficiente $\kappa$ de Cohen, de modo que la arquitectura amplifica la capacidad que cada modelo ya posee en lugar de conferirla. En una tarea tan desbalanceada, la exactitud y el acuerdo pueden moverse en sentidos opuestos, y buena parte del desacuerdo responde a un techo de la propia tarea antes que a un error del sistema, pues dos equipos de anotación codifican la misma variable con una variabilidad comparable a la que separa a los modelos. En el plano aplicado, el modelo local de pesos abiertos iguala o supera a las API comerciales en acuerdo de control, sin coste por uso y preservando la privacidad del material. Se concluye que, en una tarea intrínsecamente disputada, el sistema resulta más adecuado como asistente que como decisor, con su valor en ordenar el corpus y ofrecer una salida trazable que la persona experta audita. La validación del plano cualitativo, sin un marcado experto de referencia hoy disponible, queda como principal línea futura.
-    
-	
+
 	\textbf{Palabras Clave:}
 	% Escribir las palabras clave aquí
      \textit{Sesgos de género, Inteligencia Artificial, Periodismo Computacional, Agent Skills, Agentes especializados, Grandes Modelos de Lenguaje, Persona en el bucle.}
@@ -432,7 +433,9 @@ Por otro lado, y para terminar, gracias de corazón a Carmen y Teresa. Haber pod
 
 \chapter{Estado del Arte}
 \label{state-of-the-art}
-Este capítulo establece el marco teórico y tecnológico sobre el que se fundamenta esta investigación. En primer lugar, se analiza la evolución histórica y actual de la representación de las mujeres en los medios de comunicación, evidenciando la persistencia de sesgos de género. Posteriormente, se realiza una revisión exhaustiva de las metodologías y herramientas desarrolladas para la detección de dichos sesgos, abarcando desde el análisis manual hasta las aproximaciones más recientes basadas en Inteligencia Artificial. Por último, se examina la frontera actual (los grandes modelos de lenguaje, las arquitecturas de agentes y las \textit{Agent Skills}) sobre la que se construye la solución propuesta.
+Este capítulo establece el marco teórico y tecnológico sobre el que se fundamenta esta investigación. En primer lugar, se analiza la evolución histórica y actual de la representación de las mujeres en los medios de comunicación, evidenciando la persistencia de sesgos de género. Posteriormente, se realiza una revisión exhaustiva de las metodologías y herramientas desarrolladas para la detección de dichos sesgos, abarcando desde el análisis manual hasta las aproximaciones más recientes basadas en Inteligencia Artificial. Por último, se examina la frontera del conocimiento actual (los grandes modelos de lenguaje, las arquitecturas de agentes y las \textit{Agent Skills}) sobre la que se construye la solución propuesta.
+
+
 
 \section{Representación de las Mujeres en los Medios}
 \label{sec:rep_women_media}
@@ -444,7 +447,7 @@ Este capítulo establece el marco teórico y tecnológico sobre el que se fundam
 \input{chapters/2 state-of-the-art/det_sesgos}
 
 
-\section{Modelos de Lenguaje, Agentes y Agent Skills}
+\section{Modelos de Lenguaje, Agentes y Habilidades Agénticas}
 \label{sec:agentes_ia}
 \input{chapters/2 state-of-the-art/agentes_ia}
 
@@ -461,7 +464,7 @@ Este capítulo establece el marco teórico y tecnológico sobre el que se fundam
 \label{sec:methodology}
 Este capítulo detalla los fundamentos sobre los que se asienta el trabajo, antes
 de entrar en su implementación. Se parte del análisis experto y la perspectiva de
-género del proyecto IRIS, del que proceden el corpus, el libro de códigos y las
+género de los proyectos IRIS e InfoIA, del que proceden el corpus, el libro de códigos y las
 cinco variables de sexismo lingüístico evaluadas
 (Sección~\ref{sec:experts}). A continuación se describe la solución tecnológica:
 los modelos generativos considerados, las dos vías de despliegue (local y
@@ -512,6 +515,7 @@ que la sostienen (Sección~\ref{prompts}), la recuperación sobre las guías
 expertas (Sección~\ref{rag}), la instrumentación de la evaluación
 (Sección~\ref{eval}) y la prueba de concepto de aplicabilidad editorial
 (Sección~\ref{poc}).
+
 
 \section{Arquitectura y diseño agéntico}
 \label{agents}
