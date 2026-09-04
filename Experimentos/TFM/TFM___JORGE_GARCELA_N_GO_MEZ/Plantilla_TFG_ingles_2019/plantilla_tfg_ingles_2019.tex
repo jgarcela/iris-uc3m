@@ -304,7 +304,7 @@ hmargin=3cm
 	
 		% ESCRIBIR EL RESUMEN AQUÍ
 
-    La representación de las mujeres en la prensa presenta desequilibrios persistentes, tanto cuantitativos, por su escasa presencia como fuentes expertas y protagonistas~\cite{unwomen2025gmmp}, como cualitativos, en el modo en que el lenguaje las describe~\cite{kotek2023}. La detección automática de este sesgo plantea una dificultad específica. Es un fenómeno de fondo, que atraviesa qué se cuenta y a quién se cita, y que se manifiesta además de forma sutil en el lenguaje de textos extensos, redactados por profesionales y sometidos a procesos editoriales. En ese escenario, la revisión manual no resulta escalable al ritmo de una redacción, mientras que los sistemas de detección plenamente automáticos, concebidos para agresiones explícitas en mensajes breves, no capturan sus matices. Este trabajo se centra en la manifestación lingüística del sesgo, que es la que resulta tratable por medios automáticos.
+    La representación de las mujeres en la prensa presenta desequilibrios persistentes, tanto cuantitativos, por su escasa presencia como fuentes expertas y protagonistas~\cite{unwomen2025gmmp}, como cualitativos, en el modo en que el lenguaje las describe~\cite{kotek2023}. La detección automática de este sesgo plantea una dificultad específica: se trata de un fenómeno de forma más que de contenido, sutil y presente en textos extensos, redactados por profesionales y sometidos a procesos editoriales. En este escenario, la revisión manual no resulta escalable al ritmo de una redacción, mientras que los sistemas de detección plenamente automáticos, concebidos para agresiones explícitas en mensajes breves, no capturan sus matices.
 
     Este Trabajo de Fin de Máster, desarrollado con la metodología del proyecto IRIS, propone una herramienta de apoyo a la postedición bajo el paradigma \textit{human-in-the-loop}, orientada a asistir a la persona sin sustituir su criterio editorial. Su contribución central consiste en empaquetar la metodología experta de análisis, esto es, sus criterios, guías y ejemplos, como \textit{Agent Skills}~\cite{anthropic2025skills} cargables bajo demanda, sobre una arquitectura de agentes especializados, uno por cada variable del libro de códigos~\cite{li2023}. Para cada pieza, el sistema devuelve, además de la etiqueta, las evidencias literales del texto y una explicación del veredicto, y cubre así los dos planos, cuantitativo y cualitativo, que un análisis de contenido experto requiere. La propuesta se evaluó de forma sistemática, en régimen \textit{zero-shot} y con un flujo de procesamiento agnóstico a la empresa proveedora de los modelos de lenguaje, sobre un corpus de 1.313 noticias anotadas por expertas y cuatro modelos ligeros: tres accesibles por API (\texttt{gpt-4o-mini} y \texttt{gpt-5.4-nano} de OpenAI, y \texttt{gemini-3.1-flash-lite} de Google) y uno local de pesos abiertos (\texttt{gemma4:e4b}). Para aislar el efecto del empaquetado, la arquitectura de \textit{Agent Skills} se comparó con una condición de control que recibía la misma metodología inyectada en la instrucción.
 
@@ -337,7 +337,10 @@ A nivel profesional, me llevo grandes aprendizajes de esta etapa. Quiero dar las
 
 Quiero agradecer también a todo el equipo de RTVE y de Impulsa Visión RTVE por confiar en este proyecto. En especial, gracias a Esteban Mayoral por su acompañamiento, y de manera muy especial a Mercedes de Pablos, mentora y responsable de este TFM por parte de RTVE, por su guía, su cercanía y su compromiso con la representación de las mujeres en los medios.
 
+Gracias también a todo el equipo del proyecto IRIS, y de manera especial a Clara Sainz de Baranda, por acogerme en un proyecto del que he aprendido muchísimo y por compartir conmigo el conocimiento experto que sostiene esta memoria. Gracias igualmente a Harold Molina, por su ayuda con la granja de GPUs del Departamento de Teoría de la Señal y Comunicaciones, sin la que buena parte de los experimentos de este trabajo no habrían sido posibles.
+
 Por otro lado, y para terminar, gracias de corazón a Carmen y Teresa. Haber podido compaginar este máster con mi contrato en el proyecto IRIS ha marcado un antes y un después. Trabajar codo con codo en un entorno de investigación real me ha dado una perspectiva del mundo académico increíble, y me ha permitido incluso participar en conferencias y congresos como parte de la labor investigadora de IRIS. Gracias por aterrizar mis ideas y por remar conmigo para que este proyecto saliera adelante. Trabajar a vuestro lado ha sido un lujo.
+
 
 		
 	\vfill
@@ -396,7 +399,7 @@ Por otro lado, y para terminar, gracias de corazón a Carmen y Teresa. Haber pod
 
 %----------
 %	TRABAJO
-%----------
+%----------	
 \clearpage
 \pagenumbering{arabic} % numeración con múmeros arábigos para el resto de la publicación	
 \renewcommand{\footnotesize}{\tiny}  % Changes footnote size to \scriptsize
