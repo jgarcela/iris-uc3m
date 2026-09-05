@@ -108,42 +108,76 @@ se agrupan como clase positiva.
 
 La distribución de las clases en la anotación experta resulta marcadamente
 desigual y condiciona de forma decisiva la elección de métricas de evaluación,
-tal como se analiza en la Sección~\ref{subsec:iris_divergencia}. La
-Tabla~\ref{tab:iris-prevalencia-imp} recoge la prevalencia de la clase positiva de
-cada variable y, junto a ella, la exactitud que alcanzaría un clasificador trivial
-que respondiese siempre la clase mayoritaria.
+tal como se analiza en la Sección~\ref{subsec:iris_divergencia}. Para hacerlo
+visible conviene fijar una referencia mínima, la de un clasificador
+\emph{trivial} que no lee el texto y responde siempre lo mismo.
+
+En las cinco variables lo que el sistema debe detectar es la presencia del
+fenómeno, es decir, la clase \textit{Sí}, que es la que interesa señalar a quien
+revisa una pieza. Lo que cambia de una variable a otra es cuán frecuente resulta
+esa clase, y con ello la dificultad estadística del problema. La
+Tabla~\ref{tab:iris-prevalencia-imp} recoge lo que obtendría el clasificador
+trivial que marca todas las piezas como positivas, tomando el \textit{Sí} como
+clase positiva. Sus cifras se derivan de la prevalencia, así que la tabla no
+aporta información nueva sobre el corpus, sino la referencia contra la que leer
+los resultados del Capítulo~\ref{results_and_discussion}. Conviene advertir que
+la exactitud y la precisión coinciden en este caso porque, al marcar todas las
+piezas como positivas, el clasificador no produce verdaderos ni falsos negativos,
+de modo que $(VP+VN)/N$ y $VP/(VP+FP)$ se reducen ambas a la proporción de
+positivos del corpus. Esa coincidencia desaparece en cuanto un sistema deja de
+marcarlas todas.
 
 \begin{table}[H]
     \centering
     \begingroup
     \small
     \ttabbox[\FBwidth]{
-        \caption{Prevalencia de la clase positiva y exactitud del clasificador trivial ($N=1.313$)}
+        \caption{Rendimiento del clasificador trivial que no lee el texto y marca
+        todas las piezas como positivas ($N=1.313$). Su exactitud y su precisión
+        coinciden con la prevalencia de la clase \textit{Sí} y su recall es 1 por
+        construcción.}
         \label{tab:iris-prevalencia-imp}
     }{
-        \begin{tabular}{@{}l l c >{\columncolor{gray!15}}c@{}}
+        \begin{tabular}{@{}l l >{\columncolor{gray!15}}c >{\columncolor{gray!15}}c >{\columncolor{gray!15}}c >{\columncolor{gray!15}}c@{}}
             \toprule
-            \textbf{Cód.} & \textbf{Variable} & \textbf{Prevalencia de \textit{Sí}} & \textbf{Exactitud trivial} \\
+            \textbf{Cód.} & \textbf{Variable} & \textbf{Exactitud} & \textbf{Precisión} & \textbf{Recall} & \textbf{F1} \\
             \midrule
-            V25 & \texttt{lenguaje\_sexista}         & 0,810 & 0,810 \\
-            V26 & \texttt{masc\_generico}            & 0,810 & 0,810 \\
-            V30 & \texttt{sexismo\_discurso}         & 0,428 & 0,572 \\
-            V33 & \texttt{asimetria\_mujer\_hombre}  & 0,062 & 0,938 \\
-            V35 & \texttt{denominacion\_sexualizada} & 0,100 & 0,900 \\
+            V25 & \texttt{lenguaje\_sexista}         & 0,810 & 0,810 & 1,000 & 0,895 \\
+            V26 & \texttt{masc\_generico}            & 0,810 & 0,810 & 1,000 & 0,895 \\
+            V30 & \texttt{sexismo\_discurso}         & 0,428 & 0,428 & 1,000 & 0,599 \\
+            V33 & \texttt{asimetria\_mujer\_hombre}  & 0,062 & 0,062 & 1,000 & 0,117 \\
+            V35 & \texttt{denominacion\_sexualizada} & 0,100 & 0,100 & 1,000 & 0,182 \\
             \bottomrule
         \end{tabular}
     }
     \endgroup
 \end{table}
 
-La lectura de la última columna es reveladora: en V33 y V35, un modelo que no
-detecte nada y responda siempre \textit{No} acertaría el 93,8\,\% y el 90,0\,\% de las
-veces. Por consiguiente, \textbf{la exactitud no constituye por sí sola una
-métrica informativa} en esta tarea. Todos los resultados de este trabajo se
-acompañan del coeficiente $\kappa$ de Cohen~\cite{cohen1960}, que descuenta el acuerdo esperable por
-azar, de métricas F1 y de la prevalencia de cada variable.
+Los valores de la tabla constituyen el umbral mínimo que un sistema debe superar
+para aportar información, y ese umbral difiere sustancialmente de una variable a
+otra. En V25 y V26 el clasificador trivial alcanza un F1 de 0,895 y una exactitud
+de 0,810, mientras que en V33 el mismo procedimiento obtiene un F1 de 0,117. La
+comparación de una misma métrica entre variables carece de sentido, por tanto, si
+no se contrasta previamente con este umbral.
 
-\subsubsection{De la definición experta a la especificación ejecutable}
+El clasificador complementario, el que no marca ninguna pieza, conduce a la misma
+advertencia. En V33 y V35, donde la clase positiva es escasa, alcanza una
+exactitud del 93,8\,\% y del 90,0\,\% respectivamente, pese a no detectar ningún
+caso. \textbf{La exactitud no constituye, por tanto, una métrica informativa por
+sí sola} en esta tarea. El sentido del desequilibrio, además, no es constante: en
+unas variables favorece a un sistema conservador y en otras a uno que marque en
+exceso, de modo que ambos comportamientos requieren la misma cautela
+interpretativa.
+
+Esta asimetría afecta también al coeficiente $\kappa$ de Cohen~\cite{cohen1960},
+que descuenta el acuerdo esperable por azar y por eso resulta más severo cuanto
+más desequilibrada está la distribución, lo que se conoce como paradoja de
+$\kappa$~\cite{feinstein1990}. Ninguna métrica basta por sí sola, así que los
+resultados de este trabajo se presentan acompañando el coeficiente $\kappa$ de la
+exactitud, la precisión, el recall, las métricas F1 y la prevalencia de cada
+variable.
+
+\subsubsection{Formalización de las variables para su uso automático}
 
 Para su empleo por sistemas automáticos, cada variable, partiendo de las guías de
 lenguaje no sexista y del criterio experto, se formaliza en una especificación
