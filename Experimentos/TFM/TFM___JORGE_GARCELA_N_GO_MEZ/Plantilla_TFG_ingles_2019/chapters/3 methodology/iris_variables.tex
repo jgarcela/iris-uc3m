@@ -118,14 +118,14 @@ revisa una pieza. Lo que cambia de una variable a otra es cuán frecuente result
 esa clase, y con ello la dificultad estadística del problema. La
 Tabla~\ref{tab:iris-prevalencia-imp} recoge lo que obtendría el clasificador
 trivial que marca todas las piezas como positivas, tomando el \textit{Sí} como
-clase positiva. Sus cifras se derivan de la prevalencia, así que la tabla no
+clase positiva\footnote{La exactitud y
+la precisión coinciden en este caso porque, al marcar todas las piezas como
+positivas, el clasificador no produce verdaderos ni falsos negativos, de modo que
+$(VP+VN)/N$ y $VP/(VP+FP)$ se reducen ambas a la proporción de positivos del
+corpus. Esa coincidencia desaparece en cuanto un sistema deja de marcarlas
+todas.}. Sus cifras se derivan de la prevalencia, así que la tabla no
 aporta información nueva sobre el corpus, sino la referencia contra la que leer
-los resultados del Capítulo~\ref{results_and_discussion}. Conviene advertir que
-la exactitud y la precisión coinciden en este caso porque, al marcar todas las
-piezas como positivas, el clasificador no produce verdaderos ni falsos negativos,
-de modo que $(VP+VN)/N$ y $VP/(VP+FP)$ se reducen ambas a la proporción de
-positivos del corpus. Esa coincidencia desaparece en cuanto un sistema deja de
-marcarlas todas.
+los resultados del Capítulo~\ref{results_and_discussion}.
 
 \begin{table}[H]
     \centering
