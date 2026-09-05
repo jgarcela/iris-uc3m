@@ -12,11 +12,32 @@ fronteras entre variables) tomada del libro de códigos de IRIS.
 
 Estos dos rasgos desaconsejan el aprendizaje supervisado clásico~\cite{lecun2015deep},
 que necesitaría miles de ejemplos etiquetados. En su lugar se recurre a modelos
-generativos de lenguaje en régimen \textit{zero-shot}~\cite{radford2019, brown2020}: el
-modelo no aprende la tarea a
-partir de ejemplos, sino que recibe la metodología en el propio \textit{prompt} y
-la aplica sobre cada texto. El libro de códigos hace de supervisión en tiempo de
-inferencia, sin reentrenar nada.
+generativos de lenguaje en régimen \textit{zero-shot}~\cite{radford2019, brown2020}.
+
+
+Conviene detenerse en qué significa esto, porque condiciona todo lo que viene
+después. \textit{Zero-shot} quiere decir, literalmente, ``sin ningún ejemplo''.
+El modelo no ha visto ni una sola pieza ya codificada por el equipo de IRIS antes
+de emitir su predicción. No se le entrena, no se le ajusta y no se le muestran
+casos resueltos: se le entrega la metodología escrita, tal como se le entregaría
+a una persona que se incorpora al equipo de codificación, y se le pide que la
+aplique sobre un texto que no ha visto nunca. Toda la supervisión ocurre en
+tiempo de inferencia, dentro de la propia instrucción, y desaparece en cuanto
+termina de responder. Nada de lo que el modelo decide sobre una pieza queda
+disponible para la siguiente.
+
+Esta decisión tiene tres consecuencias transversales. La
+primera es que el libro de códigos deja de ser un documento de consulta para
+convertirse en el mecanismo de supervisión, de modo que la calidad del sistema
+depende de cómo esté redactada y organizada esa metodología, que es justamente lo
+que este trabajo lleva a cabo al comparar las dos arquitecturas. La segunda es que el
+modelo nunca observa la distribución de clases del corpus, así que cuando marca
+de más o de menos no está calibrando frecuencias, sino aplicando su propio umbral
+interpretativo, algo que resulta decisivo al leer los resultados del
+Capítulo~\ref{results_and_discussion}. La tercera es que lo que se mide no es
+cuánto ha aprendido un modelo de estos datos, sino si el conocimiento lingüístico
+y social que ya trae de su preentrenamiento basta para aplicar una metodología
+experta de análisis de género.
 
 La solución es un flujo de procesamiento común, independiente de la empresa proveedora de los LLM
 (Figura~\ref{fig:iris-pipeline}). Por cada pieza y variable, el sistema construye
