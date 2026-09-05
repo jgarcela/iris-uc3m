@@ -5,9 +5,25 @@
 \label{sec:genai_models_iris}
 
 La selección cubre las dos vías de despliegue y las principales familias
-comerciales. En cada caso se eligen variantes ligeras y económicas, aptas para
-procesar un corpus periodístico completo. La Tabla~\ref{tab:iris-modelos} recoge
-los modelos considerados.
+comerciales. En cada caso se eligen variantes ligeras y económicas, por tres
+razones.
+
+La primera es económica. Los modelos de gama alta tienen tarifas por token muy
+superiores, y el diseño experimental multiplica el número de llamadas, ya que
+cada pieza se analiza en cinco variables, con dos arquitecturas y con cada uno de
+los modelos. A ese volumen, su coste quedaría fuera de lo que el proyecto puede
+asumir. La
+segunda razón es de escala: procesar el corpus completo, y no una muestra, es
+condición para que las comparaciones tengan respaldo estadístico. La tercera
+apunta al destino de la herramienta, ya que un sistema de asistencia editorial
+que aspire a revisar la producción diaria de una redacción necesita un coste por
+documento reducido, de manera que un modelo caro sería una propuesta poco
+realista por buenos resultados que diera. El coste efectivo de la
+experimentación se detalla en la Sección~\ref{subsec:iris_coste}.
+
+Con esos criterios se seleccionan cuatro modelos, tres accesibles por API y uno
+de ejecución local, que la Tabla~\ref{tab:iris-modelos} recoge junto con su vía
+de acceso.
 
 \begin{table}[H]
     \centering
@@ -34,13 +50,6 @@ los modelos considerados.
     }
     \endgroup
 \end{table}
-
-La evaluación del Capítulo~\ref{results_and_discussion} cubre estos cuatro
-modelos, repartidos de forma equilibrada entre dos proveedoras: 
-\begin{itemize}
-    \item \textbf{Google} con \texttt{gemma4:e4b} (local) y \texttt{gemini-3.1-flash-lite} (API)
-    \item \textbf{OpenAI} con \texttt{gpt-4o-mini} y \texttt{gpt-5.4-nano} (ambos API). 
-\end{itemize}
 
 El modelo local, \texttt{gemma4:e4b}, pertenece a la familia Gemma~4 de modelos
 abiertos de Google\footnote{Ficha del modelo (E4B): \url{https://ai.google.dev/gemma/docs/core/model_card_4} [Último acceso: 14/08/2026]}.
@@ -70,10 +79,3 @@ cómputo extra del que carezcan los demás.
 Los modelos locales no cuestan dinero marginal, porque corren en infraestructura propia,
 pero sí tienen un coste computacional alto que condiciona su viabilidad a escala
 (Sección~\ref{subsec:iris_coste}).
-
-La preferencia por variantes ligeras (\textit{mini}, \textit{nano},
-\textit{flash-lite}, modelos locales de pocos miles de millones de parámetros) es
-deliberada. Un sistema de asistencia editorial que procese miles de piezas
-necesita un coste por documento contenido. Esa elección tiene un precio, menor
-capacidad frente a los modelos punteros, que se discute a la luz de los
-resultados en el Capítulo~\ref{results_and_discussion}.
