@@ -4,11 +4,33 @@
 
 La tarea descrita en la Sección~\ref{sec:experts} pide clasificar cada pieza
 periodística según cinco variables de sexismo lingüístico. Dos rasgos de esa
-tarea determinan la aproximación tecnológica. El primero: no hay un conjunto de
-entrenamiento etiquetado grande, porque la anotación experta es cara y cubre
-1.313 piezas. El segundo: codificar no consiste en buscar palabras clave, sino
-en aplicar una metodología interpretativa (definiciones, reglas de decisión,
-fronteras entre variables) tomada del libro de códigos de IRIS.
+tarea determinan la aproximación tecnológica.
+
+El primero es la escasez de datos etiquetados. El corpus disponible son 1.313
+piezas, una cifra que se explica por cómo se produce esa anotación
+(Sección~\ref{sec:experts}): no se resuelve marcando palabras, sino leyendo el
+artículo completo y aplicando sobre él un libro de códigos de unas cuarenta
+variables, tarea que solo pueden hacer especialistas en comunicación y estudios
+de género. El coste de cada etiqueta se mide, por tanto, en tiempo de lectura
+experta, y multiplicar el tamaño del corpus supondría multiplicar en la misma
+proporción ese trabajo de análisis. Es un corpus valioso por la calidad de su
+anotación, si bien su tamaño lo hace poco holgado para entrenar un clasificador
+desde cero, sobre todo teniendo en cuenta que habría que repartirlo entre cinco
+variables y que en varias de ellas una de las dos clases está poco
+representada (Sección~\ref{sec:iris_variables}).
+
+El segundo rasgo es la naturaleza de la tarea. Codificar no consiste en buscar
+palabras clave, sino en aplicar una metodología interpretativa (definiciones, reglas de decisión,
+fronteras entre variables) tomada del libro de códigos de IRIS. Esto tiene dos
+consecuencias. La primera es que localizar la expresión no equivale a codificarla.
+El léxico importa, y de hecho varias variables parten de marcas léxicas
+reconocibles, pero la marca por sí sola no decide el código, ya que hace falta el
+contexto para saber si procede. El caso que abre el Capítulo~\ref{introduction}
+(Figura~\ref{investigadores_bindi}) lo ilustra bien: el sustantivo ``investigadores'' aplicado al equipo de Bindi es un
+masculino genérico que invisibiliza a las autoras del trabajo, mientras que ese
+mismo sustantivo referido a un equipo efectivamente masculino no marca nada. Distinguir un caso de otro exige leer a quién
+se refiere el texto, no reconocer un patrón.
+
 
 Estos dos rasgos desaconsejan el aprendizaje supervisado clásico~\cite{lecun2015deep},
 que necesitaría miles de ejemplos etiquetados. En su lugar se recurre a modelos
