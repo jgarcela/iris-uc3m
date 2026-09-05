@@ -48,11 +48,11 @@ qué \textit{skills} cargar y cuándo verificar. \textit{Una skill por variable 
 \textit{una agente que carga su skill bajo demanda} sí lo es, y es lo que aquí se
 implementa.
 
-Cada agente dispone de un \textbf{catálogo de skills} del que, de entrada, solo ve
-el nombre y una descripción, y carga el cuerpo de una skill únicamente cuando la
+Cada agente dispone de un \textbf{catálogo de \textit{skills}} del que, de entrada, solo ve
+el nombre y una descripción, y carga el cuerpo de una \textit{skill} únicamente cuando la
 necesita. Es la aplicación directa del mecanismo de \textit{revelación progresiva} descrito en la Sección~\ref{sec:agentes_ia}: cargar solo lo relevante
 para la tarea en curso evita saturar la ventana de contexto y encarecer la
-inferencia. El catálogo reúne tres tipos de skill: la de la propia variable
+inferencia. El catálogo reúne tres tipos de \textit{skill}: la de la propia variable
 (obligatoria), unas auxiliares compartidas y unos resúmenes de las guías expertas,
 cuyo formato y generación se detallan en la Sección~\ref{prompts}.
 
@@ -60,7 +60,7 @@ La agente opera mediante un \textbf{bucle estilo ReAct}~\cite{yao2023react}, el
 patrón de razonamiento y acción presentado en la Sección~\ref{sec:agentes_ia}. En
 cada turno el modelo razona sobre qué le falta, emite \emph{una} acción, observa el
 resultado que le devuelve el sistema y vuelve a razonar con esa nueva información,
-y el ciclo se repite hasta que cierra con su veredicto. Ese entrelazado es lo que le permite, por ejemplo, cargar su skill,
+y el ciclo se repite hasta que cierra con su veredicto. Ese entrelazado es lo que le permite, por ejemplo, cargar su \textit{skill},
 consultar una guía si duda y verificar sus evidencias antes de responder, en lugar
 de contestar a ciegas.
 
@@ -73,7 +73,7 @@ la agente emite una de estas acciones y el sistema le devuelve el resultado:
 
 
 \begin{itemize}
-    \item \texttt{LEER\_SKILL <id>}: carga el cuerpo de una skill.
+    \item \texttt{LEER\_SKILL <id>}: carga el cuerpo de una \textit{skill}.
     \item \texttt{CONSULTAR\_GUIA <consulta>}: recupera pasajes literales de las
     guías expertas (Sección~\ref{rag}).
     \item \texttt{VERIFICAR ["..."]}: comprueba que las evidencias son literales
@@ -84,7 +84,7 @@ la agente emite una de estas acciones y el sistema le devuelve el resultado:
 El bucle admite hasta unas ocho iteraciones. Si la agente emitiera \texttt{FINAL}
 sin haber usado ninguna herramienta, su comportamiento equivaldría al del
 \textit{baseline}, un \textit{``colapso a B0''} que en la práctica apenas se
-observa, porque todas las agentes cargan al menos su propia skill. Para averiguar
+observa, porque todas las agentes cargan al menos su propia \textit{skill}. Para averiguar
 qué aporta realmente cada herramienta, el Capítulo~\ref{results_and_discussion}
 descompone la arquitectura activando y desactivando cada componente (\textit{skills},
 resúmenes de guías y recuperación en vivo) y mide su contribución al acuerdo. Ese
@@ -95,8 +95,8 @@ otros.
 \centering
 \includegraphics[width=\textwidth]{Plantilla_TFG_ingles_2019/imagenes/agente_anatomia_blanco.pdf}
 \caption{Anatomía de una agente especializada, con el ejemplo de la agente de
-\texttt{lenguaje\_sexista}: catálogo de skills (progressive disclosure) y bucle de
-acciones que carga la skill bajo demanda, consulta guías, verifica evidencias y
+\texttt{lenguaje\_sexista}: catálogo de \textit{skills} (progressive disclosure) y bucle de
+acciones que carga la \textit{skill} bajo demanda, consulta guías, verifica evidencias y
 cierra con el veredicto.}
 \label{fig:iris-agente-anatomia}
 \end{figure}
@@ -117,7 +117,7 @@ información relevante se diluye entre la que no lo es, aumentan las
 alucinaciones~\cite{huang2025hallucination} y la confusión entre criterios. Una sola agente encargada de las cinco variables tendría que sostener a
 la vez cinco metodologías y sus fronteras, incurriendo en ese riesgo. Acotar cada
 agente a una variable reduce la carga de contexto, mantiene el foco y hace que su
-traza (qué skills cargó, si verificó, si colapsó a B0) sea interpretable variable a
+traza (qué \textit{skills} cargó, si verificó, si colapsó a B0) sea interpretable variable a
 variable.
 
 \begin{figure}[H]
