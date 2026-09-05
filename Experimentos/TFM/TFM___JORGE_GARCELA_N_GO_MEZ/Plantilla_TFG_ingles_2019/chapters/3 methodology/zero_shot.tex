@@ -52,11 +52,16 @@ de sustituirla.
 
 \subsubsection{Ventajas y límites del enfoque}
 
-El régimen \textit{zero-shot} sale barato: no exige conjuntos de entrenamiento
-etiquetados ni el preprocesamiento intensivo de los enfoques clásicos. También es
-flexible, porque cambiar el codebook no obliga a reentrenar. Su límite es la otra
-cara de lo mismo. El rendimiento depende por completo de cómo se traslade la
-metodología al \textit{prompt} y de la capacidad del propio modelo, sin ejemplos
-con los que corregir sesgos. Medir ese límite, y averiguar si el cuello de
-botella está en el modelo, en su empaquetado o en cómo se ha operacionalizado la
-tarea, es el objeto del Capítulo~\ref{results_and_discussion}.
+El régimen \textit{zero-shot} presenta dos ventajas para este trabajo. La primera
+es que prescinde de conjuntos de entrenamiento etiquetados y del preprocesamiento
+intensivo que requieren los enfoques clásicos. La segunda es su flexibilidad, ya
+que una modificación del libro de códigos se traslada al sistema sin necesidad de
+reentrenarlo.
+
+Sus limitaciones se derivan de esas mismas propiedades. El rendimiento queda
+determinado por la forma en que la metodología se traslada al \textit{prompt} y
+por la capacidad del modelo empleado, sin que existan ejemplos etiquetados que
+permitan corregir sus desviaciones. Determinar el alcance de esa limitación, y
+establecer si su origen reside en el modelo, en la forma de presentarle la
+metodología o en la definición misma de la tarea, constituye el objeto del
+Capítulo~\ref{results_and_discussion}.
