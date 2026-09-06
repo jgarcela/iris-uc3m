@@ -8,12 +8,18 @@ con las instrucciones. La descripción es lo que la agente ve antes de decidir s
 carga la \textit{skill}, y por tanto lo que gobierna el enrutado. El cuerpo sólo se lee
 cuando hace falta.
 
-La elección de Markdown no es casual. Es el formato que adopta la convención
+La extensión \texttt{.md} corresponde a \textbf{Markdown}, un formato de fichero de
+texto plano que marca la estructura del documento mediante convenciones
+tipográficas sencillas, como almohadillas para los encabezados, guiones para las
+listas o asteriscos para el énfasis~\cite{gruber2004markdown}. A diferencia de un
+documento ofimático, no incorpora información de formato binaria, de manera que su
+contenido es exactamente lo que el modelo recibe.
+
+Su elección no es casual, ya que es el formato que adopta la convención
 \textit{Agent Skills}~\cite{anthropic2025skills} y encaja de forma natural con un
-LLM por dos razones. Primero, es texto plano estructurado por
-convenciones ligeras (encabezados, listas, énfasis) muy presentes en los datos de
-preentrenamiento, de modo que el modelo interpreta esa estructura sin necesidad de
-un esquema rígido. Segundo, sigue siendo legible y editable por una persona: una
+LLM por dos razones. Primero, esas convenciones de marcado están muy presentes en
+los datos de preentrenamiento, de modo que el modelo interpreta la estructura del
+documento sin necesidad de un esquema rígido. Segundo, sigue siendo legible y editable por una persona: una
 experta o experto en comunicación puede revisar o ajustar una \textit{skill} sin tocar código, y el
 fichero se versiona como cualquier otro documento de texto. Así, el mismo artefacto
 sirve de fuente para el modelo y de material auditable para el equipo.
