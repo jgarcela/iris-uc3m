@@ -60,12 +60,12 @@ La agente opera mediante un \textbf{bucle estilo ReAct}~\cite{yao2023react}, el
 patrón de razonamiento y acción presentado en la Sección~\ref{sec:agentes_ia}. En
 cada turno el modelo razona sobre qué le falta, emite \emph{una} acción, observa el
 resultado que le devuelve el sistema y vuelve a razonar con esa nueva información,
-y el ciclo se repite hasta que cierra con su veredicto. Ese entrelazado es lo que le permite, por ejemplo, cargar su \textit{skill},
+y el ciclo se repite hasta que cierra con su veredicto. Ese entrelazado es lo que le permite, por ejemplo, cargar su skill,
 consultar una guía si duda y verificar sus evidencias antes de responder, en lugar
 de contestar a ciegas.
 
 Las acciones se expresan \textbf{en texto}, no mediante el \textit{tool-calling}
-nativo de cada proveedora. La razón es práctica: el enrutado multiproveedor se
+nativo de cada proveedora. La razón es práctica: el enrutado multi-proveedor se
 apoya en una interfaz de texto común, y el \textit{tool-calling} nativo es frágil e
 incompatible entre modelos, sobre todo en los locales pequeños. Con un protocolo de
 texto, el mismo mecanismo funciona igual en las cuatro proveedoras. En cada turno
@@ -81,7 +81,7 @@ la agente emite una de estas acciones y el sistema le devuelve el resultado:
     \item \texttt{FINAL \{...\}}: cierra con el veredicto de la variable.
 \end{itemize}
 
-El bucle admite hasta unas ocho iteraciones. Si la agente emitiera \texttt{FINAL}
+El bucle admite hasta ocho iteraciones. Si la agente emitiera \texttt{FINAL}
 sin haber usado ninguna herramienta, su comportamiento equivaldría al del
 \textit{baseline}, un \textit{``colapso a B0''} que en la práctica apenas se
 observa, porque todas las agentes cargan al menos su propia \textit{skill}. Para averiguar

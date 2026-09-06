@@ -53,7 +53,29 @@ Un desarrollo reciente y directamente relevante para esta propuesta es el de las
 \textit{Agent Skills}, formalizadas por Anthropic en 2025 como un formato abierto
 para dotar a una agente de conocimiento especializado~\cite{anthropic2025skills}.
 Una \textit{skill} es una carpeta con un fichero de metodología en lenguaje natural
-y sus recursos asociados. Su mecanismo característico es la \textit{divulgación
+y sus recursos asociados.
+
+Para entender su mecanismo conviene detenerse en la noción de \textbf{contexto},
+que resulta central en todo este trabajo. Un modelo de lenguaje no conserva
+memoria de una llamada a otra, de modo que todo aquello sobre lo que puede razonar
+en un momento dado debe estar presente en el texto que recibe. Ese texto es su
+contexto, y comprende las instrucciones, la metodología que se le proporciona, el
+artículo que debe analizar y lo que él mismo haya generado hasta entonces. En
+sentido estricto, el contexto es la única realidad accesible al modelo durante una
+inferencia.
+
+Ese espacio no es ilimitado. Cada modelo admite una cantidad máxima de texto,
+denominada \textit{ventana de contexto}, que se mide en \textit{tokens}, las
+unidades mínimas de texto que procesa el modelo, y que constituye además la base
+sobre la que se factura el uso de las API comerciales
+(Sección~\ref{subsec:iris_coste}). El contexto tiene, por tanto, un
+coste económico y computacional directo. Y, lo que resulta menos intuitivo,
+llenarlo no mejora necesariamente el resultado, ya que un exceso de información
+diluye la parte relevante y degrada el rendimiento del
+modelo~\cite{liu2023lost}. Administrar el contexto, esto es, decidir qué se le
+muestra al modelo y en qué momento, se convierte así en una decisión importante de diseño en cualquier tarea.
+
+Su mecanismo característico es la \textit{divulgación
 progresiva} (\textit{progressive disclosure} en inglés): la agente solo ve el nombre y la
 descripción de cada \textit{skill}, y carga el cuerpo completo únicamente cuando la tarea lo
 requiere, lo que evita saturar la ventana de contexto. Este principio no nace en el
@@ -68,7 +90,6 @@ pesada como un sistema de recuperación vectorial. Esta idea sitúa el conocimie
 experto en el centro del diseño y es la que articula la arquitectura del
 Capítulo~\ref{implementation}, donde se contrasta de forma empírica frente a esas
 alternativas.
-
 \subsection{La combinación: agentes para detectar sesgo}
 
 La combinación de agentes y detección de sesgo es la línea de investigación más reciente y donde
