@@ -1,13 +1,22 @@
 %----------
-%	PRUEBA DE CONCEPTO DE APLICABILIDAD EDITORIAL
+%	APLICABILIDAD EDITORIAL
 %----------
 
-La finalidad última del sistema no es puntuar en una evaluación, sino asistir el
-trabajo de análisis sobre el corpus, incluidas las miles de piezas sin anotar.
-Para materializar esa aplicabilidad, el sistema de detección se integra en la
-\textbf{herramienta web del proyecto IRIS}~\cite{avi2026}\footnote{\url{https://dei.inf.uc3m.es/iris/} [Último acceso: 05/08/2026]},
-y la prueba de concepto consiste en usar esa herramienta para acompañar a expertas
-y periodistas en el análisis de un corpus de prueba.
+Los resultados expuestos hasta aquí condicionan el modo en que este sistema puede
+emplearse. El acuerdo con la anotación experta es limitado, y una parte de ese
+desacuerdo obedece a la amplitud y variabilidad del criterio experto antes que a
+un fallo de detección (Sección~\ref{sec:discussion}). El sistema no se plantea,
+por tanto, como un clasificador autónomo, sino como un \textbf{apoyo a la
+postedición} que se inserta en el flujo de trabajo de quien revisa un texto ya
+redactado. Su cometido consiste en señalar las piezas candidatas y aportar en cada
+caso las evidencias y la justificación del veredicto, de modo que la analista
+acepte, rechace o matice ese diagnóstico con plena trazabilidad, en lugar de
+partir de cero.
+
+Para hacer efectiva esa aplicabilidad, el sistema de detección se ha integrado en
+la \textbf{herramienta web del proyecto IRIS}~\cite{avi2026}\footnote{\url{https://dei.inf.uc3m.es/iris/} [Último acceso: 05/08/2026]},
+lo que permite aplicarlo al conjunto del corpus, incluidas las miles de piezas que
+carecen de anotación.
 
 La asistencia cubre los dos planos del análisis de contenido experto
 (Sección~\ref{sec:experts}). En el plano \textbf{cuantitativo}, la herramienta agrega
@@ -17,26 +26,13 @@ automático (Figura~\ref{fig:iris-web-informe}), lo que permite explorar qué me
 secciones o periodos concentran más usos marcados. En el plano \textbf{cualitativo},
 para cada pieza muestra el marcado de las evidencias sobre el texto y la explicación
 del veredicto (Figura~\ref{fig:iris-web-analisis}), de modo que quien analiza puede
-leer por qué el sistema ha decidido lo que ha decidido.
-
-El sistema no automatiza la decisión: la produce en un formato revisable (código,
-justificación y evidencias literales) y la analista acepta, rechaza o matiza cada
-veredicto.
-
-Los resultados del Capítulo~\ref{results_and_discussion} obligan a matizar el
-alcance. El acuerdo entre el sistema y las anotadoras es bajo, y buena parte de ese
-desacuerdo podría tener que ver con lo amplio y variable del criterio experto más que con
-un fallo de detección. Por eso la herramienta no se plantea como un clasificador
-autónomo, sino como un
-\textbf{apoyo a la postedición}: en lugar de sustituir el criterio editorial, se
-inserta en el flujo de trabajo de quien revisa un texto ya redactado. El sistema
-señala las piezas candidatas y aporta en cada caso las evidencias y la
-justificación del veredicto, de modo que la analista edita ese diagnóstico
-(lo acepta, lo rechaza o lo matiza) en segundos y con plena trazabilidad, en vez
-de partir de cero.
+examinar el fundamento de cada decisión.
 
 Las Figuras~\ref{fig:iris-web-informe} y~\ref{fig:iris-web-analisis} ilustran ambas
 vistas de la herramienta web, la de informe cuantitativo y la de análisis por pieza.
+La validación de esta integración con redacciones reales, mediante estudios de uso
+con profesionales, queda fuera del alcance de este trabajo y se plantea como línea
+futura (Sección~\ref{sec:futurework_usecases}).
 
 \begin{figure}[H]
     \centering
