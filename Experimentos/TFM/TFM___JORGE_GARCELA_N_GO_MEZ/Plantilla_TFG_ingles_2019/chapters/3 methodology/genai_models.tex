@@ -54,10 +54,15 @@ de acceso.
 El modelo local, \texttt{gemma4:e4b}, pertenece a la familia Gemma~4 de modelos
 abiertos de Google\footnote{Ficha del modelo (E4B): \url{https://ai.google.dev/gemma/docs/core/model_card_4} [Último acceso: 14/08/2026]}.
 La etiqueta \texttt{e4b} indica que se trata de una variante de 4.500~millones de
-parámetros \emph{efectivos} (8.000~millones contando las incorporaciones o
-\textit{embeddings}): mediante la técnica de \textit{Per-Layer Embeddings}, que
-asigna a cada capa una pequeña tabla de \textit{embeddings} por token, el cómputo
-activo en inferencia es sensiblemente menor que su tamaño nominal. Esto la hace apta para ejecución local en
+parámetros \emph{efectivos}, u 8.000~millones si se cuentan sus
+\textit{embeddings}. Un \textit{embedding}, o representación vectorial, es la
+codificación de un fragmento de texto como un vector de números en un espacio de
+muchas dimensiones, construido de manera que los textos de significado próximo
+ocupan posiciones cercanas~\cite{mikolov2013}. Es la forma en que un modelo
+convierte las palabras en magnitudes sobre las que puede operar. Mediante la
+técnica de \textit{Per-Layer Embeddings}, que asigna a cada capa una pequeña tabla
+de representaciones por token, el cómputo activo en inferencia resulta
+sensiblemente menor que el tamaño nominal del modelo. Esto la hace apta para ejecución local en
 infraestructura modesta, del orden de 5~GB de memoria de GPU, lo que encaja con el
 objetivo de un despliegue privado y sin coste de inferencia. Aunque es un modelo
 multimodal, en este trabajo se emplea únicamente su capacidad de procesamiento de

@@ -31,8 +31,13 @@ tiempo de inferencia y puede incorporarlo a su justificación.
 
 La recuperación se basa en coincidencia léxica (TF-IDF), no semántica. Funciona
 bien para términos precisos, como \textit{masculino genérico} o \textit{feminización de
-cargos}, pero es sensible a sinónimos y paráfrasis. Una recuperación por
-\textit{embeddings} mejoraría esa robustez y queda como línea de mejora. Para el
+cargos}, pero no reconoce sinónimos ni paráfrasis, de modo que un pasaje
+pertinente formulado con otras palabras puede quedar sin recuperar. Es la
+discordancia de vocabulario que la literatura de recuperación de información
+documenta desde hace décadas, ya que dos personas rara vez eligen el mismo término
+para referirse a un mismo concepto~\cite{furnas1987}. Una
+recuperación por \textit{embeddings} mejoraría esa robustez y queda como línea de
+mejora. Para el
 alcance de este trabajo, el índice léxico es suficiente. Cuestión distinta es si esa recuperación mejora el acuerdo final: su
 efecto se evalúa por separado en la Sección~\ref{subsec:iris_descomposicion}, y
 resulta, en la práctica, prescindible.
