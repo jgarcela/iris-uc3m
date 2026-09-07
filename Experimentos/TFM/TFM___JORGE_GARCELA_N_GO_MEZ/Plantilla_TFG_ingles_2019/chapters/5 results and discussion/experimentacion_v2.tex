@@ -214,7 +214,9 @@ Sección~\ref{sec:metricas_eval} y el coeficiente $\kappa$. Se presentan así, y
 en agregado, porque las prevalencias van del 6,2\,\% al 81,0\,\% y los valores no
 resultan comparables entre variables. En cada modelo se destaca su mejor valor por
 métrica, ya que lo que aquí se compara son componentes dentro de un mismo modelo y
-no modelos entre sí.
+no modelos entre sí. Las escasas respuestas que el modelo no llegó a emitir en un
+formato válido se contabilizan como negativas, de modo que todas las
+configuraciones se evalúan sobre las mismas 1.313 piezas.
 
 \input{chapters/5 results and discussion/tablas_ablacion}
 
@@ -231,9 +233,9 @@ es la mejor en la mayoría de las variables.} Atendiendo en cada una a la métri
 que la Sección~\ref{sec:metricas_eval} considera informativa, el cuadro es el
 siguiente. En \texttt{masc\_generico} (V26) la configuración completa de
 \texttt{gemini-3.1-flash-lite} obtiene el mejor F1 macro del conjunto (0,621, con
-$\kappa = 0,261$), si bien la variante sin RAG queda a dos milésimas (0,618) con un
-$\kappa$ ligeramente superior (0,264). En \texttt{sexismo\_discurso} (V30) la mejor
-combinación es \texttt{gpt-5.4-nano} con \textit{skills} y RAG (F1 de 0,271 frente
+$\kappa = 0,261$), si bien la variante sin RAG queda a dos milésimas (0,619) con un
+$\kappa$ ligeramente superior (0,266). En \texttt{sexismo\_discurso} (V30) la mejor
+combinación es \texttt{gpt-5.4-nano} con \textit{skills} y RAG (F1 de 0,270 frente
 al 0,181 de la completa). En \texttt{asimetria\_mujer\_hombre} (V33), donde importa
 no perder positivos, \texttt{gemma4:e4b} con solo \textit{skills} alcanza el mejor
 equilibrio (recall 0,185 con precisión 0,174, $\kappa = 0,124$). En
