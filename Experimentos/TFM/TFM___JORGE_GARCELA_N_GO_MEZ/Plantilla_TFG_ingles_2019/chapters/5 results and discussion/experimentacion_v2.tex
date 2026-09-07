@@ -400,21 +400,26 @@ para el nivel B1.
 
 
 \begin{itemize}
-    \item \textbf{\texttt{lenguaje\_sexista} (V25): un criterio en disputa.} La
-    precisión es alta cuando el modelo marca \textit{Sí} (entre 0,79 y 1,00), pero el
-    $\kappa$ ronda el azar en los cuatro modelos (entre $-0,037$ y 0,015). El problema
-    no es que el modelo se equivoque al marcar, sino que sistema y anotadoras no
-    coinciden en \emph{cuándo} hay que marcar. La causa está en el propio criterio de
-    V25, que es intrínsecamente amplio y admite dos lecturas. Al ser la variable más
-    genérica del bloque (el uso discriminatorio del lenguaje por razón de sexo, sin
-    describir un mecanismo concreto), las anotadoras, que son expertas en detectar este tipo de lenguaje, son capaces de encontrarlo en casi todas las piezas, de ahí su prevalencia del
-    81\,\%. La mayoría de los modelos (\texttt{gemini}, \texttt{gpt-5.4-nano} y
-    \texttt{gemma}) adopta en cambio una lectura más literal y marca mucho menos, de
-    ahí su recall bajísimo. La excepción es \texttt{gpt-4o-mini}, que sí marca de forma
-    abundante (recall 0,450), pero su acuerdo sigue siendo negativo
-    ($\kappa = -0,037$): ni marcar poco ni marcar mucho aproxima el criterio del modelo
-    al de las anotadoras. Ninguna de las dos lecturas es incorrecta, porque el propio
-    criterio admite ambas.
+    \item \textbf{\texttt{lenguaje\_sexista} (V25): detección fallida.} Es el
+    resultado más severo del capítulo. El recall es prácticamente nulo en tres de los
+    cuatro modelos (0,046 en \texttt{gemini}, 0,012 en \texttt{gemma} y 0,001 en
+    \texttt{gpt-5.4-nano}), de modo que el sistema deja sin señalar casi todo el
+    lenguaje sexista que las expertas identifican. No se trata de un matiz de umbral
+    ni de un desacuerdo sobre casos dudosos, sino de que \textbf{el modelo no detecta
+    el fenómeno}. Y conviene subrayar la magnitud de lo que se está pasando por alto,
+    ya que ambos equipos de anotación marcan esta variable en la mayoría de las
+    piezas, el 74,6\,\% Indexa y el 85,5\,\% UCM3
+    (Tabla~\ref{tab:iris-equipos-var}), es decir, coinciden en que el fenómeno está
+    ahí aunque discrepen en cuánto. La única excepción es \texttt{gpt-4o-mini}, que sí
+    marca de forma abundante (recall 0,450), pero su acuerdo sigue siendo negativo
+    ($\kappa = -0,037$), lo que indica que marca en piezas distintas de aquellas en
+    que lo hacen las anotadoras. Ni detectar poco ni detectar mucho aproxima al modelo
+    al criterio experto. Que la variable sea la más genérica del bloque, el uso
+    discriminatorio del lenguaje por razón de sexo sin describir un mecanismo
+    concreto, ayuda a explicar la dificultad, pero no la disuelve: identificar ese uso
+    es precisamente lo que se pedía al sistema. Queda por tanto un trabajo
+    considerable por delante antes de que un modelo pueda asistir en esta variable, y
+    se retoma en la discusión (Sección~\ref{sec:discussion}).
 
     \item \textbf{\texttt{masc\_generico} (V26): el único acuerdo genuino, y su
     umbral.} Es el único caso con acuerdo apreciable: \texttt{gemini} alcanza
@@ -432,26 +437,38 @@ para el nivel B1.
     del propio modelo, y los de OpenAI lo sitúan más alto que \texttt{gemini} o
     \texttt{gemma}.
 
-    \item \textbf{\texttt{sexismo\_discurso} (V30): bajo acuerdo y baja detección.} El
-    acuerdo ronda el azar en los cuatro modelos ($\kappa$ entre $-0,006$ y 0,011) y el
-    recall es muy bajo (entre 0,020 y 0,114): pese a una prevalencia anotada del
-    42,8\,\%, los modelos apenas marcan esta variable. Como en V25, se trata de un
-    criterio amplio en el que sistema y anotación no coinciden en cuándo el discurso
-    resulta sexista. Ese desacuerdo es compatible con una detección insuficiente del
-    modelo, pero también con la fuerte heterogeneidad de la anotación en esta variable,
-    donde un equipo la marca casi seis veces más que el otro como veremos más adelante
-    (Sección~\ref{subsec:iris_errores}).
+    \item \textbf{\texttt{sexismo\_discurso} (V30): baja detección, pero por otro
+    motivo.} El acuerdo ronda el azar en los cuatro modelos ($\kappa$ entre $-0,006$ y
+    0,011) y el recall es muy bajo (entre 0,020 y 0,114), de modo que, pese a una
+    prevalencia anotada del 42,8\,\%, los modelos apenas marcan esta variable. La
+    infradetección se parece a la de V25, pero su origen no es el mismo. Aquí la
+    propia anotación humana está profundamente dividida, ya que un equipo marca el
+    fenómeno casi seis veces más que el otro (11,5\,\% frente a 65,2\,\%,
+    Tabla~\ref{tab:iris-equipos-var}), mientras que en V25 ambos equipos coincidían en
+    marcar la mayoría de las piezas. En V25 los modelos no ven lo que las personas ven
+    de forma concordante. En V30, en cambio, ni siquiera las personas convergen en qué
+    debe marcarse, así que el bajo acuerdo del sistema refleja a la vez una detección
+    insuficiente y un criterio humano poco estabilizado. Es además la única variable de
+    \emph{fondo} de las cinco, la que atañe a lo que se cuenta y no a cómo se dice
+    (Sección~\ref{sec:iris_variables}), lo que la hace más dependiente de la
+    interpretación del contexto social de la pieza.
 
     \item \textbf{\texttt{asimetria\_mujer\_hombre} (V33) y
     \texttt{denominacion\_sexualizada} (V35): desequilibrio extremo.} Con prevalencias
-    del 6,2\,\% y el 10,0\,\%, el modelo casi no marca positivos (recall entre 0,000 y
-    0,160) y la precisión, cuando no es nula, descansa sobre un puñado de
-    predicciones: \texttt{gpt-5.4-nano} marca \textit{Sí} en \texttt{denominacion\_sexualizada}
-    tan pocas veces que su precisión de 1,000 carece de valor. En este régimen
-    $\kappa$ penaliza severamente incluso a clasificadores razonables, hasta el punto
-    de que una exactitud en torno a 0,90 puede convivir con un $\kappa$ prácticamente
-    nulo (\texttt{gpt-5.4-nano} en \texttt{denominacion\_sexualizada}: 0,901 de
-    exactitud y $\kappa = 0,014$).
+    del 6,2\,\% y el 10,0\,\%, son las dos variables en que la exactitud resulta menos
+    informativa y en que el F1 de la clase positiva, concebido precisamente para
+    situaciones de clase minoritaria, ofrece la lectura más ajustada
+    (Sección~\ref{sec:metricas_eval}). Los valores son bajos (entre 0,000 y 0,151),
+    con recalls que no superan 0,160, de manera que también aquí el sistema deja sin
+    señalar la mayor parte de los casos. Merece un matiz el comportamiento de
+    \texttt{gpt-5.4-nano} en \texttt{denominacion\_sexualizada}, que marca \textit{Sí}
+    en tan pocas piezas que su precisión de 1,000 descansa sobre un puñado de
+    predicciones y no permite conclusión alguna sobre su fiabilidad general. Dicho
+    esto, y aunque un recall de 0,008 lo vuelve inservible como detector, el dato
+    tiene una lectura menos desfavorable, y es que cuando ese modelo decide marcar,
+    acierta. Un sistema así resulta inútil para revisar un corpus completo, pero no
+    genera falsas alarmas.
+
 \end{itemize}
 
 \newpage
@@ -500,9 +517,12 @@ propio umbral por variable.
 
 Un rasgo atraviesa a las cinco variables: el recall es bajo casi en todas, es decir,
 los modelos detectan solo una fracción del sexismo que marcan las expertas. Esta
-\textbf{infradetección generalizada} es el patrón dominante del capítulo, y se
-examina en la Sección~\ref{subsec:iris_errores} para dirimir si es una
-limitación de los modelos o de la propia tarea. Otra característica que observamos es el comportamiento dispar de los modelos respecto a las variables analizadas.
+\textbf{infradetección generalizada} es el patrón dominante del capítulo. La
+Sección~\ref{subsec:iris_errores} la examina para determinar \emph{qué parte} de ese
+desajuste corresponde a una limitación de los modelos y qué parte a la dificultad de
+la propia tarea, sin presuponer que se deba únicamente a una de las dos. A ello se
+añade el comportamiento dispar de los modelos según la variable, que desaconseja
+tratarlos como un bloque homogéneo.
 
 
 
@@ -692,8 +712,11 @@ alcanzable, pero no lo imputa a un error de anotación de ninguno de los dos equ
 \subsubsection{Consenso de los modelos frente al \textit{ground truth}}
 
 Un segundo análisis examina las celdas en las que \textbf{los cuatro modelos
-coinciden entre sí} pero difieren de la anotación experta: son las más
-diagnósticas, pues descartan un error achacable a un solo modelo. De
+coinciden entre sí} pero difieren de la anotación experta. Son celdas informativas,
+porque descartan que el desajuste se deba a la particularidad de un modelo concreto,
+si bien conviene no sobreinterpretarlas, ya que la coincidencia de los cuatro no
+convierte a la anotación en errónea ni demuestra por sí sola una incapacidad general
+de los modelos de lenguaje. De
 las 6.565 celdas evaluadas (1.313 piezas $\times$ 5 variables), 1.364 presentan
 consenso de los cuatro modelos en contra del \textit{ground truth}. Su dirección
 es prácticamente unánime: en \textbf{1.363 casos} los cuatro modelos responden \textit{No}
@@ -805,10 +828,12 @@ variables, a las nueve personas anotadoras y a los cuatro modelos evaluados.
     \endgroup
 \end{table}
 
-Los cuatro modelos ocupan el extremo permisivo de la escala, por debajo de la
-anotación humana más conservadora (caen fuera del
-rango humano completo). Es la infradetección sistemática de la subsección anterior,
-leída ahora sobre una escala común a personas y máquinas.
+Los cuatro modelos quedan por debajo de la anotadora humana que menos marca, esto
+es, fuera del rango humano completo. La diferencia no debe leerse como una postura
+más permisiva ante el sexismo, puesto que los modelos no sostienen un criterio
+alternativo, sino como una capacidad de detección menor. Es la infradetección
+sistemática de la subsección anterior, leída ahora sobre una escala común a personas
+y máquinas.
 
 Ese retrato, no obstante, es el del promedio. El desglose por variable matiza el
 cuadro, porque en algunas variables ciertos modelos son más inclusivos que la mayoría
@@ -866,13 +891,21 @@ las celdas. El descenso más llamativo es el de los dos modelos de OpenAI en
 de 0,316 a $-0,001$. Las \textit{skills} acentúan las particularidades de cada
 modelo en lugar de acercarlos a un criterio compartido.
 
-Los tres análisis de esta subsección apuntan en la misma dirección. El primero
-mostró que el acuerdo depende del equipo de anotación tanto como del modelo. El
-segundo, que el desacuerdo es un sesgo sistemático de infradetección que comparten
-los cuatro modelos. El tercero, que estos ni siquiera convergen entre sí en un
-criterio común. En conjunto, la baja concordancia \textbf{no debe leerse como
-incapacidad de los modelos para detectar sexismo}, sino como el producto de un
-criterio experto amplio, de una heterogeneidad sustancial entre anotadores y de la
-ambigüedad de algunas definiciones del libro de códigos. El coeficiente $\kappa$ mide, en
-buena medida, esa distancia de criterio: \textbf{el techo lo pone la tarea, no el
-modelo}.
+Los tres análisis permiten repartir el desajuste entre sus dos causas. El primero
+mostró que el acuerdo depende del equipo de anotación tanto como del modelo, lo que
+sitúa una parte del desacuerdo en la propia tarea, cuyo criterio no está
+suficientemente estabilizado. El segundo mostró que, con independencia de eso, los
+modelos comparten una infradetección sistemática. El tercero, que ni siquiera
+convergen entre sí, de modo que esa infradetección no responde a un criterio
+alternativo compartido.
+
+La lectura, por tanto, tiene dos mitades y ninguna anula a la otra. Existe un
+\textbf{techo de la tarea}, visible en la distancia entre los dos equipos de
+anotación, que ningún sistema podría superar mientras el criterio admita
+interpretaciones tan distintas, y que aconseja no leer un $\kappa$ bajo como medida
+directa de incompetencia. Pero existe también una \textbf{limitación real de los
+modelos}, que en variables como \texttt{lenguaje\_sexista} no detectan un fenómeno
+que ambos equipos coinciden en marcar en la mayoría de las piezas. El peso relativo
+de cada mitad cambia según la variable, y su distinción es la que ordena las
+implicaciones para el proyecto que se recogen en la
+Sección~\ref{sec:discussion}.
