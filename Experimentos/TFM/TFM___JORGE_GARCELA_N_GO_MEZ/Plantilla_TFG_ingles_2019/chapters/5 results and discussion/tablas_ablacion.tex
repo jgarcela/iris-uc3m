@@ -1,0 +1,186 @@
+% Generado por gen_tablas_ablacion.py. No editar a mano.
+
+\begin{table}[H]
+    \centering
+    \begingroup
+    \scriptsize
+    \ttabbox[\FBwidth]{
+        \caption{Ablación por componentes en \texttt{lenguaje\_sexista} (V25), nivel B1 ($N=1.313$, prevalencia 0,810). En negrita, el mejor valor de cada métrica dentro de cada modelo.}
+        \label{tab:abl-v25}
+    }{
+        \begin{tabular}{@{}l l c c c c c c@{}}
+            \toprule
+            \textbf{Modelo} & \textbf{Configuración} & \textbf{Exac.} & \textbf{Prec.} & \textbf{Recall} & \textbf{F1 (\textit{Sí})} & \textbf{F1 macro} & \textbf{$\kappa$} \\
+            \midrule
+            \texttt{gemini-3.1-flash-lite} & Solo \textit{skills} & 0,200 & 0,800 & 0,015 & 0,030 & 0,174 & 0,000 \\
+             & \textit{Skills} + resúmenes & 0,215 & 0,971 & 0,031 & 0,060 & 0,193 & 0,011 \\
+             & \textit{Skills} + RAG & 0,222 & \textbf{0,977} & 0,040 & 0,078 & 0,202 & 0,014 \\
+             & Completo & \textbf{0,226} & 0,961 & \textbf{0,046} & \textbf{0,088} & \textbf{0,208} & \textbf{0,015} \\
+            \midrule
+            \texttt{gpt-4o-mini} & Solo \textit{skills} & \textbf{0,493} & \textbf{0,808} & \textbf{0,490} & \textbf{0,610} & \textbf{0,442} & \textbf{$-$0,004} \\
+             & \textit{Skills} + resúmenes & 0,458 & 0,806 & 0,437 & 0,566 & 0,423 & $-$0,007 \\
+             & \textit{Skills} + RAG & 0,478 & 0,787 & 0,487 & 0,602 & 0,423 & $-$0,045 \\
+             & Completo & 0,457 & 0,789 & 0,450 & 0,573 & 0,414 & $-$0,037 \\
+            \midrule
+            \texttt{gpt-5.4-nano} & Solo \textit{skills} & \textbf{0,192} & \textbf{1,000} & \textbf{0,002} & \textbf{0,004} & \textbf{0,162} & \textbf{0,001} \\
+             & \textit{Skills} + resúmenes & 0,190 & 0,000 & 0,000 & 0,000 & 0,160 & 0,000 \\
+             & \textit{Skills} + RAG & 0,190 & 0,000 & 0,000 & 0,000 & 0,160 & 0,000 \\
+             & Completo & 0,191 & \textbf{1,000} & 0,001 & 0,002 & 0,161 & 0,000 \\
+            \midrule
+            \texttt{gemma4:e4b} & Solo \textit{skills} & 0,198 & 0,857 & 0,011 & 0,022 & 0,171 & 0,001 \\
+             & \textit{Skills} + resúmenes & 0,197 & 0,800 & 0,011 & 0,022 & 0,171 & 0,000 \\
+             & \textit{Skills} + RAG & 0,194 & 0,727 & 0,008 & 0,015 & 0,167 & $-$0,002 \\
+             & Completo & \textbf{0,201} & \textbf{0,938} & \textbf{0,014} & \textbf{0,028} & \textbf{0,175} & \textbf{0,004} \\
+            \bottomrule
+        \end{tabular}
+    }
+    \endgroup
+\end{table}
+
+\begin{table}[H]
+    \centering
+    \begingroup
+    \scriptsize
+    \ttabbox[\FBwidth]{
+        \caption{Ablación por componentes en \texttt{masc\_generico} (V26), nivel B1 ($N=1.313$, prevalencia 0,810). En negrita, el mejor valor de cada métrica dentro de cada modelo.}
+        \label{tab:abl-v26}
+    }{
+        \begin{tabular}{@{}l l c c c c c c@{}}
+            \toprule
+            \textbf{Modelo} & \textbf{Configuración} & \textbf{Exac.} & \textbf{Prec.} & \textbf{Recall} & \textbf{F1 (\textit{Sí})} & \textbf{F1 macro} & \textbf{$\kappa$} \\
+            \midrule
+            \texttt{gemini-3.1-flash-lite} & Solo \textit{skills} & 0,646 & \textbf{0,910} & 0,625 & 0,741 & 0,591 & 0,238 \\
+             & \textit{Skills} + resúmenes & 0,694 & 0,898 & 0,702 & 0,788 & 0,618 & \textbf{0,264} \\
+             & \textit{Skills} + RAG & 0,662 & 0,891 & 0,664 & 0,761 & 0,593 & 0,225 \\
+             & Completo & \textbf{0,708} & 0,887 & \textbf{0,733} & \textbf{0,803} & \textbf{0,621} & 0,261 \\
+            \midrule
+            \texttt{gpt-4o-mini} & Solo \textit{skills} & \textbf{0,644} & 0,824 & \textbf{0,713} & \textbf{0,765} & \textbf{0,518} & \textbf{0,051} \\
+             & \textit{Skills} + resúmenes & 0,362 & 0,836 & 0,264 & 0,401 & 0,359 & 0,020 \\
+             & \textit{Skills} + RAG & 0,506 & 0,827 & 0,494 & 0,619 & 0,460 & 0,032 \\
+             & Completo & 0,332 & \textbf{0,873} & 0,206 & 0,333 & 0,332 & 0,034 \\
+            \midrule
+            \texttt{gpt-5.4-nano} & Solo \textit{skills} & 0,263 & 0,869 & 0,106 & 0,189 & 0,257 & 0,016 \\
+             & \textit{Skills} + resúmenes & 0,253 & \textbf{0,919} & 0,086 & 0,157 & 0,243 & \textbf{0,022} \\
+             & \textit{Skills} + RAG & \textbf{0,264} & 0,830 & \textbf{0,115} & \textbf{0,202} & \textbf{0,259} & 0,006 \\
+             & Completo & 0,262 & 0,874 & 0,104 & 0,186 & 0,256 & 0,016 \\
+            \midrule
+            \texttt{gemma4:e4b} & Solo \textit{skills} & 0,489 & \textbf{0,915} & 0,407 & 0,563 & 0,474 & \textbf{0,129} \\
+             & \textit{Skills} + resúmenes & \textbf{0,492} & 0,908 & \textbf{0,415} & \textbf{0,570} & \textbf{0,475} & 0,124 \\
+             & \textit{Skills} + RAG & 0,476 & 0,887 & 0,405 & 0,556 & 0,458 & 0,098 \\
+             & Completo & 0,482 & 0,897 & 0,408 & 0,561 & 0,465 & 0,109 \\
+            \bottomrule
+        \end{tabular}
+    }
+    \endgroup
+\end{table}
+
+\begin{table}[H]
+    \centering
+    \begingroup
+    \scriptsize
+    \ttabbox[\FBwidth]{
+        \caption{Ablación por componentes en \texttt{sexismo\_discurso} (V30), nivel B1 ($N=1.313$, prevalencia 0,428). En negrita, el mejor valor de cada métrica dentro de cada modelo.}
+        \label{tab:abl-v30}
+    }{
+        \begin{tabular}{@{}l l c c c c c c@{}}
+            \toprule
+            \textbf{Modelo} & \textbf{Configuración} & \textbf{Exac.} & \textbf{Prec.} & \textbf{Recall} & \textbf{F1 (\textit{Sí})} & \textbf{F1 macro} & \textbf{$\kappa$} \\
+            \midrule
+            \texttt{gemini-3.1-flash-lite} & Solo \textit{skills} & \textbf{0,572} & 0,467 & 0,013 & 0,024 & 0,375 & 0,002 \\
+             & \textit{Skills} + resúmenes & 0,572 & \textbf{0,500} & 0,020 & 0,038 & 0,381 & \textbf{0,006} \\
+             & \textit{Skills} + RAG & 0,567 & 0,406 & \textbf{0,023} & \textbf{0,044} & \textbf{0,382} & $-$0,002 \\
+             & Completo & 0,569 & 0,423 & 0,020 & 0,037 & 0,380 & 0,000 \\
+            \midrule
+            \texttt{gpt-4o-mini} & Solo \textit{skills} & 0,558 & 0,446 & 0,141 & \textbf{0,214} & 0,453 & 0,011 \\
+             & \textit{Skills} + resúmenes & 0,550 & 0,423 & \textbf{0,142} & 0,213 & 0,449 & $-$0,003 \\
+             & \textit{Skills} + RAG & 0,561 & \textbf{0,456} & 0,139 & 0,213 & \textbf{0,454} & \textbf{0,016} \\
+             & Completo & \textbf{0,561} & 0,450 & 0,112 & 0,179 & 0,440 & 0,011 \\
+            \midrule
+            \texttt{gpt-5.4-nano} & Solo \textit{skills} & 0,552 & 0,424 & 0,130 & 0,199 & 0,444 & $-$0,002 \\
+             & \textit{Skills} + resúmenes & 0,566 & 0,469 & 0,107 & 0,174 & 0,440 & 0,018 \\
+             & \textit{Skills} + RAG & \textbf{0,568} & \textbf{0,488} & \textbf{0,187} & \textbf{0,271} & \textbf{0,482} & \textbf{0,044} \\
+             & Completo & 0,558 & 0,435 & 0,114 & 0,181 & 0,439 & 0,004 \\
+            \midrule
+            \texttt{gemma4:e4b} & Solo \textit{skills} & 0,563 & 0,370 & 0,030 & 0,056 & 0,386 & $-$0,009 \\
+             & \textit{Skills} + resúmenes & \textbf{0,570} & \textbf{0,475} & \textbf{0,034} & \textbf{0,063} & \textbf{0,392} & \textbf{0,007} \\
+             & \textit{Skills} + RAG & 0,561 & 0,354 & 0,030 & 0,056 & 0,385 & $-$0,012 \\
+             & Completo & 0,565 & 0,378 & 0,025 & 0,047 & 0,383 & $-$0,006 \\
+            \bottomrule
+        \end{tabular}
+    }
+    \endgroup
+\end{table}
+
+\begin{table}[H]
+    \centering
+    \begingroup
+    \scriptsize
+    \ttabbox[\FBwidth]{
+        \caption{Ablación por componentes en \texttt{asimetria\_mujer\_hombre} (V33), nivel B1 ($N=1.313$, prevalencia 0,062). En negrita, el mejor valor de cada métrica dentro de cada modelo.}
+        \label{tab:abl-v33}
+    }{
+        \begin{tabular}{@{}l l c c c c c c@{}}
+            \toprule
+            \textbf{Modelo} & \textbf{Configuración} & \textbf{Exac.} & \textbf{Prec.} & \textbf{Recall} & \textbf{F1 (\textit{Sí})} & \textbf{F1 macro} & \textbf{$\kappa$} \\
+            \midrule
+            \texttt{gemini-3.1-flash-lite} & Solo \textit{skills} & \textbf{0,910} & 0,122 & 0,074 & 0,092 & 0,522 & 0,048 \\
+             & \textit{Skills} + resúmenes & 0,900 & 0,109 & \textbf{0,086} & 0,097 & 0,522 & 0,044 \\
+             & \textit{Skills} + RAG & 0,909 & \textbf{0,135} & \textbf{0,086} & \textbf{0,105} & \textbf{0,529} & \textbf{0,060} \\
+             & Completo & 0,909 & 0,118 & 0,074 & 0,091 & 0,521 & 0,045 \\
+            \midrule
+            \texttt{gpt-4o-mini} & Solo \textit{skills} & 0,796 & 0,061 & 0,160 & 0,088 & 0,487 & $-$0,001 \\
+             & \textit{Skills} + resúmenes & 0,781 & \textbf{0,081} & 0,247 & \textbf{0,122} & \textbf{0,498} & \textbf{0,032} \\
+             & \textit{Skills} + RAG & 0,726 & 0,074 & \textbf{0,296} & 0,118 & 0,478 & 0,021 \\
+             & Completo & \textbf{0,813} & 0,063 & 0,148 & 0,089 & 0,492 & 0,003 \\
+            \midrule
+            \texttt{gpt-5.4-nano} & Solo \textit{skills} & 0,931 & 0,000 & 0,000 & 0,000 & 0,482 & $-$0,012 \\
+             & \textit{Skills} + resúmenes & 0,933 & \textbf{0,111} & \textbf{0,012} & \textbf{0,022} & \textbf{0,494} & \textbf{0,010} \\
+             & \textit{Skills} + RAG & \textbf{0,936} & 0,000 & 0,000 & 0,000 & 0,483 & $-$0,004 \\
+             & Completo & 0,931 & 0,000 & 0,000 & 0,000 & 0,482 & $-$0,012 \\
+            \midrule
+            \texttt{gemma4:e4b} & Solo \textit{skills} & 0,896 & \textbf{0,174} & \textbf{0,185} & \textbf{0,180} & \textbf{0,562} & \textbf{0,124} \\
+             & \textit{Skills} + resúmenes & \textbf{0,898} & 0,156 & 0,148 & 0,152 & 0,549 & 0,098 \\
+             & \textit{Skills} + RAG & 0,883 & 0,109 & 0,123 & 0,116 & 0,527 & 0,054 \\
+             & Completo & 0,889 & 0,143 & 0,160 & 0,151 & 0,546 & 0,092 \\
+            \bottomrule
+        \end{tabular}
+    }
+    \endgroup
+\end{table}
+
+\begin{table}[H]
+    \centering
+    \begingroup
+    \scriptsize
+    \ttabbox[\FBwidth]{
+        \caption{Ablación por componentes en \texttt{denominacion\_sexualizada} (V35), nivel B1 ($N=1.313$, prevalencia 0,100). En negrita, el mejor valor de cada métrica dentro de cada modelo.}
+        \label{tab:abl-v35}
+    }{
+        \begin{tabular}{@{}l l c c c c c c@{}}
+            \toprule
+            \textbf{Modelo} & \textbf{Configuración} & \textbf{Exac.} & \textbf{Prec.} & \textbf{Recall} & \textbf{F1 (\textit{Sí})} & \textbf{F1 macro} & \textbf{$\kappa$} \\
+            \midrule
+            \texttt{gemini-3.1-flash-lite} & Solo \textit{skills} & 0,898 & 0,250 & 0,015 & 0,029 & 0,488 & 0,018 \\
+             & \textit{Skills} + resúmenes & \textbf{0,902} & \textbf{0,571} & \textbf{0,031} & \textbf{0,058} & \textbf{0,503} & \textbf{0,049} \\
+             & \textit{Skills} + RAG & 0,896 & 0,222 & 0,015 & 0,029 & 0,487 & 0,016 \\
+             & Completo & 0,894 & 0,167 & 0,015 & 0,028 & 0,486 & 0,011 \\
+            \midrule
+            \texttt{gpt-4o-mini} & Solo \textit{skills} & 0,896 & 0,368 & 0,053 & 0,093 & 0,519 & 0,070 \\
+             & \textit{Skills} + resúmenes & 0,894 & 0,333 & 0,061 & 0,103 & 0,523 & 0,075 \\
+             & \textit{Skills} + RAG & 0,884 & 0,294 & \textbf{0,115} & \textbf{0,165} & \textbf{0,551} & \textbf{0,115} \\
+             & Completo & \textbf{0,897} & \textbf{0,375} & 0,046 & 0,082 & 0,514 & 0,061 \\
+            \midrule
+            \texttt{gpt-5.4-nano} & Solo \textit{skills} & 0,899 & 0,000 & 0,000 & 0,000 & 0,473 & $-$0,003 \\
+             & \textit{Skills} + resúmenes & 0,901 & 0,667 & \textbf{0,015} & \textbf{0,030} & \textbf{0,489} & \textbf{0,025} \\
+             & \textit{Skills} + RAG & 0,896 & 0,222 & \textbf{0,015} & 0,029 & 0,487 & 0,016 \\
+             & Completo & \textbf{0,901} & \textbf{1,000} & 0,008 & 0,015 & 0,482 & 0,014 \\
+            \midrule
+            \texttt{gemma4:e4b} & Solo \textit{skills} & \textbf{0,896} & \textbf{0,381} & 0,061 & 0,105 & 0,525 & \textbf{0,080} \\
+             & \textit{Skills} + resúmenes & 0,891 & 0,300 & \textbf{0,069} & \textbf{0,112} & \textbf{0,527} & 0,078 \\
+             & \textit{Skills} + RAG & 0,893 & 0,273 & 0,046 & 0,078 & 0,511 & 0,051 \\
+             & Completo & 0,890 & 0,158 & 0,023 & 0,040 & 0,491 & 0,015 \\
+            \bottomrule
+        \end{tabular}
+    }
+    \endgroup
+\end{table}

@@ -204,138 +204,57 @@ la carga de \textit{skills} bajo demanda con verificación de evidencias
 (Sección~\ref{subsec:diseno_agentico}), un catálogo de resúmenes de las guías
 expertas descubrible por la agente (Sección~\ref{prompts}), y una herramienta de
 recuperación en vivo sobre esas guías (RAG, implementada como \texttt{CONSULTAR\_GUIA},
-Sección~\ref{rag}). Para averiguar cuál de ellos explica el efecto
-observado se ejecutaron cinco variantes por modelo, activando y desactivando cada
+Sección~\ref{rag}). Para averiguar cuál de ellos explica el efecto observado se
+ejecutaron cuatro configuraciones por modelo, activando y desactivando cada
 componente de forma independiente, sobre los cuatro modelos y las 1.313 noticias.
-Las Tablas~\ref{tab:iris-descomposicion}, \ref{tab:iris-descomposicion-acc}
-y~\ref{tab:iris-descomposicion-f1} recogen, respectivamente, el $\kappa$, la
-exactitud y el F1 macro medios de cada combinación.
 
-\begin{table}[H]
-    \centering
-    \begingroup
-    \scriptsize
-    \ttabbox[\FBwidth]{
-        \caption{Descomposición de la arquitectura por componentes. $\kappa$ promedio sobre las cinco variables, por modelo ($N=1.313$)}
-        \label{tab:iris-descomposicion}
-    }{
-        \begin{tabularx}{\textwidth}{
-            X
-            >{\centering\arraybackslash}X
-            >{\centering\arraybackslash}X
-            >{\centering\arraybackslash}X
-            >{\centering\arraybackslash}X
-        }
-            \toprule
-            \textbf{Configuración} & \textbf{Gemini} & \textbf{GPT-4o-mini} & \textbf{GPT-5.4-nano} & \textbf{Gemma} \\
-            \midrule
-            B0 & 0,026 & 0,033 & 0,052 & 0,061 \\
-            Solo \textit{skills} (B1) & 0,061 & 0,025 & 0,000 & 0,065 \\
-            \textit{Skills} + resúmenes & \textbf{0,075} & 0,024 & 0,015 & 0,061 \\
-            \textit{Skills} + RAG & 0,063 & 0,028 & 0,012 & 0,038 \\
-            Completo & 0,066 & 0,014 & 0,004 & 0,043 \\
-            \bottomrule
-        \end{tabularx}
-    }
-    \endgroup
-\end{table}
+Las Tablas~\ref{tab:abl-v25} a~\ref{tab:abl-v35} recogen el resultado
+\textbf{variable a variable}, con las cinco métricas de la
+Sección~\ref{sec:metricas_eval} y el coeficiente $\kappa$. Se presentan así, y no
+en agregado, porque las prevalencias van del 6,2\,\% al 81,0\,\% y los valores no
+resultan comparables entre variables. En cada modelo se destaca su mejor valor por
+métrica, ya que lo que aquí se compara son componentes dentro de un mismo modelo y
+no modelos entre sí.
 
-\begin{table}[H]
-    \centering
-    \begingroup
-    \scriptsize
-    \ttabbox[\FBwidth]{
-        \caption{Descomposición de la arquitectura por componentes. \textbf{Exactitud} promedio sobre las cinco variables, por modelo ($N=1.313$)}
-        \label{tab:iris-descomposicion-acc}
-    }{
-        \begin{tabularx}{\textwidth}{
-            X
-            >{\centering\arraybackslash}X
-            >{\centering\arraybackslash}X
-            >{\centering\arraybackslash}X
-            >{\centering\arraybackslash}X
-        }
-            \toprule
-            \textbf{Configuración} & \textbf{Gemini} & \textbf{GPT-4o-mini} & \textbf{GPT-5.4-nano} & \textbf{Gemma} \\
-            \midrule
-            B0 & 0,600 & 0,564 & 0,571 & 0,597 \\
-            Solo \textit{skills} (B1) & 0,645 & \textbf{0,677} & 0,567 & 0,608 \\
-            \textit{Skills} + resúmenes & 0,656 & 0,609 & 0,569 & 0,610 \\
-            \textit{Skills} + RAG & 0,651 & 0,631 & 0,571 & 0,602 \\
-            Completo & 0,661 & 0,612 & 0,569 & 0,605 \\
-            \bottomrule
-        \end{tabularx}
-    }
-    \endgroup
-\end{table}
+\input{chapters/5 results and discussion/tablas_ablacion}
 
-\begin{table}[H]
-    \centering
-    \begingroup
-    \scriptsize
-    \ttabbox[\FBwidth]{
-        \caption{Descomposición de la arquitectura por componentes. \textbf{F1 macro} promedio sobre las cinco variables, por modelo ($N=1.313$)}
-        \label{tab:iris-descomposicion-f1}
-    }{
-        \begin{tabularx}{\textwidth}{
-            X
-            >{\centering\arraybackslash}X
-            >{\centering\arraybackslash}X
-            >{\centering\arraybackslash}X
-            >{\centering\arraybackslash}X
-        }
-            \toprule
-            \textbf{Configuración} & \textbf{Gemini} & \textbf{GPT-4o-mini} & \textbf{GPT-5.4-nano} & \textbf{Gemma} \\
-            \midrule
-            B0 & 0,388 & 0,410 & 0,430 & 0,421 \\
-            Solo \textit{skills} (B1) & 0,430 & \textbf{0,484} & 0,364 & 0,424 \\
-            \textit{Skills} + resúmenes & 0,444 & 0,451 & 0,365 & 0,423 \\
-            \textit{Skills} + RAG & 0,439 & 0,473 & 0,374 & 0,409 \\
-            Completo & 0,443 & 0,438 & 0,364 & 0,412 \\
-            \bottomrule
-        \end{tabularx}
-    }
-    \endgroup
-\end{table}
+La primera lectura afecta a la \textbf{recuperación en vivo}. La configuración con
+RAG rara vez es la mejor de su modelo, y su aportación no se sostiene en ninguna
+variable de forma consistente. Dado que es además el componente más costoso en
+tiempo y en \textit{tokens}, la evidencia no respalda mantenerlo, conclusión que ya
+apuntaba la implementación al describir las limitaciones del índice léxico
+(Sección~\ref{rag}).
 
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=\textwidth]{fig_kappa_componentes_blanco.pdf}
-    \caption{Coeficiente $\kappa$ promedio al activar cada componente, por modelo
-    ($N=1.313$). La mejor configuración de cada modelo prescinde de la recuperación
-    en vivo (RAG, franja sombreada). El mecanismo de \textit{skills} solo eleva el
-    acuerdo en \texttt{gemini-3.1-flash-lite}.}
-    \label{fig:iris-descomposicion-fig}
-\end{figure}
+La segunda lectura es menos cómoda y responde a una pregunta legítima, la de si
+procede conservar la configuración completa. \textbf{La configuración completa no
+es la mejor en la mayoría de las variables.} Atendiendo en cada una a la métrica
+que la Sección~\ref{sec:metricas_eval} considera informativa, el cuadro es el
+siguiente. En \texttt{masc\_generico} (V26) la configuración completa de
+\texttt{gemini-3.1-flash-lite} obtiene el mejor F1 macro del conjunto (0,621, con
+$\kappa = 0,261$), si bien la variante sin RAG queda a dos milésimas (0,618) con un
+$\kappa$ ligeramente superior (0,264). En \texttt{sexismo\_discurso} (V30) la mejor
+combinación es \texttt{gpt-5.4-nano} con \textit{skills} y RAG (F1 de 0,271 frente
+al 0,181 de la completa). En \texttt{asimetria\_mujer\_hombre} (V33), donde importa
+no perder positivos, \texttt{gemma4:e4b} con solo \textit{skills} alcanza el mejor
+equilibrio (recall 0,185 con precisión 0,174, $\kappa = 0,124$). En
+\texttt{denominacion\_sexualizada} (V35) es \texttt{gpt-4o-mini} con \textit{skills}
+y RAG (recall 0,115 con precisión 0,294). En \texttt{lenguaje\_sexista} (V25),
+finalmente, ninguna configuración alcanza un acuerdo apreciable, ya que todos los
+valores de $\kappa$ rondan el cero o son negativos, de modo que la comparación entre
+componentes carece ahí de sentido.
 
-Dos conclusiones se sostienen en los cuatro modelos, y la
-Figura~\ref{fig:iris-descomposicion-fig} las resume. La primera afecta a la
-herramienta RAG de recuperación en vivo: no aporta, y con frecuencia perjudica. En
-todos los modelos la mejor variante prescinde de ella. En \texttt{gemma4:e4b} el
-contraste es nítido: sin la RAG el $\kappa$ se sitúa entre 0,061 y
-0,065, y al activarla cae a valores entre 0,038 y 0,043. La recuperación
-por TF-IDF en este caso introduce más ruido que señal.
+De ello se sigue que la arquitectura no admite una respuesta única, sino que
+\textbf{la configuración conveniente depende de la variable}. Este resultado
+matiza la propuesta inicial, que asumía una configuración uniforme para las cinco,
+y sugiere que un despliegue razonable en el proyecto IRIS ajustaría los componentes
+variable a variable en lugar de aplicar el sistema completo a todas.
 
-La segunda conclusión concierne al mecanismo de \textit{skills}: solo mejora el
-acuerdo en \texttt{gemini}. En ese modelo, la variante que se limita a cargar la
-metodología como \textit{skill} verificable, sin guías de ningún tipo, ya recupera
-la mayor parte de la mejora sobre el control, de 0,026 a 0,061. En los otros
-tres modelos esa misma variante apenas mueve el control en \texttt{gemma}
-(de 0,061 a 0,065, una diferencia despreciable) y lo empeora en los dos de OpenAI. Cuando hay ganancia, la configuración con mejor acuerdo es
-\textit{skills} más resúmenes sin RAG: más simple y más barata que el
-sistema completo, y en ningún modelo peor.
-
-En conjunto, la descomposición confirma la lectura del núcleo: la arquitectura no es
-útil ni inútil en abstracto, sino que \textbf{amplifica lo que cada modelo ya trae}.
-Aporta cuando el modelo aprovecha de verdad la carga bajo demanda, y estorba cuando la
-infrautiliza o se satura con el catálogo. Su valor está condicionado a la capacidad
-del modelo para explotarla.
-
-El desglose en exactitud y F1 macro matiza el cuadro y, de paso, ilustra la
-divergencia de la Sección~\ref{subsec:iris_divergencia}: la exactitud puede subir con
-las \textit{skills} (\texttt{gpt-4o-mini} con solo \textit{skills} pasa de 0,564 a
-0,677) sin que el acuerdo la acompañe (su $\kappa$ se queda en 0,025).
-
+Conviene añadir una advertencia sobre la magnitud de estas diferencias. Las
+distancias entre configuraciones son en general pequeñas, en ocasiones de milésimas,
+y este trabajo no dispone de intervalos de confianza ni de repeticiones con
+distintas semillas que permitan afirmar que sean estadísticamente significativas.
+Cabe sostener que la configuración completa no muestra ventaja, pero no que una
+configuración concreta sea definitivamente superior a otra.
 
 \subsection{Diagnóstico por variable}
 \label{subsec:iris_porvariable}
@@ -591,8 +510,8 @@ limitación de los modelos o de la propia tarea. Otra característica que observ
 Entre los cuatro modelos, el local \texttt{gemma4:e4b} merece una lectura aparte. En
 el nivel de control (B0) obtiene el \textbf{mayor $\kappa$ de los cuatro} (0,061), por
 encima de las tres API de pago (0,026, 0,033 y 0,052), y ante las \textit{skills} se
-comporta como los modelos de OpenAI: su acuerdo baja de 0,061 a 0,043
-(Tabla~\ref{tab:iris-descomposicion}). Que un modelo abierto, gratuito y desplegable
+comporta como los modelos de OpenAI, ya que su acuerdo medio baja de 0,061 a
+0,043. Que un modelo abierto, gratuito y desplegable
 en infraestructura propia iguale, y en $\kappa$ supere, a los servicios
 comerciales tiene consecuencias prácticas para un proyecto que maneja material
 sujeto a privacidad. Ahora bien, esa ventaja en acuerdo y en ausencia de tarifas
