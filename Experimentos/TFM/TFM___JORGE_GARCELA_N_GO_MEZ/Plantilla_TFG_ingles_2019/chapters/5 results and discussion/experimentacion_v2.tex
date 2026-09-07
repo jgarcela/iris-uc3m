@@ -158,14 +158,34 @@ resulta ser la mayoritaria, ese desplazamiento eleva la exactitud por simple
 coincidencia con la mayoría, no por discriminar mejor. Se trata, por tanto, de un
 artefacto estadístico de un sesgo ciego de respuesta, no de un mejor criterio. El
 coeficiente $\kappa$, que descuenta el acuerdo esperable por azar, no premia ese
-desplazamiento. La consecuencia práctica
-es directa: \emph{un estudio que reportara solo exactitud concluiría que las Agent
-Skills mejoran el sistema para todos los modelos, y se equivocaría}. De ahí la recomendación de reportar
-siempre exactitud, $\kappa$ y prevalencia de forma conjunta en tareas de
-clasificación desequilibradas.
+desplazamiento. Atender solo a la exactitud llevaría, por tanto, a dar por buena
+una mejora que en parte responde a un cambio en la frecuencia de respuesta.
 
-Leído correctamente, por $\kappa$, el efecto de las \textit{Agent Skills}
-\textbf{depende del modelo}. Solo \texttt{gemini-3.1-flash-lite} mejora con la
+Conviene, con todo, no sustituir una lectura simplificada por otra, porque
+$\kappa$ arrastra sus propias dificultades y este caso las reúne casi todas. La
+primera es que el coeficiente se concibió para medir el acuerdo entre dos personas
+codificadoras en pie de igualdad~\cite{cohen1960}, mientras que aquí una de las
+partes es un patrón de referencia y la otra una estimación, situación para la que
+no fue pensado. La segunda es que el acuerdo esperado por azar depende de las
+frecuencias marginales de ambas partes, de manera que dos modelos con la misma
+exactitud pueden obtener valores de $\kappa$ muy distintos solo por marcar con
+frecuencias distintas. La tercera es la ya mencionada paradoja de
+$\kappa$~\cite{feinstein1990}, que con prevalencias extremas hunde el coeficiente
+aunque el acuerdo observado sea alto. De ello se sigue una consecuencia que
+condiciona la estructura de este capítulo, y es que los valores de $\kappa$ de
+variables con prevalencias tan dispares no son comparables entre sí ni admiten
+promediarse con sentido, razón por la cual el análisis se realiza variable a
+variable (Sección~\ref{subsec:iris_porvariable}) y las medias que aparecen en esta
+sección deben tomarse como una orientación gruesa.
+
+Lo que cabe sostener, en suma, es que exactitud, $\kappa$ y prevalencia responden a
+preguntas distintas y que interpretarlas por separado conduce a conclusiones
+opuestas, de modo que en tareas de clasificación desequilibradas procede informar
+de las tres de forma conjunta.
+
+Atendiendo al $\kappa$, que es la métrica que menos se deja arrastrar por la
+frecuencia de marcado aunque no esté libre de problemas, el efecto de las
+\textit{Agent Skills} \textbf{depende del modelo}. Solo \texttt{gemini-3.1-flash-lite} mejora con la
 arquitectura: su $\kappa$ pasa de 0,026 a 0,066, y lo hace acompañado de subidas
 simultáneas en exactitud y F1. En los dos modelos de OpenAI las \textit{skills} no ayudan e incluso
 perjudican ($\Delta\kappa = -0,019$ en \texttt{gpt-4o-mini} y $-0,048$ en
