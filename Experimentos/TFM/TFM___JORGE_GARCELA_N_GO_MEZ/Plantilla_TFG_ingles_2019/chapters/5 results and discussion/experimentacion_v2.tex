@@ -102,16 +102,19 @@ capítulo.
     \endgroup
 \end{table}
 
-A primera vista, la arquitectura parece funcionar: la exactitud sube con B1 en la
-mayoría de los modelos (Figura~\ref{fig:iris-b0b1-metricas}), y la exactitud media de
-las API pasa de 0,578 a 0,614. Pero exactitud y $\kappa$ \emph{no cuentan la
-misma historia}: el $\kappa$ medio, lejos de acompañar, baja de 0,037 a 0,028, y todo
-ello a un coste de inferencia que se multiplica por un factor de entre 1,9 y 2,7
-según el modelo (Tabla~\ref{tab:iris-b0b1}). Esta discordancia obliga a precisar
-qué métrica resulta pertinente antes de interpretar el efecto de las \textit{skills}:
-en una tarea con clases fuertemente desequilibradas, la exactitud es un indicador
-engañoso y el análisis debe apoyarse en el coeficiente $\kappa$, según se argumenta
-en la Sección~\ref{subsec:iris_divergencia}.
+A primera vista, la arquitectura parece funcionar, ya que la exactitud sube con B1
+en la mayoría de los modelos (Figura~\ref{fig:iris-b0b1-metricas}) y la exactitud
+media de las API pasa de 0,578 a 0,614. Sin embargo, exactitud y $\kappa$ \emph{no
+cuentan la misma historia}, puesto que el $\kappa$ medio, lejos de acompañar, baja
+de 0,037 a 0,028, y todo ello a un coste de inferencia que se multiplica por un
+factor de entre 1,9 y 2,7 según el modelo (Tabla~\ref{tab:iris-b0b1}). Esa
+discordancia obliga a preguntarse qué está midiendo cada una. Con clases
+fuertemente desequilibradas, la exactitud recoge en buena parte el efecto de la
+distribución, de modo que un cambio en ella puede reflejar que el modelo marca con
+otra frecuencia y no que discrimine mejor. El coeficiente $\kappa$ descuenta ese
+componente, si bien tiene sus propias limitaciones
+(Sección~\ref{sec:metricas_eval}). Ninguna de las dos basta por separado, y la
+Sección~\ref{subsec:iris_divergencia} examina a qué responde esta divergencia.
 
 \begin{figure}[H]
     \centering
