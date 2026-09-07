@@ -5,14 +5,98 @@
 \subsection{Métricas}
 
 Las predicciones se comparan con la anotación experta sobre las 1.313 piezas
-etiquetadas. Para cada variable se calculan tres métricas: exactitud, coeficiente
-$\kappa$ de Cohen y F1 macro. La razón de reportar las tres, y no solo la
-exactitud, está en la propia naturaleza del corpus. Varias variables están muy
-desbalanceadas, así que un clasificador que responda siempre la clase mayoritaria
-alcanza una exactitud alta sin discriminar nada. El coeficiente $\kappa$ descuenta
-el acuerdo esperable por azar, y la F1 macro pondera por igual ambas clases. La
-divergencia entre estas métricas resulta ser, de hecho, uno de los hallazgos del
-trabajo (Capítulo~\ref{results_and_discussion}).
+etiquetadas. Cada variable se trata como un problema binario en el que la clase
+positiva es la presencia del fenómeno, es decir, el \textit{Sí}. De esa
+comparación resultan cuatro recuentos: los verdaderos positivos ($VP$), piezas que
+tanto el sistema como la anotadora marcan, los falsos positivos ($FP$), que el
+sistema marca y la anotadora no, los falsos negativos ($FN$), que la anotadora
+marca y el sistema pasa por alto, y los verdaderos negativos ($VN$), en que ambas
+coinciden en la ausencia. Sobre esos cuatro valores se construyen todas las
+métricas empleadas.
+
+\paragraph{Exactitud.} Es la proporción de piezas en que sistema y anotadora
+coinciden, con independencia de la clase:
+\begin{equation}
+    \text{Exactitud} = \frac{VP + VN}{VP + VN + FP + FN}
+\end{equation}
+Su ventaja es que resulta inmediatamente interpretable, ya que responde a la
+pregunta de cuántas veces acierta el sistema. Su inconveniente es que la domina la
+clase mayoritaria. En V33, con un 6,2\,\% de positivos, no marcar nada produce una
+exactitud del 93,8\,\% sin haber detectado un solo caso
+(Sección~\ref{sec:iris_variables}), de manera que por sí sola no distingue un
+sistema competente de uno que no lo es.
+
+\paragraph{Precisión.} De todo lo que el sistema marca, mide qué proporción estaba
+efectivamente marcada por la anotadora:
+\begin{equation}
+    \text{Precisión} = \frac{VP}{VP + FP}
+\end{equation}
+Responde a la pregunta de cuánto cabe fiarse de una alerta del sistema, lo que la
+hace directamente relevante para una herramienta de asistencia, ya que una
+precisión baja se traduce en avisos que la persona analista deberá descartar. Su
+inconveniente es que se calcula solo sobre lo marcado, así que un sistema muy
+conservador puede alcanzar una precisión alta con un puñado de aciertos, y
+queda indefinida si no marca nada.
+
+\paragraph{Recall.} También llamado sensibilidad, mide qué proporción de lo que la
+anotadora marcó consigue detectar el sistema:
+\begin{equation}
+    \text{Recall} = \frac{VP}{VP + FN}
+\end{equation}
+Responde a la pregunta complementaria, la de cuánto sexismo se está dejando sin
+señalar. Su inconveniente es simétrico al de la precisión, puesto que marcarlo
+todo garantiza un recall de 1 sin discriminar nada. Precisión y recall solo tienen
+sentido, por tanto, leídos conjuntamente.
+
+\paragraph{F1.} Resume ambas en su media armónica, que penaliza el desequilibrio
+entre las dos más de lo que lo haría una media aritmética:
+\begin{equation}
+    F_1 = 2 \cdot \frac{\text{Precisión} \cdot \text{Recall}}{\text{Precisión} + \text{Recall}}
+\end{equation}
+La variante \textbf{macro} calcula el $F_1$ de cada clase por separado y promedia
+los dos valores sin ponderar por su frecuencia, de modo que la clase minoritaria
+pesa tanto como la mayoritaria. Es una corrección importante frente a la
+exactitud, pero no elimina el problema del desequilibrio, ya que en una variable
+con un 81\,\% de positivos como V25 marcarlo todo produce un $F_1$ de 0,895 sobre
+la clase positiva.
+
+\paragraph{Coeficiente $\kappa$ de Cohen.} Mide el acuerdo entre dos anotadores
+descontando el que cabría esperar por azar~\cite{cohen1960}:
+\begin{equation}
+    \kappa = \frac{p_o - p_e}{1 - p_e}
+\end{equation}
+donde $p_o$ es el acuerdo observado, equivalente a la exactitud, y $p_e$ el
+acuerdo esperado si ambos etiquetasen al azar respetando sus respectivas
+frecuencias marginales. Un valor de 1 indica acuerdo perfecto, un 0 indica un
+acuerdo equivalente al del azar y los valores negativos señalan un desacuerdo
+sistemático. Su ventaja es que sitúa el resultado frente a una referencia
+razonable en lugar de frente al cero absoluto, y que procede del análisis de
+contenido, disciplina de la que nace este trabajo. Su inconveniente es la conocida
+\textbf{paradoja de $\kappa$}~\cite{feinstein1990}, según la cual con
+distribuciones muy desequilibradas el acuerdo esperado por azar se dispara y el
+coeficiente se desploma aunque la exactitud sea alta. Esto vuelve los valores de
+$\kappa$ difícilmente comparables entre variables de prevalencia distinta.
+
+Ninguna métrica basta por sí sola, y la que resulta informativa depende de la
+variable. En V33 y V35, donde los positivos son escasos, la exactitud carece de
+valor, la precisión se vuelve inestable por apoyarse en muy pocos casos y el
+recall es el indicador decisivo, ya que revela cuánto se queda sin detectar. En
+V25 y V26, con prevalencias del 81\,\%, ocurre lo contrario, pues el recall y el
+$F_1$ se inflan con facilidad y lo informativo pasa a ser la capacidad de
+reconocer las piezas sin sexismo, que es donde $\kappa$ resulta más exigente. Por
+este motivo los resultados del Capítulo~\ref{results_and_discussion} se presentan
+siempre acompañados de la prevalencia de cada variable y del rendimiento del
+clasificador trivial (Sección~\ref{sec:iris_variables}), que fijan la referencia
+mínima frente a la que interpretarlos.
+
+Existe, además, un criterio que ordena esta elección y que procede del uso
+previsto del sistema. Como herramienta de apoyo a la postedición, su cometido
+consiste en señalar a la persona analista las piezas que merecen una segunda
+lectura, de modo que un falso positivo cuesta unos segundos de descarte mientras
+que un falso negativo supone un caso de sexismo que nadie revisará. Esa asimetría
+otorga al recall una prioridad que no tendría en un clasificador autónomo, y así se
+discute en el Capítulo~\ref{results_and_discussion}.
+
 
 \subsection{Evaluación \textit{zero-shot} sobre el corpus completo}
 
@@ -21,8 +105,7 @@ La evaluación se realiza en régimen \textit{zero-shot}
 metodología en el \textit{prompt} y que no se ajusta ningún parámetro a la vista
 de los datos. Dos consecuencias de ese régimen, ya justificadas en la
 Sección~\ref{sec:zeroshot_iris}, condicionan la lectura de los resultados. En
-cuanto a la adquisición de conocimiento, el sistema no incorpora nada del corpus,
-de modo que su competencia procede íntegramente del preentrenamiento y de la
+cuanto a la adquisición de conocimiento, el sistema no incorpora información del corpus, de modo que su competencia procede íntegramente del preentrenamiento y de la
 metodología que se le entrega en cada llamada. En cuanto al modelado estadístico,
 no estima probabilidades a partir de los datos anotados ni ajusta su umbral a la
 prevalencia de cada variable, así que su propensión a marcar refleja su
@@ -34,20 +117,6 @@ Todas las cifras del Capítulo~\ref{results_and_discussion} se calculan sobre la
 Al no existir entrenamiento ni selección de umbrales sobre los datos, no cabe el
 riesgo de sobreajustar a un subconjunto y medir después el rendimiento en él, y el
 corpus completo puede emplearse como material de evaluación.
-
-\subsection{Instrumentación y reproducibilidad}
-
-Cada ejecución registra, además del veredicto, información para el análisis:
-\textit{tokens} consumidos, coste estimado por artículo y latencia, más las
-métricas de comportamiento de la agente ya descritas (uso de herramientas, colapso
-a B0). El coste se calcula por proveedora a partir de las tablas de tarifas públicas de cada API.
-
-La ejecución es incremental y \textbf{reanudable} por identificador de pieza: si
-se interrumpe, al relanzarla continúa donde iba, sin repetir ni
-perder trabajo. Un mecanismo de corte (\textit{circuit breaker} en inglés) aborta la ejecución
-si varios artículos consecutivos fallan por completo, síntoma de un problema de
-infraestructura
-(saldo agotado, servidor caído). 
 
 
 \subsection{Ejecución a escala: enrutado y granja}
