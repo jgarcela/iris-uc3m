@@ -767,7 +767,9 @@ variables, a las nueve personas anotadoras y a los cuatro modelos evaluados.
     \scriptsize
     \renewcommand{\texttt}[1]{{\ttfamily #1}}
     \ttabbox[\FBwidth]{
-        \caption{Espacio de criterios: prevalencia de \textit{Sí} por entidad anotadora (humana y artificial) y variable. Columnas: V25 \texttt{lenguaje\_sexista}, V26 \texttt{masc\_generico}, V30 \texttt{sexismo\_discurso}, V33 \texttt{asimetria\_mujer\_hombre}, V35 \texttt{denominacion\_sexualizada}. La última columna (sombreada) es la media sobre las cinco.}
+        \caption{Espacio de criterios: prevalencia de \textit{Sí} por entidad anotadora (humana y artificial) y variable. Columnas: V25 \texttt{lenguaje\_sexista}, V26 \texttt{masc\_generico}, V30 \texttt{sexismo\_discurso}, V33 \texttt{asimetria\_mujer\_hombre}, V35 \texttt{denominacion\_sexualizada}. La última columna (sombreada) promedia las cinco variables y se ofrece solo como
+        ordenación de la tabla, ya que con prevalencias tan dispares esa media no
+        admite una lectura sustantiva.}
         \label{tab:iris-criterios}
     }{
         \begin{tabularx}{\textwidth}{
@@ -825,57 +827,44 @@ codificó piezas distintas, su prevalencia mezcla dos factores: el criterio prop
 la muestra que le tocó.
 
 Un segundo análisis mide el acuerdo \emph{entre} modelos, que sí tienen solapamiento
-total porque los cuatro codificaron las 1.313 piezas. El resultado es inesperado y
-se recoge en la Tabla~\ref{tab:iris-intraia}.
+total porque los cuatro codificaron las 1.313 piezas. La
+Tabla~\ref{tab:iris-intraia} lo recoge variable a variable, sin promediar, ya que
+los coeficientes de variables con prevalencias tan distintas no son comparables
+entre sí (Sección~\ref{subsec:iris_divergencia}).
 
-\begin{table}[H]
-    \centering
-    \begingroup
-    \scriptsize
-    \renewcommand{\texttt}[1]{{\ttfamily #1}}
-    \ttabbox[\FBwidth]{
-        \caption{Acuerdo entre modelos ($\kappa$ media sobre las cinco variables), por nivel}
-        \label{tab:iris-intraia}
-    }{
-        \begin{tabularx}{\textwidth}{
-            >{\hsize=1.7\hsize\raggedright\arraybackslash}X
-            >{\hsize=0.65\hsize\centering\arraybackslash}X
-            >{\hsize=0.65\hsize\columncolor{gray!15}\centering\arraybackslash}X
-        }
-            \toprule
-            \textbf{Par de modelos} & \boldmath$\kappa$ \textbf{(B0)} & \boldmath$\kappa$ \textbf{(B1)} \\
-            \midrule
-            \texttt{gemini} $\leftrightarrow$ \texttt{gpt-4o-mini}     & 0,079 & 0,053 \\
-            \texttt{gemini} $\leftrightarrow$ \texttt{gpt-5.4-nano}    & 0,067 & 0,014 \\
-            \texttt{gpt-4o-mini} $\leftrightarrow$ \texttt{gpt-5.4-nano} & \textbf{0,279} & 0,084 \\
-            \midrule
-            \texttt{gemma} $\leftrightarrow$ \texttt{gemini}          & 0,129 & \textbf{0,156} \\
-            \texttt{gemma} $\leftrightarrow$ \texttt{gpt-4o-mini}     & 0,135 & 0,104 \\
-            \texttt{gemma} $\leftrightarrow$ \texttt{gpt-5.4-nano}    & 0,121 & 0,026 \\
-            \bottomrule
-        \end{tabularx}
-    }
-    \endgroup
-\end{table}
+\input{chapters/5 results and discussion/tabla_intraia}
 
-El acuerdo \emph{entre} modelos es tan bajo como el que cada uno alcanza con las
-personas: el $\kappa$ entre pares se mueve entre 0,014 y 0,156 en B1
-(Tabla~\ref{tab:iris-intraia}). No existe, por tanto, un criterio común a los
-modelos. Cada uno presenta su propio patrón de respuesta, y lo que comparten se
-limita a la dirección del sesgo (la tendencia a marcar de menos), no a los casos
-concretos en que lo aplican. Este resultado matiza la idea de un sesgo único y
-uniforme de la inteligencia artificial: se observan, más bien, cuatro sesgos
-distintos que solo coinciden en sus limitaciones de detección. El modelo local \texttt{gemma4:e4b}
-es el que mayor solape mantiene con el resto (hasta 0,156 con \texttt{gemini}), pero
-ni ese máximo alcanza un acuerdo apreciable.
+El acuerdo entre modelos resulta bajo en casi todas las celdas, aunque con
+diferencias apreciables entre variables que el promedio habría ocultado. En el
+nivel B1 la mediana de los treinta valores se sitúa en 0,048 y el rango va de
+$-0,001$ a 0,300. Los dos únicos casos con algo de convergencia son los dos modelos
+de OpenAI en \texttt{sexismo\_discurso} ($\kappa = 0,300$), previsible por proceder
+de la misma empresa proveedora, y el par formado por \texttt{gemma4:e4b} y
+\texttt{gemini-3.1-flash-lite} en \texttt{asimetria\_mujer\_hombre} (0,259) y en
+\texttt{sexismo\_discurso} (0,236), ambos de la familia de modelos de Google. Fuera
+de esas coincidencias por familia, los modelos no comparten criterio.
+
+Conviene señalar que el acuerdo bruto entre modelos sí es alto en V25, V33 y V35,
+por encima del 92\,\% en la mayoría de los pares, pero se trata de un artefacto de
+que casi todos responden \textit{No} en casi todas las piezas. Es la misma cautela
+que exige la exactitud frente al clasificador trivial
+(Sección~\ref{sec:iris_variables}), aplicada ahora al acuerdo entre sistemas.
+
+No existe, por tanto, un criterio común a los modelos. Cada uno presenta su propio
+patrón de respuesta, y lo que comparten se limita a la dirección del sesgo, la
+tendencia a marcar de menos, no a los casos concretos en que lo aplican. Este
+resultado matiza la idea de un sesgo único y uniforme de la inteligencia artificial,
+ya que se observan más bien cuatro comportamientos distintos que solo coinciden en
+sus limitaciones de detección.
 
 El patrón se mantiene al repetir el análisis sobre el nivel de control (B0), lo que
-indica que el sesgo procede del modelo y no del empaquetado como \textit{skills}. La
-arquitectura introduce, de hecho, un matiz en sentido contrario al esperable: las
-\textit{Agent Skills} \textbf{reducen} el acuerdo entre modelos en cinco de los seis
-pares (el par formado por \texttt{gpt-4o-mini} y \texttt{gpt-5.4-nano} cae de 0,279 a
-0,084), lo que confirma que acentúan las particularidades de cada modelo en lugar de
-acercarlos a un criterio compartido.
+indica que procede del modelo y no del empaquetado como \textit{skills}. La
+arquitectura introduce, de hecho, un matiz en sentido contrario al esperable, ya que
+las \textit{Agent Skills} \textbf{reducen} el acuerdo entre modelos en la mayoría de
+las celdas. El descenso más llamativo es el de los dos modelos de OpenAI en
+\texttt{sexismo\_discurso}, de 0,550 a 0,300, y en \texttt{denominacion\_sexualizada},
+de 0,316 a $-0,001$. Las \textit{skills} acentúan las particularidades de cada
+modelo en lugar de acercarlos a un criterio compartido.
 
 Los tres análisis de esta subsección apuntan en la misma dirección. El primero
 mostró que el acuerdo depende del equipo de anotación tanto como del modelo. El

@@ -1,0 +1,34 @@
+% Generado por gen_tabla_intraia.py. No editar a mano.
+\begin{table}[H]
+    \centering
+    \begingroup
+    \scriptsize
+    \setlength{\tabcolsep}{4pt}
+    \renewcommand{\texttt}[1]{{\ttfamily #1}}
+    \ttabbox[\FBwidth]{
+        \caption{Acuerdo entre modelos ($\kappa$ de Cohen) por variable y nivel ($N=1.313$). Cada celda muestra B0 / B1. No se promedia entre variables, porque sus prevalencias no lo permiten.}
+        \label{tab:iris-intraia}
+    }{
+        \begin{tabularx}{\textwidth}{
+            >{\hsize=1.6\hsize\raggedright\arraybackslash}X
+            >{\hsize=0.88\hsize\centering\arraybackslash}X
+            >{\hsize=0.88\hsize\centering\arraybackslash}X
+            >{\hsize=0.88\hsize\centering\arraybackslash}X
+            >{\hsize=0.88\hsize\centering\arraybackslash}X
+            >{\hsize=0.88\hsize\centering\arraybackslash}X
+        }
+            \toprule
+            \textbf{Par de modelos} & \textbf{V25} & \textbf{V26} & \textbf{V30} & \textbf{V33} & \textbf{V35} \\
+            \midrule
+            \texttt{gemini} $\leftrightarrow$ \texttt{gpt-4o-mini} & 0,063 / 0,047 & 0,139 / 0,055 & 0,091 / 0,015 & 0,010 / 0,086 & 0,092 / 0,062 \\
+            \texttt{gemini} $\leftrightarrow$ \texttt{gpt-5.4-nano} & 0,056 / $-$0,001 & 0,143 / 0,012 & 0,079 / 0,037 & 0,014 / 0,022 & 0,042 / $-$0,001 \\
+            \texttt{gpt-4o-mini} $\leftrightarrow$ \texttt{gpt-5.4-nano} & 0,177 / 0,002 & 0,163 / 0,071 & 0,550 / 0,300 & 0,189 / 0,048 & 0,316 / $-$0,001 \\
+            \midrule
+            \texttt{gemma} $\leftrightarrow$ \texttt{gemini} & 0,025 / 0,042 & 0,260 / 0,190 & 0,265 / 0,236 & 0,063 / 0,259 & 0,031 / 0,054 \\
+            \texttt{gemma} $\leftrightarrow$ \texttt{gpt-4o-mini} & 0,065 / 0,012 & 0,121 / 0,140 & 0,094 / 0,107 & 0,154 / 0,102 & 0,242 / 0,160 \\
+            \texttt{gemma} $\leftrightarrow$ \texttt{gpt-5.4-nano} & 0,077 / $-$0,001 & 0,119 / 0,047 & 0,125 / 0,055 & 0,125 / 0,028 & 0,160 / $-$0,001 \\
+            \bottomrule
+        \end{tabularx}
+    }
+    \endgroup
+\end{table}
