@@ -1,8 +1,7 @@
 %----------
 %	EXPERIMENTACIÓN Y RESULTADOS (versión de trabajo)
 %
-%	Copia de experimentacion.tex sobre la que se aplican los comentarios de
-%	las tutoras. El original se conserva intacto hasta que esta versión
+%	Copia de experimentacion.tex sobre la que se aplican los comentarios. El original se conserva intacto hasta que esta versión
 %	quede cerrada y se cambie el \input del fichero principal.
 %----------
 
@@ -12,12 +11,23 @@
 % Corpus de evaluación: 1.313 noticias anotadas en las cinco variables
 % =====================================================================
 
-La pregunta que vertebra toda la experimentación es una: \textbf{¿aporta algo
-empaquetar la metodología experta como \textit{Agent Skills}?} Para responderla se
+La experimentación se organiza en torno a tres preguntas. La primera es si aporta
+algo empaquetar la metodología experta como \textit{Agent Skills}, para lo cual se
 enfrenta la arquitectura propuesta (\textbf{nivel B1}) a una condición de control
 que recibe la misma metodología por la vía más simple, inyectada íntegramente en el
 \textit{prompt} (\textbf{nivel B0}). Ambos niveles se definen en el
-Capítulo~\ref{implementation} (Sección~\ref{subsec:diseno_agentico}).
+Capítulo~\ref{implementation} (Sección~\ref{subsec:diseno_agentico}). La segunda
+pregunta atiende a los modelos, esto es, cuáles se aproximan más al criterio
+experto, cuáles menos y a qué obedecen esas diferencias. La tercera atraviesa a las
+dos anteriores y se refiere a las variables, ya que cada una plantea una tarea de
+detección distinta y nada garantiza que una misma configuración resulte igual de
+adecuada para todas.
+
+Estas tres preguntas no admiten una respuesta única. Como se verá, el efecto del
+empaquetado depende del modelo, el rendimiento de cada modelo depende de la
+variable, y la configuración más conveniente puede diferir de una variable a otra.
+El análisis se organiza en consecuencia, variable por variable, y solo al final se
+valora hasta qué punto cabe extraer alguna conclusión de conjunto.
 
 Como se detalla en la Sección~\ref{subsec:diseno_agentico}, el diseño mantiene fijo
 todo salvo el empaquetado (mismo corpus, modelos, variables y formato de salida),
@@ -29,12 +39,17 @@ interpretación de las métricas exige tener presente la prevalencia de cada var
 y la exactitud trivial asociada, recogidas en la
 Tabla~\ref{tab:iris-prevalencia-imp} del Capítulo~\ref{sec:methodology}.
 
-\subsection{Resultados del núcleo: \textit{baseline} frente a Agent Skills}
+\subsection{Panorámica: el efecto del empaquetado en cada modelo}
 \label{subsec:iris_core}
 
-La Tabla~\ref{tab:iris-b0b1} compara ambos niveles en los cuatro modelos
-evaluados: los tres accesibles por API de pago y el modelo local
-\texttt{gemma4:e4b}.
+Antes de descender al detalle por variable conviene una panorámica que sitúe a los
+cuatro modelos y ambos niveles. La Tabla~\ref{tab:iris-b0b1} los compara en los
+cuatro modelos evaluados, los tres accesibles por API de pago y el modelo local
+\texttt{gemma4:e4b}. Sus valores son promedios sobre las cinco variables, de modo
+que resumen la posición de cada modelo pero ocultan diferencias considerables entre
+variables, según se comprueba en la Sección~\ref{subsec:iris_porvariable}. Conviene
+leerlos, por tanto, como una primera orientación y no como el resultado del
+capítulo.
 
 \begin{table}[H]
     \centering
@@ -300,6 +315,7 @@ las \textit{skills} (\texttt{gpt-4o-mini} con solo \textit{skills} pasa de 0,564
 
 
 \subsection{Diagnóstico por variable}
+\label{subsec:iris_porvariable}
 \label{subsec:iris_diagnostico}
 
 Hasta ahora el análisis se ha apoyado en métricas globales, promediadas sobre las
