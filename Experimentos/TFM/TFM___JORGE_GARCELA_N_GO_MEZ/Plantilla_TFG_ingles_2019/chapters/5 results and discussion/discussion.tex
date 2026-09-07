@@ -4,10 +4,10 @@
 
 Más allá de cada tabla, los resultados del capítulo admiten una lectura de
 conjunto en torno a tres ideas: el carácter condicional de las \textit{Agent
-Skills}, la lección metodológica que deja la evaluación, y el techo que impone la
+Skills}, la lección metodológica que deja la evaluación pormenorizada que hemos hecho, y el techo que impone la
 propia tarea, del que se derivan las implicaciones para el proyecto.
 
-\subsection{El valor de las \textit{Agent Skills} es condicional al modelo}
+\subsection{El valor de las \textit{Agent Skills} es condicional al modelo.}
 
 El hallazgo central obliga a matizar una expectativa extendida: que dotar a un modelo
 de más componentes (herramientas, conocimiento cargable bajo demanda, capacidad de
@@ -25,46 +25,47 @@ de \textit{skills} con sus resúmenes, sin herramienta, más simple, más barata
 ningún caso peor.
 
 
-\subsection{Una lección metodológica: medir el acuerdo, no la exactitud}
+\subsection{Una lección metodológica: evaluar varias métricas y no una sóla.}
 
-El segundo aprendizaje es metodológico. En tareas con clases muy desbalanceadas, la
+El segundo aprendizaje es metodológico. En tareas con clases muy desequilibradas, la
 exactitud y el coeficiente $\kappa$ pueden desacoplarse y llegar a moverse en
 sentidos opuestos. Una intervención que vuelve al modelo menos conservador aumenta
-los aciertos por efecto de la distribución marginal, sin que mejore su capacidad
+los aciertos triviales por efecto de la distribución marginal, sin que mejore su capacidad
 discriminativa (Sección~\ref{subsec:iris_divergencia}). Este trabajo lo ilustra:
 apoyarse solo en la exactitud llevaría a concluir que las \textit{Agent Skills}
 mejoran el sistema, cuando el $\kappa$ indica lo contrario. Por eso, en tareas
-desbalanceadas, la exactitud debe interpretarse siempre junto al $\kappa$ y a la
+desequilibradas, la exactitud debe interpretarse siempre junto al $\kappa$ y a la
 prevalencia, para no tomar un cambio en la distribución de respuestas por una mejora
 real de criterio.
 
 
 \subsection{El techo lo pone la tarea: implicaciones para IRIS}
 
-El acuerdo absoluto es bajo, pero interpretarlo únicamente como un fallo de los modelos
+El acuerdo absoluto es bajo, pero interpretarlo únicamente como una ceguera de los modelos
 sería un error de diagnóstico. El análisis de errores
-(Sección~\ref{subsec:iris_errores}) apunta a una explicación distinta: buena parte
-del desacuerdo nace de la tarea, no del sistema. Que dos equipos expertos codifiquen
-la misma variable con una variabilidad comparable a la que separa a personas de
-máquinas, y que el sistema, situado como una anotadora más, no caiga dentro del rango
-humano sino en su extremo permisivo, sugieren que el sexismo lingüístico, en muchas
-de sus formas, se juzga más que se detecta, y admite lecturas legítimamente
-distintas. Cuando el propio criterio está en disputa, el \textit{ground truth} deja
-de ser un suelo estable y pasa a ser un punto dentro de una franja de criterios: el
-$\kappa$ mide entonces distancia entre criterios más que error. Esto reorienta dónde
-buscar el margen de mejora, que no reside tanto en modelos más capaces como en
-delimitar y explicitar el constructo que se pide anotar. Ese desacuerdo, además, no se
+(Sección~\ref{subsec:iris_errores}) apunta también a que parte
+del desacuerdo nace de la tarea, aunque esto debe ser tomado con precaución puesto que no hay solapamiento entre las piezas anotadas por las distintas personas y por tanto, no se puede medir fielmente el desacuerdo. Sí se observa, sin embargo, que la capacidad de detección de dos equipos expertos tiene una variabilidad comparable a la que separa a personas de
+máquinas, y que el sistema, evaluado como una anotadora más, no cae dentro del rango
+humano sino en su extremo más bajo, sugieren que el sexismo lingüístico, en muchas
+de sus formas, requiere de una gran capacidad de detección y un entrenamiento muy extenso, sin perjuicio de que en algunos casos admita lecturas legítimamente
+distintas. Cuando el criterio no es lo suficientemente explícito, el \textit{ground truth} deja
+de ser un suelo estable y pasa a tener una naturaleza difusa: el
+$\kappa$ mide entonces distancia entre criterios más que error. Es necesario señalar que esta es una dificultad intrínseca del problema que se aborda en este trabajo puesto que el sexismo muchas veces se manifiesta de manera implícita y su detección es complicada incluso para personas expertas. Es, sin embargo, notorio que una vez detectado y explicado, sí que es reconocido ampliamente.
+
+Esto reorienta dónde
+buscar el margen de mejora, que además de buscar modelos más capaces requiere
+delimitar y explicitar el constructo que se pide anotar utilizando, por ejemplo, anotaciones cualitativas que permitan su delimitación a base de ejemplos. El punto de partida que proporcionan los modelos podría ser de gran utilidad en este marcado si se consigue mejorar su sensibilidad. Es importante resaltar que el desacuerdo, no se
 reparte por igual entre variables, sino que se concentra en las de criterio más
-amplio y mayor prevalencia (\texttt{lenguaje\_sexista} y \texttt{sexismo\_discurso}),
-lo que indica dónde conviene priorizar unas definiciones más precisas en el
-libro de códigos antes que un cambio de modelo. Conviene además evitar una
+implícito y mayor prevalencia (\texttt{lenguaje\_sexista} y \texttt{sexismo\_discurso}),
+lo que indica dónde conviene priorizar la anotación cualitativa y su descripción en el
+libro de códigos. Conviene además evitar una
 simplificación: los modelos no comparten un sesgo homogéneo, sino cuatro sesgos distintos que solo coinciden en su dirección.
 
-De ahí se desprenden dos orientaciones prácticas para IRIS. En cuanto al
+De ahí se desprenden dos orientaciones prácticas para IRIS en el futuro. En cuanto al
 \textbf{despliegue}, un modelo abierto ejecutado en local (\texttt{gemma4:e4b})
 alcanza el mayor acuerdo de control entre los cuatro
 (Sección~\ref{subsec:iris_local}), de modo que la privacidad y el coste nulo de
-inferencia no obligan a renunciar a rendimiento. En cuanto al \textbf{papel del
+inferencia no obligan a renunciar al rendimiento. En cuanto al \textbf{papel del
 sistema}, dado que ninguna configuración alcanza un acuerdo alto y que la tarea es
 intrínsecamente disputada, encaja mejor como asistente que como decisor: su salida
 trazable (código, explicación y evidencias literales) permite que la analista

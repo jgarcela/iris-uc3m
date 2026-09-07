@@ -18,7 +18,7 @@ empaquetar la metodología como \textit{Agent Skills} \textbf{no mejora el acuer
 sí mismo}: de los cuatro modelos, solo uno se beneficia en coeficiente $\kappa$, de modo
 que la arquitectura amplifica la capacidad que cada modelo ya trae en lugar de
 conferirla, y la herramienta de recuperación en vivo (RAG) no compensa en este dominio. La segunda es de alcance metodológico: en una tarea con
-clases muy desbalanceadas, la exactitud y $\kappa$ pueden moverse en sentidos opuestos,
+clases muy desequilibradas, la exactitud y $\kappa$ pueden moverse en sentidos opuestos,
 por lo que reportar solo la exactitud llevaría a la conclusión contraria y se impone
 informar de exactitud, $\kappa$ y prevalencia de forma conjunta. La tercera es que el
 bajo acuerdo absoluto refleja un \textbf{techo de la propia tarea} más que una
@@ -84,6 +84,6 @@ trabajo permite formular cinco directrices:
     salida del modelo, en especial en las variables cuyo criterio está más en disputa.
     \item Favorecer el despliegue local cuando el material sea sensible, por razones de
     privacidad y de coste.
-    \item Informar del desempeño con métricas conscientes del desbalance, esto es, acuerdo
+    \item Informar del desempeño con métricas conscientes del desequilibrio, esto es, acuerdo
     y prevalencia además de exactitud, para no sobrestimar la fiabilidad del sistema.
 \end{itemize}
