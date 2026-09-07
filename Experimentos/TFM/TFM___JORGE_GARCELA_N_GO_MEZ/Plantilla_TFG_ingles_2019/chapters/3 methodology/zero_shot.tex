@@ -4,12 +4,12 @@
 
 \label{sec:zeroshot_iris}
 
-La clasificación se aborda en régimen \textit{zero-shot}: se pide al modelo que
-realice la tarea sin haber visto ejemplos etiquetados de ella durante su
-entrenamiento, de modo que generaliza a partir del conocimiento que ya tiene.
-Esto permite prescindir de un corpus de entrenamiento etiquetado, del que no se
-dispone a gran escala, y cambiar la supervisión por ejemplos por otra cosa: la
-\textbf{supervisión mediante libro de códigos}~\cite{ziems2024css, hollauer_2024}.
+La clasificación se aborda en régimen \textit{zero-shot}, presentado en la
+Sección~\ref{sec:ai_solution}. Al no disponerse de un corpus de entrenamiento
+etiquetado a gran escala, la supervisión por ejemplos se sustituye por la
+\textbf{supervisión mediante libro de códigos}~\cite{ziems2024css, hollauer_2024},
+de modo que el modelo generaliza a partir del conocimiento que ya posee y de la
+metodología que recibe en la instrucción.
 
 La metodología que se traslada al \textit{prompt} procede de la especificación
 estructurada de cada variable descrita en la Sección~\ref{sec:iris_variables}:
@@ -52,16 +52,40 @@ de sustituirla.
 
 \subsubsection{Ventajas y límites del enfoque}
 
-El régimen \textit{zero-shot} presenta dos ventajas para este trabajo. La primera
-es que prescinde de conjuntos de entrenamiento etiquetados y del preprocesamiento
-intensivo que requieren los enfoques clásicos. La segunda es su flexibilidad, ya
-que una modificación del libro de códigos se traslada al sistema sin necesidad de
-reentrenarlo.
+El alcance de esta decisión se aprecia mejor si se examinan sus efectos sobre dos
+planos distintos, el de la adquisición de conocimiento y el del modelado
+estadístico de la tarea.
 
-Sus limitaciones se derivan de esas mismas propiedades. El rendimiento queda
+En el plano de la \textbf{adquisición de conocimiento}, el sistema no incorpora
+nada de lo que procesa. Los pesos del modelo permanecen intactos, de modo que la
+metodología no llega a formar parte de él, sino que se le suministra en cada
+llamada y se pierde al terminarla. Esto tiene una cara favorable y otra adversa.
+La favorable es que prescinde de conjuntos de entrenamiento etiquetados y del
+preprocesamiento intensivo de los enfoques clásicos, y sobre todo que mejorar el
+sistema consiste en reescribir la metodología y no en reentrenar un modelo, tarea
+que corresponde entonces al equipo experto y no a quien programa. La adversa es
+que el sistema no acumula experiencia, ya que un error cometido en una pieza no
+informa el análisis de la siguiente, y todo el conocimiento del dominio con que
+cuenta procede de su preentrenamiento, ajeno a este corpus y a esta metodología.
+
+En el plano del \textbf{modelado estadístico}, el sistema no estima probabilidad
+alguna a partir de los datos anotados. Un clasificador supervisado aprendería con
+qué frecuencia aparece cada clase y ajustaría en consecuencia su umbral de
+decisión, de manera que en una variable como V33, con un 6,2\,\% de positivos,
+tendería por sí solo a marcar poco. Aquí no sucede nada de eso. Al no observar
+nunca la distribución de clases del corpus (Sección~\ref{sec:iris_variables}), la
+propensión del modelo a marcar no responde a la prevalencia real, sino a cómo
+interpreta el criterio que se le ha descrito y a las regularidades de su
+preentrenamiento. Cuando marca de más o de menos no está, por tanto, mal
+calibrado respecto a una distribución que conoce, sino aplicando un umbral
+interpretativo propio, observación que resulta determinante para leer los
+resultados del Capítulo~\ref{results_and_discussion} y, en particular, las
+diferencias de recall entre modelos.
+
+De ambos planos se sigue la limitación principal del enfoque. El rendimiento queda
 determinado por la forma en que la metodología se traslada al \textit{prompt} y
-por la capacidad del modelo empleado, sin que existan ejemplos etiquetados que
-permitan corregir sus desviaciones. Determinar el alcance de esa limitación, y
+por la capacidad del modelo empleado, sin que existan ejemplos etiquetados con los
+que corregir sus desviaciones. Determinar el alcance de esa limitación, y
 establecer si su origen reside en el modelo, en la forma de presentarle la
 metodología o en la definición misma de la tarea, constituye el objeto del
 Capítulo~\ref{results_and_discussion}.

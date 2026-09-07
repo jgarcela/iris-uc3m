@@ -16,12 +16,24 @@ trabajo (Capítulo~\ref{results_and_discussion}).
 
 \subsection{Evaluación \textit{zero-shot} sobre el corpus completo}
 
-La evaluación es \textit{zero-shot}: el modelo recibe la metodología en el
-\textit{prompt} y no se ajusta ningún parámetro mirando los datos. Por eso todas
-las cifras del Capítulo~\ref{results_and_discussion} se calculan sobre las 1.313
-piezas etiquetadas, sin reservar un subconjunto de desarrollo o de test. Al no haber
-entrenamiento ni selección de umbrales sobre los datos, no existe el riesgo de
-sobreajustar a un conjunto y medir el rendimiento en él.
+La evaluación se realiza en régimen \textit{zero-shot}
+(Sección~\ref{sec:zeroshot_iris}), lo que significa que el modelo recibe la
+metodología en el \textit{prompt} y que no se ajusta ningún parámetro a la vista
+de los datos. Dos consecuencias de ese régimen, ya justificadas en la
+Sección~\ref{sec:zeroshot_iris}, condicionan la lectura de los resultados. En
+cuanto a la adquisición de conocimiento, el sistema no incorpora nada del corpus,
+de modo que su competencia procede íntegramente del preentrenamiento y de la
+metodología que se le entrega en cada llamada. En cuanto al modelado estadístico,
+no estima probabilidades a partir de los datos anotados ni ajusta su umbral a la
+prevalencia de cada variable, así que su propensión a marcar refleja su
+interpretación del criterio y no la distribución real de las clases.
+
+De ahí se desprende una consecuencia práctica sobre el diseño de la evaluación.
+Todas las cifras del Capítulo~\ref{results_and_discussion} se calculan sobre las
+1.313 piezas etiquetadas, sin reservar un subconjunto de desarrollo o de prueba.
+Al no existir entrenamiento ni selección de umbrales sobre los datos, no cabe el
+riesgo de sobreajustar a un subconjunto y medir después el rendimiento en él, y el
+corpus completo puede emplearse como material de evaluación.
 
 \subsection{Instrumentación y reproducibilidad}
 
