@@ -722,8 +722,29 @@ consenso de los cuatro modelos en contra del \textit{ground truth}. Su direcció
 es prácticamente unánime: en \textbf{1.363 casos} los cuatro modelos responden \textit{No}
 donde la anotación dice \textit{Sí}, y solo en 1 caso ocurre lo contrario. La
 infradetección observada por variable es, por tanto, un \textbf{sesgo sistemático},
-no aleatorio: los modelos detectan de forma consistente menos sexismo que las
-anotadoras.
+no aleatorio, y constituye el hallazgo principal de este análisis: \textbf{los
+modelos detectan de forma consistente menos sexismo que las anotadoras}.
+
+Este resultado no es aislado. La literatura sobre detección automática de discurso
+discriminatorio viene documentando que los sistemas rinden bastante peor cuando el
+fenómeno no se apoya en marcas explícitas. ElSherief et al.~\cite{elsherief2021}
+muestran que los clasificadores del estado del arte dejan sin marcar buena parte del
+odio implícito, con proporciones de casos clasificados como inocuos que llegan al
+36\,\% en algunas categorías. La evaluación funcional de
+Röttger et al.~\cite{rottger2021} ofrece un dato aún más severo sobre sistemas en
+producción, ya que uno de los servicios comerciales examinados solo identifica como
+odio el 9,0\,\% de los casos que sí lo son. En español y sobre sexismo,
+De Grazia et al.~\cite{degrazia2025} constatan que los modelos de lenguaje resuelven
+razonablemente el sexismo explícito pero se atascan en el implícito, que es
+precisamente donde también desciende el acuerdo entre anotadoras.
+
+Conviene, no obstante, no elevar esta coincidencia a ley general. Otros trabajos
+observan el sesgo contrario, con modelos que marcan en exceso enunciados inocuos que
+mencionan a grupos sensibles~\cite{zhang2024extremes}, de modo que la dirección del
+error depende del sistema, del umbral y del dominio. Lo que la literatura sí
+sostiene con solidez es que el rendimiento cae en lo implícito, y en ese marco los
+resultados de este trabajo aportan evidencia propia sobre un dominio poco explorado,
+el de la prensa escrita en español evaluada con criterio experto.
 
 El desglose por variable de esas celdas (Tabla~\ref{tab:iris-consenso}) muestra
 además \emph{dónde} se concentra el sesgo. Casi tres cuartas partes de los casos se
