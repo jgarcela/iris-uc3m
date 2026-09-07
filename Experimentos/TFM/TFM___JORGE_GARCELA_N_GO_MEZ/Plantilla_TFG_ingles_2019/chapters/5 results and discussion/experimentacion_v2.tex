@@ -39,162 +39,83 @@ interpretación de las métricas exige tener presente la prevalencia de cada var
 y la exactitud trivial asociada, recogidas en la
 Tabla~\ref{tab:iris-prevalencia-imp} del Capítulo~\ref{sec:methodology}.
 
-\subsection{Panorámica: el efecto del empaquetado en cada modelo}
-\label{subsec:iris_core}
+\subsection{Referencia de partida: prevalencia y clasificador trivial}
+\label{subsec:iris_referencia}
 
-Antes de descender al detalle por variable conviene una panorámica que sitúe a los
-cuatro modelos y ambos niveles. La Tabla~\ref{tab:iris-b0b1} los compara en los
-cuatro modelos evaluados, los tres accesibles por API de pago y el modelo local
-\texttt{gemma4:e4b}. Sus valores son promedios sobre las cinco variables, de modo
-que resumen la posición de cada modelo pero ocultan diferencias considerables entre
-variables, según se comprueba en la Sección~\ref{subsec:iris_porvariable}. Conviene
-leerlos, por tanto, como una primera orientación y no como el resultado del
-capítulo.
+Toda lectura de los resultados exige tener presente la distribución de clases de
+cada variable, ya expuesta en la Sección~\ref{sec:iris_variables}. Se reproduce
+aquí por comodidad, dada su importancia para interpretar lo que sigue. La
+Tabla~\ref{tab:iris-referencia} recoge la prevalencia de la clase positiva y el
+rendimiento del clasificador trivial que marca todas las piezas, cifras que
+constituyen el umbral mínimo que un sistema debe superar para aportar información.
 
 \begin{table}[H]
     \centering
     \begingroup
-    \scriptsize
-    \setlength{\tabcolsep}{4pt}
-    \newcommand{\dr}[1]{\textcolor{gray!75}{$#1$}} % fila delta: en gris
-    \renewcommand{\texttt}[1]{{\ttfamily #1}}
+    \small
     \ttabbox[\FBwidth]{
-        \caption{Comparación B0 (\textit{baseline}) frente a B1 (Agent Skills). Medias sobre las cinco variables, $N=1.313$. Las filas $\Delta$ (en gris) recogen la variación B1$-$B0.}
-        \label{tab:iris-b0b1}
+        \caption{Prevalencia anotada y rendimiento del clasificador trivial que marca
+        todas las piezas como positivas ($N=1.313$), reproducida de la
+        Sección~\ref{sec:iris_variables}.}
+        \label{tab:iris-referencia}
     }{
-        \begin{tabularx}{\textwidth}{
-            >{\hsize=1.7\hsize\raggedright\arraybackslash}X
-            >{\hsize=0.6\hsize\centering\arraybackslash}X
-            >{\hsize=0.925\hsize\centering\arraybackslash}X
-            >{\hsize=0.925\hsize\columncolor{gray!12}\centering\arraybackslash}X
-            >{\hsize=0.925\hsize\centering\arraybackslash}X
-            >{\hsize=0.925\hsize\centering\arraybackslash}X
-        }
+        \begin{tabular}{@{}l l c >{\columncolor{gray!15}}c >{\columncolor{gray!15}}c@{}}
             \toprule
-            \textbf{Modelo} & \textbf{Nivel} & \textbf{Exactitud} & \boldmath$\kappa$ & \textbf{F1 macro} & \textbf{Coste (USD)} \\
+            \textbf{Cód.} & \textbf{Variable} & \textbf{Prevalencia} & \textbf{Exactitud} & \textbf{F1 (\textit{Sí})} \\
             \midrule
-            \multirow{3}{*}{\texttt{gemini-3.1-flash-lite}}
-              & B0 & 0,600 & 0,026 & 0,388 & 5,64 \\
-              & B1 & 0,661 & \textbf{0,066} & 0,443 & 13,16 \\
-              & \dr{\Delta} & \dr{+0,061} & \dr{+0,040} & \dr{+0,055} & \dr{2{,}3\times} \\
-            \midrule
-            \multirow{3}{*}{\texttt{gpt-4o-mini}}
-              & B0 & 0,564 & 0,033 & 0,410 & 2,52 \\
-              & B1 & 0,612 & 0,014 & 0,438 & 6,89 \\
-              & \dr{\Delta} & \dr{+0,048} & \dr{-0,019} & \dr{+0,029} & \dr{2{,}7\times} \\
-            \midrule
-            \multirow{3}{*}{\texttt{gpt-5.4-nano}}
-              & B0 & 0,571 & 0,052 & 0,430 & 5,67 \\
-              & B1 & 0,569 & 0,004 & 0,364 & 10,86 \\
-              & \dr{\Delta} & \dr{-0,003} & \dr{-0,048} & \dr{-0,066} & \dr{1{,}9\times} \\
-            \midrule
-            \multirow{2}{*}{\textbf{Media (API)}}
-              & \textbf{B0} & 0,578 & \textbf{0,037} & 0,409 & \textemdash \\
-              & \textbf{B1} & \textbf{0,614} & 0,028 & 0,415 & \textemdash \\
-            \midrule
-            \multirow{3}{*}{\texttt{gemma4:e4b}\,\textnormal{\footnotesize(local)}}
-              & B0 & 0,597 & \textbf{0,061} & 0,421 & \textemdash \\
-              & B1 & 0,605 & 0,043 & 0,412 & \textemdash \\
-              & \dr{\Delta} & \dr{+0,008} & \dr{-0,018} & \dr{-0,009} & \textemdash \\
+            V25 & \texttt{lenguaje\_sexista}         & 0,810 & 0,810 & 0,895 \\
+            V26 & \texttt{masc\_generico}            & 0,810 & 0,810 & 0,895 \\
+            V30 & \texttt{sexismo\_discurso}         & 0,428 & 0,428 & 0,599 \\
+            V33 & \texttt{asimetria\_mujer\_hombre}  & 0,062 & 0,062 & 0,117 \\
+            V35 & \texttt{denominacion\_sexualizada} & 0,100 & 0,100 & 0,182 \\
             \bottomrule
-        \end{tabularx}
+        \end{tabular}
     }
     \endgroup
 \end{table}
 
-A primera vista, la arquitectura parece funcionar, ya que la exactitud sube con B1
-en la mayoría de los modelos (Figura~\ref{fig:iris-b0b1-metricas}) y la exactitud
-media de las API pasa de 0,578 a 0,614. Sin embargo, exactitud y $\kappa$ \emph{no
-cuentan la misma historia}, puesto que el $\kappa$ medio, lejos de acompañar, baja
-de 0,037 a 0,028, y todo ello a un coste de inferencia que se multiplica por un
-factor de entre 1,9 y 2,7 según el modelo (Tabla~\ref{tab:iris-b0b1}). Esa
-discordancia obliga a preguntarse qué está midiendo cada una. Con clases
-fuertemente desequilibradas, la exactitud recoge en buena parte el efecto de la
-distribución, de modo que un cambio en ella puede reflejar que el modelo marca con
-otra frecuencia y no que discrimine mejor. El coeficiente $\kappa$ descuenta ese
-componente, si bien tiene sus propias limitaciones
-(Sección~\ref{sec:metricas_eval}). Ninguna de las dos basta por separado, y la
-Sección~\ref{subsec:iris_divergencia} examina a qué responde esta divergencia.
+Las prevalencias van del 6,2\,\% al 81,0\,\%, un rango que desaconseja comparar
+directamente los valores de una variable con los de otra y que explica la
+organización de este capítulo, que examina cada variable por separado antes de
+plantearse cualquier lectura de conjunto.
 
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=\textwidth]{fig_b0b1_barras_blanco.pdf}
-    \caption{Niveles de exactitud, F1 macro y $\kappa$ por modelo, en B0 y B1
-    ($N=1.313$). Cada métrica se representa en su propia escala: el $\kappa$ vive
-    en un orden de magnitud mucho menor que la exactitud.}
-    \label{fig:iris-b0b1-metricas}
-\end{figure}
+\subsection{Resultados por variable: el efecto del empaquetado}
+\label{subsec:iris_porvariable_b0b1}
 
+Las Tablas~\ref{tab:var-v25} a~\ref{tab:var-v35} recogen, para cada variable, el
+rendimiento de los cuatro modelos en los dos niveles. Se reportan de forma
+sistemática todas las métricas definidas en la Sección~\ref{sec:metricas_eval},
+esto es, exactitud, precisión y recall sobre la clase positiva, F1 de esa clase,
+F1 macro y el coeficiente $\kappa$, junto con la prevalencia que predice cada
+modelo, que permite ver cuánto marca en relación con lo que marcan las expertas.
 
-\subsection{Divergencia entre exactitud y \texorpdfstring{$\kappa$}{kappa}}
-\label{subsec:iris_divergencia}
+\input{chapters/5 results and discussion/tablas_porvariable}
 
-Conviene detenerse en esa discordancia, porque condiciona cómo debe leerse toda la
-tabla: \textbf{la mejora en exactitud no se traduce en más acuerdo}. Considerando
-las medias, el nivel B1 sube la exactitud en 0,036 pero el $\kappa$ baja en $-0,009$.
-Exactitud y $\kappa$ pueden, por tanto, moverse de forma independiente e incluso en
-sentidos opuestos. Esto es un efecto conocido de $\kappa$ en
-presencia de clases desequilibradas~\cite{feinstein1990}, pero aquí resulta determinante: pasarlo por alto
-invertiría la conclusión del capítulo. La Figura~\ref{fig:iris-divergencia} lo
-visualiza como trayectorias B0$\to$B1: en el panel de exactitud casi todas las líneas
-ascienden, mientras que en el de $\kappa$ se mantienen o descienden, salvo en
-\texttt{gemini}, cuya línea sube en ambas.
+El primer resultado es que \textbf{el efecto de las \textit{skills} no es uniforme
+ni entre modelos ni entre variables}. En \texttt{masc\_generico} (V26)
+\texttt{gemini-3.1-flash-lite} mejora de forma clara al pasar a B1, ya que su
+$\kappa$ sube de 0,073 a 0,261 y su recall de 0,287 a 0,733, con la exactitud
+acompañando (de 0,397 a 0,708). Es la única celda del capítulo en que las tres
+métricas se mueven a la vez en la dirección esperada, lo que descarta que la
+mejora responda a un artefacto de la distribución. En
+\texttt{asimetria\_mujer\_hombre} (V33) el modelo local mejora también con B1, con
+un $\kappa$ que pasa de 0,054 a 0,092 y un recall de 0,136 a 0,160.
 
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=\textwidth]{fig_b0b1_slope_blanco.pdf}
-    \caption{Evolución de cada modelo de B0 a B1 en las tres métricas ($N=1.313$).
-    La exactitud sube en tres de los cuatro modelos, pero el $\kappa$ solo mejora en
-    \texttt{gemini-3.1-flash-lite}. En el resto se mantiene o desciende. La mejora en
-    exactitud sin mejora en $\kappa$ es el desacoplamiento entre exactitud y acuerdo.}
-    \label{fig:iris-divergencia}
-\end{figure}
+En sentido contrario, las \textit{skills} degradan varias celdas en las que el
+control ya tenía algo de señal, y lo hacen sobre todo en
+\texttt{denominacion\_sexualizada} (V35), donde el $\kappa$ cae de 0,123 a 0,014 en
+\texttt{gpt-5.4-nano}, de 0,136 a 0,061 en \texttt{gpt-4o-mini} y de 0,154 a 0,015
+en \texttt{gemma4:e4b}.
 
-El motivo de esa divergencia es conocido, y no exige que el modelo conozca la
-distribución de clases: en régimen \textit{zero-shot} no influye. Al volverse menos
-conservador (por efecto del empaquetado, no por una estrategia informada), el modelo
-responde \textit{Sí} con más frecuencia. En las variables donde la clase positiva
-resulta ser la mayoritaria, ese desplazamiento eleva la exactitud por simple
-coincidencia con la mayoría, no por discriminar mejor. Se trata, por tanto, de un
-artefacto estadístico de un sesgo ciego de respuesta, no de un mejor criterio. El
-coeficiente $\kappa$, que descuenta el acuerdo esperable por azar, no premia ese
-desplazamiento. Atender solo a la exactitud llevaría, por tanto, a dar por buena
-una mejora que en parte responde a un cambio en la frecuencia de respuesta.
-
-Conviene, con todo, no sustituir una lectura simplificada por otra, porque
-$\kappa$ arrastra sus propias dificultades y este caso las reúne casi todas. La
-primera es que el coeficiente se concibió para medir el acuerdo entre dos personas
-codificadoras en pie de igualdad~\cite{cohen1960}, mientras que aquí una de las
-partes es un patrón de referencia y la otra una estimación, situación para la que
-no fue pensado. La segunda es que el acuerdo esperado por azar depende de las
-frecuencias marginales de ambas partes, de manera que dos modelos con la misma
-exactitud pueden obtener valores de $\kappa$ muy distintos solo por marcar con
-frecuencias distintas. La tercera es la ya mencionada paradoja de
-$\kappa$~\cite{feinstein1990}, que con prevalencias extremas hunde el coeficiente
-aunque el acuerdo observado sea alto. De ello se sigue una consecuencia que
-condiciona la estructura de este capítulo, y es que los valores de $\kappa$ de
-variables con prevalencias tan dispares no son comparables entre sí ni admiten
-promediarse con sentido, razón por la cual el análisis se realiza variable a
-variable (Sección~\ref{subsec:iris_porvariable}) y las medias que aparecen en esta
-sección deben tomarse como una orientación gruesa.
-
-Lo que cabe sostener, en suma, es que exactitud, $\kappa$ y prevalencia responden a
-preguntas distintas y que interpretarlas por separado conduce a conclusiones
-opuestas, de modo que en tareas de clasificación desequilibradas procede informar
-de las tres de forma conjunta.
-
-Atendiendo al $\kappa$, que es la métrica que menos se deja arrastrar por la
-frecuencia de marcado aunque no esté libre de problemas, el efecto de las
-\textit{Agent Skills} \textbf{depende del modelo}. Solo \texttt{gemini-3.1-flash-lite} mejora con la
-arquitectura: su $\kappa$ pasa de 0,026 a 0,066, y lo hace acompañado de subidas
-simultáneas en exactitud y F1. En los dos modelos de OpenAI las \textit{skills} no ayudan e incluso
-perjudican ($\Delta\kappa = -0,019$ en \texttt{gpt-4o-mini} y $-0,048$ en
-\texttt{gpt-5.4-nano}), y el modelo local se comporta igual que ellos ($\kappa$ de
-0,061 a 0,043). De los cuatro modelos, solo uno mejora con las \textit{skills}. En
-los otros tres el $\kappa$ se mantiene o desciende, y la media no aumenta. Que el
-efecto dependa del modelo y no eleve el acuerdo en agregado admite varias lecturas, desde el techo de la propia tarea hasta la heterogeneidad de la anotación, que se
-retoman en la discusión (Sección~\ref{sec:discussion}) una vez presentada toda la
-evidencia.
+El caso de \texttt{lenguaje\_sexista} (V25) en \texttt{gpt-4o-mini} ilustra por qué
+conviene mirar varias métricas a la vez. Al pasar a B1 su exactitud casi se duplica
+(de 0,236 a 0,457) y su F1 de la clase positiva pasa de 0,151 a 0,573, mientras que
+el $\kappa$ empeora (de $-0,013$ a $-0,037$). Lo que ha cambiado no es su capacidad
+de discriminar, sino cuánto marca, que pasa del 9,0\,\% al 46,2\,\% de las piezas.
+En una variable cuya prevalencia anotada es del 81,0\,\%, marcar más acerca
+mecánicamente a la mayoría y mejora las métricas que no descuentan el azar. Este
+desacoplamiento, que reaparece en varias celdas, se examina como cuestión
+metodológica en la Sección~\ref{subsec:iris_divergencia}.
 
 \subsection{Descomposición de la arquitectura por componentes (ablación)}
 \label{subsec:iris_descomposicion}
@@ -262,93 +183,8 @@ configuración concreta sea definitivamente superior a otra.
 \label{subsec:iris_porvariable}
 \label{subsec:iris_diagnostico}
 
-Hasta ahora el análisis se ha apoyado en métricas globales, promediadas sobre las
-cinco variables. Ese nivel agregado responde a la pregunta central del capítulo,
-pero esconde comportamientos muy distintos de una variable a otra. Para entender qué
-ocurre por debajo del promedio hay que desglosar los resultados variable a variable:
-primero para localizar dónde actúan las \textit{skills} (B0 frente a B1) y después
-para caracterizar el comportamiento del sistema final (B1) en cada variable.
-
-\subsubsection{Efecto de las Agent Skills por variable (B0 frente a B1)}
-
-El desglose por variable revela dónde actúan las \textit{skills}. La
-Tabla~\ref{tab:iris-porvariable-b0b1} compara el $\kappa$ de B0 y B1 en cada
-variable. En \texttt{gemini}, la mejora del núcleo se concentra por completo en
-\texttt{masc\_generico} (de 0,073 a 0,261), mientras el resto de variables apenas se
-mueve. En los otros tres modelos ocurre lo contrario: las \textit{skills} degradan
-variables donde el control ya tenía algo de señal, sobre todo
-\texttt{denominacion\_sexualizada} (de 0,123 a 0,014 en \texttt{gpt-5.4-nano}, de
-0,136 a 0,061 en \texttt{gpt-4o-mini} y de 0,154 a 0,015 en \texttt{gemma4:e4b}). El
-efecto de la arquitectura no solo depende del modelo, sino que dentro de cada modelo
-se localiza en variables concretas.
-
-La Tabla~\ref{tab:iris-porvariable-b0b1-acc} recoge la exactitud en esa misma
-comparación, y su movimiento no acompaña al del $\kappa$. En
-\texttt{masc\_generico} de \texttt{gemini}, exactitud y $\kappa$ suben a la vez (de
-0,397 a 0,708 de exactitud), pero en otras celdas la exactitud cambia en sentido
-contrario al acuerdo, como en \texttt{asimetria\_mujer\_hombre} de
-\texttt{gpt-5.4-nano}, donde sube de 0,619 a 0,931 mientras el $\kappa$ cae de 0,026
-a $-0,012$. Es una nueva manifestación del desacoplamiento de la
-Sección~\ref{subsec:iris_divergencia}: la exactitud por variable sigue el desequilibrio,
-no el acuerdo.
-
-\begin{table}[H]
-    \centering
-    \begingroup
-    \scriptsize
-    \ttabbox[\FBwidth]{
-        \caption{Coeficiente $\kappa$ por variable en B0 (\textit{baseline}) y B1 (Agent Skills), para los cuatro modelos ($N=1.313$). Cada celda muestra B0 / B1.}
-        \label{tab:iris-porvariable-b0b1}
-    }{
-        \begin{tabularx}{\textwidth}{
-            >{\hsize=1.4\hsize\raggedright\arraybackslash\ttfamily}X
-            >{\hsize=0.9\hsize\centering\arraybackslash}X
-            >{\hsize=0.9\hsize\centering\arraybackslash}X
-            >{\hsize=0.9\hsize\centering\arraybackslash}X
-            >{\hsize=0.9\hsize\centering\arraybackslash}X
-        }
-            \toprule
-            \normalfont\textbf{Variable} & \textbf{Gemini} & \textbf{GPT-4o-mini} & \textbf{GPT-5.4-nano} & \textbf{Gemma} \\
-            \midrule
-            lenguaje\_sexista & 0,000 / 0,015 & $-0,013$ / $-0,037$ & 0,001 / 0,000 & $-0,004$ / 0,003 \\
-            masc\_generico & \textbf{0,073 / 0,261} & 0,023 / 0,034 & 0,103 / 0,016 & 0,102 / 0,109 \\
-            sexismo\_discurso & 0,004 / 0,000 & 0,002 / 0,011 & 0,007 / 0,004 & 0,002 / $-0,006$ \\
-            asimetria\_mujer\_hombre & 0,036 / 0,045 & 0,019 / 0,003 & 0,026 / $-0,012$ & 0,054 / 0,092 \\
-            denominacion\_sexualizada & 0,019 / 0,011 & 0,136 / 0,061 & 0,123 / 0,014 & 0,154 / 0,015 \\
-            \bottomrule
-        \end{tabularx}
-    }
-    \endgroup
-\end{table}
-
-\begin{table}[H]
-    \centering
-    \begingroup
-    \scriptsize
-    \ttabbox[\FBwidth]{
-        \caption{Exactitud por variable en B0 (\textit{baseline}) y B1 (Agent Skills), para los cuatro modelos ($N=1.313$). Cada celda muestra B0 / B1.}
-        \label{tab:iris-porvariable-b0b1-acc}
-    }{
-        \begin{tabularx}{\textwidth}{
-            >{\hsize=1.4\hsize\raggedright\arraybackslash\ttfamily}X
-            >{\hsize=0.9\hsize\centering\arraybackslash}X
-            >{\hsize=0.9\hsize\centering\arraybackslash}X
-            >{\hsize=0.9\hsize\centering\arraybackslash}X
-            >{\hsize=0.9\hsize\centering\arraybackslash}X
-        }
-            \toprule
-            \normalfont\textbf{Variable} & \textbf{Gemini} & \textbf{GPT-4o-mini} & \textbf{GPT-5.4-nano} & \textbf{Gemma} \\
-            \midrule
-            lenguaje\_sexista & 0,200 / 0,226 & 0,236 / 0,457 & 0,207 / 0,191 & 0,199 / 0,201 \\
-            masc\_generico & \textbf{0,397 / 0,708} & 0,317 / 0,332 & 0,580 / 0,262 & 0,451 / 0,482 \\
-            sexismo\_discurso & 0,571 / 0,569 & 0,554 / 0,561 & 0,554 / 0,558 & 0,567 / 0,565 \\
-            asimetria\_mujer\_hombre & 0,936 / 0,909 & 0,816 / 0,813 & 0,619 / 0,931 & 0,877 / 0,889 \\
-            denominacion\_sexualizada & 0,898 / 0,894 & 0,896 / 0,897 & 0,895 / 0,901 & 0,893 / 0,890 \\
-            \bottomrule
-        \end{tabularx}
-    }
-    \endgroup
-\end{table}
+Establecido el efecto del empaquetado, procede caracterizar cómo se comporta el
+sistema desplegado, esto es, el nivel B1, en cada una de las cinco variables.
 
 \subsubsection{Comportamiento por variable en el nivel B1}
 
@@ -930,3 +766,154 @@ que ambos equipos coinciden en marcar en la mayoría de las piezas. El peso rela
 de cada mitad cambia según la variable, y su distinción es la que ordena las
 implicaciones para el proyecto que se recogen en la
 Sección~\ref{sec:discussion}.
+
+\subsection{¿Cabe alguna conclusión de conjunto?}
+\label{subsec:iris_conjunto}
+
+El análisis por variable ha mostrado que el comportamiento del sistema cambia lo
+bastante de una a otra como para que ninguna afirmación general se sostenga sin
+matices. Queda por examinar si, pese a ello, cabe extraer alguna lectura de
+conjunto. Esta sección lo intenta, con la cautela que impone el hecho de que
+promediar métricas de variables cuya prevalencia va del 6,2\,\% al 81,0\,\% mezcla
+magnitudes que no son comparables entre sí
+(Sección~\ref{subsec:iris_divergencia}).
+
+La Tabla~\ref{tab:iris-b0b1} recoge esos promedios. Sus cifras no describen el
+rendimiento del sistema en ninguna tarea concreta, sino que ofrecen un resumen
+grueso que permite situar a los modelos entre sí y, sobre todo, cuantificar el
+coste, que sí admite agregación por tratarse de una suma sobre el corpus.
+
+\begin{table}[H]
+    \centering
+    \begingroup
+    \scriptsize
+    \setlength{\tabcolsep}{4pt}
+    \newcommand{\dr}[1]{\textcolor{gray!75}{$#1$}} % fila delta: en gris
+    \renewcommand{\texttt}[1]{{\ttfamily #1}}
+    \ttabbox[\FBwidth]{
+        \caption{Comparación B0 (\textit{baseline}) frente a B1 (Agent Skills). Medias sobre las cinco variables, $N=1.313$. Las filas $\Delta$ (en gris) recogen la variación B1$-$B0.}
+        \label{tab:iris-b0b1}
+    }{
+        \begin{tabularx}{\textwidth}{
+            >{\hsize=1.7\hsize\raggedright\arraybackslash}X
+            >{\hsize=0.6\hsize\centering\arraybackslash}X
+            >{\hsize=0.925\hsize\centering\arraybackslash}X
+            >{\hsize=0.925\hsize\columncolor{gray!12}\centering\arraybackslash}X
+            >{\hsize=0.925\hsize\centering\arraybackslash}X
+            >{\hsize=0.925\hsize\centering\arraybackslash}X
+        }
+            \toprule
+            \textbf{Modelo} & \textbf{Nivel} & \textbf{Exactitud} & \boldmath$\kappa$ & \textbf{F1 macro} & \textbf{Coste (USD)} \\
+            \midrule
+            \multirow{3}{*}{\texttt{gemini-3.1-flash-lite}}
+              & B0 & 0,600 & 0,026 & 0,388 & 5,64 \\
+              & B1 & 0,661 & \textbf{0,066} & 0,443 & 13,16 \\
+              & \dr{\Delta} & \dr{+0,061} & \dr{+0,040} & \dr{+0,055} & \dr{2{,}3\times} \\
+            \midrule
+            \multirow{3}{*}{\texttt{gpt-4o-mini}}
+              & B0 & 0,564 & 0,033 & 0,410 & 2,52 \\
+              & B1 & 0,612 & 0,014 & 0,438 & 6,89 \\
+              & \dr{\Delta} & \dr{+0,048} & \dr{-0,019} & \dr{+0,029} & \dr{2{,}7\times} \\
+            \midrule
+            \multirow{3}{*}{\texttt{gpt-5.4-nano}}
+              & B0 & 0,571 & 0,052 & 0,430 & 5,67 \\
+              & B1 & 0,569 & 0,004 & 0,364 & 10,86 \\
+              & \dr{\Delta} & \dr{-0,003} & \dr{-0,048} & \dr{-0,066} & \dr{1{,}9\times} \\
+            \midrule
+            \multirow{2}{*}{\textbf{Media (API)}}
+              & \textbf{B0} & 0,578 & \textbf{0,037} & 0,409 & \textemdash \\
+              & \textbf{B1} & \textbf{0,614} & 0,028 & 0,415 & \textemdash \\
+            \midrule
+            \multirow{3}{*}{\texttt{gemma4:e4b}\,\textnormal{\footnotesize(local)}}
+              & B0 & 0,597 & \textbf{0,061} & 0,421 & \textemdash \\
+              & B1 & 0,605 & 0,043 & 0,412 & \textemdash \\
+              & \dr{\Delta} & \dr{+0,008} & \dr{-0,018} & \dr{-0,009} & \textemdash \\
+            \bottomrule
+        \end{tabularx}
+    }
+    \endgroup
+\end{table}
+
+Con esa salvedad, el promedio permite una afirmación robusta, la de que
+\textbf{el empaquetado como \textit{Agent Skills} no eleva el acuerdo de forma
+general}. Solo \texttt{gemini-3.1-flash-lite} mejora su $\kappa$ al pasar a B1, de
+0,026 a 0,066, mientras que en los otros tres se mantiene o desciende, y todo ello
+con un coste de inferencia que se multiplica por un factor de entre 1,9 y 2,7. La
+arquitectura amplifica, por tanto, lo que cada modelo ya trae en lugar de
+conferirlo, conclusión que el análisis por variable precisa al mostrar que esa
+amplificación se concentra en \texttt{masc\_generico}.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{fig_b0b1_barras_blanco.pdf}
+    \caption{Niveles de exactitud, F1 macro y $\kappa$ por modelo, en B0 y B1
+    ($N=1.313$). Cada métrica se representa en su propia escala: el $\kappa$ vive
+    en un orden de magnitud mucho menor que la exactitud.}
+    \label{fig:iris-b0b1-metricas}
+\end{figure}
+
+\subsubsection{Una lección metodológica: la divergencia entre exactitud y \texorpdfstring{$\kappa$}{kappa}}
+\label{subsec:iris_divergencia}
+
+Merece atención un fenómeno que atraviesa el capítulo y cuyo interés excede a este
+trabajo. Considerando las medias, el nivel B1 sube la exactitud en 0,036 mientras
+el $\kappa$ baja en 0,009, de modo que ambas métricas se mueven en sentidos
+opuestos. La Figura~\ref{fig:iris-divergencia} lo visualiza como trayectorias de B0
+a B1, con la advertencia de que ambos paneles agregan las cinco variables.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{fig_b0b1_slope_blanco.pdf}
+    \caption{Evolución de cada modelo de B0 a B1 en las tres métricas ($N=1.313$).
+    La exactitud sube en tres de los cuatro modelos, pero el $\kappa$ solo mejora en
+    \texttt{gemini-3.1-flash-lite}. En el resto se mantiene o desciende. La mejora en
+    exactitud sin mejora en $\kappa$ es el desacoplamiento entre exactitud y acuerdo.}
+    \label{fig:iris-divergencia}
+\end{figure}
+
+El motivo de esa divergencia es conocido, y no exige que el modelo conozca la
+distribución de clases: en régimen \textit{zero-shot} no influye. Al volverse menos
+conservador (por efecto del empaquetado, no por una estrategia informada), el modelo
+responde \textit{Sí} con más frecuencia. En las variables donde la clase positiva
+resulta ser la mayoritaria, ese desplazamiento eleva la exactitud por simple
+coincidencia con la mayoría, no por discriminar mejor. Se trata, por tanto, de un
+artefacto estadístico de un sesgo ciego de respuesta, no de un mejor criterio. El
+coeficiente $\kappa$, que descuenta el acuerdo esperable por azar, no premia ese
+desplazamiento. Atender solo a la exactitud llevaría, por tanto, a dar por buena
+una mejora que en parte responde a un cambio en la frecuencia de respuesta.
+
+Conviene, con todo, no sustituir una lectura simplificada por otra, porque
+$\kappa$ arrastra sus propias dificultades y este caso las reúne casi todas. La
+primera es que el coeficiente se concibió para medir el acuerdo entre dos personas
+codificadoras en pie de igualdad~\cite{cohen1960}, mientras que aquí una de las
+partes es un patrón de referencia y la otra una estimación, situación para la que
+no fue pensado. La segunda es que el acuerdo esperado por azar depende de las
+frecuencias marginales de ambas partes, de manera que dos modelos con la misma
+exactitud pueden obtener valores de $\kappa$ muy distintos solo por marcar con
+frecuencias distintas. La tercera es la ya mencionada paradoja de
+$\kappa$~\cite{feinstein1990}, que con prevalencias extremas hunde el coeficiente
+aunque el acuerdo observado sea alto. De ello se sigue una consecuencia que
+condiciona la estructura de este capítulo, y es que los valores de $\kappa$ de
+variables con prevalencias tan dispares no son comparables entre sí ni admiten
+promediarse con sentido, razón por la cual el análisis se realiza variable a
+variable (Sección~\ref{subsec:iris_porvariable}) y las medias que aparecen en esta
+sección deben tomarse como una orientación gruesa.
+
+Lo que cabe sostener, en suma, es que exactitud, $\kappa$ y prevalencia responden a
+preguntas distintas y que interpretarlas por separado conduce a conclusiones
+opuestas, de modo que en tareas de clasificación desequilibradas procede informar
+de las tres de forma conjunta.
+
+Atendiendo al $\kappa$, que es la métrica que menos se deja arrastrar por la
+frecuencia de marcado aunque no esté libre de problemas, el efecto de las
+\textit{Agent Skills} \textbf{depende del modelo}. Solo \texttt{gemini-3.1-flash-lite} mejora con la
+arquitectura: su $\kappa$ pasa de 0,026 a 0,066, y lo hace acompañado de subidas
+simultáneas en exactitud y F1. En los dos modelos de OpenAI las \textit{skills} no ayudan e incluso
+perjudican ($\Delta\kappa = -0,019$ en \texttt{gpt-4o-mini} y $-0,048$ en
+\texttt{gpt-5.4-nano}), y el modelo local se comporta igual que ellos ($\kappa$ de
+0,061 a 0,043). De los cuatro modelos, solo uno mejora con las \textit{skills}. En
+los otros tres el $\kappa$ se mantiene o desciende, y la media no aumenta. Que el
+efecto dependa del modelo y no eleve el acuerdo en agregado admite varias lecturas, desde el techo de la propia tarea hasta la heterogeneidad de la anotación, que se
+retoman en la discusión (Sección~\ref{sec:discussion}) una vez presentada toda la
+evidencia.
+
