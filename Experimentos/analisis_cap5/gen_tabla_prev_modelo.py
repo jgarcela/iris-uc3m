@@ -29,7 +29,7 @@ o.write(r"""\begin{table}[H]
     \scriptsize
     \renewcommand{\texttt}[1]{{\ttfamily #1}}
     \ttabbox[\FBwidth]{
-        \caption{Prevalencia de \textit{Sí} (\%) de cada modelo por variable, en el nivel B1 ($N=1.313$). La columna \textbf{Prev. Sí} (sombreada) es la prevalencia anotada por las expertas, que sirve de referencia. En negrita, el modelo cuya prevalencia predicha más se acerca a la anotada, lo que no implica que marque las mismas piezas.}
+        \caption{Prevalencia de \textit{Sí} (\%) de cada modelo por variable, en el nivel B1 ($N=1.313$). La columna \textbf{Prev. Sí} (sombreada) es la prevalencia anotada por las expertas, que sirve de referencia.}
         \label{tab:iris-prev-modelo-var}
     }{
         \begin{tabularx}{\textwidth}{
@@ -46,12 +46,9 @@ o.write(r"""\begin{table}[H]
 """)
 for cod, nom in VAR:
     prev = pct(d[(cod, MOD[0])]["prev_real"])
-    celdas = []
-    for m in MOD:
-        v = pct(d[(cod, m)]["prev_pred"])
-        # se resalta el modelo que mas se acerca a la prevalencia anotada
-        cerca = min(MOD, key=lambda mm: abs(float(d[(cod, mm)]["prev_pred"]) - float(d[(cod, mm)]["prev_real"])))
-        celdas.append(f"\\textbf{{{v}}}" if m == cerca else v)
+    # Sin resaltar ninguna celda: acercarse a la prevalencia anotada no significa
+    # marcar las mismas piezas, de modo que destacarlo induciria a error.
+    celdas = [pct(d[(cod, m)]["prev_pred"]) for m in MOD]
     o.write(f"            {nom.replace('_', chr(92) + '_')} & {prev} & " + " & ".join(celdas) + r" \\" + "\n")
 o.write(r"""            \bottomrule
         \end{tabularx}
