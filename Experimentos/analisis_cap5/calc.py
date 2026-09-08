@@ -69,8 +69,12 @@ def load(path, model, config, errsuffix=False):
             b=b.where(d[ec].isna())
         out[v]=b
         fails[v]=int(b.isna().sum())
+    # Las respuestas que el modelo no llego a emitir en formato valido, y las piezas
+    # que no aparecen en el fichero, se contabilizan como negativas. Asi todas las
+    # metricas del capitulo se calculan sobre las mismas 1.313 piezas.
+    out=out.reindex(sorted(IDS)).fillna(0)
     sources[(model,config)]=out
-    notes.append(f'{model}|{config}: filas fichero={nraw}, usadas={len(out)}, faltan_vs_1313={1313-len(out)}, nulas/fallidas por var={fails}')
+    notes.append(f'{model}|{config}: filas fichero={nraw}, usadas={len(out)}, faltan_vs_1313={1313-len(d)}, nulas/fallidas por var={fails}')
 
 for m in API:
     load(f'{BASE}/results/b0_{m}/exp21_{m}.csv',m,'B0')
@@ -106,9 +110,10 @@ for (m,cfg),df in sources.items():
                                  n_descartadas_pred=int(len(G)-len(idx)))
         rows.append(r)
 R=pd.DataFrame(rows)
-cols=['codigo','variable','modelo','configuracion','n','n_descartadas_pred','prev_real','prev_pred','exactitud','precision','recall','f1_pos','f1_macro','kappa','TP','FP','FN','TN']
+cols=['codigo','variable','modelo','configuracion','n','prev_real','prev_pred','exactitud','precision','recall','f1_pos','f1_macro','kappa','TP','FP','FN','TN']
 R=R[cols].sort_values(['codigo','configuracion','modelo'])
-R[R.configuracion.isin(['B0','B1'])].to_csv(f'{OUT}/metricas_por_variable.csv',index=False)
+(R[R.configuracion.isin(['B0','B1'])].rename(columns={'configuracion':'nivel'})
+   .to_csv(f'{OUT}/metricas_por_variable.csv',index=False))
 R[R.configuracion.isin(['B1','abl_minimo','abl_singuia','abl_sinres'])].to_csv(f'{OUT}/ablacion_por_variable.csv',index=False)
 R.to_csv(f'{OUT}/_todas_metricas.csv',index=False)
 
@@ -123,7 +128,7 @@ for lvl in ['B0','B1']:
             idx=sa.index.intersection(sb.index)
             x=sa.loc[idx].astype(int); y=sb.loc[idx].astype(int)
             kr.append(dict(codigo=CODE[v],variable=v,nivel=lvl,modelo_a=a,modelo_b=b,n=len(idx),
-                           acuerdo_bruto=(x.values==y.values).mean(),
+                           acuerdo=(x.values==y.values).mean(),
                            kappa=cohen_kappa_score(x,y)))
 K=pd.DataFrame(kr); K.to_csv(f'{OUT}/kappa_entre_modelos_por_variable.csv',index=False)
 
@@ -154,5 +159,24 @@ VT=pd.DataFrame(vr)
 c2=['codigo','variable','modelo','regla_empate','n','n_empates','prev_real','prev_pred','exactitud','precision','recall','f1_pos','f1_macro','kappa','TP','FP','FN','TN']
 VT=VT[c2].sort_values(['codigo','modelo'])
 VT.to_csv(f'{OUT}/voto_mayoria.csv',index=False)
+# --- equipos de anotacion (nivel B1) ---
+# El equipo se deduce del campo no_NombreUsuario del corpus anotado.
+equipo=(gt.set_index('IdNoticia')['no_NombreUsuario'].astype(str)
+          .str.contains('ndexa',case=False).map({True:'Indexa',False:'UCM3'}))
+er=[]
+for v in V:
+    for e in ['Indexa','UCM3']:
+        idx=[i for i in G.index if equipo.get(i)==e]
+        y=G.loc[idx,v].astype(int)
+        row=dict(codigo=CODE[v],equipo=e,n=len(idx),prev=y.mean())
+        for m in MODELS:
+            p_=sources[(m,'B1')].loc[idx,v].astype(int)
+            row['recall_'+m]=recall_score(y,p_,pos_label=1,zero_division=0)
+            row['kappa_'+m]=cohen_kappa_score(y,p_)
+        er.append(row)
+E=pd.DataFrame(er)
+E=E[['codigo','equipo','n','prev']+[f'{k}_{m}' for m in MODELS for k in ('recall','kappa')]]
+E.to_csv(f'{OUT}/equipos_por_variable.csv',index=False)
+
 print('\n'.join(notes))
 print('EMPATES por variable:',tie_info)

@@ -1,0 +1,31 @@
+% Generado por gen_tablas_porvariable.py. No editar a mano.
+
+\begin{table}[H]
+    \centering
+    \begingroup
+    \scriptsize
+    \setlength{\tabcolsep}{4pt}
+    \ttabbox[\FBwidth]{
+        \caption{Resultados en \texttt{masc\_generico} (V26) por modelo y nivel ($N=1.313$, prevalencia anotada 0,810). En negrita, el mejor valor de cada métrica en esta variable.}
+        \label{tab:var-v26}
+    }{
+        \begin{tabular}{@{}l l c c c c c c c@{}}
+            \toprule
+            \textbf{Modelo} & \textbf{Nivel} & \textbf{Prev. pred.} & \textbf{Exac.} & \textbf{Prec.} & \textbf{Recall} & \textbf{F1 (\textit{Sí})} & \textbf{F1 macro} & \textbf{$\kappa$} \\
+            \midrule
+            \texttt{gemini-3.1-flash-lite} & B0 & 0,257 & 0,397 & 0,902 & 0,287 & 0,435 & 0,394 & 0,073 \\
+             & B1 & 0,669 & \textbf{0,708} & 0,887 & \textbf{0,733} & \textbf{0,803} & \textbf{0,621} & \textbf{0,261} \\
+            \midrule
+            \texttt{gpt-4o-mini} & B0 & 0,179 & 0,317 & 0,855 & 0,189 & 0,309 & 0,317 & 0,023 \\
+             & B1 & 0,191 & 0,332 & 0,873 & 0,206 & 0,333 & 0,332 & 0,034 \\
+            \midrule
+            \texttt{gpt-5.4-nano} & B0 & 0,552 & 0,580 & 0,854 & 0,582 & 0,692 & 0,517 & 0,103 \\
+             & B1 & 0,097 & 0,262 & 0,874 & 0,104 & 0,186 & 0,256 & 0,016 \\
+            \midrule
+            \texttt{gemma4:e4b} & B0 & 0,321 & 0,451 & \textbf{0,907} & 0,359 & 0,514 & 0,441 & 0,102 \\
+             & B1 & 0,369 & 0,482 & 0,897 & 0,408 & 0,561 & 0,465 & 0,109 \\
+            \bottomrule
+        \end{tabular}
+    }
+    \endgroup
+\end{table}

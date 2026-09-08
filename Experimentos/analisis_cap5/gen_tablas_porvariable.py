@@ -21,9 +21,11 @@ def num(x):
         v = 0.0
     return f"{v:.3f}".replace(".", ",").replace("-", "$-$")
 
-o = io.StringIO()
-o.write("% Generado por gen_tablas_porvariable.py. No editar a mano.\n")
+DEST = os.path.normpath(os.path.join(BASE, "..", "TFM", "TFM___JORGE_GARCELA_N_GO_MEZ",
+        "Plantilla_TFG_ingles_2019", "chapters", "5 results and discussion"))
 for cod, nom in VAR:
+    o = io.StringIO()
+    o.write("% Generado por gen_tablas_porvariable.py. No editar a mano.\n")
     sub = [r for r in rows if r["codigo"] == cod]
     prev = num(sub[0]["prev_real"])
     best = {c: max(float(r[c]) for r in sub) for c, _ in COLS if c != "prev_pred"}
@@ -49,7 +51,6 @@ for cod, nom in VAR:
             o.write(f"            {mlab if i == 0 else ''} & {niv} & " + " & ".join(cells) + " \\\\\n")
     o.write("            \\bottomrule\n        \\end{tabular}\n    }\n    \\endgroup\n\\end{table}\n")
 
-dest = os.path.normpath(os.path.join(BASE, "..", "TFM", "TFM___JORGE_GARCELA_N_GO_MEZ",
-        "Plantilla_TFG_ingles_2019", "chapters", "5 results and discussion", "tablas_porvariable.tex"))
-open(dest, "w", encoding="utf-8").write(o.getvalue())
-print("escrito:", dest)
+    dest = os.path.join(DEST, f"tabla_var_{cod.lower()}.tex")
+    open(dest, "w", encoding="utf-8").write(o.getvalue())
+    print("escrito:", dest)

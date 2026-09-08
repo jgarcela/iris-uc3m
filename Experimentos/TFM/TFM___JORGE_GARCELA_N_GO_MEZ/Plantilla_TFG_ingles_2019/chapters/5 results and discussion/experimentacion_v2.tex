@@ -98,8 +98,9 @@ directamente los valores de una variable con los de otra y que explica la
 organización de este capítulo, que examina cada variable por separado antes de
 plantearse cualquier lectura de conjunto.
 
-\subsection{Resultados por variable: el efecto del empaquetado}
-\label{subsec:iris_porvariable_b0b1}
+
+\subsection{Análisis por variable}
+\label{subsec:iris_porvariable}
 
 Las Tablas~\ref{tab:var-v25} a~\ref{tab:var-v35} recogen, para cada variable, el
 rendimiento de los cuatro modelos en los dos niveles. Se reportan de forma
@@ -108,36 +109,219 @@ esto es, exactitud, precisión y recall sobre la clase positiva, F1 de esa clase
 F1 macro y el coeficiente $\kappa$, junto con la prevalencia que predice cada
 modelo, que permite ver cuánto marca en relación con lo que marcan las expertas.
 
-\input{chapters/5 results and discussion/tablas_porvariable}
+Cada variable se examina en dos planos. El primero es el efecto del empaquetado en
+\textit{skills}, esto es, qué cambia al pasar de B0 a B1. El segundo es el nivel que
+alcanza el sistema tal y como se desplegaría, que es el de B1. El recall merece
+atención particular en ambos, ya que indica qué proporción del sexismo señalado por
+las expertas llega a detectar el sistema, y es la magnitud que decide su utilidad
+como herramienta de apoyo. La exactitud se interpreta siempre frente a la de los
+clasificadores triviales de la Sección~\ref{subsec:iris_referencia}, ya que en las
+variables de prevalencia extrema es fácil alcanzar cifras altas sin haber detectado
+nada.
 
-El primer resultado es que \textbf{el efecto de las \textit{skills} no es uniforme
-ni entre modelos ni entre variables}. En \texttt{masc\_generico} (V26)
-\texttt{gemini-3.1-flash-lite} mejora de forma clara al pasar a B1, ya que su
-recall sube de 0,287 a 0,733 y su F1 de la clase positiva de 0,435 a 0,803, esto
-es, pasa de detectar poco más de la cuarta parte del masculino genérico que marcan
-las expertas a detectar casi tres cuartas partes. La exactitud acompaña (de 0,397 a
-0,708) y también lo hace el $\kappa$ (de 0,073 a 0,261). Es la única celda del
-capítulo en que todas las métricas se mueven a la vez en la dirección esperada, lo
-que descarta que la mejora responda a un artefacto de la distribución. En
-\texttt{asimetria\_mujer\_hombre} (V33) el modelo local mejora también con B1, con
-un recall que pasa de 0,136 a 0,160 y un F1 de 0,120 a 0,151.
+\subsubsection{\texttt{lenguaje\_sexista} (V25)}
 
-En sentido contrario, las \textit{skills} degradan varias celdas en las que el
-control ya tenía algo de señal, y lo hacen sobre todo en
-\texttt{denominacion\_sexualizada} (V35). Ahí el recall de \texttt{gemma4:e4b} cae
-de 0,130 a 0,023 y el de \texttt{gpt-4o-mini} de 0,107 a 0,046, con descensos
-paralelos en F1 y en $\kappa$ (este último de 0,154 a 0,015 y de 0,136 a 0,061
-respectivamente).
+\input{chapters/5 results and discussion/tabla_var_v25}
 
-El caso de \texttt{lenguaje\_sexista} (V25) en \texttt{gpt-4o-mini} ilustra por qué
-conviene mirar varias métricas a la vez. Al pasar a B1 su exactitud casi se duplica
+\textbf{Efecto del empaquetado.} Solo una celda se mueve de forma apreciable, la de
+\texttt{gpt-4o-mini}, y conviene detenerse en ella porque ilustra por qué el
+capítulo mira varias métricas a la vez. Al pasar a B1 su exactitud casi se duplica
 (de 0,236 a 0,457) y su F1 de la clase positiva pasa de 0,151 a 0,573, mientras que
 el $\kappa$ empeora (de $-0,013$ a $-0,037$). Lo que ha cambiado no es su capacidad
 de discriminar, sino cuánto marca, que pasa del 9,0\,\% al 46,2\,\% de las piezas.
 En una variable cuya prevalencia anotada es del 81,0\,\%, marcar más acerca
 mecánicamente a la mayoría y mejora las métricas que no descuentan el azar. Este
-desacoplamiento, que reaparece en varias celdas, se examina como cuestión
-metodológica en la Sección~\ref{subsec:iris_divergencia}.
+desacoplamiento, que reaparece en otras variables, se examina como cuestión
+metodológica en la Sección~\ref{subsec:iris_divergencia}. Los otros tres modelos
+apenas se mueven, con recalls que siguen en el entorno de la centésima en los dos
+niveles.
+
+\textbf{Nivel alcanzado.} Es el resultado más severo del capítulo. El recall es
+prácticamente nulo en tres de los cuatro modelos (0,046 en \texttt{gemini}, 0,014 en
+\texttt{gemma} y 0,001 en \texttt{gpt-5.4-nano}), de modo que el sistema deja sin
+señalar casi todo el lenguaje sexista que las expertas identifican. No se trata de un
+matiz de umbral ni de un desacuerdo sobre casos dudosos, sino de que \textbf{el modelo
+no detecta el fenómeno}. Y conviene subrayar la magnitud de lo que se está pasando por
+alto, ya que ambos equipos de anotación marcan esta variable en la mayoría de las
+piezas, el 74,6\,\% Indexa y el 85,5\,\% UCM3
+(Tabla~\ref{tab:iris-equipos-recall}), es decir, coinciden en que el fenómeno está ahí
+aunque discrepen en cuánto. La única excepción es \texttt{gpt-4o-mini}, que sí marca de
+forma abundante (recall 0,450), pero su acuerdo sigue siendo negativo
+($\kappa = -0,037$), lo que indica que marca en piezas distintas de aquellas en que lo
+hacen las anotadoras. Ni detectar poco ni detectar mucho aproxima al modelo al criterio
+experto. Que la variable sea la más genérica del bloque, el uso discriminatorio del
+lenguaje por razón de sexo sin describir un mecanismo concreto, ayuda a explicar la
+dificultad, pero no la disuelve: identificar ese uso es precisamente lo que se pedía al
+sistema. Queda por tanto un trabajo considerable por delante antes de que un modelo
+pueda asistir en esta variable, y se retoma en la discusión
+(Sección~\ref{sec:discussion}).
+
+\textbf{Una particularidad, el salto semántico.} El \emph{salto semántico} es el caso
+en que un masculino presentado como genérico se revela no inclusivo al aparecer
+después una marca explícita de mujer, y el libro de códigos lo distingue con el
+valor~3 de esta variable (Sección~\ref{sec:iris_variables}). El sistema lo contempla y
+llega a emitirlo, 37 veces \texttt{gpt-4o-mini} en el nivel B1 y de forma testimonial
+los demás modelos. La anotación experta de este corpus, en cambio, no emplea ese valor
+en ninguna de las 1.313 piezas, que se reparten entre 250 negativos y 1.063 positivos
+ordinarios. No es posible, por tanto, evaluar si el sistema detecta correctamente el
+salto semántico, y esa es también la razón por la que la agrupación binaria de los
+valores 2 y 3 no altera en nada la referencia. La identificación de este fenómeno queda
+como línea de trabajo futura, condicionada a que una anotación posterior lo codifique
+de forma diferenciada.
+
+\subsubsection{\texttt{masc\_generico} (V26)}
+
+\input{chapters/5 results and discussion/tabla_var_v26}
+
+\textbf{Efecto del empaquetado.} \texttt{gemini-3.1-flash-lite} sube su recall de
+0,287 a 0,733 y su F1 de la clase positiva de 0,435 a 0,803, esto es, pasa de detectar
+poco más de la cuarta parte del masculino genérico que marcan las expertas a detectar
+casi tres cuartas partes. La exactitud acompaña (de 0,397 a 0,708) y también lo hace el
+$\kappa$ (de 0,073 a 0,261), mientras que la precisión apenas cede (de 0,902 a 0,887).
+Que la ganancia en detección no se pague con falsos positivos, y que el $\kappa$ suba
+en la misma dirección, descarta que se trate de un artefacto de la distribución. \texttt{gemma4:e4b} mejora de forma más
+modesta (recall de 0,359 a 0,408) y \texttt{gpt-4o-mini} apenas se mueve. En sentido
+contrario, \texttt{gpt-5.4-nano} se vuelve mucho más conservador al recibir las
+\textit{skills}, ya que su recall cae de 0,582 a 0,104 y su F1 de 0,692 a 0,186. El
+empaquetado, por tanto, desplaza el umbral de cada modelo, y no siempre en la misma
+dirección.
+
+\textbf{Nivel alcanzado.} Es la única variable en que el sistema detecta de verdad.
+\texttt{gemini} recupera el 73,3\,\% del masculino genérico que marcan las expertas,
+con una precisión de 0,887 y un F1 de 0,803, cifras que lo convierten en un detector
+utilizable. El local \texttt{gemma4:e4b} queda en segundo lugar, con un recall de 0,408
+y un F1 de 0,561. Los dos modelos de OpenAI, en cambio, son mucho más conservadores
+(recall 0,206 y 0,104), es decir, marcan el masculino genérico en muy pocas piezas.
+
+\textbf{Una particularidad, el umbral.} La variable es propensa a este desajuste,
+porque el español emplea el masculino genérico de forma pervasiva
+(\textit{los trabajadores}, \textit{los ciudadanos}) y la anotación tiende a marcarlo
+de forma sistemática, de modo que un modelo restrictivo se queda corto. El umbral en el
+que cada modelo decide marcar es una característica del propio modelo, y los de OpenAI
+lo sitúan más alto que \texttt{gemini} o \texttt{gemma}.
+
+\subsubsection{\texttt{sexismo\_discurso} (V30)}
+
+\input{chapters/5 results and discussion/tabla_var_v30}
+
+\textbf{Efecto del empaquetado.} Es la variable en que las \textit{skills} menos
+cambian las cosas. Los recalls pasan de 0,018 a 0,020 en \texttt{gemini}, de 0,128 a
+0,112 en \texttt{gpt-4o-mini}, de 0,146 a 0,114 en \texttt{gpt-5.4-nano} y de 0,039 a
+0,025 en \texttt{gemma}, con movimientos equivalentes en F1 y en $\kappa$. Ni el
+empaquetado ni el acceso a las guías alteran de forma apreciable el comportamiento del
+sistema en esta variable.
+
+\textbf{Nivel alcanzado.} El recall se mueve entre 0,020 y 0,114, de manera que, pese a
+una prevalencia anotada del 42,8\,\%, los modelos dejan sin señalar más del 88\,\% de
+los casos, y el F1 de la clase positiva no supera 0,181. El acuerdo ronda además el
+azar en los cuatro ($\kappa$ entre $-0,006$ y 0,011). La exactitud, en el entorno de
+0,56, tampoco aporta buenas noticias, ya que un clasificador que respondiera siempre
+\textit{No} acertaría en el 57,2\,\% de las piezas, que es exactamente la proporción
+de negativos de la variable.
+
+\textbf{Una particularidad, la división de la anotación.} La infradetección se parece a
+la de V25, pero su origen no es el mismo. Aquí la propia anotación humana está
+profundamente dividida, ya que un equipo marca el fenómeno casi seis veces más que el
+otro (11,5\,\% frente a 65,2\,\%, Tabla~\ref{tab:iris-equipos-recall}), mientras que en
+V25 ambos equipos coincidían en marcar la mayoría de las piezas. En V25 los modelos no
+ven lo que las personas ven de forma concordante. En V30, en cambio, ni siquiera las
+personas convergen en qué debe marcarse, así que el bajo acuerdo del sistema refleja a
+la vez una detección insuficiente y un criterio humano poco estabilizado. Es además la
+única variable de \emph{fondo} de las cinco, la que atañe a lo que se cuenta y no a
+cómo se dice (Sección~\ref{sec:iris_variables}), lo que la hace más dependiente de la
+interpretación del contexto social de la pieza.
+
+\subsubsection{\texttt{asimetria\_mujer\_hombre} (V33)}
+
+\input{chapters/5 results and discussion/tabla_var_v33}
+
+\textbf{Efecto del empaquetado.} El modelo local mejora con B1 en las seis métricas a
+la vez, con un recall que pasa de 0,136 a 0,160, una precisión de 0,107 a 0,143, un F1
+de la clase positiva de 0,120 a 0,151 y un $\kappa$ de 0,054 a 0,092. Es la única celda
+del capítulo en que ninguna métrica retrocede, si bien la mejora parte de una base tan
+baja que no convierte al modelo en un detector utilizable. \texttt{gemini} acompaña la
+dirección (recall de 0,025 a 0,074). El caso de \texttt{gpt-5.4-nano} va en dirección contraria y merece un
+comentario, porque en B0 obtenía el mayor recall de la variable (0,457) marcando
+\textit{Sí} en el 37,5\,\% de las piezas, con una precisión de 0,075 que delata que
+marcaba casi al azar. En B1 marca el 0,7\,\% y su recall cae a 0,000. Un recall alto
+obtenido marcando cuatro de cada diez piezas no es detección, y es otra razón para no
+leer ninguna métrica en solitario.
+
+\textbf{Nivel alcanzado.} Los valores son bajos en los cuatro modelos, con F1 de la
+clase positiva entre 0,000 y 0,151 y recalls que no superan 0,160, de manera que el
+sistema deja sin señalar la mayor parte de los casos.
+
+\textbf{Una particularidad, la prevalencia mínima.} Con un 6,2\,\% de piezas marcadas,
+la exactitud resulta engañosa, ya que responder siempre \textit{No} acertaría en el
+93,8\,\% de las piezas y ningún modelo llega a esa cifra. El F1 de la clase positiva, concebido precisamente
+para situaciones de clase minoritaria, ofrece aquí la lectura más ajustada
+(Sección~\ref{sec:metricas_eval}).
+
+\subsubsection{\texttt{denominacion\_sexualizada} (V35)}
+
+\input{chapters/5 results and discussion/tabla_var_v35}
+
+\textbf{Efecto del empaquetado.} Es la única variable en que ningún modelo mejora su
+detección al pasar a B1. El recall de \texttt{gemma4:e4b} cae de 0,130 a 0,023 y el de
+\texttt{gpt-4o-mini} de 0,107 a 0,046, con descensos paralelos en F1 y en $\kappa$
+(este último de 0,154 a 0,015 y de 0,136 a 0,061 respectivamente). \texttt{gpt-5.4-nano}
+pasa de un recall de 0,099 a 0,008 y \texttt{gemini} se mantiene en valores igual de
+bajos. El empaquetado vuelve al sistema más restrictivo justo en la variable en la que
+ya marcaba poco.
+
+\textbf{Nivel alcanzado.} Ningún modelo supera un recall de 0,046 ni un F1 de la clase
+positiva de 0,082, de modo que la variable queda fuera del alcance del sistema tal y
+como está configurado. La exactitud, cercana a 0,89 en los cuatro, no debe leerse como
+un buen resultado, ya que responder siempre \textit{No} acertaría en el 90,0\,\% de las
+piezas y ninguno se distancia de esa cifra. Con una prevalencia del 10,0\,\%, el F1 de
+la clase positiva vuelve a ser aquí la lectura más ajustada
+(Sección~\ref{sec:metricas_eval}).
+
+\textbf{Una particularidad, la precisión de \texttt{gpt-5.4-nano}.} Este modelo marca
+\textit{Sí} en tan pocas piezas que su precisión de 1,000 descansa sobre un puñado de
+predicciones y no permite conclusión alguna sobre su fiabilidad general. Dicho esto, y
+aunque un recall de 0,008 lo vuelve inservible como detector, el dato tiene una lectura
+menos desfavorable, y es que cuando ese modelo decide marcar, acierta. Un sistema así
+resulta inútil para revisar un corpus completo, pero no genera falsas alarmas.
+
+\subsubsection{Lectura de conjunto de las cinco variables}
+
+El recorrido anterior deja dos conclusiones. La primera es que \textbf{el efecto de las
+\textit{skills} no es uniforme ni entre modelos ni entre variables}. Hay una mejora
+inequívoca en \texttt{masc\_generico} con \texttt{gemini}, una mejora modesta del
+modelo local en \texttt{asimetria\_mujer\_hombre}, ningún efecto apreciable en
+\texttt{sexismo\_discurso}, una degradación sistemática en
+\texttt{denominacion\_sexualizada} y, en \texttt{lenguaje\_sexista}, un cambio de umbral
+que mejora unas métricas y empeora otras sin que mejore la discriminación. El
+empaquetado no actúa, por tanto, como una mejora general del sistema, sino como un
+desplazamiento del criterio con el que cada modelo decide marcar.
+
+La segunda es que ese criterio es muy distinto en cada modelo. La
+Tabla~\ref{tab:iris-prev-modelo-var} recoge, por variable, la prevalencia de
+\textit{Sí} de cada uno en el nivel B1, que ayuda a interpretar el recall, ya que marcar
+poco impide detectar buena parte de lo que las expertas sí señalan. En las tres
+variables de prevalencia alta o media todos los modelos marcan muy por debajo de las
+expertas, con la única excepción de \texttt{gemini} en \texttt{masc\_generico}
+(66,9\,\% frente al 81,0\,\% anotado). El patrón, además, no es común, ya que
+\texttt{gpt-4o-mini} marca \texttt{lenguaje\_sexista} en el 46,2\,\% de las piezas
+donde \texttt{gemini} apenas llega al 3,9\,\%, mientras que en \texttt{masc\_generico}
+sucede lo contrario. Conviene, eso sí, no leer esta tabla como una medida de acierto,
+ya que \texttt{gemma4:e4b} reproduce casi exactamente la prevalencia anotada en
+\texttt{asimetria\_mujer\_hombre} (6,9\,\% frente a 6,2\,\%) y sin embargo solo
+detecta el 16,0\,\% de los casos, esto es, marca un número parecido de piezas pero no
+las mismas. Cada modelo tiene su propio umbral por variable.
+
+\input{chapters/5 results and discussion/tabla_prev_modelo}
+
+Un rasgo atraviesa a las cinco variables: el recall es bajo casi en todas, es decir,
+los modelos detectan solo una fracción del sexismo que marcan las expertas. Esta
+\textbf{infradetección generalizada} es el patrón dominante del capítulo. La
+Sección~\ref{subsec:iris_errores} la examina para determinar \emph{qué parte} de ese
+desajuste corresponde a una limitación de los modelos y qué parte a la dificultad de
+la propia tarea, sin presuponer que se deba únicamente a una de las dos. A ello se
+añade el comportamiento dispar que se acaba de describir, que desaconseja tratar a los
+modelos como un bloque homogéneo y obliga a decidir la configuración variable a
+variable.
 
 \subsection{Descomposición de la arquitectura por componentes (ablación)}
 \label{subsec:iris_descomposicion}
@@ -202,165 +386,8 @@ distintas semillas que permitan afirmar que sean estadísticamente significativa
 Cabe sostener que la configuración completa no muestra ventaja, pero no que una
 configuración concreta sea definitivamente superior a otra.
 
-\subsection{Diagnóstico por variable}
-\label{subsec:iris_porvariable}
-\label{subsec:iris_diagnostico}
 
-Establecido el efecto del empaquetado, procede caracterizar cómo se comporta el
-sistema desplegado, esto es, el nivel B1, en cada una de las cinco variables.
-
-\subsubsection{Comportamiento por variable en el nivel B1}
-
-El comportamiento de cada variable se examina a continuación sobre las
-Tablas~\ref{tab:var-v25} a~\ref{tab:var-v35} ya presentadas, atendiendo en cada caso
-a la métrica que resulta informativa según su prevalencia
-(Sección~\ref{sec:metricas_eval}). El recall merece atención particular en todas
-ellas, ya que indica qué proporción del sexismo señalado por las expertas llega a
-detectar el sistema, y es la magnitud que decide su utilidad como herramienta de
-apoyo.
-
-\begin{itemize}
-    \item \textbf{\texttt{lenguaje\_sexista} (V25): detección fallida.} Es el
-    resultado más severo del capítulo. El recall es prácticamente nulo en tres de los
-    cuatro modelos (0,046 en \texttt{gemini}, 0,012 en \texttt{gemma} y 0,001 en
-    \texttt{gpt-5.4-nano}), de modo que el sistema deja sin señalar casi todo el
-    lenguaje sexista que las expertas identifican. No se trata de un matiz de umbral
-    ni de un desacuerdo sobre casos dudosos, sino de que \textbf{el modelo no detecta
-    el fenómeno}. Y conviene subrayar la magnitud de lo que se está pasando por alto,
-    ya que ambos equipos de anotación marcan esta variable en la mayoría de las
-    piezas, el 74,6\,\% Indexa y el 85,5\,\% UCM3
-    (Tabla~\ref{tab:iris-equipos-recall}), es decir, coinciden en que el fenómeno está
-    ahí aunque discrepen en cuánto. La única excepción es \texttt{gpt-4o-mini}, que sí
-    marca de forma abundante (recall 0,450), pero su acuerdo sigue siendo negativo
-    ($\kappa = -0,037$), lo que indica que marca en piezas distintas de aquellas en
-    que lo hacen las anotadoras. Ni detectar poco ni detectar mucho aproxima al modelo
-    al criterio experto. Que la variable sea la más genérica del bloque, el uso
-    discriminatorio del lenguaje por razón de sexo sin describir un mecanismo
-    concreto, ayuda a explicar la dificultad, pero no la disuelve: identificar ese uso
-    es precisamente lo que se pedía al sistema. Queda por tanto un trabajo
-    considerable por delante antes de que un modelo pueda asistir en esta variable, y
-    se retoma en la discusión (Sección~\ref{sec:discussion}).
-
-    Merece una nota el \emph{salto semántico}, el caso en que un masculino
-    presentado como genérico se revela no inclusivo al aparecer después una marca
-    explícita de mujer, que el libro de códigos distingue con el valor~3 de esta
-    variable (Sección~\ref{sec:iris_variables}). El sistema lo contempla y llega a
-    emitirlo, 37 veces \texttt{gpt-4o-mini} en el nivel B1 y de forma testimonial
-    los demás modelos. La anotación experta de este corpus, en cambio, no emplea
-    ese valor en ninguna de las 1.313 piezas, que se reparten entre 250 negativos y
-    1.063 positivos ordinarios. No es posible, por tanto, evaluar si el sistema
-    detecta correctamente el salto semántico, y esa es también la razón por la que
-    la agrupación binaria de los valores 2 y 3 no altera en nada la referencia. La
-    identificación de este fenómeno queda como línea de trabajo futura, condicionada
-    a que una anotación posterior lo codifique de forma diferenciada.
-
-    \item \textbf{\texttt{masc\_generico} (V26): el único acuerdo genuino, y su
-    umbral.} Es la única variable en que el sistema detecta de verdad.
-    \texttt{gemini} recupera el 73,3\,\% del masculino genérico que marcan las
-    expertas, con una precisión de 0,887 y un F1 de 0,803, cifras que lo convierten
-    en un detector utilizable. Todas las métricas mejoran a la vez sobre el
-    \textit{baseline}, incluido el $\kappa$ (0,261), lo que descarta el artefacto de
-    marginales y confirma una ganancia real. El local \texttt{gemma4:e4b} queda en
-    segundo lugar, con un recall de 0,408 y un F1 de 0,561. Los dos modelos de OpenAI, en cambio, son mucho más
-    conservadores (recall 0,206 y 0,104): marcan el masculino genérico en muy pocas
-    piezas. La variable es propensa a este desajuste de umbral, porque el español lo
-    emplea de forma pervasiva (\textit{los trabajadores}, \textit{los ciudadanos}) y la
-    anotación tiende a marcarlo de forma sistemática, de modo que un modelo restrictivo
-    se queda corto. El umbral en el que cada modelo decide marcar es una característica
-    del propio modelo, y los de OpenAI lo sitúan más alto que \texttt{gemini} o
-    \texttt{gemma}.
-
-    \item \textbf{\texttt{sexismo\_discurso} (V30): baja detección, pero por otro
-    motivo.} El recall se mueve entre 0,020 y 0,114, de manera que, pese a una
-    prevalencia anotada del 42,8\,\%, los modelos dejan sin señalar más del 88\,\% de
-    los casos, y el F1 de la clase positiva no supera 0,181. El acuerdo ronda además
-    el azar en los cuatro ($\kappa$ entre $-0,006$ y 0,011). La
-    infradetección se parece a la de V25, pero su origen no es el mismo. Aquí la
-    propia anotación humana está profundamente dividida, ya que un equipo marca el
-    fenómeno casi seis veces más que el otro (11,5\,\% frente a 65,2\,\%,
-    Tabla~\ref{tab:iris-equipos-recall}), mientras que en V25 ambos equipos coincidían en
-    marcar la mayoría de las piezas. En V25 los modelos no ven lo que las personas ven
-    de forma concordante. En V30, en cambio, ni siquiera las personas convergen en qué
-    debe marcarse, así que el bajo acuerdo del sistema refleja a la vez una detección
-    insuficiente y un criterio humano poco estabilizado. Es además la única variable de
-    \emph{fondo} de las cinco, la que atañe a lo que se cuenta y no a cómo se dice
-    (Sección~\ref{sec:iris_variables}), lo que la hace más dependiente de la
-    interpretación del contexto social de la pieza.
-
-    \item \textbf{\texttt{asimetria\_mujer\_hombre} (V33) y
-    \texttt{denominacion\_sexualizada} (V35): desequilibrio extremo.} Con prevalencias
-    del 6,2\,\% y el 10,0\,\%, son las dos variables en que la exactitud resulta menos
-    informativa y en que el F1 de la clase positiva, concebido precisamente para
-    situaciones de clase minoritaria, ofrece la lectura más ajustada
-    (Sección~\ref{sec:metricas_eval}). Los valores son bajos (entre 0,000 y 0,151),
-    con recalls que no superan 0,160, de manera que también aquí el sistema deja sin
-    señalar la mayor parte de los casos. Merece un matiz el comportamiento de
-    \texttt{gpt-5.4-nano} en \texttt{denominacion\_sexualizada}, que marca \textit{Sí}
-    en tan pocas piezas que su precisión de 1,000 descansa sobre un puñado de
-    predicciones y no permite conclusión alguna sobre su fiabilidad general. Dicho
-    esto, y aunque un recall de 0,008 lo vuelve inservible como detector, el dato
-    tiene una lectura menos desfavorable, y es que cuando ese modelo decide marcar,
-    acierta. Un sistema así resulta inútil para revisar un corpus completo, pero no
-    genera falsas alarmas.
-
-\end{itemize}
-
-\newpage
-
-Conviene mirar también cuánto marca cada modelo en términos absolutos, que ayuda a
-interpretar el recall: marcar poco impide detectar buena parte de lo que las
-expertas sí señalan. La Tabla~\ref{tab:iris-prev-modelo-var} recoge, por variable, la
-prevalencia de \textit{Sí} de cada modelo. La única variable en la que algún modelo
-se acerca al terreno de las expertas es \texttt{masc\_generico} (\texttt{gemini},
-66,9\,\%), mientras que en el resto todos marcan \textit{Sí} en una fracción muy
-pequeña de las piezas. El patrón, además, no es común: \texttt{gpt-4o-mini} dispara
-en \texttt{lenguaje\_sexista} (44,6\,\%) donde \texttt{gemini} apenas marca (3,8\,\%),
-mientras que \texttt{gemini} domina en \texttt{masc\_generico}. Cada modelo tiene su
-propio umbral por variable.
-
-\begin{table}[H]
-    \centering
-    \begingroup
-    \scriptsize
-    \renewcommand{\texttt}[1]{{\ttfamily #1}}
-    \ttabbox[\FBwidth]{
-        \caption{Prevalencia de \textit{Sí} (\%) de cada modelo por variable, en el nivel B1 ($N=1.313$). La columna \textbf{Prev. Sí} (sombreada) es la prevalencia anotada por las expertas, que sirve de referencia.}
-        \label{tab:iris-prev-modelo-var}
-    }{
-        \begin{tabularx}{\textwidth}{
-            >{\hsize=2\hsize\raggedright\arraybackslash\ttfamily}X
-            >{\hsize=0.7875\hsize\columncolor{gray!12}\centering\arraybackslash}X
-            >{\hsize=0.7875\hsize\centering\arraybackslash}X
-            >{\hsize=0.7875\hsize\centering\arraybackslash}X
-            >{\hsize=0.7875\hsize\centering\arraybackslash}X
-            >{\hsize=0.7875\hsize\centering\arraybackslash}X
-        }
-            \toprule
-            \normalfont\textbf{Variable} & \textbf{Prev. Sí} & \textbf{Gemini} & \textbf{GPT-4o-mini} & \textbf{GPT-5.4-nano} & \textbf{Gemma} \\
-            \midrule
-            lenguaje\_sexista & 81,0 & 3,8 & 44,6 & 0,1 & 1,1 \\
-            masc\_generico & 81,0 & \textbf{66,9} & 19,1 & 9,7 & 36,9 \\
-            sexismo\_discurso & 42,8 & 2,0 & 10,7 & 11,2 & 2,8 \\
-            asimetria\_mujer\_hombre & 6,2 & 3,9 & 14,4 & 0,7 & 6,9 \\
-            denominacion\_sexualizada & 10,0 & 0,9 & 1,2 & 0,1 & 1,4 \\
-            \bottomrule
-        \end{tabularx}
-    }
-    \endgroup
-\end{table}
-
-Un rasgo atraviesa a las cinco variables: el recall es bajo casi en todas, es decir,
-los modelos detectan solo una fracción del sexismo que marcan las expertas. Esta
-\textbf{infradetección generalizada} es el patrón dominante del capítulo. La
-Sección~\ref{subsec:iris_errores} la examina para determinar \emph{qué parte} de ese
-desajuste corresponde a una limitación de los modelos y qué parte a la dificultad de
-la propia tarea, sin presuponer que se deba únicamente a una de las dos. A ello se
-añade el comportamiento dispar de los modelos según la variable, que desaconseja
-tratarlos como un bloque homogéneo.
-
-
-
-\subsubsection{Un caso concreto}
+\subsection{Un caso concreto de fallo de detección}
 \label{subsec:iris_caso}
 
 Las métricas agregadas describen el patrón, pero no permiten ver en qué consiste un
@@ -642,7 +669,7 @@ prácticamente absoluta, un único caso, en \texttt{asimetria\_mujer\_hombre}, i
 el patrón (los cuatro modelos marcan \textit{Sí} donde la anotación dice \textit{No}).
 Esto refuerza el mensaje del apartado: el sesgo no solo es sistemático (dirección
 unánime), sino que se concentra en las variables de alta prevalencia, enlazando con
-el diagnóstico por variable (Sección~\ref{subsec:iris_diagnostico}).
+el análisis por variable (Sección~\ref{subsec:iris_porvariable}).
 
 \begin{table}[H]
     \centering
@@ -754,7 +781,7 @@ puntos de mayor sensibilidad en variables concretas, habitualmente las más expl
 Hay además un segundo dato en la misma tabla: la dispersión \emph{entre las propias personas} es mayor que la que
 separa a los modelos entre sí. La prevalencia media humana va de 0,283 a 0,639 (un
 rango de 0,356), mientras que la de los cuatro modelos va de 0,043 a 0,183 (un rango
-de 0,14). El criterio humano no es un punto de referencia fijo, sino una franja
+de 0,140). El criterio humano no es un punto de referencia fijo, sino una franja
 ancha, y esa amplitud es justamente la que acota el acuerdo alcanzable. Como cada persona
 codificó piezas distintas, su prevalencia mezcla dos factores: el criterio propio y
 la muestra que le tocó.
