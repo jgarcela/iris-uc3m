@@ -37,9 +37,13 @@ primero, el cuantitativo, porque la referencia disponible es la etiqueta de cada
 variable y no el marcado sobre el texto. El plano cualitativo, que para el trabajo
 de análisis resulta al menos tan valioso, queda por tanto fuera de esta evaluación,
 no por decisión metodológica sino por ausencia de un marcado experto con el que
-contrastarlo (Sección~\ref{subsec:limitacion_fiabilidad}). Las cifras que siguen
-miden si el sistema clasifica como las expertas, no si señala los mismos fragmentos
-ni si sus justificaciones resultan aceptables.
+contrastarlo (Sección~\ref{subsec:limitacion_fiabilidad}). Las cifras que siguen recogen, en consecuencia,
+la coincidencia en la etiqueta asignada. La calidad de las evidencias y de las
+justificaciones, determinante para el uso previsto del sistema, no se evalúa en
+este trabajo y queda como línea futura
+(Sección~\ref{sec:futurework_usecases}). Sí se recurre a ellas de forma
+puntual, en la Sección~\ref{subsec:iris_caso}, para ilustrar el razonamiento que
+conduce a un error de clasificación.
 
 Como se detalla en la Sección~\ref{subsec:diseno_agentico}, el diseño mantiene fijo
 todo salvo el empaquetado (mismo corpus, modelos, variables y formato de salida),
@@ -55,31 +59,34 @@ Tabla~\ref{tab:iris-prevalencia-imp} del Capítulo~\ref{sec:methodology}.
 \label{subsec:iris_referencia}
 
 Toda lectura de los resultados exige tener presente la distribución de clases de
-cada variable, ya expuesta en la Sección~\ref{sec:iris_variables}. Se reproduce
-aquí por comodidad, dada su importancia para interpretar lo que sigue. La
-Tabla~\ref{tab:iris-referencia} recoge la prevalencia de la clase positiva y el
-rendimiento del clasificador trivial que marca todas las piezas, cifras que
-constituyen el umbral mínimo que un sistema debe superar para aportar información.
+cada variable y el rendimiento que alcanza sin esfuerzo un clasificador trivial,
+según se argumentó en la Sección~\ref{sec:iris_variables}. La
+Tabla~\ref{tab:iris-referencia} reproduce, por comodidad de lectura, las cifras de
+la Tabla~\ref{tab:iris-prevalencia-imp} del Capítulo~\ref{sec:methodology},
+añadiendo la prevalencia de la clase positiva. Constituyen el umbral mínimo que un
+sistema debe superar para aportar información.
 
 \begin{table}[H]
     \centering
     \begingroup
-    \small
+    \scriptsize
     \ttabbox[\FBwidth]{
-        \caption{Prevalencia anotada y rendimiento del clasificador trivial que marca
-        todas las piezas como positivas ($N=1.313$), reproducida de la
-        Sección~\ref{sec:iris_variables}.}
+        \caption{Prevalencia de la clase positiva y rendimiento del clasificador
+        trivial que no lee el texto y marca todas las piezas como positivas
+        ($N=1.313$). Su exactitud y su precisión coinciden con la prevalencia y su
+        recall es 1 por construcción.}
         \label{tab:iris-referencia}
     }{
-        \begin{tabular}{@{}l l c >{\columncolor{gray!15}}c >{\columncolor{gray!15}}c@{}}
+        \setlength{\tabcolsep}{4pt}
+        \begin{tabular}{@{}l l c >{\columncolor{gray!15}}c >{\columncolor{gray!15}}c >{\columncolor{gray!15}}c >{\columncolor{gray!15}}c@{}}
             \toprule
-            \textbf{Cód.} & \textbf{Variable} & \textbf{Prevalencia} & \textbf{Exactitud} & \textbf{F1 (\textit{Sí})} \\
+            \textbf{Cód.} & \textbf{Variable} & \textbf{Prevalencia} & \textbf{Exactitud} & \textbf{Precisión} & \textbf{Recall} & \textbf{F1} \\
             \midrule
-            V25 & \texttt{lenguaje\_sexista}         & 0,810 & 0,810 & 0,895 \\
-            V26 & \texttt{masc\_generico}            & 0,810 & 0,810 & 0,895 \\
-            V30 & \texttt{sexismo\_discurso}         & 0,428 & 0,428 & 0,599 \\
-            V33 & \texttt{asimetria\_mujer\_hombre}  & 0,062 & 0,062 & 0,117 \\
-            V35 & \texttt{denominacion\_sexualizada} & 0,100 & 0,100 & 0,182 \\
+            V25 & \texttt{lenguaje\_sexista}         & 0,810 & 0,810 & 0,810 & 1,000 & 0,895 \\
+            V26 & \texttt{masc\_generico}            & 0,810 & 0,810 & 0,810 & 1,000 & 0,895 \\
+            V30 & \texttt{sexismo\_discurso}         & 0,428 & 0,428 & 0,428 & 1,000 & 0,599 \\
+            V33 & \texttt{asimetria\_mujer\_hombre}  & 0,062 & 0,062 & 0,062 & 1,000 & 0,117 \\
+            V35 & \texttt{denominacion\_sexualizada} & 0,100 & 0,100 & 0,100 & 1,000 & 0,182 \\
             \bottomrule
         \end{tabular}
     }
