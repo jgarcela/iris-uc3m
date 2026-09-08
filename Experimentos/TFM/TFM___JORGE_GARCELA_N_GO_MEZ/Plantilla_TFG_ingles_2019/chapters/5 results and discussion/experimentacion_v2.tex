@@ -80,7 +80,7 @@ sistema debe superar para aportar información.
         \setlength{\tabcolsep}{4pt}
         \begin{tabular}{@{}l l c >{\columncolor{gray!15}}c >{\columncolor{gray!15}}c >{\columncolor{gray!15}}c >{\columncolor{gray!15}}c@{}}
             \toprule
-            \textbf{Cód.} & \textbf{Variable} & \textbf{Prevalencia} & \textbf{Exactitud} & \textbf{Precisión} & \textbf{Recall} & \textbf{F1} \\
+            \textbf{Cód.} & \textbf{Variable} & \textbf{Prev. (Sí)} & \textbf{Exactitud} & \textbf{Precisión} & \textbf{Recall} & \textbf{F1} \\
             \midrule
             V25 & \texttt{lenguaje\_sexista}         & 0,810 & 0,810 & 0,810 & 1,000 & 0,895 \\
             V26 & \texttt{masc\_generico}            & 0,810 & 0,810 & 0,810 & 1,000 & 0,895 \\
@@ -106,8 +106,10 @@ Las Tablas~\ref{tab:var-v25} a~\ref{tab:var-v35} recogen, para cada variable, el
 rendimiento de los cuatro modelos en los dos niveles. Se reportan de forma
 sistemática todas las métricas definidas en la Sección~\ref{sec:metricas_eval},
 esto es, exactitud, precisión y recall sobre la clase positiva, F1 de esa clase,
-F1 macro y el coeficiente $\kappa$, junto con la prevalencia que predice cada
-modelo, que permite ver cuánto marca en relación con lo que marcan las expertas.
+F1 macro y el coeficiente $\kappa$. La primera columna de métricas,
+\textbf{Marca (\textit{Sí})}, recoge la proporción de las 1.313 piezas que marca cada
+modelo, de manera que puede compararse con la que marcan las expertas y sirve para
+interpretar el resto de la fila.
 
 Cada variable se examina en dos planos. El primero es el efecto del empaquetado en
 \textit{skills}, esto es, qué cambia al pasar de B0 a B1. El segundo es el nivel que

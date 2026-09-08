@@ -3,29 +3,29 @@
 \begin{table}[H]
     \centering
     \begingroup
-    \scriptsize
+    \small
     \setlength{\tabcolsep}{4pt}
     \ttabbox[\FBwidth]{
-        \caption{Resultados en \texttt{denominacion\_sexualizada} (V35) por modelo y nivel ($N=1.313$, prevalencia anotada 0,100).}
+        \caption{Resultados en denominación sexualizada (V35) por modelo y nivel ($N=1.313$, prevalencia anotada 0,100). La columna \textbf{Marca (\textit{Sí})} es la proporción de las 1.313 piezas que el modelo marca como \textit{Sí}, esto es, su prevalencia predicha, que se compara con la anotada. Los modelos se nombran de forma abreviada, gemini por gemini-3.1-flash-lite y gemma por gemma4:e4b.}
         \label{tab:var-v35}
     }{
-        \begin{tabular}{@{}l l c c c c c c c@{}}
+        \begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}l l c c c c c c c@{}}
             \toprule
-            \textbf{Modelo} & \textbf{Nivel} & \textbf{Prev. pred.} & \textbf{Exac.} & \textbf{Prec.} & \textbf{Recall} & \textbf{F1 (\textit{Sí})} & \textbf{F1 macro} & \textbf{$\kappa$} \\
+            \textbf{Modelo} & \textbf{Nivel} & \textbf{Prev. (\textit{Sí})} & \textbf{Exac.} & \textbf{Prec.} & \textbf{Recall} & \textbf{F1 (\textit{Sí})} & \textbf{F1 macro} & \textbf{$\kappa$} \\
             \midrule
-            \texttt{gemini-3.1-flash-lite} & B0 & 0,005 & 0,898 & 0,286 & 0,015 & 0,029 & 0,488 & 0,019 \\
+            gemini & B0 & 0,005 & 0,898 & 0,286 & 0,015 & 0,029 & 0,488 & 0,019 \\
              & B1 & 0,009 & 0,894 & 0,167 & 0,015 & 0,028 & 0,486 & 0,011 \\
             \midrule
-            \texttt{gpt-4o-mini} & B0 & 0,025 & 0,896 & 0,424 & 0,107 & 0,171 & 0,558 & 0,136 \\
+            gpt-4o-mini & B0 & 0,025 & 0,896 & 0,424 & 0,107 & 0,171 & 0,558 & 0,136 \\
              & B1 & 0,012 & 0,897 & 0,375 & 0,046 & 0,082 & 0,514 & 0,061 \\
             \midrule
-            \texttt{gpt-5.4-nano} & B0 & 0,025 & 0,895 & 0,394 & 0,099 & 0,159 & 0,551 & 0,123 \\
+            gpt-5.4-nano & B0 & 0,025 & 0,895 & 0,394 & 0,099 & 0,159 & 0,551 & 0,123 \\
              & B1 & 0,001 & 0,901 & 1,000 & 0,008 & 0,015 & 0,482 & 0,014 \\
             \midrule
-            \texttt{gemma4:e4b} & B0 & 0,033 & 0,893 & 0,395 & 0,130 & 0,195 & 0,569 & 0,154 \\
+            gemma & B0 & 0,033 & 0,893 & 0,395 & 0,130 & 0,195 & 0,569 & 0,154 \\
              & B1 & 0,014 & 0,890 & 0,158 & 0,023 & 0,040 & 0,491 & 0,015 \\
             \bottomrule
-        \end{tabular}
+        \end{tabular*}
     }
     \endgroup
 \end{table}
