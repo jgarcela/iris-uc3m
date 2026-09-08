@@ -1,0 +1,34 @@
+% Generado por gen_tabla_sintesis.py. No editar a mano.
+
+\begin{table}[H]
+    \centering
+    \begingroup
+    \footnotesize
+    \setlength{\tabcolsep}{4pt}
+    \ttabbox[\FBwidth]{
+        \caption{Síntesis por variable ($N=1.313$). \textbf{Mejor modelo} es el de mayor F1 de la clase positiva en el nivel desplegado (B1), y \textbf{recall} y \textbf{F1} son los suyos. \textbf{Mejor configuración} es la que ese mismo modelo alcanza entre las cuatro de la ablación. El coste suma los tres modelos accesibles por API. Se considera que la variable admite apoyo automático cuando ese modelo detecta más de la mitad de lo que marcan las expertas con un acuerdo por encima del azar.}
+        \label{tab:iris-sintesis}
+    }{
+        \begin{tabularx}{\textwidth}{
+            >{\hsize=1.45\hsize\raggedright\arraybackslash}X
+            >{\hsize=0.62\hsize\centering\arraybackslash}X
+            >{\hsize=1.0\hsize\centering\arraybackslash}X
+            >{\hsize=0.62\hsize\centering\arraybackslash}X
+            >{\hsize=0.62\hsize\centering\arraybackslash}X
+            >{\hsize=1.32\hsize\centering\arraybackslash}X
+            >{\hsize=0.62\hsize\centering\arraybackslash}X
+            >{\hsize=0.75\hsize\columncolor{gray!15}\centering\arraybackslash}X
+        }
+            \toprule
+            \textbf{Variable} & \textbf{Prev.} & \textbf{Mejor modelo} & \textbf{Recall} & \textbf{F1 (\textit{Sí})} & \textbf{Mejor config.} & \textbf{USD} & \textbf{¿Apoyo?} \\
+            \midrule
+            lenguaje sexista (V25) & 0,810 & gpt-4o-mini & 0,450 & 0,573 & solo \textit{skills} & 7,48 & \textbf{No} \\
+            masculino genérico (V26) & 0,810 & gemini & 0,733 & 0,803 & completa & 6,82 & \textbf{Sí} \\
+            sexismo en el discurso (V30) & 0,428 & gpt-5.4-nano & 0,114 & 0,181 & \textit{skills} + RAG & 5,18 & \textbf{No} \\
+            asimetría mujer/hombre (V33) & 0,062 & gemma & 0,160 & 0,151 & solo \textit{skills} & 6,01 & \textbf{No} \\
+            denominación sexualizada (V35) & 0,100 & gpt-4o-mini & 0,046 & 0,082 & \textit{skills} + RAG & 5,42 & \textbf{No} \\
+            \bottomrule
+        \end{tabularx}
+    }
+    \endgroup
+\end{table}

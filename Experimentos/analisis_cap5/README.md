@@ -38,6 +38,8 @@ no se editan a mano.
 - `gen_tabla_intraia.py` → `tabla_intraia.tex`.
 - `gen_tabla_prev_modelo.py` → `tabla_prev_modelo.tex` (prevalencia de Sí predicha por
   cada modelo en B1).
+- `gen_tabla_sintesis.py` → `tabla_sintesis.tex` (una fila por variable con el mejor
+  modelo, su mejor configuración, el coste y si admite apoyo automático).
 
 ## Criterios
 

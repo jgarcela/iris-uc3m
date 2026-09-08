@@ -339,13 +339,24 @@ componente de forma independiente, sobre los cuatro modelos y las 1.313 noticias
 
 Las Tablas~\ref{tab:abl-v25} a~\ref{tab:abl-v35} recogen el resultado
 \textbf{variable a variable}, con las cinco métricas de la
-Sección~\ref{sec:metricas_eval} y el coeficiente $\kappa$. Se presentan así, y no
-en agregado, porque las prevalencias van del 6,2\,\% al 81,0\,\% y los valores no
-resultan comparables entre variables. La comparación pertinente es la que se hace
-dentro de cada modelo, entre sus cuatro configuraciones, y no la que se hace entre
-modelos. Las escasas respuestas que el modelo no llegó a emitir en un
-formato válido se contabilizan como negativas, de modo que todas las
-configuraciones se evalúan sobre las mismas 1.313 piezas.
+Sección~\ref{sec:metricas_eval} y el coeficiente $\kappa$. Conviene justificar por
+qué también aquí se renuncia al agregado, y la razón no es solo que las
+prevalencias vayan del 6,2\,\% al 81,0\,\% y hagan incomparables los valores entre
+variables. Es que \textbf{la configuración que resulta mejor cambia de una variable
+a otra}. En las veinte celdas que forman los cuatro modelos por las cinco
+variables, las cuatro configuraciones ganan en alguna, y ningún modelo conserva la
+misma configuración ganadora en las cinco. Un promedio tendría que declarar un único
+vencedor por modelo, que sería falso en la mayoría de las celdas, y además lo
+decidirían las dos variables de prevalencia alta, donde el F1 de la clase positiva
+alcanza valores mucho mayores que en las otras tres y domina cualquier media. En
+\texttt{gemini}, sin ir más lejos, el promedio situaría a la configuración completa
+por delante de la variante sin RAG por una milésima, cuando lo que muestran las
+tablas es que su mejor configuración cambia según la variable.
+
+La comparación pertinente es, por tanto, la que se hace dentro de cada modelo, entre
+sus cuatro configuraciones, y no la que se hace entre modelos. Las escasas respuestas
+que el modelo no llegó a emitir en un formato válido se contabilizan como negativas,
+de modo que todas las configuraciones se evalúan sobre las mismas 1.313 piezas.
 
 \input{chapters/5 results and discussion/tablas_ablacion}
 
@@ -873,13 +884,42 @@ Sección~\ref{sec:discussion}.
 
 El análisis por variable ha mostrado que el comportamiento del sistema cambia lo
 bastante de una a otra como para que ninguna afirmación general se sostenga sin
-matices. Queda por examinar si, pese a ello, cabe extraer alguna lectura de
-conjunto. Esta sección lo intenta, con la cautela que impone el hecho de que
-promediar métricas de variables cuya prevalencia va del 6,2\,\% al 81,0\,\% mezcla
-magnitudes que no son comparables entre sí
-(Sección~\ref{subsec:iris_divergencia}).
+matices. Cabe, con todo, una lectura de conjunto, siempre que se haga sin
+promediar: poner las cinco variables una al lado de otra y leer cada fila por
+separado.
 
-La Tabla~\ref{tab:iris-b0b1} recoge esos promedios. Sus cifras no describen el
+Eso es lo que recoge la Tabla~\ref{tab:iris-sintesis}, que reúne en una sola fila
+por variable lo que las secciones anteriores han ido estableciendo, esto es, el
+modelo que mejor se comporta en el nivel desplegado, cuánto detecta, qué
+configuración le conviene, lo que cuesta y si el resultado alcanza para servir de
+apoyo. Es la síntesis que un despliegue en IRIS necesitaría para decidir qué hacer
+con cada variable.
+
+\input{chapters/5 results and discussion/tabla_sintesis}
+
+La tabla condensa el resultado principal del capítulo, y es que \textbf{de las cinco
+variables solo una admite hoy apoyo automático}. En \texttt{masc\_generico} un modelo
+recupera casi tres cuartas partes de lo que marcan las expertas con un acuerdo por
+encima del azar, mientras que en las otras cuatro el sistema deja sin señalar la
+mayor parte de los casos. Los cuatro noes, además, no son el mismo no. En
+\texttt{lenguaje\_sexista} el modelo que más marca alcanza un recall de 0,450 pero
+con acuerdo negativo, de modo que marca en piezas distintas de aquellas en que lo
+hacen las anotadoras. En \texttt{sexismo\_discurso} la infradetección convive con una
+anotación humana profundamente dividida. Y en \texttt{asimetria\_mujer\_hombre} y
+\texttt{denominacion\_sexualizada} el fenómeno es tan infrecuente que el sistema
+apenas encuentra qué detectar.
+
+Se aprecian ahí, además, los dos hallazgos que ninguna variable muestra por separado.
+El primero es que \textbf{ni el modelo ni la configuración convenientes son los
+mismos} en las cinco filas, lo que desaconseja un despliegue uniforme. El segundo es
+que \textbf{el gasto no sigue al rendimiento}, ya que la variable más cara es
+justamente una de las que no producen detección aprovechable, mientras que la única
+utilizable no es la más costosa.
+
+Queda por ver qué ocurre si, pese a todo lo anterior, se promedian las cinco
+variables. La Tabla~\ref{tab:iris-b0b1} recoge esos promedios, con la cautela de que
+mezclan magnitudes que no son comparables entre sí
+(Sección~\ref{subsec:iris_divergencia}). Sus cifras no describen el
 rendimiento del sistema en ninguna tarea concreta, sino que ofrecen un resumen
 grueso que permite situar a los modelos entre sí y, sobre todo, cuantificar el
 coste, que sí admite agregación por tratarse de una suma sobre el corpus.
