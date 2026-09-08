@@ -1,0 +1,69 @@
+% Generado por gen_tabla_equipos.py. No editar a mano.
+
+\begin{table}[H]
+    \centering
+    \begingroup
+    \scriptsize
+    \setlength{\tabcolsep}{4pt}
+    \renewcommand{\texttt}[1]{{\ttfamily #1}}
+    \ttabbox[\FBwidth]{
+        \caption{Prevalencia anotada por cada equipo y recall de los cuatro modelos frente a cada uno, por variable (nivel B1). Indexa codificó 548 piezas y UCM3 las 765 restantes.}
+        \label{tab:iris-equipos-recall}
+    }{
+        \begin{tabular}{@{}l l c c c c c@{}}
+            \toprule
+            \textbf{Variable} & \textbf{Equipo} & \textbf{Prev.} & \texttt{gemini} & \texttt{gpt-4o-mini} & \texttt{gpt-5.4-nano} & \texttt{gemma} \\
+            \midrule
+            \texttt{lenguaje\_sexista} & Indexa & 74,6\,\% & 0,056 & 0,430 & 0,000 & 0,020 \\
+             & UCM3 & 85,5\,\% & 0,040 & 0,462 & 0,002 & 0,011 \\
+            \midrule
+            \texttt{masc\_generico} & Indexa & 71,4\,\% & 0,711 & 0,233 & 0,118 & 0,396 \\
+             & UCM3 & 88,0\,\% & 0,746 & 0,190 & 0,097 & 0,415 \\
+            \midrule
+            \texttt{sexismo\_discurso} & Indexa & 11,5\,\% & 0,063 & 0,159 & 0,111 & 0,063 \\
+             & UCM3 & 65,2\,\% & 0,014 & 0,106 & 0,114 & 0,020 \\
+            \midrule
+            \texttt{asimetria\_mujer\_hombre} & Indexa & 3,3\,\% & 0,278 & 0,222 & 0,000 & 0,278 \\
+             & UCM3 & 8,2\,\% & 0,016 & 0,127 & 0,000 & 0,127 \\
+            \midrule
+            \texttt{denominacion\_sexualizada} & Indexa & 6,6\,\% & 0,028 & 0,056 & 0,028 & 0,028 \\
+             & UCM3 & 12,4\,\% & 0,011 & 0,042 & 0,000 & 0,021 \\
+            \bottomrule
+        \end{tabular}
+    }
+    \endgroup
+\end{table}
+
+\begin{table}[H]
+    \centering
+    \begingroup
+    \scriptsize
+    \setlength{\tabcolsep}{4pt}
+    \renewcommand{\texttt}[1]{{\ttfamily #1}}
+    \ttabbox[\FBwidth]{
+        \caption{Coeficiente $\kappa$ de los cuatro modelos frente a cada equipo de anotación, por variable (nivel B1).}
+        \label{tab:iris-equipos-kappa}
+    }{
+        \begin{tabular}{@{}l l c c c c c@{}}
+            \toprule
+            \textbf{Variable} & \textbf{Equipo} & \textbf{Prev.} & \texttt{gemini} & \texttt{gpt-4o-mini} & \texttt{gpt-5.4-nano} & \texttt{gemma} \\
+            \midrule
+            \texttt{lenguaje\_sexista} & Indexa & 74,6\,\% & 0,026 & $-$0,027 & 0,000 & 0,010 \\
+             & UCM3 & 85,5\,\% & 0,009 & $-$0,051 & 0,000 & 0,000 \\
+            \midrule
+            \texttt{masc\_generico} & Indexa & 71,4\,\% & 0,277 & 0,048 & 0,017 & 0,152 \\
+             & UCM3 & 88,0\,\% & 0,223 & 0,032 & 0,019 & 0,068 \\
+            \midrule
+            \texttt{sexismo\_discurso} & Indexa & 11,5\,\% & 0,065 & 0,070 & 0,013 & 0,050 \\
+             & UCM3 & 65,2\,\% & $-$0,003 & $-$0,010 & $-$0,013 & $-$0,010 \\
+            \midrule
+            \texttt{asimetria\_mujer\_hombre} & Indexa & 3,3\,\% & 0,202 & 0,038 & $-$0,012 & 0,117 \\
+             & UCM3 & 8,2\,\% & $-$0,027 & $-$0,020 & $-$0,012 & 0,083 \\
+            \midrule
+            \texttt{denominacion\_sexualizada} & Indexa & 6,6\,\% & 0,019 & 0,078 & 0,051 & 0,012 \\
+             & UCM3 & 12,4\,\% & 0,013 & 0,054 & 0,000 & 0,020 \\
+            \bottomrule
+        \end{tabular}
+    }
+    \endgroup
+\end{table}

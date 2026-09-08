@@ -106,18 +106,21 @@ modelo, que permite ver cuánto marca en relación con lo que marcan las experta
 El primer resultado es que \textbf{el efecto de las \textit{skills} no es uniforme
 ni entre modelos ni entre variables}. En \texttt{masc\_generico} (V26)
 \texttt{gemini-3.1-flash-lite} mejora de forma clara al pasar a B1, ya que su
-$\kappa$ sube de 0,073 a 0,261 y su recall de 0,287 a 0,733, con la exactitud
-acompañando (de 0,397 a 0,708). Es la única celda del capítulo en que las tres
-métricas se mueven a la vez en la dirección esperada, lo que descarta que la
-mejora responda a un artefacto de la distribución. En
+recall sube de 0,287 a 0,733 y su F1 de la clase positiva de 0,435 a 0,803, esto
+es, pasa de detectar poco más de la cuarta parte del masculino genérico que marcan
+las expertas a detectar casi tres cuartas partes. La exactitud acompaña (de 0,397 a
+0,708) y también lo hace el $\kappa$ (de 0,073 a 0,261). Es la única celda del
+capítulo en que todas las métricas se mueven a la vez en la dirección esperada, lo
+que descarta que la mejora responda a un artefacto de la distribución. En
 \texttt{asimetria\_mujer\_hombre} (V33) el modelo local mejora también con B1, con
-un $\kappa$ que pasa de 0,054 a 0,092 y un recall de 0,136 a 0,160.
+un recall que pasa de 0,136 a 0,160 y un F1 de 0,120 a 0,151.
 
 En sentido contrario, las \textit{skills} degradan varias celdas en las que el
 control ya tenía algo de señal, y lo hacen sobre todo en
-\texttt{denominacion\_sexualizada} (V35), donde el $\kappa$ cae de 0,123 a 0,014 en
-\texttt{gpt-5.4-nano}, de 0,136 a 0,061 en \texttt{gpt-4o-mini} y de 0,154 a 0,015
-en \texttt{gemma4:e4b}.
+\texttt{denominacion\_sexualizada} (V35). Ahí el recall de \texttt{gemma4:e4b} cae
+de 0,130 a 0,023 y el de \texttt{gpt-4o-mini} de 0,107 a 0,046, con descensos
+paralelos en F1 y en $\kappa$ (este último de 0,154 a 0,015 y de 0,136 a 0,061
+respectivamente).
 
 El caso de \texttt{lenguaje\_sexista} (V25) en \texttt{gpt-4o-mini} ilustra por qué
 conviene mirar varias métricas a la vez. Al pasar a B1 su exactitud casi se duplica
@@ -174,9 +177,10 @@ no perder positivos, \texttt{gemma4:e4b} con solo \textit{skills} alcanza el mej
 equilibrio (recall 0,185 con precisión 0,174, $\kappa = 0,124$). En
 \texttt{denominacion\_sexualizada} (V35) es \texttt{gpt-4o-mini} con \textit{skills}
 y RAG (recall 0,115 con precisión 0,294). En \texttt{lenguaje\_sexista} (V25),
-finalmente, ninguna configuración alcanza un acuerdo apreciable, ya que todos los
-valores de $\kappa$ rondan el cero o son negativos, de modo que la comparación entre
-componentes carece ahí de sentido.
+finalmente, ninguna configuración logra una detección aprovechable, ya que los
+valores de recall siguen siendo muy bajos salvo en el modelo que marca casi la mitad
+de las piezas sin coincidir con las anotadoras, y todos los $\kappa$ rondan el cero o
+son negativos. La comparación entre componentes carece ahí de sentido.
 
 De ello se sigue que la arquitectura no admite una respuesta única, sino que
 \textbf{la configuración conveniente depende de la variable}. Este resultado
@@ -200,52 +204,13 @@ sistema desplegado, esto es, el nivel B1, en cada una de las cinco variables.
 
 \subsubsection{Comportamiento por variable en el nivel B1}
 
-Para cada una se reportan, sobre la clase positiva (\textit{Sí}), la \textbf{precisión} (de
-las piezas que el modelo marca como \textit{positivas}, cuántas lo son de verdad) y el
-\textbf{recall} o sensibilidad (del sexismo que marcan las expertas, cuánto detecta el
-modelo), junto a la \textbf{exactitud} (el acierto global sobre todas las piezas, que
-no debe confundirse con la precisión) y el coeficiente $\kappa$. El recall es aquí el
-más revelador: un recall bajo significa que el modelo deja sin marcar buena parte de lo
-que las anotadoras sí marcan. La Tabla~\ref{tab:iris-diagnostico} recoge estos valores
-para el nivel B1.
-
-
-\begin{table}[H]
-    \centering
-    \begingroup
-    \scriptsize
-    \setlength{\tabcolsep}{3pt}
-    \newcommand{\cel}[4]{\begin{tabular}[t]{@{}c@{}}#1\\#2\\#3\\#4\end{tabular}}
-    \ttabbox[\FBwidth]{
-        \caption{Exactitud, precisión, recall (sensibilidad) sobre la clase \textit{Sí} y $\kappa$, por variable en el nivel B1 ($N=1.313$). En cada celda se apilan, de arriba abajo, exactitud, precisión, recall y $\kappa$.}
-        \label{tab:iris-diagnostico}
-    }{
-        \begin{tabularx}{\textwidth}{
-            >{\hsize=1.35\hsize\raggedright\arraybackslash\ttfamily}X
-            >{\hsize=0.55\hsize\centering\arraybackslash}X
-            >{\hsize=0.775\hsize\centering\arraybackslash}X
-            >{\hsize=0.775\hsize\centering\arraybackslash}X
-            >{\hsize=0.775\hsize\centering\arraybackslash}X
-            >{\hsize=0.775\hsize\centering\arraybackslash}X
-        }
-            \toprule
-            \normalfont\textbf{Variable} & \textbf{Prev. Sí} & \textbf{Gemini} & \textbf{GPT-4o-mini} & \textbf{GPT-5.4-nano} & \textbf{Gemma} \\
-            \midrule
-            lenguaje\_sexista & 0,810 & \cel{0,226}{0,961}{0,046}{0,015} & \cel{0,457}{0,789}{0,450}{$-$0,037} & \cel{0,191}{1,000}{0,001}{0,000} & \cel{0,201}{0,929}{0,012}{0,003} \\
-            \midrule
-            masc\_generico & 0,810 & \textbf{\cel{0,708}{0,887}{0,733}{0,261}} & \cel{0,332}{0,873}{0,206}{0,034} & \cel{0,262}{0,874}{0,104}{0,016} & \cel{0,482}{0,897}{0,408}{0,109} \\
-            \midrule
-            sexismo\_discurso & 0,428 & \cel{0,569}{0,423}{0,020}{0,000} & \cel{0,561}{0,450}{0,112}{0,011} & \cel{0,558}{0,435}{0,114}{0,004} & \cel{0,565}{0,378}{0,025}{$-$0,006} \\
-            \midrule
-            asimetria\_mujer\_hombre & 0,062 & \cel{0,909}{0,118}{0,074}{0,045} & \cel{0,813}{0,063}{0,148}{0,003} & \cel{0,931}{0,000}{0,000}{$-$0,012} & \cel{0,889}{0,143}{0,160}{0,092} \\
-            \midrule
-            denominacion\_sexualizada & 0,100 & \cel{0,894}{0,167}{0,015}{0,011} & \cel{0,897}{0,375}{0,046}{0,061} & \cel{0,901}{1,000}{0,008}{0,014} & \cel{0,890}{0,158}{0,023}{0,015} \\
-            \bottomrule
-        \end{tabularx}
-    }
-    \endgroup
-\end{table}
-
+El comportamiento de cada variable se examina a continuación sobre las
+Tablas~\ref{tab:var-v25} a~\ref{tab:var-v35} ya presentadas, atendiendo en cada caso
+a la métrica que resulta informativa según su prevalencia
+(Sección~\ref{sec:metricas_eval}). El recall merece atención particular en todas
+ellas, ya que indica qué proporción del sexismo señalado por las expertas llega a
+detectar el sistema, y es la magnitud que decide su utilidad como herramienta de
+apoyo.
 
 \begin{itemize}
     \item \textbf{\texttt{lenguaje\_sexista} (V25): detección fallida.} Es el
@@ -257,7 +222,7 @@ para el nivel B1.
     el fenómeno}. Y conviene subrayar la magnitud de lo que se está pasando por alto,
     ya que ambos equipos de anotación marcan esta variable en la mayoría de las
     piezas, el 74,6\,\% Indexa y el 85,5\,\% UCM3
-    (Tabla~\ref{tab:iris-equipos-var}), es decir, coinciden en que el fenómeno está
+    (Tabla~\ref{tab:iris-equipos-recall}), es decir, coinciden en que el fenómeno está
     ahí aunque discrepen en cuánto. La única excepción es \texttt{gpt-4o-mini}, que sí
     marca de forma abundante (recall 0,450), pero su acuerdo sigue siendo negativo
     ($\kappa = -0,037$), lo que indica que marca en piezas distintas de aquellas en
@@ -283,13 +248,13 @@ para el nivel B1.
     a que una anotación posterior lo codifique de forma diferenciada.
 
     \item \textbf{\texttt{masc\_generico} (V26): el único acuerdo genuino, y su
-    umbral.} Es el único caso con acuerdo apreciable: \texttt{gemini} alcanza
-    $\kappa = 0,261$ y un recall de 0,733, es decir, detecta la mayoría del masculino
-    genérico que marcan las expertas, con exactitud y $\kappa$ que mejoran a la vez
-    sobre el \textit{baseline} (lo que descarta el artefacto de marginales y confirma
-    una ganancia real). El local \texttt{gemma4:e4b} queda en segundo lugar, con un
-    recall de 0,408 y un $\kappa$ de 0,109, la única variable en la que también supera
-    con claridad el azar. Los dos modelos de OpenAI, en cambio, son mucho más
+    umbral.} Es la única variable en que el sistema detecta de verdad.
+    \texttt{gemini} recupera el 73,3\,\% del masculino genérico que marcan las
+    expertas, con una precisión de 0,887 y un F1 de 0,803, cifras que lo convierten
+    en un detector utilizable. Todas las métricas mejoran a la vez sobre el
+    \textit{baseline}, incluido el $\kappa$ (0,261), lo que descarta el artefacto de
+    marginales y confirma una ganancia real. El local \texttt{gemma4:e4b} queda en
+    segundo lugar, con un recall de 0,408 y un F1 de 0,561. Los dos modelos de OpenAI, en cambio, son mucho más
     conservadores (recall 0,206 y 0,104): marcan el masculino genérico en muy pocas
     piezas. La variable es propensa a este desajuste de umbral, porque el español lo
     emplea de forma pervasiva (\textit{los trabajadores}, \textit{los ciudadanos}) y la
@@ -299,13 +264,14 @@ para el nivel B1.
     \texttt{gemma}.
 
     \item \textbf{\texttt{sexismo\_discurso} (V30): baja detección, pero por otro
-    motivo.} El acuerdo ronda el azar en los cuatro modelos ($\kappa$ entre $-0,006$ y
-    0,011) y el recall es muy bajo (entre 0,020 y 0,114), de modo que, pese a una
-    prevalencia anotada del 42,8\,\%, los modelos apenas marcan esta variable. La
+    motivo.} El recall se mueve entre 0,020 y 0,114, de manera que, pese a una
+    prevalencia anotada del 42,8\,\%, los modelos dejan sin señalar más del 88\,\% de
+    los casos, y el F1 de la clase positiva no supera 0,181. El acuerdo ronda además
+    el azar en los cuatro ($\kappa$ entre $-0,006$ y 0,011). La
     infradetección se parece a la de V25, pero su origen no es el mismo. Aquí la
     propia anotación humana está profundamente dividida, ya que un equipo marca el
     fenómeno casi seis veces más que el otro (11,5\,\% frente a 65,2\,\%,
-    Tabla~\ref{tab:iris-equipos-var}), mientras que en V25 ambos equipos coincidían en
+    Tabla~\ref{tab:iris-equipos-recall}), mientras que en V25 ambos equipos coincidían en
     marcar la mayoría de las piezas. En V25 los modelos no ven lo que las personas ven
     de forma concordante. En V30, en cambio, ni siquiera las personas convergen en qué
     debe marcarse, así que el bajo acuerdo del sistema refleja a la vez una detección
@@ -387,28 +353,92 @@ tratarlos como un bloque homogéneo.
 
 
 
+\subsubsection{Un caso concreto}
+\label{subsec:iris_caso}
+
+Las métricas agregadas describen el patrón, pero no permiten ver en qué consiste un
+fallo de detección. Conviene por ello examinar una pieza del corpus, elegida entre
+las 567 en que los cuatro modelos coinciden en no marcar
+\texttt{lenguaje\_sexista} pese a que la anotación sí lo marca
+(Tabla~\ref{tab:iris-consenso}).
+
+La pieza informa sobre una feria de innovación universitaria y contiene, entre
+otros, estos pasajes:
+
+\begin{quote}
+\small
+``Los expertos, 80 grupos de investigación y 20 \textit{spin-off} \ldots\ se han
+reunido \ldots\ para exponer sus ideas''.
+
+``\ldots\ ha venido a presentar esta y 10 iniciativas más a las empresas
+interesadas y a otros investigadores''.
+
+``\ldots\ los \textit{spin-off}, las empresas creadas por los investigadores de la
+UAB para explotar los resultados de su investigación''.
+\end{quote}
+
+La anotadora codificó la variable como presente. Los cuatro modelos respondieron
+que no, y sus justificaciones resultan más reveladoras que el propio veredicto. El
+sistema no pasó por alto las expresiones, sino que las examinó y las declaró
+correctas. \texttt{gemini-3.1-flash-lite} razonó que el texto emplea
+``\textit{investigadores} como colectivo mixto'' y concluyó que no hay uso
+discriminatorio. \texttt{gpt-5.4-nano} fue más explícito todavía, ya que afirmó que
+``no hay uso de masculino genérico que excluya a las mujeres'' y descartó la
+variable tras recorrer los cuatro pasos de la metodología. \texttt{gemma4:e4b}
+argumentó que los cargos femeninos están correctamente feminizados y que no
+aparece un salto semántico, de lo que dedujo que ``el texto no presenta sexismo
+lingüístico en su forma''.
+
+Los tres razonamientos comparten una misma operación, la de tomar el masculino
+genérico por neutro y darlo por válido precisamente porque el texto nombra además a
+varias mujeres con sus cargos. Es la operación que el caso de Bindi ilustraba en la
+introducción de esta memoria (Sección~\ref{introduction}), donde una investigación
+liderada por investigadoras se difundió como obra de ``investigadores''. El sistema
+reproduce aquí el mismo automatismo que se le pedía detectar.
+
+Un detalle añade precisión al diagnóstico. En esa misma pieza,
+\texttt{gemini-3.1-flash-lite} y \texttt{gemma4:e4b} sí marcaron
+\texttt{masc\_generico} (V26), de modo que reconocieron el fenómeno cuando la
+pregunta se lo nombraba de forma explícita, pero no lo consideraron un uso
+discriminatorio del lenguaje al responder por V25. La detección, por tanto, no
+depende solo de que el modelo advierta la expresión, sino de cómo esté formulado el
+criterio que se le pide aplicar, lo que refuerza el papel de la redacción de la
+metodología y ofrece una vía de mejora concreta para el proyecto.
+
+Este caso ilustra además el valor del plano cualitativo. Sin la explicación
+asociada a cada veredicto, el resultado sería un cero en una tabla. Con ella se
+puede identificar el mecanismo del fallo, que es lo que permite corregirlo.
+
 \subsection{El modelo local: rendimiento y coste}
 \label{subsec:iris_local}\label{subsec:iris_coste}
 
-Entre los cuatro modelos, el local \texttt{gemma4:e4b} merece una lectura aparte. En
-el nivel de control (B0) obtiene el \textbf{mayor $\kappa$ de los cuatro} (0,061), por
-encima de las tres API de pago (0,026, 0,033 y 0,052), y ante las \textit{skills} se
-comporta como los modelos de OpenAI, ya que su acuerdo medio baja de 0,061 a
-0,043. Que un modelo abierto, gratuito y desplegable
-en infraestructura propia iguale, y en $\kappa$ supere, a los servicios
-comerciales tiene consecuencias prácticas para un proyecto que maneja material
-sujeto a privacidad. Ahora bien, esa ventaja en acuerdo y en ausencia de tarifas
-convive con un coste de otro tipo: el del cómputo.
+Entre los cuatro modelos, el local \texttt{gemma4:e4b} merece una lectura aparte,
+que conviene hacer variable a variable. Es el mejor de los cuatro en
+\texttt{asimetria\_mujer\_hombre}, donde alcanza el mayor recall (0,160), la mejor
+precisión (0,143) y el mayor $\kappa$ (0,092) del conjunto, y queda segundo en
+\texttt{masc\_generico}, por detrás de \texttt{gemini} pero por delante de los dos
+modelos de OpenAI, con un recall de 0,408 frente a 0,206 y 0,104. En
+\texttt{denominacion\_sexualizada} su nivel de control obtiene el mejor $\kappa$ de
+los cuatro (0,154), aunque lo pierde al pasar a B1. En las dos variables restantes
+se comporta como los demás, esto es, sin detectar apenas nada. No cabe afirmar, por
+tanto, que sea mejor o peor en términos absolutos, sino que \textbf{compite de tú a
+tú con los servicios comerciales y los supera en algunas variables}.
+
+Ese resultado tiene consecuencias prácticas para un proyecto que maneja material
+sujeto a privacidad, ya que un modelo abierto, gratuito y desplegable en
+infraestructura propia se sitúa al nivel de las alternativas de pago. Ahora bien,
+esa ventaja convive con un coste de otro tipo, el del cómputo.
 
 La Tabla~\ref{tab:iris-b0b1} recoge el coste real de inferencia. Sobre las 1.313
 noticias, el sistema agéntico (B1) cuesta 30,91 USD en los tres modelos de pago,
 frente a los 13,83 USD del \textit{baseline} (B0), un factor de 2,2. El aumento se
-explica por el número de llamadas al modelo: B0 resuelve cada variable en una única
-llamada, mientras que en B1 la agente encadena varias (entre dos y tres por variable
-en promedio, las acciones de su bucle más el veredicto final). Que el factor no sea
-aún mayor se debe a que cada llamada de B1 es más corta: gracias a la carga bajo
-demanda, la agente solo incluye en el \textit{prompt} lo que necesita, mientras que
-B0 inyecta la metodología completa en su única llamada.
+explica por el número de llamadas al modelo, ya que B0 resuelve cada variable en una
+única llamada mientras que en B1 la agente encadena varias, las acciones de su bucle
+más el veredicto final. A ello se añade que cada iteración arrastra el historial
+acumulado de la conversación, de modo que el consumo de \textit{tokens} por pieza y
+variable llega a duplicarse. La carga bajo demanda contiene ese crecimiento, porque
+la agente incorpora al \textit{prompt} solo la \textit{skill} que necesita en lugar
+de la metodología completa, pero no lo compensa por entero.
 
 
 En el modelo local no hay tarifas, pero el coste reaparece como tiempo de cómputo. El
@@ -451,21 +481,21 @@ variable.
     \small
     \ttabbox[\FBwidth]{
         \caption{Coste de inferencia por variable sobre las 1.313 piezas, sumados los
-        tres modelos accesibles por API, y mejor acuerdo alcanzado en el nivel B1 por
-        cualquiera de los cuatro modelos.}
+        tres modelos accesibles por API, junto al mejor recall y al mejor F1 de la
+        clase positiva que alcanza alguno de los cuatro modelos en el nivel B1.}
         \label{tab:iris-coste-var}
     }{
-        \begin{tabular}{@{}l l c c >{\columncolor{gray!15}}c@{}}
+        \begin{tabular}{@{}l l c c >{\columncolor{gray!15}}c >{\columncolor{gray!15}}c@{}}
             \toprule
-            \textbf{Cód.} & \textbf{Variable} & \textbf{B0 (USD)} & \textbf{B1 (USD)} & \textbf{Mejor} \boldmath$\kappa$ \textbf{(B1)} \\
+            \textbf{Cód.} & \textbf{Variable} & \textbf{B0 (USD)} & \textbf{B1 (USD)} & \textbf{Mejor recall} & \textbf{Mejor F1 (\textit{Sí})} \\
             \midrule
-            V25 & \texttt{lenguaje\_sexista}         & 2,86 & 7,48 & 0,015 \\
-            V26 & \texttt{masc\_generico}            & 2,72 & 6,82 & \textbf{0,261} \\
-            V30 & \texttt{sexismo\_discurso}         & 2,80 & 5,18 & 0,011 \\
-            V33 & \texttt{asimetria\_mujer\_hombre}  & 2,83 & 6,01 & 0,092 \\
-            V35 & \texttt{denominacion\_sexualizada} & 2,61 & 5,42 & 0,061 \\
+            V25 & \texttt{lenguaje\_sexista}         & 2,86 & 7,48 & 0,450 & 0,573 \\
+            V26 & \texttt{masc\_generico}            & 2,72 & 6,82 & \textbf{0,733} & \textbf{0,803} \\
+            V30 & \texttt{sexismo\_discurso}         & 2,80 & 5,18 & 0,114 & 0,181 \\
+            V33 & \texttt{asimetria\_mujer\_hombre}  & 2,83 & 6,01 & 0,160 & 0,151 \\
+            V35 & \texttt{denominacion\_sexualizada} & 2,61 & 5,42 & 0,046 & 0,082 \\
             \midrule
-            & \textbf{Total} & \textbf{13,83} & \textbf{30,91} & \textemdash \\
+            & \textbf{Total} & \textbf{13,83} & \textbf{30,91} & \textemdash & \textemdash \\
             \bottomrule
         \end{tabular}
     }
@@ -481,10 +511,13 @@ variables más caras son precisamente \texttt{lenguaje\_sexista} y
 \texttt{masc\_generico}, aquellas en que la agente consulta más herramientas antes
 de decidirse.
 
-El contraste con la última columna es el dato relevante para el proyecto.
-\texttt{lenguaje\_sexista} es la variable más costosa de las cinco y su mejor
-acuerdo apenas se distingue del azar, mientras que \texttt{masc\_generico} cuesta
-algo menos y concentra prácticamente todo el acuerdo obtenido. Dicho de otro modo,
+El contraste con las dos últimas columnas es el dato relevante para el proyecto.
+\texttt{masc\_generico} es la variable en que el sistema detecta de verdad, con un
+recall de 0,733 y un F1 de 0,803, y cuesta 6,82 USD. \texttt{lenguaje\_sexista}
+cuesta más, 7,48 USD, y su mejor recall (0,450) procede del modelo que marca casi
+la mitad de las piezas sin coincidir con las anotadoras, de modo que ese número no
+se traduce en detección aprovechable. En \texttt{denominacion\_sexualizada} se
+gastan 5,42 USD para recuperar menos del 5\,\% de los casos. Dicho de otro modo,
 \textbf{el gasto no se corresponde con el rendimiento}, y una parte apreciable del
 presupuesto de inferencia se destina hoy a variables en las que el sistema no
 aporta información utilizable. De ahí se sigue una recomendación de despliegue que
@@ -512,121 +545,49 @@ noticias anotadas se reparten entre dos equipos: Indexa (548 piezas) y UCM3
 intercodificadora, sí es posible medir el acuerdo del sistema con cada equipo
 por separado, a modo de análisis de sensibilidad.
 
-\begin{table}[H]
-    \centering
-    \begingroup
-    \scriptsize
-    \renewcommand{\texttt}[1]{{\ttfamily #1}}
-    \ttabbox[\FBwidth]{
-        \caption{Análisis de sensibilidad: acuerdo (B1) según el equipo de anotación}
-        \label{tab:iris-sensibilidad}
-    }{
-        \begin{tabularx}{\textwidth}{
-            >{\hsize=1.5\hsize\raggedright\arraybackslash}X
-            >{\hsize=1.0\hsize\raggedright\arraybackslash}X
-            >{\hsize=0.85\hsize\centering\arraybackslash}X
-            >{\hsize=0.85\hsize\centering\arraybackslash}X
-            >{\hsize=0.8\hsize\columncolor{gray!15}\centering\arraybackslash}X
-        }
-            \toprule
-            \textbf{Modelo} & \textbf{Subconjunto} & \textbf{Exactitud} & \textbf{F1 macro} & \boldmath$\kappa$ \\
-            \midrule
-            \multirow{3}{*}{\texttt{gemini-3.1-flash-lite}}
-              & Todas (1.313)   & 0,661 & 0,443 & 0,066 \\
-              & \textbf{Solo Indexa (548)} & \textbf{0,741} & \textbf{0,503} & \textbf{0,118} \\
-              & Solo UCM3 (765)  & 0,604 & 0,398 & 0,043 \\
-            \midrule
-            \multirow{3}{*}{\texttt{gpt-4o-mini}}
-              & Todas           & 0,612 & 0,438 & 0,014 \\
-              & \textbf{Solo Indexa}     & \textbf{0,693} & \textbf{0,482} & \textbf{0,042} \\
-              & Solo UCM3       & 0,554 & 0,398 & 0,001 \\
-            \midrule
-            \multirow{3}{*}{\texttt{gpt-5.4-nano}}
-              & Todas           & 0,569 & 0,364 & 0,004 \\
-              & \textbf{Solo Indexa}     & \textbf{0,661} & \textbf{0,406} & \textbf{0,014} \\
-              & Solo UCM3       & 0,502 & 0,323 & $-0,001$ \\
-            \midrule
-            \multirow{3}{*}{\texttt{gemma4:e4b}}
-              & Todas           & 0,605 & 0,412 & 0,043 \\
-              & \textbf{Solo Indexa}     & \textbf{0,695} & \textbf{0,461} & \textbf{0,068} \\
-              & Solo UCM3       & 0,541 & 0,369 & 0,032 \\
-            \bottomrule
-        \end{tabularx}
-    }
-    \endgroup
-\end{table}
+\input{chapters/5 results and discussion/tablas_equipos}
 
-La Tabla~\ref{tab:iris-sensibilidad} muestra un resultado nítido: el acuerdo con
-Indexa es sistemáticamente superior al obtenido con UCM3, en los cuatro modelos y en
-las tres métricas. En \texttt{gemini-3.1-flash-lite}, restringir la evaluación a
-Indexa casi duplica el coeficiente $\kappa$ (de 0,066 a 0,118) y sube la exactitud
-ocho puntos, mientras que contra UCM3 el $\kappa$ cae hacia el azar (llega a valores
-negativos en \texttt{gpt-5.4-nano}).
+La Tabla~\ref{tab:iris-equipos-recall} recoge, para cada variable, cuánto marca cada
+equipo y qué recall alcanza cada modelo frente a él. La
+Tabla~\ref{tab:iris-equipos-kappa} añade el coeficiente $\kappa$ en la misma
+disposición. El resultado no es uniforme entre variables, de ahí que convenga
+examinarlo una a una.
 
-Lo interesante es la magnitud de ese efecto: \textbf{cambiar de equipo de anotación
-mueve el acuerdo tanto o más que cambiar de modelo.} En \texttt{gemini}, el salto de
-$\kappa$ entre evaluar contra Indexa y contra UCM3 (de 0,118 a 0,043, un rango de
-0,075, Tabla~\ref{tab:iris-sensibilidad}) supera al rango completo de $\kappa$ entre
-los cuatro modelos, que va de 0,004 en \texttt{gpt-5.4-nano} a 0,066 en el propio
-\texttt{gemini} (un rango de 0,062, Tabla~\ref{tab:iris-b0b1}). Es decir, contra qué
-equipo se compara pesa en el resultado tanto como qué modelo se emplea.
+\textbf{UCM3 marca sistemáticamente más que Indexa en las cinco variables}, y en
+algunas la diferencia es enorme. En \texttt{sexismo\_discurso} el salto va del
+11,5\,\% al 65,2\,\%, casi seis veces, y en
+\texttt{asimetria\_mujer\_hombre} y \texttt{denominacion\_sexualizada} se duplica.
+Son proporciones de la anotación humana y, por tanto, \textbf{no dependen de ningún
+modelo}: reflejan que la misma variable se entiende de forma muy distinta según
+quién la codifique.
 
+Lo relevante es qué le ocurre al sistema ante esa diferencia. \textbf{Allí donde
+UCM3 marca más, el recall de los modelos cae}, que es tanto como decir que los casos
+adicionales señalados por ese equipo son precisamente los que el sistema no ve. En
+\texttt{asimetria\_mujer\_hombre}, \texttt{gemini} pasa de un recall de 0,278 frente
+a Indexa a 0,016 frente a UCM3, y \texttt{gemma4:e4b} de 0,278 a 0,127. En
+\texttt{sexismo\_discurso}, \texttt{gemini} baja de 0,063 a 0,014 y \texttt{gemma} de
+0,063 a 0,020. El efecto se repite, más atenuado, en
+\texttt{denominacion\_sexualizada}. Si el sistema detectase el fenómeno con
+independencia de quién lo anote, el recall se mantendría al cambiar de referencia.
+No es lo que ocurre.
 
-El origen de esa diferencia está en la anotación, no en el modelo. La
-Tabla~\ref{tab:iris-equipos-var} muestra, por variable, la proporción de \textit{Sí}
-que marca cada equipo. Esas proporciones son de la propia anotación humana y, por
-tanto, \textbf{no dependen de ningún modelo}: reflejan cómo codifica cada equipo, y
-dejan ver que la misma variable se entiende de forma muy distinta. El caso extremo es
-\texttt{sexismo\_discurso}: Indexa marca el fenómeno en el 11,5\,\% de las piezas y
-UCM3 en el 65,2\,\%, casi seis veces más. No es ruido del modelo, son dos criterios
-humanos difícilmente conciliables sobre una misma variable. Las dos últimas columnas
-de la tabla añaden, a modo de ilustración, el $\kappa$ de \texttt{gemini} frente a
-cada equipo. El mismo patrón se da en los demás modelos, como ya recogía el análisis
-de sensibilidad (Tabla~\ref{tab:iris-sensibilidad}).
-Como esa variabilidad entre equipos iguala o supera la que separa a los modelos,
-constituye una evidencia del techo de la tarea, sin necesitar doble codificación.
+Hay dos excepciones que conviene no ocultar. En \texttt{masc\_generico} el recall
+apenas varía entre equipos, e incluso sube ligeramente frente a UCM3 en
+\texttt{gemini} (de 0,711 a 0,746) y en \texttt{gemma} (de 0,396 a 0,415), lo cual
+resulta coherente con que sea la variable de criterio más explícito y la única con
+acuerdo apreciable. En \texttt{lenguaje\_sexista}, el recall es tan bajo frente a
+ambos equipos que la comparación no aporta información.
 
-
-\begin{table}[H]
-    \centering
-    \begingroup
-    \scriptsize
-    \renewcommand{\texttt}[1]{{\ttfamily #1}}
-    \ttabbox[\FBwidth]{
-        \caption{Prevalencia de \textit{Sí} y acuerdo (\texttt{gemini} B1) por equipo y variable. La misma variable se codifica de forma muy distinta según el equipo.}
-        \label{tab:iris-equipos-var}
-    }{
-        \begin{tabularx}{\textwidth}{
-            >{\hsize=1.7\hsize\raggedright\arraybackslash\ttfamily}X
-            >{\hsize=0.9\hsize\centering\arraybackslash}X
-            >{\hsize=0.9\hsize\centering\arraybackslash}X
-            >{\hsize=0.9\hsize\centering\arraybackslash}X
-            >{\hsize=0.8\hsize\centering\arraybackslash}X
-            >{\hsize=0.8\hsize\centering\arraybackslash}X
-        }
-            \toprule
-             & \multicolumn{2}{c}{\normalfont\% \textit{Sí}} & & \multicolumn{2}{c}{\normalfont$\kappa$} \\
-            \cmidrule(lr){2-3}\cmidrule(lr){5-6}
-            \normalfont\textbf{Variable} & \textbf{Indexa} & \textbf{UCM3} & \textbf{Ratio} & \textbf{Indexa} & \textbf{UCM3} \\
-            \midrule
-            lenguaje\_sexista & 74,6 & 85,5 & 1,1$\times$ & 0,026 & 0,009 \\
-            masc\_generico & 71,4 & 88,0 & 1,2$\times$ & 0,277 & 0,223 \\
-            sexismo\_discurso & \textbf{11,5} & \textbf{65,2} & \textbf{5,7$\times$} & 0,065 & $-0,003$ \\
-            asimetria\_mujer\_hombre & 3,3 & 8,2 & 2,5$\times$ & 0,202 & $-0,027$ \\
-            denominacion\_sexualizada & 6,6 & 12,4 & 1,9$\times$ & 0,019 & 0,013 \\
-            \bottomrule
-        \end{tabularx}
-    }
-    \endgroup
-\end{table}
-
-Conviene, no obstante, acotar el alcance de este análisis. La mayor concordancia con
-Indexa no justifica reportar únicamente ese subconjunto como resultado del sistema:
-en ausencia de doble codificación no es posible determinar qué equipo se ajusta mejor
-al constructo, y la diferencia observada entre ambos no depende solo de su criterio,
-ya que cada equipo codificó piezas distintas. El análisis delimita el techo de acuerdo
-alcanzable, pero no lo imputa a un error de anotación de ninguno de los dos equipos.
-
+El coeficiente $\kappa$ muestra el mismo patrón de forma más acusada
+(Tabla~\ref{tab:iris-equipos-kappa}). En \texttt{asimetria\_mujer\_hombre},
+\texttt{gemini} obtiene 0,202 frente a Indexa y $-0,027$ frente a UCM3, una
+diferencia de 0,229 que supera con holgura a la que separa a los cuatro modelos
+entre sí en esa misma variable. En \texttt{sexismo\_discurso} los cuatro modelos
+pasan de valores positivos frente a Indexa a valores nulos o negativos frente a
+UCM3. Dicho de otro modo, \textbf{contra qué equipo se compare puede pesar tanto
+como qué modelo se emplee}, y esa magnitud constituye una evidencia del techo de la
+tarea que no requiere doble codificación.
 
 \subsubsection{Consenso de los modelos frente al \textit{ground truth}}
 
@@ -1008,16 +969,10 @@ preguntas distintas y que interpretarlas por separado conduce a conclusiones
 opuestas, de modo que en tareas de clasificación desequilibradas procede informar
 de las tres de forma conjunta.
 
-Atendiendo al $\kappa$, que es la métrica que menos se deja arrastrar por la
-frecuencia de marcado aunque no esté libre de problemas, el efecto de las
-\textit{Agent Skills} \textbf{depende del modelo}. Solo \texttt{gemini-3.1-flash-lite} mejora con la
-arquitectura: su $\kappa$ pasa de 0,026 a 0,066, y lo hace acompañado de subidas
-simultáneas en exactitud y F1. En los dos modelos de OpenAI las \textit{skills} no ayudan e incluso
-perjudican ($\Delta\kappa = -0,019$ en \texttt{gpt-4o-mini} y $-0,048$ en
-\texttt{gpt-5.4-nano}), y el modelo local se comporta igual que ellos ($\kappa$ de
-0,061 a 0,043). De los cuatro modelos, solo uno mejora con las \textit{skills}. En
-los otros tres el $\kappa$ se mantiene o desciende, y la media no aumenta. Que el
-efecto dependa del modelo y no eleve el acuerdo en agregado admite varias lecturas, desde el techo de la propia tarea hasta la heterogeneidad de la anotación, que se
-retoman en la discusión (Sección~\ref{sec:discussion}) una vez presentada toda la
-evidencia.
-
+Cabe cerrar, en consecuencia, con una afirmación de conjunto y una advertencia. La
+afirmación es que el empaquetado como \textit{Agent Skills} no eleva por sí solo la
+concordancia con el criterio experto, y que su efecto depende del modelo y de la
+variable. La advertencia es que ese enunciado se apoya en promedios y que el
+análisis pormenorizado de las secciones anteriores es el que debe prevalecer cuando
+ambos discrepen. Las implicaciones de todo ello para el proyecto se retoman en la
+discusión (Sección~\ref{sec:discussion}).

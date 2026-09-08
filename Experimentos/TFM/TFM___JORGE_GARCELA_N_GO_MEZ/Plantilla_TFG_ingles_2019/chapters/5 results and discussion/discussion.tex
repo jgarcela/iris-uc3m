@@ -39,36 +39,94 @@ prevalencia, para no tomar un cambio en la distribución de respuestas por una m
 real de criterio.
 
 
-\subsection{El techo lo pone la tarea: implicaciones para IRIS}
+\subsection{Dos límites, uno de la tarea y otro de los modelos}
 
-El acuerdo absoluto es bajo, pero interpretarlo únicamente como una ceguera de los modelos
-sería un error de diagnóstico. El análisis de errores
-(Sección~\ref{subsec:iris_errores}) apunta también a que parte
-del desacuerdo nace de la tarea, aunque esto debe ser tomado con precaución puesto que no hay solapamiento entre las piezas anotadas por las distintas personas y por tanto, no se puede medir fielmente el desacuerdo. Sí se observa, sin embargo, que la capacidad de detección de dos equipos expertos tiene una variabilidad comparable a la que separa a personas de
-máquinas, y que el sistema, evaluado como una anotadora más, no cae dentro del rango
-humano sino en su extremo más bajo, sugieren que el sexismo lingüístico, en muchas
-de sus formas, requiere de una gran capacidad de detección y un entrenamiento muy extenso, sin perjuicio de que en algunos casos admita lecturas legítimamente
-distintas. Cuando el criterio no es lo suficientemente explícito, el \textit{ground truth} deja
-de ser un suelo estable y pasa a tener una naturaleza difusa: el
-$\kappa$ mide entonces distancia entre criterios más que error. Es necesario señalar que esta es una dificultad intrínseca del problema que se aborda en este trabajo puesto que el sexismo muchas veces se manifiesta de manera implícita y su detección es complicada incluso para personas expertas. Es, sin embargo, notorio que una vez detectado y explicado, sí que es reconocido ampliamente.
+El acuerdo absoluto es bajo, y el análisis del Capítulo permite repartir ese
+desajuste entre dos causas que conviene no confundir.
 
-Esto reorienta dónde
-buscar el margen de mejora, que además de buscar modelos más capaces requiere
-delimitar y explicitar el constructo que se pide anotar utilizando, por ejemplo, anotaciones cualitativas que permitan su delimitación a base de ejemplos. El punto de partida que proporcionan los modelos podría ser de gran utilidad en este marcado si se consigue mejorar su sensibilidad. Es importante resaltar que el desacuerdo, no se
-reparte por igual entre variables, sino que se concentra en las de criterio más
-implícito y mayor prevalencia (\texttt{lenguaje\_sexista} y \texttt{sexismo\_discurso}),
-lo que indica dónde conviene priorizar la anotación cualitativa y su descripción en el
-libro de códigos. Conviene además evitar una
-simplificación: los modelos no comparten un sesgo homogéneo, sino cuatro sesgos distintos que solo coinciden en su dirección.
+La primera es un \textbf{límite de la tarea}. Dos equipos expertos codificaron la
+misma variable con criterios muy distantes, hasta el punto de que
+\texttt{sexismo\_discurso} pasa del 11,5\,\% al 65,2\,\% de piezas marcadas según
+quién anote (Sección~\ref{subsec:iris_errores}). Cuando el criterio admite esa
+amplitud, el patrón de referencia deja de ser un suelo estable y el coeficiente
+$\kappa$ mide en buena parte distancia entre criterios más que error del sistema.
+Esta variabilidad no es un defecto del corpus de IRIS, sino un rasgo reconocido de
+las tareas de anotación subjetiva, que la investigación reciente propone tratar
+como información y no como ruido a eliminar~\cite{davani2022, plank2022}. La
+campaña EXIST, referencia en identificación de sexismo en español, ha adoptado por
+ello un paradigma de aprendizaje con desacuerdo en el que se conservan las
+etiquetas de todas las personas anotadoras en lugar de agregarlas en una
+sola~\cite{plaza2024}.
 
-De ahí se desprenden dos orientaciones prácticas para IRIS en el futuro. En cuanto al
-\textbf{despliegue}, un modelo abierto ejecutado en local (\texttt{gemma4:e4b})
-alcanza el mayor acuerdo de control entre los cuatro
-(Sección~\ref{subsec:iris_local}), de modo que la privacidad y el coste nulo de
-inferencia no obligan a renunciar al rendimiento. En cuanto al \textbf{papel del
-sistema}, dado que ninguna configuración alcanza un acuerdo alto y que la tarea es
-intrínsecamente disputada, encaja mejor como asistente que como decisor: su salida
-trazable (código, explicación y evidencias literales) permite que la analista
-audite, acepte o corrija cada predicción. El valor no está en sustituir el criterio
-experto, sino en ordenar el corpus y señalar los casos que merecen una segunda
-lectura.
+La segunda es un \textbf{límite de los modelos}, y sería un error disolverlo en el
+anterior. En \texttt{lenguaje\_sexista} ambos equipos coinciden en marcar la
+variable en la mayoría de las piezas, el 74,6\,\% y el 85,5\,\% respectivamente, y
+aun así tres de los cuatro modelos presentan un recall prácticamente nulo. Ahí no
+hay criterio en disputa, hay un fenómeno que las personas ven y el sistema no. El
+caso examinado en la Sección~\ref{subsec:iris_caso} muestra el mecanismo, ya que
+los modelos localizan el masculino genérico y lo declaran un colectivo mixto
+válido, reproduciendo el mismo automatismo que se les pedía detectar.
+
+El peso de cada límite cambia según la variable, y de ahí se sigue que el margen de
+mejora tenga también dos vías. Una consiste en explicitar mejor el constructo en el
+libro de códigos, apoyándose en anotaciones cualitativas que lo delimiten con
+ejemplos, y conviene priorizarla en las variables de criterio más implícito. La
+otra consiste en mejorar la sensibilidad del sistema en aquello que las expertas sí
+identifican de forma concordante. Conviene además evitar una simplificación, ya que
+los modelos no comparten un sesgo homogéneo, sino cuatro comportamientos distintos
+que solo coinciden en su dirección.
+
+\subsection{Implicaciones para IRIS}
+\label{subsec:iris_implicaciones}
+
+De los resultados se desprenden cuatro orientaciones prácticas para el proyecto.
+
+\paragraph{El despliegue local es viable.} El modelo abierto \texttt{gemma4:e4b},
+ejecutado en infraestructura propia, compite con los servicios comerciales y los
+supera en algunas variables, como \texttt{asimetria\_mujer\_hombre}, donde obtiene
+el mejor recall y la mejor precisión de los cuatro
+(Sección~\ref{subsec:iris_local}). Para una institución que maneja material sujeto
+a privacidad, esto significa que preservar los datos y prescindir de tarifas no
+obliga a renunciar al rendimiento, a cambio de asumir un coste de cómputo.
+
+\paragraph{Conviene tratar cada variable por separado.} Ni la configuración óptima
+ni la utilidad del sistema son las mismas en las cinco. En
+\texttt{masc\_generico} el sistema detecta ya tres de cada cuatro casos señalados
+por las expertas y puede incorporarse al flujo de trabajo, mientras que en
+\texttt{lenguaje\_sexista} no aporta información utilizable pese a consumir la
+mayor parte del presupuesto de inferencia (Sección~\ref{subsec:iris_coste}).
+Concentrar el esfuerzo donde el sistema funciona, y no distribuirlo por igual,
+mejora el rendimiento y reduce el gasto a la vez.
+
+\paragraph{La supervisión humana no es un remedio provisional.} Que el sistema
+requiera revisión experta no constituye una anomalía de esta implementación, sino
+lo que la literatura viene recomendando para las tareas de anotación con carga
+interpretativa. Pangakis et al.~\cite{pangakis2023} replican veintisiete tareas de
+anotación procedentes de la investigación en ciencias sociales y concluyen que
+ningún proceso automático puede darse por válido sin contrastarlo con etiquetas
+humanas, ya que en nueve de ellas la precisión o el recall caen por debajo de 0,5.
+Kocoń et al.~\cite{kocon2023} constatan que el rendimiento de un modelo general se
+degrada de forma acusada justo en las tareas subjetivas, con una pérdida media del
+25,5\,\% frente a los sistemas especializados. Y desde la perspectiva de la
+gobernanza, Gorwa et al.~\cite{gorwa2020} advierten de que los sistemas
+algorítmicos de moderación, aun bien optimizados, siguen siendo opacos y difíciles
+de fiscalizar. El paradigma \textit{human-in-the-loop} que adopta este trabajo se
+sitúa, por tanto, en el consenso de la disciplina.
+
+\paragraph{Ante la duda, conviene marcar de más.} Como herramienta de apoyo a la
+postedición, el sistema no decide, sino que selecciona lo que merece una segunda
+lectura. En ese uso los dos errores no cuestan lo mismo, ya que un falso positivo
+supone unos segundos de descarte para la analista mientras que un falso negativo
+es un caso que nadie revisará (Sección~\ref{sec:metricas_eval}). Los resultados
+apuntan en la dirección contraria a la deseable, puesto que el sistema falla
+precisamente por defecto, de modo que cualquier ajuste futuro debería orientarse a
+elevar el recall aun a costa de la precisión.
+
+Con estas cuatro orientaciones, el sistema encaja mejor como asistente que como
+decisor. Su salida trazable, con código, explicación y evidencias literales,
+permite que la analista audite, acepte o corrija cada predicción, y el caso
+analizado en la Sección~\ref{subsec:iris_caso} muestra que esa explicación no es un
+añadido cosmético, sino lo que permite entender por qué falla el sistema y, con
+ello, corregirlo. El valor no está en sustituir el criterio experto, sino en
+ordenar el corpus, señalar los casos que merecen atención y hacerlo de forma
+auditable.
