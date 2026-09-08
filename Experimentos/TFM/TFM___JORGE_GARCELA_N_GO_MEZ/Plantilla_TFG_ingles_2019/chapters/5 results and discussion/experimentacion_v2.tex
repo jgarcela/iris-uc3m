@@ -257,6 +257,19 @@ para el nivel B1.
     considerable por delante antes de que un modelo pueda asistir en esta variable, y
     se retoma en la discusión (Sección~\ref{sec:discussion}).
 
+    Merece una nota el \emph{salto semántico}, el caso en que un masculino
+    presentado como genérico se revela no inclusivo al aparecer después una marca
+    explícita de mujer, que el libro de códigos distingue con el valor~3 de esta
+    variable (Sección~\ref{sec:iris_variables}). El sistema lo contempla y llega a
+    emitirlo, 37 veces \texttt{gpt-4o-mini} en el nivel B1 y de forma testimonial
+    los demás modelos. La anotación experta de este corpus, en cambio, no emplea
+    ese valor en ninguna de las 1.313 piezas, que se reparten entre 250 negativos y
+    1.063 positivos ordinarios. No es posible, por tanto, evaluar si el sistema
+    detecta correctamente el salto semántico, y esa es también la razón por la que
+    la agrupación binaria de los valores 2 y 3 no altera en nada la referencia. La
+    identificación de este fenómeno queda como línea de trabajo futura, condicionada
+    a que una anotación posterior lo codifique de forma diferenciada.
+
     \item \textbf{\texttt{masc\_generico} (V26): el único acuerdo genuino, y su
     umbral.} Es el único caso con acuerdo apreciable: \texttt{gemini} alcanza
     $\kappa = 0,261$ y un recall de 0,733, es decir, detecta la mayoría del masculino
