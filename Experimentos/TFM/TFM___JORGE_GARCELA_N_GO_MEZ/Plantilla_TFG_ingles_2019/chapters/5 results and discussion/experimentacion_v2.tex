@@ -341,9 +341,9 @@ Las Tablas~\ref{tab:abl-v25} a~\ref{tab:abl-v35} recogen el resultado
 \textbf{variable a variable}, con las cinco métricas de la
 Sección~\ref{sec:metricas_eval} y el coeficiente $\kappa$. Se presentan así, y no
 en agregado, porque las prevalencias van del 6,2\,\% al 81,0\,\% y los valores no
-resultan comparables entre variables. En cada modelo se destaca su mejor valor por
-métrica, ya que lo que aquí se compara son componentes dentro de un mismo modelo y
-no modelos entre sí. Las escasas respuestas que el modelo no llegó a emitir en un
+resultan comparables entre variables. La comparación pertinente es la que se hace
+dentro de cada modelo, entre sus cuatro configuraciones, y no la que se hace entre
+modelos. Las escasas respuestas que el modelo no llegó a emitir en un
 formato válido se contabilizan como negativas, de modo que todas las
 configuraciones se evalúan sobre las mismas 1.313 piezas.
 
@@ -526,7 +526,7 @@ variable.
             \textbf{Cód.} & \textbf{Variable} & \textbf{B0 (USD)} & \textbf{B1 (USD)} & \textbf{Mejor recall} & \textbf{Mejor F1 (\textit{Sí})} \\
             \midrule
             V25 & \texttt{lenguaje\_sexista}         & 2,86 & 7,48 & 0,450 & 0,573 \\
-            V26 & \texttt{masc\_generico}            & 2,72 & 6,82 & \textbf{0,733} & \textbf{0,803} \\
+            V26 & \texttt{masc\_generico}            & 2,72 & 6,82 & 0,733 & 0,803 \\
             V30 & \texttt{sexismo\_discurso}         & 2,80 & 5,18 & 0,114 & 0,181 \\
             V33 & \texttt{asimetria\_mujer\_hombre}  & 2,83 & 6,01 & 0,160 & 0,151 \\
             V35 & \texttt{denominacion\_sexualizada} & 2,61 & 5,42 & 0,046 & 0,082 \\
@@ -908,7 +908,7 @@ coste, que sí admite agregación por tratarse de una suma sobre el corpus.
             \midrule
             \multirow{3}{*}{\texttt{gemini-3.1-flash-lite}}
               & B0 & 0,600 & 0,026 & 0,388 & 5,64 \\
-              & B1 & 0,661 & \textbf{0,066} & 0,443 & 13,16 \\
+              & B1 & 0,661 & 0,066 & 0,443 & 13,16 \\
               & \dr{\Delta} & \dr{+0,061} & \dr{+0,040} & \dr{+0,055} & \dr{2{,}3\times} \\
             \midrule
             \multirow{3}{*}{\texttt{gpt-4o-mini}}
@@ -922,11 +922,11 @@ coste, que sí admite agregación por tratarse de una suma sobre el corpus.
               & \dr{\Delta} & \dr{-0,003} & \dr{-0,048} & \dr{-0,066} & \dr{1{,}9\times} \\
             \midrule
             \multirow{2}{*}{\textbf{Media (API)}}
-              & \textbf{B0} & 0,578 & \textbf{0,037} & 0,409 & \textemdash \\
-              & \textbf{B1} & \textbf{0,614} & 0,028 & 0,415 & \textemdash \\
+              & \textbf{B0} & 0,578 & 0,037 & 0,409 & \textemdash \\
+              & \textbf{B1} & 0,614 & 0,028 & 0,415 & \textemdash \\
             \midrule
             \multirow{3}{*}{\texttt{gemma4:e4b}\,\textnormal{\footnotesize(local)}}
-              & B0 & 0,597 & \textbf{0,061} & 0,421 & \textemdash \\
+              & B0 & 0,597 & 0,061 & 0,421 & \textemdash \\
               & B1 & 0,605 & 0,043 & 0,412 & \textemdash \\
               & \dr{\Delta} & \dr{+0,008} & \dr{-0,018} & \dr{-0,009} & \textemdash \\
             \bottomrule

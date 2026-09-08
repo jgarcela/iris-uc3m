@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 """Genera las tablas de ablacion por variable en LaTeX desde ablacion_por_variable.csv.
-Negrita: mejor valor de cada metrica DENTRO de cada modelo (comparacion de componentes)."""
+Sin resaltados: el maximo de una metrica dentro de un modelo suele venir de la
+configuracion mas conservadora, de modo que la negrita señalaba artefactos. Que
+configuracion conviene en cada variable se razona en el texto."""
 import csv, collections, io, os
 BASE=os.path.dirname(os.path.abspath(__file__))
 rows=list(csv.DictReader(open(os.path.join(BASE,"ablacion_por_variable.csv"))))
@@ -28,14 +30,13 @@ for cod,nom in VAR:
     out.write("    \\setlength{\\tabcolsep}{4pt}\n")
     out.write("    \\ttabbox[\\FBwidth]{\n")
     out.write(f"        \\caption{{Ablación por componentes en {nom} ({cod}), nivel B1 "
-              f"($N=1.313$, prevalencia {prev}). En negrita, el mejor valor de cada métrica dentro de cada modelo. Los modelos se nombran de forma abreviada, gemini por gemini-3.1-flash-lite y gemma por gemma4:e4b.}}\n")
+              f"($N=1.313$, prevalencia {prev}). Los modelos se nombran de forma abreviada, gemini por gemini-3.1-flash-lite y gemma por gemma4:e4b.}}\n")
     out.write(f"        \\label{{tab:abl-{cod.lower()}}}\n    }}{{\n")
     out.write("        \\begin{tabular*}{\\textwidth}{@{\\extracolsep{\\fill}}l l"+" c"*len(MET)+"@{}}\n            \\toprule\n")
     out.write("            \\textbf{Modelo} & \\textbf{Configuración} & "+" & ".join("\\textbf{%s}"%t for _,t in MET)+" \\\\\n")
     for mk,mlab in MOD:
         block=[r for r in sub if r["modelo"]==mk]
         block={r["configuracion"]:r for r in block}
-        best={m:max(float(block[c][m]) for c in ORD if c in block) for m,_ in MET}
         out.write("            \\midrule\n")
         for i,c in enumerate(ORD):
             if c not in block: continue
@@ -43,7 +44,7 @@ for cod,nom in VAR:
             cells=[]
             for m,_ in MET:
                 v=float(r[m]); s=num(v)
-                cells.append("\\textbf{%s}"%s if abs(v-best[m])<1e-9 else s)
+                cells.append(s)
             first=mlab if i==0 else ""
             out.write(f"            {first} & {NOM[c]} & "+" & ".join(cells)+" \\\\\n")
     out.write("            \\bottomrule\n        \\end{tabular*}\n    }\n    \\endgroup\n\\end{table}\n")
