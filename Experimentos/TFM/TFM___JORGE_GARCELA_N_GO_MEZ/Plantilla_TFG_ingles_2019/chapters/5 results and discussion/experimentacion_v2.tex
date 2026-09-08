@@ -438,6 +438,64 @@ retoman en la discusión (Sección~\ref{sec:discussion}).
     \label{fig:iris-acuerdo-dolar}
 \end{figure}
 
+\subsubsection{El coste, variable a variable}
+
+El coste agregado oculta que no todas las variables cuestan lo mismo ni rinden lo
+mismo. La Tabla~\ref{tab:iris-coste-var} lo desglosa, sumando los tres modelos de
+API, y lo enfrenta al mejor acuerdo que alguno de los cuatro modelos alcanza en esa
+variable.
+
+\begin{table}[H]
+    \centering
+    \begingroup
+    \small
+    \ttabbox[\FBwidth]{
+        \caption{Coste de inferencia por variable sobre las 1.313 piezas, sumados los
+        tres modelos accesibles por API, y mejor acuerdo alcanzado en el nivel B1 por
+        cualquiera de los cuatro modelos.}
+        \label{tab:iris-coste-var}
+    }{
+        \begin{tabular}{@{}l l c c >{\columncolor{gray!15}}c@{}}
+            \toprule
+            \textbf{Cód.} & \textbf{Variable} & \textbf{B0 (USD)} & \textbf{B1 (USD)} & \textbf{Mejor} \boldmath$\kappa$ \textbf{(B1)} \\
+            \midrule
+            V25 & \texttt{lenguaje\_sexista}         & 2,86 & 7,48 & 0,015 \\
+            V26 & \texttt{masc\_generico}            & 2,72 & 6,82 & \textbf{0,261} \\
+            V30 & \texttt{sexismo\_discurso}         & 2,80 & 5,18 & 0,011 \\
+            V33 & \texttt{asimetria\_mujer\_hombre}  & 2,83 & 6,01 & 0,092 \\
+            V35 & \texttt{denominacion\_sexualizada} & 2,61 & 5,42 & 0,061 \\
+            \midrule
+            & \textbf{Total} & \textbf{13,83} & \textbf{30,91} & \textemdash \\
+            \bottomrule
+        \end{tabular}
+    }
+    \endgroup
+\end{table}
+
+En el nivel de control el gasto se reparte de forma casi uniforme, entre 2,61 y
+2,86 USD por variable, lo que era esperable porque cada pieza se procesa con una
+llamada por variable y las metodologías tienen extensiones parecidas. En B1, en
+cambio, la horquilla se abre, de 5,18 a 7,48 USD, porque el número de iteraciones
+del bucle lo decide la agente en función de la dificultad que encuentra. Las dos
+variables más caras son precisamente \texttt{lenguaje\_sexista} y
+\texttt{masc\_generico}, aquellas en que la agente consulta más herramientas antes
+de decidirse.
+
+El contraste con la última columna es el dato relevante para el proyecto.
+\texttt{lenguaje\_sexista} es la variable más costosa de las cinco y su mejor
+acuerdo apenas se distingue del azar, mientras que \texttt{masc\_generico} cuesta
+algo menos y concentra prácticamente todo el acuerdo obtenido. Dicho de otro modo,
+\textbf{el gasto no se corresponde con el rendimiento}, y una parte apreciable del
+presupuesto de inferencia se destina hoy a variables en las que el sistema no
+aporta información utilizable. De ahí se sigue una recomendación de despliegue que
+se desarrolla en la discusión (Sección~\ref{sec:discussion}), la de no tratar las
+cinco variables por igual, sino asignar a cada una la vía y la configuración que le
+convengan.
+
+Sobre el modelo local no cabe el mismo desglose, ya que su instrumentación registra
+el tiempo de procesamiento por pieza y no por variable. El reparto de ese tiempo
+entre las cinco variables queda, por tanto, sin medir.
+
 \subsection{¿Un límite del modelo o de la tarea?}
 \label{subsec:iris_errores}
 
