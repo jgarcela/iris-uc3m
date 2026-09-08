@@ -761,6 +761,27 @@ las celdas. El descenso más llamativo es el de los dos modelos de OpenAI en
 de 0,316 a $-0,001$. Las \textit{skills} acentúan las particularidades de cada
 modelo en lugar de acercarlos a un criterio compartido.
 
+\paragraph{¿Serviría combinar los modelos?} El bajo acuerdo entre ellos plantea de
+forma natural si una decisión por mayoría mejoraría el resultado, ya que combinar
+sistemas con errores poco correlacionados suele elevar el rendimiento. Se comprobó
+combinando las predicciones de los cuatro modelos en el nivel B1 por mayoría
+simple, con los empates a dos resueltos como positivo, criterio coherente con la
+prioridad del recall que exige el uso previsto del sistema
+(Sección~\ref{sec:metricas_eval}). El resultado es negativo en las cinco variables,
+donde el voto queda por debajo del mejor modelo individual tanto en F1 de la clase
+positiva como en $\kappa$. En \texttt{masc\_generico} obtiene un F1 de 0,605 frente
+al 0,803 de \texttt{gemini} y un $\kappa$ de 0,148 frente a 0,261, y en
+\texttt{asimetria\_mujer\_hombre} un F1 de 0,120 frente al 0,151 de
+\texttt{gemma4:e4b}. Tampoco mejora el recall, que era el objetivo más plausible de
+la combinación.
+
+La explicación es coherente con lo anterior. La mayoría solo marca allí donde
+coinciden al menos dos modelos, y como todos infradetectan, su intersección resulta
+aún más conservadora que cada uno por separado. Combinar sistemas ayuda cuando sus
+errores se compensan, no cuando comparten la misma dirección de sesgo. Una
+estrategia de unión, que marcase cuando cualquiera de ellos lo hiciera, elevaría el
+recall a costa de la precisión y queda como posible línea futura.
+
 Los tres análisis permiten repartir el desajuste entre sus dos causas. El primero
 mostró que el acuerdo depende del equipo de anotación tanto como del modelo, lo que
 sitúa una parte del desacuerdo en la propia tarea, cuyo criterio no está
