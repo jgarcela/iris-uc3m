@@ -414,6 +414,23 @@ configuración concreta sea definitivamente superior a otra.
 \subsection{Coste de inferencia y elección de modelo}
 \label{subsec:iris_local}\label{subsec:iris_coste}
 
+Elegir con qué modelo desplegar el sistema no se resuelve mirando una sola cifra, y
+las secciones anteriores explican por qué. Ninguno de los cuatro domina en las cinco
+variables, hasta el punto de que el primer puesto por F1 de la clase positiva lo
+ocupan los cuatro en algún momento, \texttt{gemini} en \texttt{masc\_generico},
+\texttt{gemma} en \texttt{asimetria\_mujer\_hombre}, \texttt{gpt-5.4-nano} en
+\texttt{sexismo\_discurso} y \texttt{gpt-4o-mini} en las dos restantes, si bien en
+\texttt{lenguaje\_sexista} ese primer puesto convive con un acuerdo negativo y no
+equivale a detectar.
+
+A la comparación de rendimiento se añade una segunda dimensión, la del coste, que ni
+siquiera se mide en la misma moneda para todos, ya que los tres modelos accesibles
+por API se pagan por \textit{token} mientras que el local se paga en tiempo de
+cómputo sobre infraestructura propia. Esta sección recorre ambas, empezando por
+situar a los modelos entre sí y deteniéndose en el local, que es el que obliga a
+plantear el coste en esos términos, para pasar después a lo que cuesta cada uno y a
+cómo se reparte ese gasto entre las cinco variables.
+
 Entre los cuatro modelos, el local \texttt{gemma4:e4b} merece una lectura aparte,
 que conviene hacer variable a variable. Es el mejor de los cuatro en
 \texttt{asimetria\_mujer\_hombre}, donde alcanza el mayor recall (0,160), la mejor
