@@ -40,6 +40,8 @@ no se editan a mano.
   cada modelo en B1).
 - `gen_tabla_sintesis.py` → `tabla_sintesis.tex` (una fila por variable con el mejor
   modelo, su mejor configuración, el coste y si admite apoyo automático).
+- `gen_tabla_coste_modelo.py` → `tabla_coste_modelo.tex` (coste en B1 desglosado por
+  variable y modelo, solo los tres accesibles por API).
 
 ## Criterios
 

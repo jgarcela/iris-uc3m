@@ -544,6 +544,30 @@ se desarrolla en la discusión (Sección~\ref{sec:discussion}), la de no tratar 
 cinco variables por igual, sino asignar a cada una la vía y la configuración que le
 convengan.
 
+Ese reparto tampoco es igual para los tres modelos, y conviene abrirlo, porque las
+cifras anteriores suman a los tres y ocultan que cada uno gasta en sitios distintos.
+La Tabla~\ref{tab:iris-coste-modelo} lo desglosa.
+
+\input{chapters/5 results and discussion/tabla_coste_modelo}
+
+En el nivel de control el gasto de cada modelo es prácticamente el mismo en las cinco
+variables, como corresponde a una única llamada por pieza y variable. En B1, en
+cambio, cada uno concentra su gasto en variables distintas, porque el número de
+iteraciones lo decide la agente en función de lo que encuentra. \texttt{gemini} gasta
+más en \texttt{masc\_generico} (3,43 USD, frente a 2,13 en
+\texttt{denominacion\_sexualizada}), que es justamente la variable en la que detecta.
+\texttt{gpt-4o-mini} concentra el suyo en \texttt{lenguaje\_sexista} (2,46 USD frente
+a 0,98 en \texttt{sexismo\_discurso}), donde marca casi la mitad de las piezas sin
+coincidir con las anotadoras. Y \texttt{gpt-5.4-nano} reparte de forma bastante
+uniforme, entre 1,87 y 2,31 USD.
+
+La lectura es que \textbf{gastar más en una variable indica que la agente ha
+trabajado más en ella, no que el resultado vaya a ser mejor}. En \texttt{gemini} ese
+esfuerzo adicional se traduce en la única detección utilizable del capítulo, y en
+\texttt{gpt-4o-mini} en un marcado abundante que no coincide con el criterio experto.
+Para un despliegue, esto refuerza la conveniencia de decidir modelo y variable a la
+vez, ya que el modelo más caro en una variable no lo es en la siguiente.
+
 Sobre el modelo local no cabe el mismo desglose, ya que su instrumentación registra
 el tiempo de procesamiento por pieza y no por variable. El reparto de ese tiempo
 entre las cinco variables queda, por tanto, sin medir.
@@ -914,9 +938,7 @@ Sección~\ref{sec:discussion}.
 
 El análisis por variable ha mostrado que el comportamiento del sistema cambia lo
 bastante de una a otra como para que ninguna afirmación general se sostenga sin
-matices. Cabe, con todo, una lectura de conjunto, siempre que se haga sin
-promediar: poner las cinco variables una al lado de otra y leer cada fila por
-separado.
+matices. Cabe, con todo, una lectura de conjunto.
 
 Eso es lo que recoge la Tabla~\ref{tab:iris-sintesis}, que reúne en una sola fila
 por variable lo que las secciones anteriores han ido estableciendo, esto es, el

@@ -1,0 +1,27 @@
+% Generado por gen_tabla_coste_modelo.py. No editar a mano.
+
+\begin{table}[H]
+    \centering
+    \begingroup
+    \footnotesize
+    \setlength{\tabcolsep}{4pt}
+    \ttabbox[\FBwidth]{
+        \caption{Coste de inferencia en el nivel B1, en USD sobre las 1.313 piezas, desglosado por variable y modelo. Solo los tres modelos accesibles por API, ya que el local registra el tiempo de proceso por pieza y no por variable.}
+        \label{tab:iris-coste-modelo}
+    }{
+        \begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}l c c c >{\columncolor{gray!15}}c@{}}
+            \toprule
+            \textbf{Variable} & \textbf{gemini} & \textbf{gpt-4o-mini} & \textbf{gpt-5.4-nano} & \textbf{Total} \\
+            \midrule
+            lenguaje sexista (V25) & 2,81 & 2,46 & 2,20 & 7,48 \\
+            masculino genérico (V26) & 3,43 & 1,21 & 2,19 & 6,82 \\
+            sexismo en el discurso (V30) & 2,32 & 0,98 & 1,87 & 5,18 \\
+            asimetría mujer/hombre (V33) & 2,46 & 1,24 & 2,31 & 6,01 \\
+            denominación sexualizada (V35) & 2,13 & 1,01 & 2,29 & 5,42 \\
+            \midrule
+            \textbf{Total} & \textbf{13,16} & \textbf{6,89} & \textbf{10,86} & \textbf{30,91} \\
+            \bottomrule
+        \end{tabular*}
+    }
+    \endgroup
+\end{table}
