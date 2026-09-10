@@ -968,6 +968,22 @@ que \textbf{el gasto no sigue al rendimiento}, ya que la variable más cara es
 justamente una de las que no producen detección aprovechable, mientras que la única
 utilizable no es la más costosa.
 
+Este segundo hallazgo admite una precisión que aporta el desglose por modelo de la
+Sección~\ref{subsec:iris_coste}. Vale para la suma de los tres modelos, pero no para
+cada uno por separado, ya que \texttt{gemini} gasta su máximo precisamente en la
+variable en que detecta. Lo que encarece \texttt{lenguaje\_sexista} no es la variable
+en sí, sino que allí se paga a tres modelos por una tarea que ninguno resuelve.
+
+Eso permite estimar lo que costaría el despliegue que la tabla sugiere. Asignar a cada
+variable el modelo que mejor se comporta en ella supone 8,77 USD sobre las 1.313
+piezas, cifra en la que \texttt{asimetria\_mujer\_hombre} no devenga tarifa porque
+recae en el modelo local, si bien consume tiempo de cómputo. Fijar en cambio un único
+modelo para las cinco costaría 13,16 USD con \texttt{gemini}, que es el de mayor
+acuerdo, y 6,89 USD con \texttt{gpt-4o-mini}, que sale más barato pero queda por
+detrás en tres de las cinco variables. La asignación por variable se sitúa entre
+ambas en coste y por delante de las dos en rendimiento, que es cuanto cabe pedirle a
+una decisión de despliegue.
+
 Queda por ver qué ocurre si, pese a todo lo anterior, se promedian las cinco
 variables. La Tabla~\ref{tab:iris-b0b1} recoge esos promedios, con la cautela de que
 mezclan magnitudes que no son comparables entre sí
