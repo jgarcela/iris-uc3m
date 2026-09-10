@@ -26,8 +26,18 @@ independiente.
 Estas tres preguntas no admiten una respuesta única. Como se verá, el efecto del
 empaquetado depende del modelo, el rendimiento de cada modelo depende de la
 variable, y la configuración más conveniente puede diferir de una variable a otra.
-El análisis se organiza en consecuencia, variable por variable, y solo al final se
-valora hasta qué punto cabe extraer alguna conclusión de conjunto.
+
+El análisis se organiza en consecuencia. Fijada la referencia de partida
+(Sección~\ref{subsec:iris_referencia}), se recorren cuatro cuestiones distintas, y
+\textbf{todas ellas se examinan variable a variable}: las métricas de cada modelo en
+los dos niveles (Sección~\ref{subsec:iris_porvariable}), la contribución de cada
+componente de la arquitectura (Sección~\ref{subsec:iris_descomposicion}), el coste de
+inferencia y la viabilidad del despliegue local (Sección~\ref{subsec:iris_coste}), y
+el origen del desajuste con la anotación experta
+(Sección~\ref{subsec:iris_errores}), que se cierra examinando por dentro el
+razonamiento que conduce a un fallo concreto (Sección~\ref{subsec:iris_caso}). La Sección~\ref{subsec:iris_conjunto} cierra
+reuniendo esas cuatro cuestiones en una sola tabla, una fila por variable, y solo entonces
+se valora qué cabe afirmar en conjunto.
 
 Conviene delimitar antes qué se evalúa. El sistema produce por cada pieza y
 variable una etiqueta, una explicación y las evidencias literales que la sostienen,
@@ -99,7 +109,7 @@ organización de este capítulo, que examina cada variable por separado antes de
 plantearse cualquier lectura de conjunto.
 
 
-\subsection{Análisis por variable}
+\subsection{Métricas por variable}
 \label{subsec:iris_porvariable}
 
 Las Tablas~\ref{tab:var-v25} a~\ref{tab:var-v35} recogen, para cada variable, el
@@ -286,7 +296,7 @@ aunque un recall de 0,008 lo vuelve inservible como detector, el dato tiene una 
 menos desfavorable, y es que cuando ese modelo decide marcar, acierta. Un sistema así
 resulta inútil para revisar un corpus completo, pero no genera falsas alarmas.
 
-\subsubsection{Lectura de conjunto de las cinco variables}
+\subsubsection{Patrones comunes a las cinco variables}
 
 El recorrido anterior deja dos conclusiones. La primera es que \textbf{el efecto de las
 \textit{skills} no es uniforme ni entre modelos ni entre variables}. Hay una mejora
@@ -400,63 +410,7 @@ Cabe sostener que la configuración completa no muestra ventaja, pero no que una
 configuración concreta sea definitivamente superior a otra.
 
 
-\subsection{Un caso concreto de fallo de detección}
-\label{subsec:iris_caso}
-
-Las métricas agregadas describen el patrón, pero no permiten ver en qué consiste un
-fallo de detección. Conviene por ello examinar una pieza del corpus, elegida entre
-las 567 en que los cuatro modelos coinciden en no marcar
-\texttt{lenguaje\_sexista} pese a que la anotación sí lo marca
-(Tabla~\ref{tab:iris-consenso}).
-
-La pieza informa sobre una feria de innovación universitaria y contiene, entre
-otros, estos pasajes:
-
-\begin{quote}
-\small
-``Los expertos, 80 grupos de investigación y 20 \textit{spin-off} \ldots\ se han
-reunido \ldots\ para exponer sus ideas''.
-
-``\ldots\ ha venido a presentar esta y 10 iniciativas más a las empresas
-interesadas y a otros investigadores''.
-
-``\ldots\ los \textit{spin-off}, las empresas creadas por los investigadores de la
-UAB para explotar los resultados de su investigación''.
-\end{quote}
-
-La anotadora codificó la variable como presente. Los cuatro modelos respondieron
-que no, y sus justificaciones resultan más reveladoras que el propio veredicto. El
-sistema no pasó por alto las expresiones, sino que las examinó y las declaró
-correctas. \texttt{gemini-3.1-flash-lite} razonó que el texto emplea
-``\textit{investigadores} como colectivo mixto'' y concluyó que no hay uso
-discriminatorio. \texttt{gpt-5.4-nano} fue más explícito todavía, ya que afirmó que
-``no hay uso de masculino genérico que excluya a las mujeres'' y descartó la
-variable tras recorrer los cuatro pasos de la metodología. \texttt{gemma4:e4b}
-argumentó que los cargos femeninos están correctamente feminizados y que no
-aparece un salto semántico, de lo que dedujo que ``el texto no presenta sexismo
-lingüístico en su forma''.
-
-Los tres razonamientos comparten una misma operación, la de tomar el masculino
-genérico por neutro y darlo por válido precisamente porque el texto nombra además a
-varias mujeres con sus cargos. Es la operación que el caso de Bindi ilustraba en la
-introducción de esta memoria (Sección~\ref{introduction}), donde una investigación
-liderada por investigadoras se difundió como obra de ``investigadores''. El sistema
-reproduce aquí el mismo automatismo que se le pedía detectar.
-
-Un detalle añade precisión al diagnóstico. En esa misma pieza,
-\texttt{gemini-3.1-flash-lite} y \texttt{gemma4:e4b} sí marcaron
-\texttt{masc\_generico} (V26), de modo que reconocieron el fenómeno cuando la
-pregunta se lo nombraba de forma explícita, pero no lo consideraron un uso
-discriminatorio del lenguaje al responder por V25. La detección, por tanto, no
-depende solo de que el modelo advierta la expresión, sino de cómo esté formulado el
-criterio que se le pide aplicar, lo que refuerza el papel de la redacción de la
-metodología y ofrece una vía de mejora concreta para el proyecto.
-
-Este caso ilustra además el valor del plano cualitativo. Sin la explicación
-asociada a cada veredicto, el resultado sería un cero en una tabla. Con ella se
-puede identificar el mecanismo del fallo, que es lo que permite corregirlo.
-
-\subsection{El modelo local: rendimiento y coste}
+\subsection{Viabilidad del modelo local y coste de inferencia}
 \label{subsec:iris_local}\label{subsec:iris_coste}
 
 Entre los cuatro modelos, el local \texttt{gemma4:e4b} merece una lectura aparte,
@@ -576,12 +530,13 @@ Sobre el modelo local no cabe el mismo desglose, ya que su instrumentación regi
 el tiempo de procesamiento por pieza y no por variable. El reparto de ese tiempo
 entre las cinco variables queda, por tanto, sin medir.
 
-\subsection{¿Un límite del modelo o de la tarea?}
+\subsection{El origen de la infradetección: la tarea y los modelos}
 \label{subsec:iris_errores}
 
 El bajo acuerdo absoluto plantea la pregunta que condiciona la interpretación de
 todo el capítulo: ¿refleja una limitación de los modelos, o un límite intrínseco de
-la propia tarea? Tres análisis complementarios apuntan en la misma dirección.
+la propia tarea? Tres análisis complementarios apuntan en la misma dirección, y una
+pieza concreta permite después ver el mecanismo del fallo por dentro.
 
 \subsubsection{Heterogeneidad entre equipos de anotación}
 
@@ -860,7 +815,64 @@ errores se compensan, no cuando comparten la misma dirección de sesgo. Una
 estrategia de unión, que marcase cuando cualquiera de ellos lo hiciera, elevaría el
 recall a costa de la precisión y queda como posible línea futura.
 
-Los tres análisis permiten repartir el desajuste entre sus dos causas. El primero
+\subsubsection{Anatomía de un fallo de detección}
+\label{subsec:iris_caso}
+
+Los análisis anteriores establecen la dirección y la magnitud del desajuste, pero no
+permiten ver en qué consiste un fallo de detección. Conviene por ello examinar una pieza del corpus, elegida entre
+las 567 en que los cuatro modelos coinciden en no marcar
+\texttt{lenguaje\_sexista} pese a que la anotación sí lo marca
+(Tabla~\ref{tab:iris-consenso}).
+
+La pieza informa sobre una feria de innovación universitaria y contiene, entre
+otros, estos pasajes:
+
+\begin{quote}
+\small
+``Los expertos, 80 grupos de investigación y 20 \textit{spin-off} \ldots\ se han
+reunido \ldots\ para exponer sus ideas''.
+
+``\ldots\ ha venido a presentar esta y 10 iniciativas más a las empresas
+interesadas y a otros investigadores''.
+
+``\ldots\ los \textit{spin-off}, las empresas creadas por los investigadores de la
+UAB para explotar los resultados de su investigación''.
+\end{quote}
+
+La anotadora codificó la variable como presente. Los cuatro modelos respondieron
+que no, y sus justificaciones resultan más reveladoras que el propio veredicto. El
+sistema no pasó por alto las expresiones, sino que las examinó y las declaró
+correctas. \texttt{gemini-3.1-flash-lite} razonó que el texto emplea
+``\textit{investigadores} como colectivo mixto'' y concluyó que no hay uso
+discriminatorio. \texttt{gpt-5.4-nano} fue más explícito todavía, ya que afirmó que
+``no hay uso de masculino genérico que excluya a las mujeres'' y descartó la
+variable tras recorrer los cuatro pasos de la metodología. \texttt{gemma4:e4b}
+argumentó que los cargos femeninos están correctamente feminizados y que no
+aparece un salto semántico, de lo que dedujo que ``el texto no presenta sexismo
+lingüístico en su forma''.
+
+Los tres razonamientos comparten una misma operación, la de tomar el masculino
+genérico por neutro y darlo por válido precisamente porque el texto nombra además a
+varias mujeres con sus cargos. Es la operación que el caso de Bindi ilustraba en la
+introducción de esta memoria (Sección~\ref{introduction}), donde una investigación
+liderada por investigadoras se difundió como obra de ``investigadores''. El sistema
+reproduce aquí el mismo automatismo que se le pedía detectar.
+
+Un detalle añade precisión al diagnóstico. En esa misma pieza,
+\texttt{gemini-3.1-flash-lite} y \texttt{gemma4:e4b} sí marcaron
+\texttt{masc\_generico} (V26), de modo que reconocieron el fenómeno cuando la
+pregunta se lo nombraba de forma explícita, pero no lo consideraron un uso
+discriminatorio del lenguaje al responder por V25. La detección, por tanto, no
+depende solo de que el modelo advierta la expresión, sino de cómo esté formulado el
+criterio que se le pide aplicar, lo que refuerza el papel de la redacción de la
+metodología y ofrece una vía de mejora concreta para el proyecto.
+
+Este caso ilustra además el valor del plano cualitativo. Sin la explicación
+asociada a cada veredicto, el resultado sería un cero en una tabla. Con ella se
+puede identificar el mecanismo del fallo, que es lo que permite corregirlo.
+
+Los tres análisis permiten repartir el desajuste entre sus dos causas, y el caso que
+acaba de examinarse muestra en qué consiste la segunda. El primero
 mostró que el acuerdo depende del equipo de anotación tanto como del modelo, lo que
 sitúa una parte del desacuerdo en la propia tarea, cuyo criterio no está
 suficientemente estabilizado. El segundo mostró que, con independencia de eso, los
@@ -879,7 +891,7 @@ de cada mitad cambia según la variable, y su distinción es la que ordena las
 implicaciones para el proyecto que se recogen en la
 Sección~\ref{sec:discussion}.
 
-\subsection{¿Cabe alguna conclusión de conjunto?}
+\subsection{Síntesis por variable y lectura agregada}
 \label{subsec:iris_conjunto}
 
 El análisis por variable ha mostrado que el comportamiento del sistema cambia lo
@@ -993,7 +1005,7 @@ amplificación se concentra en \texttt{masc\_generico}.
     \label{fig:iris-b0b1-metricas}
 \end{figure}
 
-\subsubsection{Una lección metodológica: la divergencia entre exactitud y \texorpdfstring{$\kappa$}{kappa}}
+\subsubsection{El desacoplamiento entre exactitud y acuerdo}
 \label{subsec:iris_divergencia}
 
 Merece atención un fenómeno que atraviesa el capítulo y cuyo interés excede a este
