@@ -32,7 +32,8 @@ El análisis se organiza en consecuencia. Fijada la referencia de partida
 \textbf{todas ellas se examinan variable a variable}: las métricas de cada modelo en
 los dos niveles (Sección~\ref{subsec:iris_porvariable}), la contribución de cada
 componente de la arquitectura (Sección~\ref{subsec:iris_descomposicion}), el coste de
-inferencia y la viabilidad del despliegue local (Sección~\ref{subsec:iris_coste}), y
+inferencia de cada modelo y lo que implica para elegir uno
+(Sección~\ref{subsec:iris_coste}), y
 el origen del desajuste con la anotación experta
 (Sección~\ref{subsec:iris_errores}), que se cierra examinando por dentro el
 razonamiento que conduce a un fallo concreto (Sección~\ref{subsec:iris_caso}). La Sección~\ref{subsec:iris_conjunto} cierra
@@ -410,7 +411,7 @@ Cabe sostener que la configuración completa no muestra ventaja, pero no que una
 configuración concreta sea definitivamente superior a otra.
 
 
-\subsection{Viabilidad del modelo local y coste de inferencia}
+\subsection{Coste de inferencia y elección de modelo}
 \label{subsec:iris_local}\label{subsec:iris_coste}
 
 Entre los cuatro modelos, el local \texttt{gemma4:e4b} merece una lectura aparte,
@@ -891,7 +892,7 @@ de cada mitad cambia según la variable, y su distinción es la que ordena las
 implicaciones para el proyecto que se recogen en la
 Sección~\ref{sec:discussion}.
 
-\subsection{Síntesis por variable y lectura agregada}
+\subsection{Dónde sirve hoy el sistema}
 \label{subsec:iris_conjunto}
 
 El análisis por variable ha mostrado que el comportamiento del sistema cambia lo
