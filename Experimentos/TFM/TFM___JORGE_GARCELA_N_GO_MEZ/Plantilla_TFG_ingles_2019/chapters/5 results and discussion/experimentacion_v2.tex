@@ -140,11 +140,14 @@ nada.
 capítulo mira varias métricas a la vez. Al pasar a B1 su exactitud casi se duplica
 (de 0,236 a 0,457) y su F1 de la clase positiva pasa de 0,151 a 0,573, mientras que
 el $\kappa$ empeora (de $-0,013$ a $-0,037$). Lo que ha cambiado no es su capacidad
-de discriminar, sino cuánto marca, que pasa del 9,0\,\% al 46,2\,\% de las piezas.
-En una variable cuya prevalencia anotada es del 81,0\,\%, marcar más acerca
+de discriminar, sino cuánto marca, que pasa del 9,0\,\% al 46,2\,\% de las piezas
+(columna Prev.~(\textit{Sí}) de la Tabla~\ref{tab:var-v25}).
+En una variable cuya prevalencia anotada es del 81,0\,\ (Tabla~\ref{tab:iris-referencia}), marcar más acerca
 mecánicamente a la mayoría y mejora las métricas que no descuentan el azar. Este
-desacoplamiento, que reaparece en otras variables, se examina como cuestión
-metodológica en la Sección~\ref{subsec:iris_divergencia}. Los otros tres modelos
+desacoplamiento, en el que la exactitud mejora mientras el $\kappa$ empeora, reaparece
+en otras celdas, de forma muy marcada en \texttt{gpt-5.4-nano} sobre
+\texttt{asimetria\_mujer\_hombre} (Tabla~\ref{tab:var-v33}), y se examina como
+cuestión metodológica en la Sección~\ref{subsec:iris_divergencia}. Los otros tres modelos
 apenas se mueven, con recalls que siguen en el entorno de la centésima en los dos
 niveles.
 
@@ -153,11 +156,11 @@ prácticamente nulo en tres de los cuatro modelos (0,046 en \texttt{gemini}, 0,0
 \texttt{gemma} y 0,001 en \texttt{gpt-5.4-nano}), de modo que el sistema deja sin
 señalar casi todo el lenguaje sexista que las expertas identifican. No se trata de un
 matiz de umbral ni de un desacuerdo sobre casos dudosos, sino de que \textbf{el modelo
-no detecta el fenómeno}. Y conviene subrayar la magnitud de lo que se está pasando por
-alto, ya que ambos equipos de anotación marcan esta variable en la mayoría de las
-piezas, el 74,6\,\% Indexa y el 85,5\,\% UCM3
-(Tabla~\ref{tab:iris-equipos-recall}), es decir, coinciden en que el fenómeno está ahí
-aunque discrepen en cuánto. La única excepción es \texttt{gpt-4o-mini}, que sí marca de
+no detecta el fenómeno}. La magnitud de esa omisión se aprecia al contrastarla con la
+anotación humana, ya que los dos equipos marcan la variable en la mayoría de las
+piezas, Indexa en el 74,6\,\% y UCM3 en el 85,5\,\%
+(Tabla~\ref{tab:iris-equipos-recall}). Discrepan en la proporción, pero coinciden en
+que el fenómeno está presente. La única excepción es \texttt{gpt-4o-mini}, que sí marca de
 forma abundante (recall 0,450), pero su acuerdo sigue siendo negativo
 ($\kappa = -0,037$), lo que indica que marca en piezas distintas de aquellas en que lo
 hacen las anotadoras. Ni detectar poco ni detectar mucho aproxima al modelo al criterio
@@ -1079,16 +1082,32 @@ a B1, con la advertencia de que ambos paneles agregan las cinco variables.
     \label{fig:iris-divergencia}
 \end{figure}
 
-El motivo de esa divergencia es conocido, y no exige que el modelo conozca la
-distribución de clases: en régimen \textit{zero-shot} no influye. Al volverse menos
-conservador (por efecto del empaquetado, no por una estrategia informada), el modelo
-responde \textit{Sí} con más frecuencia. En las variables donde la clase positiva
-resulta ser la mayoritaria, ese desplazamiento eleva la exactitud por simple
-coincidencia con la mayoría, no por discriminar mejor. Se trata, por tanto, de un
-artefacto estadístico de un sesgo ciego de respuesta, no de un mejor criterio. El
-coeficiente $\kappa$, que descuenta el acuerdo esperable por azar, no premia ese
-desplazamiento. Atender solo a la exactitud llevaría, por tanto, a dar por buena
-una mejora que en parte responde a un cambio en la frecuencia de respuesta.
+El promedio, con todo, es aquí lo menos revelador, porque el fenómeno se produce
+celda a celda y no en todas. En cinco de las veinte combinaciones de modelo y variable
+la exactitud mejora al pasar a B1 mientras el $\kappa$ empeora
+(Tablas~\ref{tab:var-v25} a~\ref{tab:var-v35}), y las cinco comparten un rasgo que la
+columna Prev.~(\textit{Sí}) permite advertir de un vistazo: en todas ellas el modelo
+desplaza su prevalencia predicha hacia la clase mayoritaria de la variable.
+
+Ese desplazamiento puede darse en cualquiera de los dos sentidos, y los dos casos más
+marcados del capítulo lo muestran. En \texttt{lenguaje\_sexista}, donde la clase
+mayoritaria es \textit{Sí} (81,0\,\%), \texttt{gpt-4o-mini} se vuelve menos conservador
+y pasa de marcar el 9,0\,\% de las piezas al 46,2\,\%, con lo que su exactitud sube de
+0,236 a 0,457. En \texttt{asimetria\_mujer\_hombre}, donde la mayoritaria es \textit{No}
+(93,8\,\%), \texttt{gpt-5.4-nano} hace justo lo contrario, se vuelve mucho más
+conservador y pasa de marcar el 37,5\,\% de las piezas al 0,7\,\%, y su exactitud salta
+de 0,619 a 0,931 al mismo tiempo que su recall cae de 0,457 a cero. En ninguno de los
+dos casos el modelo discrimina mejor. Lo único que hace es acercarse a la respuesta que
+más se repite, y la exactitud premia ese acercamiento por simple coincidencia con la
+mayoría.
+
+No hace falta, para ello, que el modelo conozca la distribución de clases, que en
+régimen \textit{zero-shot} no ve, ni que siga una estrategia informada. Basta con que
+el empaquetado desplace su umbral en la dirección que resulta favorable, lo que
+convierte el fenómeno en un artefacto estadístico de un sesgo ciego de respuesta y no
+en un mejor criterio. El coeficiente $\kappa$, que descuenta el acuerdo esperable por
+azar, no premia ese desplazamiento, y atender solo a la exactitud llevaría a dar por
+buena una mejora que responde a un cambio en la frecuencia de respuesta.
 
 Conviene, con todo, no sustituir una lectura simplificada por otra, porque
 $\kappa$ arrastra sus propias dificultades y este caso las reúne casi todas. La
@@ -1110,7 +1129,11 @@ sección deben tomarse como una orientación gruesa.
 Lo que cabe sostener, en suma, es que exactitud, $\kappa$ y prevalencia responden a
 preguntas distintas y que interpretarlas por separado conduce a conclusiones
 opuestas, de modo que en tareas de clasificación desequilibradas procede informar
-de las tres de forma conjunta.
+de las tres de forma conjunta. De ello se desprende además una comprobación sencilla,
+que este capítulo ha aplicado en cada variable: ante cualquier mejora de la exactitud,
+conviene mirar antes si la prevalencia predicha se ha movido hacia la clase
+mayoritaria, porque en ese caso la mejora puede no ser más que el reflejo de ese
+movimiento.
 
 Cabe cerrar, en consecuencia, con una afirmación de conjunto y una advertencia. La
 afirmación es que el empaquetado como \textit{Agent Skills} no eleva por sí solo la
