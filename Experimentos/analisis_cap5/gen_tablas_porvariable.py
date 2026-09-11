@@ -10,7 +10,7 @@ MOD = [("gemini-3.1-flash-lite", "gemini"),
        ("gpt-4o-mini",           "gpt-4o-mini"),
        ("gpt-5.4-nano",          "gpt-5.4-nano"),
        ("gemma4:e4b",            "gemma")]
-COLS = [("prev_pred", r"Marca (\textit{Sí})"), ("exactitud", "Exac."), ("precision", "Prec."),
+COLS = [("prev_pred", r"Prev. (\textit{Sí})"), ("exactitud", "Exac."), ("precision", "Prec."),
         ("recall", "Recall"), ("f1_pos", r"F1 (\textit{Sí})"),
         ("f1_macro", "F1 macro"), ("kappa", r"$\kappa$")]
 VAR = [("V25", "lenguaje sexista"), ("V26", "masculino genérico"),
@@ -33,9 +33,9 @@ for cod, nom in VAR:
     o.write("\n\\begin{table}[H]\n    \\centering\n    \\begingroup\n    \\small\n")
     o.write("    \\setlength{\\tabcolsep}{4pt}\n    \\ttabbox[\\FBwidth]{\n")
     o.write(f"        \\caption{{Resultados en {nom} ({cod}) por modelo y nivel "
-            f"($N=1.313$, prevalencia anotada {prev}). La columna \\textbf{{Marca (\\textit{{Sí}})}} "
-            f"es la proporción de las 1.313 piezas que el modelo marca como \\textit{{Sí}}, "
-            f"esto es, su prevalencia predicha, que se compara con la anotada. "
+            f"($N=1.313$, prevalencia anotada {prev}). La columna \\textbf{{Prev. (\\textit{{Sí}})}} "
+            f"es la prevalencia predicha por cada modelo, esto es, la proporción de las 1.313 "
+            f"piezas que marca como \\textit{{Sí}}, y se compara con la anotada. "
             f"Los modelos se nombran de forma abreviada, gemini por gemini-3.1-flash-lite "
             f"y gemma por gemma4:e4b.}}\n")
     o.write(f"        \\label{{tab:var-{cod.lower()}}}\n    }}{{\n")

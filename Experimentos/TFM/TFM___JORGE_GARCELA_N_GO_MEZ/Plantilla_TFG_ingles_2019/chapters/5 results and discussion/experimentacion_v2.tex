@@ -45,12 +45,11 @@ variable una etiqueta, una explicación y las evidencias literales que la sostie
 esto es, los dos planos que el análisis de contenido experto requiere
 (Sección~\ref{sec:experts}). Todo lo que se mide en este capítulo pertenece al
 primero, el cuantitativo, porque la referencia disponible es la etiqueta de cada
-variable y no el marcado sobre el texto. El plano cualitativo, que para el trabajo
-de análisis resulta al menos tan valioso, queda por tanto fuera de esta evaluación,
+variable y no el marcado sobre el texto. El plano cualitativo queda por tanto fuera de esta evaluación,
 no por decisión metodológica sino por ausencia de un marcado experto con el que
 contrastarlo (Sección~\ref{subsec:limitacion_fiabilidad}). Las cifras que siguen recogen, en consecuencia,
 la coincidencia en la etiqueta asignada. La calidad de las evidencias y de las
-justificaciones, determinante para el uso previsto del sistema, no se evalúa en
+justificaciones, determinante para el uso del sistema IRIS, no se evalúa en
 este trabajo y queda como línea futura
 (Sección~\ref{sec:futurework_usecases}). Sí se recurre a ellas de forma
 puntual, en la Sección~\ref{subsec:iris_caso}, para ilustrar el razonamiento que
@@ -91,7 +90,7 @@ sistema debe superar para aportar información.
         \setlength{\tabcolsep}{4pt}
         \begin{tabular}{@{}l l c >{\columncolor{gray!15}}c >{\columncolor{gray!15}}c >{\columncolor{gray!15}}c >{\columncolor{gray!15}}c@{}}
             \toprule
-            \textbf{Cód.} & \textbf{Variable} & \textbf{Prev. (Sí)} & \textbf{Exactitud} & \textbf{Precisión} & \textbf{Recall} & \textbf{F1} \\
+            \textbf{Cód.} & \textbf{Variable} & \textbf{Prev. (\textit{Sí})} & \textbf{Exactitud} & \textbf{Precisión} & \textbf{Recall} & \textbf{F1} \\
             \midrule
             V25 & \texttt{lenguaje\_sexista}         & 0,810 & 0,810 & 0,810 & 1,000 & 0,895 \\
             V26 & \texttt{masc\_generico}            & 0,810 & 0,810 & 0,810 & 1,000 & 0,895 \\
@@ -114,13 +113,13 @@ plantearse cualquier lectura de conjunto.
 \label{subsec:iris_porvariable}
 
 Las Tablas~\ref{tab:var-v25} a~\ref{tab:var-v35} recogen, para cada variable, el
-rendimiento de los cuatro modelos en los dos niveles. Se reportan de forma
+rendimiento de los cuatro modelos en los dos niveles (B0 y B1). Se reportan de forma
 sistemática todas las métricas definidas en la Sección~\ref{sec:metricas_eval},
 esto es, exactitud, precisión y recall sobre la clase positiva, F1 de esa clase,
 F1 macro y el coeficiente $\kappa$. La primera columna de métricas,
-\textbf{Marca (\textit{Sí})}, recoge la proporción de las 1.313 piezas que marca cada
-modelo, de manera que puede compararse con la que marcan las expertas y sirve para
-interpretar el resto de la fila.
+\textbf{Prev. (\textit{Sí})}, recoge la prevalencia predicha por cada modelo, esto es,
+la proporción de las 1.313 piezas que marca como \textit{Sí}, de manera que puede
+compararse con la prevalencia anotada y sirve para interpretar el resto de la fila.
 
 Cada variable se examina en dos planos. El primero es el efecto del empaquetado en
 \textit{skills}, esto es, qué cambia al pasar de B0 a B1. El segundo es el nivel que
