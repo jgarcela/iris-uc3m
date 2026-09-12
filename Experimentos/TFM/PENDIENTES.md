@@ -62,12 +62,12 @@ a cambiar. No abordarlas mientras se estén aplicando comentarios de las tutoras
 - [ ] **Mover el código a `github.com/jgarcela/tfm-iris-uc3m`** (repo creado el
       06/09/2026, vacío por ahora). El Apéndice B ya lo enlaza. Solo el código: el
       corpus y las anotaciones de IRIS_IAMEDIA e InfoIA no se difunden con él.
-- [ ] **Glosario** (`chapters/glosario.tex`): repasar que la lista esté completa y
-      que el tratamiento tipográfico que declara se cumpla en todo el documento.
-      Ya corregidos así `codebook` (se traduce a "libro de códigos") y
-      `skill` / `Agent Skills` (cursiva y mayúsculas).
-
-## Contenido
+- [x] **Glosario** (12/09/2026). Se retira la frase que prometia glosar cada termino
+      en su primera aparicion, porque solo se cumplia en 2 de 12 casos. Se unifica
+      "revelacion progresiva" (el cuerpo decia "divulgacion" en un sitio). Se anaden
+      GPU y JSON a la tabla de acronimos, expandidos ademas en su primera aparicion, y
+      golden standard y Ollama a la de terminos. Comprobado que VP, FP, VN y FN si se
+      definen en eval.tex y que los hsize de las dos tablas suman 3,00.
 
 - [ ] **Comentario de la "ceguera" (Carmen).** Reencuadrar el trabajo de
       "divergencia de opiniones" a "dificultad de detección / ceguera patriarcal".
