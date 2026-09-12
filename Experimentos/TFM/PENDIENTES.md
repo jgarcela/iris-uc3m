@@ -15,6 +15,19 @@ a cambiar. No abordarlas mientras se estén aplicando comentarios de las tutoras
       `fig_rendimiento_coste_blanco.pdf`, sobre F1 macro en lugar de $\kappa$.
       Actualizados el pie y el párrafo que la comenta. `fig_acuerdo_por_dolar_blanco.pdf`
       queda sin uso y puede borrarse de `imagenes/`.
+- [x] **Seccion "Donde sirve hoy el sistema" retirada** (12/09/2026). Se quito primero
+      todo lo promediado (la tabla de B0 frente a B1 por metrica media y los dos
+      parrafos que la comentaban) y despues la seccion entera, porque su lectura de
+      conjunto ("de las cinco variables solo una admite hoy apoyo automatico") resultaba
+      demasiado categorica. El capitulo cierra ahora con el desacoplamiento entre
+      exactitud y acuerdo. Consecuencias:
+      - `tabla_sintesis.tex` y su generador quedan sin uso.
+      - `fig_b0b1_barras_blanco.pdf` queda sin uso y puede borrarse de `imagenes/`,
+        igual que `fig_acuerdo_por_dolar_blanco.pdf`.
+      - **Pendiente**: la estimacion de coste de despliegue (8,77 USD asignando el mejor
+        modelo a cada variable, frente a 13,16 con `gemini` y 6,89 con `gpt-4o-mini`)
+        solo estaba ahi. Valorar si recuperarla en la discusion (5.2), que es donde el
+        texto la remite ahora.
 - [x] **Figura de la Tabla 5.14** (`fig_coste_variable_blanco.pdf`): añadida el
       12/09/2026 acompañando a la tabla, no sustituyéndola, porque el texto cita
       cifras por modelo (3,43, 2,13, 2,46, 0,98) que la figura no rotula.

@@ -39,9 +39,10 @@ inferencia de cada modelo y el caso aparte del modelo local
 (Sección~\ref{subsec:iris_coste}), y
 el origen del desajuste con la anotación experta
 (Sección~\ref{subsec:iris_errores}), que se cierra examinando por dentro el
-razonamiento que conduce a un fallo concreto (Sección~\ref{subsec:iris_caso}). La Sección~\ref{subsec:iris_conjunto} cierra
-reuniendo esas cuatro cuestiones en una sola tabla, una fila por variable, y solo entonces
-se valora qué cabe afirmar en conjunto.
+razonamiento que conduce a un fallo concreto (Sección~\ref{subsec:iris_caso}). La
+Sección~\ref{subsec:iris_divergencia} cierra con una cuestión metodológica que
+atraviesa a las cuatro, la de por qué exactitud y acuerdo no siempre se mueven en la
+misma dirección.
 
 Conviene delimitar antes qué se evalúa. El sistema produce por cada pieza y
 variable una etiqueta, una explicación y las evidencias literales que la sostienen,
@@ -475,9 +476,9 @@ porque hacerlo exigiría fijar supuestos sobre amortización del equipo y consum
 eléctrico ajenos al alcance de este trabajo. Una y otra magnitud se reportan, por
 tanto, por separado. La sección presenta primero el gasto de los tres modelos de
 pago, agregado y después repartido entre las cinco variables, y se detiene por último
-en el modelo local, que es el que obliga a plantear el coste en estos términos. La
-decisión de despliegue que de todo ello se sigue no se toma aquí, sino en la
-Sección~\ref{subsec:iris_conjunto}, una vez reunidas las cinco variables.
+en el modelo local, que es el que obliga a plantear el coste en estos términos. Lo que
+de ello se sigue para un despliegue en IRIS se retoma en la discusión
+(Sección~\ref{sec:discussion}).
 
 \subsubsection{El coste, variable a variable}
 
@@ -1071,142 +1072,17 @@ de cada mitad cambia según la variable, y su distinción es la que ordena las
 implicaciones para el proyecto que se recogen en la
 Sección~\ref{sec:discussion}.
 
-\subsection{Dónde sirve hoy el sistema}
-\label{subsec:iris_conjunto}
-
-El análisis por variable ha mostrado que el comportamiento del sistema cambia lo
-bastante de una a otra como para que ninguna afirmación general se sostenga sin
-matices. Cabe, con todo, una lectura de conjunto.
-
-Eso es lo que recoge la Tabla~\ref{tab:iris-sintesis}, que reúne en una sola fila
-por variable lo que las secciones anteriores han ido estableciendo, esto es, el
-modelo que mejor se comporta en el nivel desplegado, cuánto detecta, qué
-configuración le conviene, lo que cuesta y si el resultado alcanza para servir de
-apoyo. Es la síntesis que un despliegue en IRIS necesitaría para decidir qué hacer
-con cada variable.
-
-\input{chapters/5 results and discussion/tabla_sintesis}
-
-La tabla condensa el resultado principal del capítulo, y es que \textbf{de las cinco
-variables solo una admite hoy apoyo automático}. En \texttt{masc\_generico} un modelo
-recupera casi tres cuartas partes de lo que marcan las expertas con un acuerdo por
-encima del azar, mientras que en las otras cuatro el sistema deja sin señalar la
-mayor parte de los casos. Los cuatro noes, además, no son el mismo no. En
-\texttt{lenguaje\_sexista} el modelo que más marca alcanza un recall de 0,450 pero
-con acuerdo negativo, de modo que marca en piezas distintas de aquellas en que lo
-hacen las personas anotadoras. En \texttt{sexismo\_discurso} la infradetección convive con una
-anotación humana profundamente dividida. Y en \texttt{asimetria\_mujer\_hombre} y
-\texttt{denominacion\_sexualizada} el fenómeno es tan infrecuente que el sistema
-apenas encuentra qué detectar.
-
-Se aprecian ahí, además, los dos hallazgos que ninguna variable muestra por separado.
-El primero es que \textbf{ni el modelo ni la configuración convenientes son los
-mismos} en las cinco filas, lo que desaconseja un despliegue uniforme. El segundo es
-que \textbf{el gasto no sigue al rendimiento}, ya que la variable más cara es
-justamente una de las que no producen detección aprovechable, mientras que la única
-utilizable no es la más costosa.
-
-Este segundo hallazgo admite una precisión que aporta el desglose por modelo de la
-Sección~\ref{subsec:iris_coste}. Vale para la suma de los tres modelos, pero no para
-cada uno por separado, ya que \texttt{gemini} gasta su máximo precisamente en la
-variable en que detecta. Lo que encarece \texttt{lenguaje\_sexista} no es la variable
-en sí, sino que allí se paga a tres modelos por una tarea que ninguno resuelve.
-
-Eso permite estimar lo que costaría el despliegue que la tabla sugiere. Asignar a cada
-variable el modelo que mejor se comporta en ella supone 8,77 USD sobre las 1.313
-piezas, cifra en la que \texttt{asimetria\_mujer\_hombre} no devenga tarifa porque
-recae en el modelo local, si bien consume tiempo de cómputo. Fijar en cambio un único
-modelo para las cinco costaría 13,16 USD con \texttt{gemini}, que es el de mayor
-acuerdo, y 6,89 USD con \texttt{gpt-4o-mini}, que sale más barato pero queda por
-detrás en tres de las cinco variables. La asignación por variable se sitúa entre
-ambas en coste y por delante de las dos en rendimiento, que es cuanto cabe pedirle a
-una decisión de despliegue.
-
-Queda por ver qué ocurre si, pese a todo lo anterior, se promedian las cinco
-variables. La Tabla~\ref{tab:iris-b0b1} recoge esos promedios, con la cautela de que
-mezclan magnitudes que no son comparables entre sí
-(Sección~\ref{subsec:iris_divergencia}). Sus cifras no describen el
-rendimiento del sistema en ninguna tarea concreta, sino que ofrecen un resumen
-grueso que permite situar a los modelos entre sí y, sobre todo, cuantificar el
-coste, que sí admite agregación por tratarse de una suma sobre el corpus.
-
-\begin{table}[H]
-    \centering
-    \begingroup
-    \scriptsize
-    \setlength{\tabcolsep}{4pt}
-    \newcommand{\dr}[1]{\textcolor{gray!75}{$#1$}} % fila delta: en gris
-    \renewcommand{\texttt}[1]{{\ttfamily #1}}
-    \ttabbox[\FBwidth]{
-        \caption{Comparación B0 (\textit{baseline}) frente a B1 (Agent Skills). Medias sobre las cinco variables, $N=1.313$. Las filas $\Delta$ (en gris) recogen la variación B1$-$B0.}
-        \label{tab:iris-b0b1}
-    }{
-        \begin{tabularx}{\textwidth}{
-            >{\hsize=1.7\hsize\raggedright\arraybackslash}X
-            >{\hsize=0.6\hsize\centering\arraybackslash}X
-            >{\hsize=0.925\hsize\centering\arraybackslash}X
-            >{\hsize=0.925\hsize\columncolor{gray!12}\centering\arraybackslash}X
-            >{\hsize=0.925\hsize\centering\arraybackslash}X
-            >{\hsize=0.925\hsize\centering\arraybackslash}X
-        }
-            \toprule
-            \textbf{Modelo} & \textbf{Nivel} & \textbf{Exactitud} & \boldmath$\kappa$ & \textbf{F1 macro} & \textbf{Coste (USD)} \\
-            \midrule
-            \multirow{3}{*}{\texttt{gemini}}
-              & B0 & 0,600 & 0,026 & 0,388 & 5,64 \\
-              & B1 & 0,661 & 0,066 & 0,443 & 13,16 \\
-              & \dr{\Delta} & \dr{+0,061} & \dr{+0,040} & \dr{+0,055} & \dr{2{,}3\times} \\
-            \midrule
-            \multirow{3}{*}{\texttt{gpt-4o-mini}}
-              & B0 & 0,564 & 0,033 & 0,410 & 2,52 \\
-              & B1 & 0,612 & 0,014 & 0,438 & 6,89 \\
-              & \dr{\Delta} & \dr{+0,048} & \dr{-0,019} & \dr{+0,029} & \dr{2{,}7\times} \\
-            \midrule
-            \multirow{3}{*}{\texttt{gpt-5.4-nano}}
-              & B0 & 0,571 & 0,052 & 0,430 & 5,67 \\
-              & B1 & 0,569 & 0,004 & 0,364 & 10,86 \\
-              & \dr{\Delta} & \dr{-0,003} & \dr{-0,048} & \dr{-0,066} & \dr{1{,}9\times} \\
-            \midrule
-            \multirow{2}{*}{\textbf{Media (API)}}
-              & \textbf{B0} & 0,578 & 0,037 & 0,409 & \textemdash \\
-              & \textbf{B1} & 0,614 & 0,028 & 0,415 & \textemdash \\
-            \midrule
-            \multirow{3}{*}{\texttt{gemma}\,\textnormal{\footnotesize(local)}}
-              & B0 & 0,597 & 0,061 & 0,421 & \textemdash \\
-              & B1 & 0,605 & 0,043 & 0,412 & \textemdash \\
-              & \dr{\Delta} & \dr{+0,008} & \dr{-0,018} & \dr{-0,009} & \textemdash \\
-            \bottomrule
-        \end{tabularx}
-    }
-    \endgroup
-\end{table}
-
-Con esa salvedad, el promedio permite una afirmación robusta, la de que
-\textbf{el empaquetado como \textit{Agent Skills} no eleva el acuerdo de forma
-general}. Solo \texttt{gemini} mejora su $\kappa$ al pasar a B1, de
-0,026 a 0,066, mientras que en los otros tres se mantiene o desciende, y todo ello
-con un coste de inferencia que se multiplica por un factor de entre 1,9 y 2,7. La
-arquitectura amplifica, por tanto, lo que cada modelo ya trae en lugar de
-conferirlo, conclusión que el análisis por variable precisa al mostrar que esa
-amplificación se concentra en \texttt{masc\_generico}.
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=\textwidth]{fig_b0b1_barras_blanco.pdf}
-    \caption{Niveles de exactitud, F1 macro y $\kappa$ por modelo, en B0 y B1
-    ($N=1.313$). Cada métrica se representa en su propia escala: el $\kappa$ vive
-    en un orden de magnitud mucho menor que la exactitud.}
-    \label{fig:iris-b0b1-metricas}
-\end{figure}
-
-\subsubsection{El desacoplamiento entre exactitud y acuerdo}
+\subsection{El desacoplamiento entre exactitud y acuerdo}
 \label{subsec:iris_divergencia}
 
 Merece atención un fenómeno que atraviesa el capítulo y cuyo interés excede a este
-trabajo. Considerando las medias, el nivel B1 sube la exactitud en 0,036 mientras
-el $\kappa$ baja en 0,009, de modo que ambas métricas se mueven en sentidos
-opuestos. La Figura~\ref{fig:iris-divergencia} lo visualiza como trayectorias de B0
-a B1, con la advertencia de que ambos paneles agregan las cinco variables.
+trabajo. En cinco de las veinte combinaciones de modelo y variable, la exactitud
+mejora al pasar a B1 mientras el $\kappa$ empeora
+(Tablas~\ref{tab:var-v25} a~\ref{tab:var-v35}), de manera que dos métricas que
+suelen suponerse concordantes se mueven en sentidos opuestos. La
+Figura~\ref{fig:iris-divergencia} lo resume como trayectorias de B0 a B1, con la
+advertencia de que sus paneles agregan las cinco variables y sirven, por tanto, de
+mera orientación.
 
 \begin{figure}[H]
     \centering
@@ -1218,12 +1094,9 @@ a B1, con la advertencia de que ambos paneles agregan las cinco variables.
     \label{fig:iris-divergencia}
 \end{figure}
 
-El promedio, con todo, es aquí lo menos revelador, porque el fenómeno se produce
-celda a celda y no en todas. En cinco de las veinte combinaciones de modelo y variable
-la exactitud mejora al pasar a B1 mientras el $\kappa$ empeora
-(Tablas~\ref{tab:var-v25} a~\ref{tab:var-v35}), y las cinco comparten un rasgo que la
-columna Prev.~(\textit{Sí}) permite advertir de un vistazo: en todas ellas el modelo
-desplaza su prevalencia predicha hacia la clase mayoritaria de la variable.
+Esas cinco celdas comparten un rasgo que la columna Prev.~(\textit{Sí}) permite
+advertir sin más cálculo: en todas ellas el modelo desplaza su prevalencia predicha
+hacia la clase mayoritaria de la variable.
 
 Ese desplazamiento puede darse en cualquiera de los dos sentidos, y los dos casos más
 marcados del capítulo lo muestran. En \texttt{lenguaje\_sexista}, donde la clase
@@ -1259,8 +1132,9 @@ aunque el acuerdo observado sea alto. De ello se sigue una consecuencia que
 condiciona la estructura de este capítulo, y es que los valores de $\kappa$ de
 variables con prevalencias tan dispares no son comparables entre sí ni admiten
 promediarse con sentido, razón por la cual el análisis se realiza variable a
-variable (Sección~\ref{subsec:iris_porvariable}) y las medias que aparecen en esta
-sección deben tomarse como una orientación gruesa.
+variable (Sección~\ref{subsec:iris_porvariable}) y las pocas cifras agregadas que el
+capítulo conserva, la Figura~\ref{fig:iris-divergencia} y la última columna de la
+Tabla~\ref{tab:iris-criterios}, no pasan de ser una orientación gruesa.
 
 Lo que cabe sostener, en suma, es que exactitud, $\kappa$ y prevalencia responden a
 preguntas distintas y que interpretarlas por separado conduce a conclusiones
@@ -1271,10 +1145,10 @@ conviene mirar antes si la prevalencia predicha se ha movido hacia la clase
 mayoritaria, porque en ese caso la mejora puede no ser más que el reflejo de ese
 movimiento.
 
-Cabe cerrar, en consecuencia, con una afirmación de conjunto y una advertencia. La
-afirmación es que el empaquetado como \textit{Agent Skills} no eleva por sí solo la
-concordancia con el criterio experto, y que su efecto depende del modelo y de la
-variable. La advertencia es que ese enunciado se apoya en promedios y que el
-análisis pormenorizado de las secciones anteriores es el que debe prevalecer cuando
-ambos discrepen. Las implicaciones de todo ello para el proyecto se retoman en la
-discusión (Sección~\ref{sec:discussion}).
+Cabe cerrar, en consecuencia, con la afirmación de conjunto que el capítulo sostiene,
+la de que \textbf{el empaquetado como \textit{Agent Skills} no eleva por sí solo la
+concordancia con el criterio experto}, y que su efecto depende del modelo y de la
+variable. Conviene subrayar que esa conclusión no descansa en ningún promedio, sino en
+el recorrido celda a celda de las secciones anteriores, y que haberlo hecho así es
+precisamente lo que permite sostenerla. Las implicaciones de todo ello para el
+proyecto se retoman en la discusión (Sección~\ref{sec:discussion}).

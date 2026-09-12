@@ -43,7 +43,9 @@ no se editan a mano.
 - `gen_tabla_prev_modelo.py` → `tabla_prev_modelo.tex` (prevalencia de Sí predicha por
   cada modelo en B1).
 - `gen_tabla_sintesis.py` → `tabla_sintesis.tex` (una fila por variable con el mejor
-  modelo, su mejor configuración, el coste y si admite apoyo automático).
+  modelo, su mejor configuración, el coste y si admite apoyo automático). **Sin uso
+  desde el 12/09/2026**: se retiró la Sección 5.1.6, que era la única que la incluía.
+  El generador se conserva por si la tabla vuelve.
 - `gen_tabla_coste_modelo.py` → `tabla_coste_modelo.tex` (coste desglosado por
   variable, modelo y nivel, B0 y B1, solo los tres accesibles por API).
 - `gen_tabla_local_tiempo.py` → `tabla_local_tiempo.tex` (coste en tiempo de computo
