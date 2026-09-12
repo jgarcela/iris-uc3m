@@ -94,9 +94,27 @@ caso examinado en la Sección~\ref{subsec:iris_caso} muestra el mecanismo, ya qu
 los modelos localizan el masculino genérico y lo declaran un colectivo mixto
 válido, reproduciendo el mismo automatismo que se les pedía detectar.
 
-El peso de cada límite cambia según la variable, y de ahí se sigue que el margen de
-mejora tenga también dos vías. Una consiste en explicitar mejor el constructo en el
-libro de códigos, apoyándose en anotaciones cualitativas que lo delimiten con
+El peso de cada límite cambia según la variable, y el reparto admite nombres. El
+límite de la tarea está documentado en una sola, \texttt{sexismo\_discurso}, donde los
+dos equipos distan 53,7 puntos. En \texttt{lenguaje\_sexista} y
+\texttt{masc\_generico} sucede lo contrario, ya que ambos equipos marcan la variable en
+la mayoría de las piezas y se separan menos de veinte puntos, de modo que allí no hay
+criterio en disputa y lo que falla es el sistema. En
+\texttt{asimetria\_mujer\_hombre} y \texttt{denominacion\_sexualizada}, por último, la
+distancia ronda los cinco puntos, lo que en términos relativos supone que un equipo
+marca alrededor del doble que el otro, si bien sobre proporciones tan bajas que el
+obstáculo principal no es el desacuerdo sino la escasez de positivos, 81 y 131 piezas
+en todo el corpus.
+
+Conviene, por ello, no dejar que el techo de la tarea absuelva al sistema. En el nivel
+desplegado, el mejor recall que alcanza alguno de los cuatro modelos se queda en 0,450
+en \texttt{lenguaje\_sexista}, 0,114 en \texttt{sexismo\_discurso}, 0,160 en
+\texttt{asimetria\_mujer\_hombre} y 0,046 en \texttt{denominacion\_sexualizada}, y solo
+en \texttt{masc\_generico} llega a 0,733. Con cifras así, el margen de mejora de los
+modelos sigue siendo amplio al margen de cuánto converja la anotación humana.
+
+De ahí que ese margen tenga dos vías. Una consiste en explicitar mejor el constructo en
+el libro de códigos, apoyándose en anotaciones cualitativas que lo delimiten con
 ejemplos, y conviene priorizarla en las variables de criterio más implícito. La
 otra consiste en mejorar la sensibilidad del sistema en aquello que las expertas sí
 identifican de forma concordante. Conviene además evitar una simplificación, ya que
@@ -109,10 +127,12 @@ que solo coinciden en su dirección.
 De los resultados se desprenden cuatro orientaciones prácticas para el proyecto.
 
 \paragraph{El despliegue local es viable.} El modelo abierto \texttt{gemma},
-ejecutado en infraestructura propia, compite con los servicios comerciales y los
-supera en algunas variables, como \texttt{asimetria\_mujer\_hombre}, donde obtiene
-el mejor recall y la mejor precisión de los cuatro
-(Sección~\ref{subsec:iris_local}). Para una institución que maneja material sujeto
+ejecutado en infraestructura propia, compite con los servicios comerciales
+(Sección~\ref{subsec:iris_local}). Encabeza \texttt{asimetria\_mujer\_hombre} en recall
+y en precisión, si bien no conviene apoyarse en ese dato, porque su ventaja sobre el
+segundo es de una sola pieza acertada. El respaldo firme está en
+\texttt{masc\_generico}, donde queda segundo con un recall de 0,408 frente al 0,206 y
+el 0,104 de los dos modelos de OpenAI. Para una institución que maneja material sujeto
 a privacidad, esto significa que preservar los datos y prescindir de tarifas no
 obliga a renunciar al rendimiento, a cambio de asumir un coste de cómputo. Ese coste,
 además, se comporta al revés que el de los modelos de pago, en los que el empaquetado

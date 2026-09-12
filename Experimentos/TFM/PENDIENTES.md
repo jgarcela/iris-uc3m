@@ -45,6 +45,16 @@ a cambiar. No abordarlas mientras se estén aplicando comentarios de las tutoras
       la perdida media sobre las 25 tareas, no la de las subjetivas. Corregido, y se
       anade el dato que si sostiene la afirmacion, que al descartar las ocho tareas de
       emociones la perdida cae al 12,8 %.
+- [x] **Comentarios de Carmen a 5.2** (30/08/2026), atendidos el 12/09/2026:
+      - "El techo lo pone la tarea" no estaba demostrado. El titulo ya era "Dos limites,
+        uno de la tarea y otro de los modelos". Se anade ahora el reparto por variable.
+        Ojo, su hipotesis (que valdria en las de poca prevalencia) NO la sostienen los
+        datos: el unico sitio donde esta documentado es sexismo_discurso, de prevalencia
+        media (0,428), con 53,7 puntos de brecha entre equipos. En V25 y V26 los equipos
+        se separan menos de 20 puntos, y en V33 y V35 unos 5. Conviene confirmarselo.
+      - El "mayor acuerdo de control" del modelo local ya no se afirma. Se anade ademas
+        que su ventaja en asimetria_mujer_hombre es de una sola pieza, y se apoya la
+        recomendacion en masc_generico.
 - [ ] **Mover el código a `github.com/jgarcela/tfm-iris-uc3m`** (repo creado el
       06/09/2026, vacío por ahora). El Apéndice B ya lo enlaza. Solo el código: el
       corpus y las anotaciones de IRIS_IAMEDIA e InfoIA no se difunden con él.
