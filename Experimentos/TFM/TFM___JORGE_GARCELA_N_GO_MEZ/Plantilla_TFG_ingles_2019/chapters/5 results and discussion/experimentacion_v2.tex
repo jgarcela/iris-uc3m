@@ -832,16 +832,17 @@ dirección, en cambio, sí es prácticamente absoluta, ya que un único caso, en
 
 
 
-\subsubsection{El sistema como una anotadora más}
+\subsubsection{El sistema como una persona anotadora más}
 \label{subsec:iris_equipo_ia}
 
 Los análisis anteriores comparan cada modelo contra la anotación experta tomada
 como referencia. Un enfoque complementario invierte la pregunta: en vez de medir
-cuánto se equivoca el modelo respecto al \textit{ground truth}, lo sitúa como \textbf{una
+cuánto se equivoca el modelo respecto al \textit{ground truth}, lo sitúa como \textbf{una persona
 anotadora más} dentro del espacio de criterios de las personas que codificaron el
-corpus. La cuestión deja de ser \textit{``¿acierta o no el modelo?''} y pasa a ser \textit{``¿dónde se sitúa su
-habilidad de detección respecto al de las expertas?''}. Los modelos se tratan así formalmente como un tercer
-equipo de anotación, junto a Indexa y UCM3.
+corpus. La cuestión deja de ser \textit{``¿acierta o no el modelo?''} y pasa a ser
+\textit{``¿dónde se sitúa su capacidad de detección respecto a la de las expertas?''}.
+Los modelos se tratan así formalmente como un tercer equipo de anotación, junto a
+Indexa y UCM3.
 
 Como cada noticia la codificó una sola persona, no hay solapamiento entre anotadoras. Lo que
 sí compara todos los criterios es la \textbf{prevalencia del \textit{Sí}}: la proporción de
@@ -908,15 +909,15 @@ por encima de todas las anotadoras salvo una (UCM3-4, con el 27,1\,\%). También
 \texttt{gemini} marca \texttt{masc\_generico} (66,9\,\%) dentro del rango humano. La ceguera global de los modelos convive, por tanto, con
 puntos de mayor sensibilidad en variables concretas, habitualmente las más explícitas y sencillas de definir.
 
-Hay además un segundo dato en la misma tabla: la dispersión \emph{entre las propias personas} es mayor que la que
-separa a los modelos entre sí. La prevalencia media humana va de 0,283 a 0,639 (un
+La misma tabla depara otra lectura, y es que la dispersión \emph{entre las propias
+personas} resulta mayor que la que separa a los modelos entre sí. La prevalencia media humana va de 0,283 a 0,639 (un
 rango de 0,356), mientras que la de los cuatro modelos va de 0,043 a 0,183 (un rango
 de 0,140). El criterio humano no es un punto de referencia fijo, sino una franja
 ancha, y esa amplitud es justamente la que acota el acuerdo alcanzable. Como cada persona
 codificó piezas distintas, su prevalencia mezcla dos factores: el criterio propio y
 la muestra que le tocó.
 
-Un segundo análisis mide el acuerdo \emph{entre} modelos, que sí tienen solapamiento
+Cabe medir por último el acuerdo \emph{entre} modelos, que sí cuentan con solapamiento
 total porque los cuatro codificaron las 1.313 piezas. La
 Tabla~\ref{tab:iris-intraia} lo recoge variable a variable, sin promediar, ya que
 los coeficientes de variables con prevalencias tan distintas no son comparables
@@ -927,12 +928,12 @@ entre sí (Sección~\ref{subsec:iris_divergencia}).
 El acuerdo entre modelos resulta bajo en casi todas las celdas, aunque con
 diferencias apreciables entre variables que el promedio habría ocultado. En el
 nivel B1 la mediana de los treinta valores se sitúa en 0,048 y el rango va de
-$-0,001$ a 0,300. Los dos únicos casos con algo de convergencia son los dos modelos
-de OpenAI en \texttt{sexismo\_discurso} ($\kappa = 0,300$), previsible por proceder
-de la misma empresa proveedora, y el par formado por \texttt{gemma} y
-\texttt{gemini} en \texttt{asimetria\_mujer\_hombre} (0,259) y en
-\texttt{sexismo\_discurso} (0,236), ambos de la familia de modelos de Google. Fuera
-de esas coincidencias por familia, los modelos no comparten criterio.
+$-0,001$ a 0,300. La convergencia apreciable se limita a dos pares, y en ambos casos
+se trata de modelos de la misma empresa proveedora. Los dos de OpenAI alcanzan
+$\kappa = 0,300$ en \texttt{sexismo\_discurso}, y el formado por \texttt{gemma} y
+\texttt{gemini}, ambos de la familia de Google, llega a 0,259 en
+\texttt{asimetria\_mujer\_hombre} y a 0,236 en \texttt{sexismo\_discurso}. Fuera de
+esas coincidencias por familia, los modelos no comparten criterio.
 
 Conviene señalar que el acuerdo bruto entre modelos sí resulta alto en algunos
 pares, pero se trata de un artefacto de que casi todos responden \textit{No} en casi
@@ -952,11 +953,10 @@ resultado matiza la idea de un sesgo único y uniforme de la inteligencia artifi
 ya que se observan más bien cuatro comportamientos distintos que solo coinciden en
 sus limitaciones de detección.
 
-El patrón se mantiene al repetir el análisis sobre el nivel de control (B0), lo que
-indica que procede del modelo y no del empaquetado como \textit{skills}. La
-arquitectura introduce, de hecho, un matiz en sentido contrario al esperable, ya que
-las \textit{Agent Skills} \textbf{reducen} el acuerdo entre modelos en la mayoría de
-las celdas. El descenso más llamativo es el de los dos modelos de OpenAI en
+La falta de criterio común no la introduce el empaquetado, ya que el mismo cuadro
+aparece al repetir el análisis sobre el nivel de control. Lo que sí cambia es el
+nivel, y en la dirección contraria a la esperable, porque las \textit{Agent Skills}
+\textbf{reducen} el acuerdo entre modelos en veintitrés de las treinta celdas. El descenso más llamativo es el de los dos modelos de OpenAI en
 \texttt{sexismo\_discurso}, de 0,550 a 0,300, y en \texttt{denominacion\_sexualizada},
 de 0,316 a $-0,001$. Las \textit{skills} acentúan las particularidades de cada
 modelo en lugar de acercarlos a un criterio compartido.
@@ -977,10 +977,20 @@ la combinación.
 
 La explicación es coherente con lo anterior. La mayoría solo marca allí donde
 coinciden al menos dos modelos, y como todos infradetectan, su intersección resulta
-aún más conservadora que cada uno por separado. Combinar sistemas ayuda cuando sus
-errores se compensan, no cuando comparten la misma dirección de sesgo. Una
-estrategia de unión, que marcase cuando cualquiera de ellos lo hiciera, elevaría el
-recall a costa de la precisión y queda como posible línea futura.
+aún más conservadora que cada uno por separado. Exigir coincidencia, en suma, penaliza
+a unos sistemas que no coinciden.
+
+Cabe entonces probar lo contrario, esto es, una estrategia de unión que marque la pieza
+cuando lo haga cualquiera de los cuatro. Comprobada sobre el mismo nivel B1, eleva el
+recall en las cinco variables y el F1 de la clase positiva en cuatro de ellas, y lo
+hace sin apenas pagarlo en precisión. En \texttt{masc\_generico} alcanza un recall de
+0,841 con una precisión de 0,861, cifras superiores a las del mejor modelo individual
+(0,733 y 0,887). Es un resultado que merece explorarse, si bien queda fuera de lo que
+este trabajo puede recomendar, por dos motivos. El primero es que obliga a ejecutar los
+cuatro modelos sobre cada pieza, de modo que multiplica el coste de inferencia. El
+segundo es que el $\kappa$ desciende en cuatro de las cinco variables, algo esperable
+en una regla que marca más y que remite de nuevo al desacoplamiento entre exactitud y
+acuerdo (Sección~\ref{subsec:iris_divergencia}).
 
 \subsubsection{Anatomía de un fallo de detección}
 \label{subsec:iris_caso}
