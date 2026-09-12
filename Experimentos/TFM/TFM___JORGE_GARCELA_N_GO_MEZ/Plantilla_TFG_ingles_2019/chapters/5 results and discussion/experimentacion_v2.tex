@@ -257,27 +257,37 @@ el sistema.
 
 \input{chapters/5 results and discussion/tabla_var_v33}
 
-\textbf{Efecto del empaquetado.} El modelo local mejora con B1 en las seis métricas a
+\textbf{Efecto del empaquetado.} El modelo local (\texttt{gemma}) mejora con B1 en las
+seis métricas a
 la vez, con un recall que pasa de 0,136 a 0,160, una precisión de 0,107 a 0,143, un F1
-de la clase positiva de 0,120 a 0,151 y un $\kappa$ de 0,054 a 0,092. Es la única celda
-del capítulo en que ninguna métrica retrocede, si bien la mejora parte de una base tan
-baja que no convierte al modelo en un detector utilizable. \texttt{gemini} acompaña la
+de la clase positiva de 0,120 a 0,151 y un $\kappa$ de 0,054 a 0,092. Es una de las tres
+celdas del capítulo en que ninguna métrica retrocede, junto con \texttt{gemini} en
+\texttt{lenguaje\_sexista} y \texttt{gpt-4o-mini} en \texttt{masc\_generico}, si bien
+la mejora parte de una base tan baja que no convierte al modelo en un detector
+utilizable. \texttt{gemini} acompaña la
 dirección (recall de 0,025 a 0,074). El caso de \texttt{gpt-5.4-nano} va en dirección contraria y merece un
 comentario, porque en B0 obtenía el mayor recall de la variable (0,457) marcando
-\textit{Sí} en el 37,5\,\% de las piezas, con una precisión de 0,075 que delata que
-marcaba casi al azar. En B1 marca el 0,7\,\% y su recall cae a 0,000. Un recall alto
+\textit{Sí} en el 37,5\,\% de las piezas, con una precisión de 0,075, apenas por encima
+del 6,2\,\% que obtendría marcando al azar (Tabla~\ref{tab:iris-referencia}). En B1 marca el 0,7\,\% y su recall cae a 0,000. Un recall alto
 obtenido marcando cuatro de cada diez piezas no es detección, y es otra razón para no
 leer ninguna métrica en solitario.
 
 \textbf{Nivel alcanzado.} Los valores son bajos en los cuatro modelos, con F1 de la
 clase positiva entre 0,000 y 0,151 y recalls que no superan 0,160, de manera que el
-sistema deja sin señalar la mayor parte de los casos.
+sistema deja sin señalar la mayor parte de los casos. El mejor de los cuatro es aquí el
+modelo local (\texttt{gemma}), que reúne el mayor recall (0,160), la mejor precisión
+(0,143) y el mayor $\kappa$ (0,092), un resultado que se retoma al tratar el coste y la
+elección de modelo (Sección~\ref{subsec:iris_coste}).
 
-\textbf{Una particularidad, la prevalencia mínima.} Con un 6,2\,\% de piezas marcadas,
-la exactitud resulta engañosa, ya que responder siempre \textit{No} acertaría en el
-93,8\,\% de las piezas y ningún modelo llega a esa cifra. El F1 de la clase positiva, concebido precisamente
-para situaciones de clase minoritaria, ofrece aquí la lectura más ajustada
-(Sección~\ref{sec:metricas_eval}).
+\textbf{Una particularidad, los pocos casos positivos.} Las cifras de esta variable descansan
+sobre 81 piezas positivas en todo el corpus (Tabla~\ref{tab:iris-referencia}), de modo
+que cada una vale 0,012 de recall y las diferencias entre modelos se juegan en un puñado
+de casos. La ventaja del modelo local sobre \texttt{gpt-4o-mini} es de una sola pieza,
+13 aciertos frente a 12. A ello se añade que los positivos no se reparten por igual
+entre los dos equipos, ya que 63 de los 81 proceden de UCM3 y 18 de Indexa
+(Tabla~\ref{tab:iris-equipos-recall}), de manera que el resultado depende en buena
+medida del criterio de uno de ellos. Conviene, por tanto, leer esta variable con más
+cautela que las demás.
 
 \subsubsection{Denominación sexualizada (V35)}
 
