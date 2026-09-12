@@ -458,75 +458,34 @@ las secciones anteriores explican por qué. Ninguno de los cuatro domina en las 
 variables, hasta el punto de que el primer puesto por F1 de la clase positiva lo
 ocupan los cuatro en algún momento, \texttt{gemini} en \texttt{masc\_generico},
 \texttt{gemma} en \texttt{asimetria\_mujer\_hombre}, \texttt{gpt-5.4-nano} en
-\texttt{sexismo\_discurso} y \texttt{gpt-4o-mini} en las dos restantes, si bien en
-\texttt{lenguaje\_sexista} ese primer puesto convive con un acuerdo negativo y no
-equivale a detectar.
+\texttt{sexismo\_discurso} y \texttt{gpt-4o-mini} en las dos restantes. Dos de esos
+primeros puestos piden matiz. En \texttt{sexismo\_discurso} la ventaja de
+\texttt{gpt-5.4-nano} sobre \texttt{gpt-4o-mini} es de dos milésimas (0,181 frente a
+0,179), diferencia que no distingue a un modelo de otro. Y en
+\texttt{lenguaje\_sexista} el primer puesto convive con un acuerdo negativo, de modo
+que no equivale a detectar.
 
-A la comparación de rendimiento se añade una segunda dimensión, la del coste, que ni
-siquiera se mide en la misma moneda para todos, ya que los tres modelos accesibles
-por API se pagan por \textit{token} mientras que el local se paga en tiempo de
-cómputo sobre infraestructura propia. Esta sección recorre ambas, empezando por
-situar a los modelos entre sí y deteniéndose en el local, que es el que obliga a
-plantear el coste en esos términos, para pasar después a lo que cuesta cada uno y a
-cómo se reparte ese gasto entre las cinco variables.
+Al rendimiento se añade una segunda dimensión, la del coste, que no admite una unidad
+común a los cuatro modelos. Los tres accesibles por API se facturan por
+\textit{token} consumido, de modo que su coste es una cantidad en dólares imputable a
+cada pieza y variable. El local no genera factura, y su coste adopta la forma de
+tiempo de ocupación de una infraestructura propia, que aquí no se traduce a dinero
+porque hacerlo exigiría fijar supuestos sobre amortización del equipo y consumo
+eléctrico ajenos al alcance de este trabajo. Una y otra magnitud se reportan, por
+tanto, por separado. La sección presenta primero el gasto de los tres modelos de
+pago, agregado y después repartido entre las cinco variables, y se detiene por último
+en el modelo local, que es el que obliga a plantear el coste en estos términos.
 
-Entre los cuatro modelos, el local \texttt{gemma} merece una lectura aparte,
-que conviene hacer variable a variable. Es el mejor de los cuatro en
-\texttt{asimetria\_mujer\_hombre}, donde alcanza el mayor recall (0,160), la mejor
-precisión (0,143) y el mayor $\kappa$ (0,092) del conjunto, y queda segundo en
-\texttt{masc\_generico}, por detrás de \texttt{gemini} pero por delante de los dos
-modelos de OpenAI, con un recall de 0,408 frente a 0,206 y 0,104. En
-\texttt{denominacion\_sexualizada} su nivel de control obtiene el mejor $\kappa$ de
-los cuatro (0,154), aunque lo pierde al pasar a B1. En las dos variables restantes
-se comporta como los demás, esto es, sin detectar apenas nada. No cabe afirmar, por
-tanto, que sea mejor o peor en términos absolutos, sino que \textbf{compite de tú a
-tú con los servicios comerciales y los supera en algunas variables}.
+\subsubsection{El coste, variable a variable}
 
-Ese resultado tiene consecuencias prácticas para un proyecto que maneja material
-sujeto a privacidad, ya que un modelo abierto, gratuito y desplegable en
-infraestructura propia se sitúa al nivel de las alternativas de pago. Ahora bien,
-esa ventaja convive con un coste de otro tipo, el del cómputo.
-
-La Tabla~\ref{tab:iris-b0b1} recoge el coste real de inferencia. Sobre las 1.313
-noticias, el sistema agéntico (B1) cuesta 30,91 USD en los tres modelos de pago,
-frente a los 13,83 USD del \textit{baseline} (B0), un factor de 2,2. El aumento se
+El coste real de inferencia sobre las 1.313 noticias asciende a 30,91 USD en el
+sistema agéntico (B1), frente a los 13,83 USD del \textit{baseline} (B0) en los tres
+modelos de pago, un factor de 2,2. El aumento se
 explica por el número de llamadas al modelo, ya que B0 resuelve cada variable en una
 única llamada mientras que en B1 la agente encadena varias, las acciones de su bucle
 más el veredicto final. A ello se añade que cada iteración arrastra el historial
 acumulado de la conversación, de modo que el consumo de \textit{tokens} por pieza y
-variable llega a duplicarse. La carga bajo demanda contiene ese crecimiento, porque
-la agente incorpora al \textit{prompt} solo la \textit{skill} que necesita en lugar
-de la metodología completa, pero no lo compensa por entero.
-
-
-En el modelo local no hay tarifas, pero el coste reaparece como tiempo de cómputo. El
-nivel B1 de \texttt{gemma} se ejecutó sobre la granja de GPU (NVIDIA RTX 3090 y
-4090) del Departamento de Teoría de la Señal y Comunicaciones (TSC) de la Universidad
-Carlos III de Madrid, con un rendimiento medido de unos 44 segundos por variable,
-esto es, en torno a 220 segundos por artículo completo. Repartiendo la carga en
-cuatro servidores en paralelo (uno por \textit{shard}), cada ejecución sobre el corpus
-de evaluación tardó alrededor de veinte horas. En un solo servidor, el mismo cómputo
-superaría las ochenta horas. Así, el modelo
-local es competitivo en acuerdo y prescinde de tarifas, pero su despliegue agéntico
-exige infraestructura dedicada: el coste no desaparece, cambia de dinero a cómputo.
-La Figura~\ref{fig:iris-acuerdo-dolar} resume ese compromiso: situado el acuerdo del
-sistema desplegado (B1) frente a su coste monetario, el modelo local ocupa la esquina
-más favorable (pintada en verde). Sin ser el de mayor acuerdo absoluto (\texttt{gemini} lo supera en
-$\kappa$), ofrece un acuerdo competitivo a coste monetario nulo, con la salvedad de
-que ese coste se traslada al cómputo. Las implicaciones prácticas para IRIS se
-retoman en la discusión (Sección~\ref{sec:discussion}).
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=\textwidth]{fig_acuerdo_por_dolar_blanco.pdf}
-    \caption{Acuerdo (coeficiente $\kappa$ en B1) frente al coste de inferencia sobre
-    el corpus completo, por modelo ($N=1.313$). El modelo local ofrece el mejor
-    acuerdo por dólar (coste monetario nulo). Su coste se traslada al tiempo de
-    cómputo en infraestructura propia.}
-    \label{fig:iris-acuerdo-dolar}
-\end{figure}
-
-\subsubsection{El coste, variable a variable}
+variable llega a duplicarse.
 
 El coste agregado oculta que no todas las variables cuestan lo mismo ni rinden lo
 mismo. La Tabla~\ref{tab:iris-coste-var} lo desglosa, sumando los tres modelos de
@@ -570,12 +529,13 @@ variables más caras son precisamente \texttt{lenguaje\_sexista} y
 de decidirse.
 
 El contraste con las dos últimas columnas es el dato relevante para el proyecto.
-\texttt{masc\_generico} es la variable en que el sistema detecta de verdad, con un
-recall de 0,733 y un F1 de 0,803, y cuesta 6,82 USD. \texttt{lenguaje\_sexista}
-cuesta más, 7,48 USD, y su mejor recall (0,450) procede del modelo que marca casi
-la mitad de las piezas sin coincidir con las anotadoras, de modo que ese número no
-se traduce en detección aprovechable. En \texttt{denominacion\_sexualizada} se
-gastan 5,42 USD para recuperar menos del 5\,\% de los casos. Dicho de otro modo,
+\texttt{masc\_generico} es la única variable en que el sistema alcanza una detección
+aprovechable, con un recall de 0,733 y un F1 de 0,803 (Tabla~\ref{tab:var-v26}), y
+cuesta 6,82 USD. \texttt{lenguaje\_sexista} cuesta más, 7,48 USD, y su mejor recall
+(0,450) procede del modelo que marca casi la mitad de las piezas sin coincidir con
+las anotadoras (Tabla~\ref{tab:var-v25}), de modo que ese número no se traduce en
+detección aprovechable. En \texttt{denominacion\_sexualizada} se gastan 5,42 USD
+para recuperar menos del 5\,\% de los casos. Dicho de otro modo,
 \textbf{el gasto no se corresponde con el rendimiento}, y una parte apreciable del
 presupuesto de inferencia se destina hoy a variables en las que el sistema no
 aporta información utilizable. De ahí se sigue una recomendación de despliegue que
@@ -594,22 +554,74 @@ variables, como corresponde a una única llamada por pieza y variable. En B1, en
 cambio, cada uno concentra su gasto en variables distintas, porque el número de
 iteraciones lo decide la agente en función de lo que encuentra. \texttt{gemini} gasta
 más en \texttt{masc\_generico} (3,43 USD, frente a 2,13 en
-\texttt{denominacion\_sexualizada}), que es justamente la variable en la que detecta.
-\texttt{gpt-4o-mini} concentra el suyo en \texttt{lenguaje\_sexista} (2,46 USD frente
-a 0,98 en \texttt{sexismo\_discurso}), donde marca casi la mitad de las piezas sin
-coincidir con las anotadoras. Y \texttt{gpt-5.4-nano} reparte de forma bastante
+\texttt{denominacion\_sexualizada}), que es justamente la variable en la que detecta
+(Tabla~\ref{tab:var-v26}). \texttt{gpt-4o-mini} concentra el suyo en
+\texttt{lenguaje\_sexista} (2,46 USD frente a 0,98 en \texttt{sexismo\_discurso}),
+donde marca casi la mitad de las piezas sin coincidir con las anotadoras
+(Tabla~\ref{tab:var-v25}). Y \texttt{gpt-5.4-nano} reparte de forma bastante
 uniforme, entre 1,87 y 2,31 USD.
 
 La lectura es que \textbf{gastar más en una variable indica que la agente ha
 trabajado más en ella, no que el resultado vaya a ser mejor}. En \texttt{gemini} ese
 esfuerzo adicional se traduce en la única detección utilizable del capítulo, y en
-\texttt{gpt-4o-mini} en un marcado abundante que no coincide con el criterio experto.
-Para un despliegue, esto refuerza la conveniencia de decidir modelo y variable a la
+\texttt{gpt-4o-mini} en un marcado abundante que, con un acuerdo negativo, no
+coincide con el criterio experto. Para un despliegue, esto refuerza la conveniencia de decidir modelo y variable a la
 vez, ya que el modelo más caro en una variable no lo es en la siguiente.
 
-Sobre el modelo local no cabe el mismo desglose, ya que su instrumentación registra
-el tiempo de procesamiento por pieza y no por variable. El reparto de ese tiempo
-entre las cinco variables queda, por tanto, sin medir.
+\subsubsection{El modelo local}
+
+El modelo local queda fuera de las tablas de coste del apartado anterior, y merece un
+apartado propio por dos razones. La primera es que su rendimiento no queda por
+detrás del de los servicios de pago. La
+segunda es que su coste no se mide en dinero y hay que cuantificarlo por otra vía.
+Este apartado atiende a ambas en ese orden.
+
+\texttt{gemma} es el mejor de los cuatro en \texttt{asimetria\_mujer\_hombre}, donde
+alcanza el mayor recall (0,160), la mejor
+precisión (0,143) y el mayor $\kappa$ (0,092) del conjunto, y queda segundo en
+\texttt{masc\_generico}, por detrás de \texttt{gemini} pero por delante de los dos
+modelos de OpenAI, con un recall de 0,408 frente a 0,206 y 0,104. En
+\texttt{denominacion\_sexualizada} su nivel de control obtiene el mejor $\kappa$ de
+los cuatro (0,154), aunque lo pierde al pasar a B1. En las dos variables restantes
+se comporta como los demás, esto es, sin detectar apenas nada. No cabe afirmar, por
+tanto, que sea mejor o peor en términos absolutos, sino que \textbf{iguala a los
+servicios comerciales y los supera en algunas variables}.
+
+Ese resultado tiene consecuencias prácticas para un proyecto que maneja material
+sujeto a privacidad, ya que un modelo abierto, gratuito y desplegable en
+infraestructura propia se sitúa al nivel de las alternativas de pago. Ahora bien,
+esa ventaja convive con un coste de otro tipo, el del cómputo.
+
+El nivel B1 de \texttt{gemma} se ejecutó sobre la granja de GPU (NVIDIA RTX 3090 y
+4090) del Departamento de Teoría de la Señal y Comunicaciones (TSC) de la Universidad
+Carlos III de Madrid, con un rendimiento medido de unos 44 segundos por variable,
+esto es, en torno a 220 segundos por artículo completo. Repartiendo la carga en
+cuatro servidores en paralelo (uno por \textit{shard}), cada ejecución sobre el corpus
+de evaluación tardó alrededor de veinte horas. En un solo servidor, el mismo cómputo
+superaría las ochenta horas. Así, el modelo
+local es competitivo en acuerdo y prescinde de tarifas, pero su despliegue agéntico
+exige infraestructura dedicada: el coste no desaparece, cambia de dinero a cómputo.
+La Figura~\ref{fig:iris-acuerdo-dolar} resume ese compromiso: situado el acuerdo del
+sistema desplegado (B1) frente a su coste monetario, el modelo local ocupa la esquina
+más favorable (pintada en verde). Sin ser el de mayor acuerdo absoluto (\texttt{gemini} lo supera en
+$\kappa$), ofrece un acuerdo competitivo a coste monetario nulo, con la salvedad de
+que ese coste se traslada al cómputo. Las implicaciones prácticas para IRIS se
+retoman en la discusión (Sección~\ref{sec:discussion}).
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{fig_acuerdo_por_dolar_blanco.pdf}
+    \caption{Acuerdo (coeficiente $\kappa$ en B1) frente al coste de inferencia sobre
+    el corpus completo, por modelo ($N=1.313$). El modelo local ofrece el mejor
+    acuerdo por dólar (coste monetario nulo). Su coste se traslada al tiempo de
+    cómputo en infraestructura propia.}
+    \label{fig:iris-acuerdo-dolar}
+\end{figure}
+
+El coste del modelo local no admite, en cambio, el desglose por variable del apartado
+anterior, ya que su instrumentación registra el tiempo de procesamiento por pieza y
+no por variable. El reparto de ese tiempo entre las cinco variables queda, por
+tanto, sin medir.
 
 \subsection{El origen de la infradetección: la tarea y los modelos}
 \label{subsec:iris_errores}

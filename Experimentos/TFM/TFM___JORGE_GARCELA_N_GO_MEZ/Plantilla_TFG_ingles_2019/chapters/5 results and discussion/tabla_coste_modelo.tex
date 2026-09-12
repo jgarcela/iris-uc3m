@@ -4,22 +4,24 @@
     \centering
     \begingroup
     \footnotesize
-    \setlength{\tabcolsep}{4pt}
+    \setlength{\tabcolsep}{3pt}
     \ttabbox[\FBwidth]{
-        \caption{Coste de inferencia en el nivel B1, en USD sobre las 1.313 piezas, desglosado por variable y modelo. Solo los tres modelos accesibles por API, ya que el local registra el tiempo de proceso por pieza y no por variable.}
+        \caption{Coste de inferencia en USD sobre las 1.313 piezas, desglosado por variable, modelo y nivel, B0 (\textit{baseline}) y B1 (Agent Skills).}
         \label{tab:iris-coste-modelo}
     }{
-        \begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}l c c c >{\columncolor{gray!15}}c@{}}
+        \begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}l cc cc cc >{\columncolor{gray!15}}c >{\columncolor{gray!15}}c@{}}
             \toprule
-            \textbf{Variable} & \textbf{gemini} & \textbf{gpt-4o-mini} & \textbf{gpt-5.4-nano} & \textbf{Total} \\
+            & \multicolumn{2}{c}{\textbf{gemini}} & \multicolumn{2}{c}{\textbf{gpt-4o-mini}} & \multicolumn{2}{c}{\textbf{gpt-5.4-nano}} & \multicolumn{2}{>{\columncolor{gray!15}}c}{\textbf{Total}} \\
+            \cmidrule(lr){2-3} \cmidrule(lr){4-5} \cmidrule(lr){6-7} \cmidrule(lr){8-9}
+            \textbf{Variable} & B0 & B1 & B0 & B1 & B0 & B1 & B0 & B1 \\
             \midrule
-            lenguaje sexista (V25) & 2,81 & 2,46 & 2,20 & 7,48 \\
-            masculino genérico (V26) & 3,43 & 1,21 & 2,19 & 6,82 \\
-            sexismo en el discurso (V30) & 2,32 & 0,98 & 1,87 & 5,18 \\
-            asimetría mujer/hombre (V33) & 2,46 & 1,24 & 2,31 & 6,01 \\
-            denominación sexualizada (V35) & 2,13 & 1,01 & 2,29 & 5,42 \\
+            lenguaje sexista (V25) & 1,19 & 2,81 & 0,53 & 2,46 & 1,14 & 2,20 & 2,86 & 7,48 \\
+            masculino genérico (V26) & 1,12 & 3,43 & 0,48 & 1,21 & 1,13 & 2,19 & 2,72 & 6,82 \\
+            sexismo en el discurso (V30) & 1,18 & 2,32 & 0,52 & 0,98 & 1,11 & 1,87 & 2,80 & 5,18 \\
+            asimetría mujer/hombre (V33) & 1,07 & 2,46 & 0,51 & 1,24 & 1,25 & 2,31 & 2,83 & 6,01 \\
+            denominación sexualizada (V35) & 1,08 & 2,13 & 0,48 & 1,01 & 1,05 & 2,29 & 2,61 & 5,42 \\
             \midrule
-            \textbf{Total} & \textbf{13,16} & \textbf{6,89} & \textbf{10,86} & \textbf{30,91} \\
+            \textbf{Total} & \textbf{5,64} & \textbf{13,16} & \textbf{2,52} & \textbf{6,89} & \textbf{5,67} & \textbf{10,86} & \textbf{13,83} & \textbf{30,91} \\
             \bottomrule
         \end{tabular*}
     }
