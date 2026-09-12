@@ -54,8 +54,18 @@ hmargin=3cm
 
 % \texttt un pelín más pequeño: el tipo monoespaciado de txfonts se ve más grande
 % que el texto del cuerpo. Se compensa reduciendo el tamaño dentro de \texttt.
-\let\oldtexttt\texttt
-\renewcommand{\texttt}[1]{{\small\oldtexttt{#1}}}
+% La reducción es relativa al tamaño vigente (un 90 %), de modo que también
+% funciona dentro de notas al pie, pies de tabla y entornos ya reducidos, donde
+% un \small absoluto agrandaba el monoespaciado en lugar de encogerlo.
+\makeatletter
+% Se copia la version interna de \texttt (la que LaTeX crea al declararlo robusto),
+% no el envoltorio con \protect, porque el envoltorio apuntaria a la nueva
+% definicion y la llamada seria recursiva.
+\expandafter\let\expandafter\oldtexttt\csname texttt \endcsname
+\DeclareRobustCommand{\texttt}[1]{{%
+    \fontsize{\dimexpr\f@size pt*9/10\relax}{\f@baselineskip}\selectfont
+    \oldtexttt{#1}}}
+\makeatother
 
 % Permitir cortar identificadores largos (p. ej. \texttt{verificar\_evidencias})
 % justo tras el guion bajo, sin guion de división, para que no desborden el margen.
