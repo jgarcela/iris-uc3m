@@ -39,6 +39,11 @@ a cambiar. No abordarlas mientras se estén aplicando comentarios de las tutoras
 - [x] **Figura de la Tabla 5.14** (`fig_coste_variable_blanco.pdf`): añadida el
       12/09/2026 acompañando a la tabla, no sustituyéndola, porque el texto cita
       cifras por modelo (3,43, 2,13, 2,46, 0,98) que la figura no rotula.
+- [ ] **Citas de 5.2 sin reverificar**: las cifras de Pangakis et al. (nueve de
+      veintisiete tareas con precision o recall por debajo de 0,5) y de Kocon et al.
+      (perdida media del 25,5 % en tareas subjetivas) son las dos unicas de 5.2 que no
+      se han contrastado contra la fuente. Conviene hacerlo como se hizo con ElSherief
+      y Rottger.
 - [ ] **Mover el código a `github.com/jgarcela/tfm-iris-uc3m`** (repo creado el
       06/09/2026, vacío por ahora). El Apéndice B ya lo enlaza. Solo el código: el
       corpus y las anotaciones de IRIS_IAMEDIA e InfoIA no se difunden con él.

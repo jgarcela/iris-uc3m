@@ -13,16 +13,27 @@ El hallazgo central obliga a matizar una expectativa extendida: que dotar a un m
 de más componentes (herramientas, conocimiento cargable bajo demanda, capacidad de
 actuar) mejora por sí solo su desempeño. No es lo que se observa. Empaquetar la
 metodología experta como \textit{skills} cargables no eleva el acuerdo de forma
-automática: de los cuatro modelos, solo uno se beneficia, mientras el resto queda
-igual o empeora. La arquitectura no es útil ni inútil en abstracto, sino que
-\textbf{amplifica lo que cada modelo ya trae}. Aprovechar la carga bajo demanda exige
-que el modelo sepa decidir qué necesita y cuándo, una competencia desigual entre
-modelos, y cuando falta, el componente aporta contexto que satura en lugar de ayudar.
-La lectura práctica, respaldada por la descomposición por componentes
-(Sección~\ref{subsec:iris_descomposicion}) es que la recuperación en vivo sobre
-las guías nunca compensa, y la configuración preferible para un despliegue real es la
-de \textit{skills} con sus resúmenes, sin herramienta, más simple, más barata y en
-ningún caso peor.
+automática, y lo que separa a los cuatro modelos no es tanto la dirección del cambio
+como su magnitud. Solo \texttt{gemini} registra una ganancia de entidad, la de
+\texttt{masc\_generico}, donde su $\kappa$ sube 0,188 puntos. En los demás los
+movimientos se quedan en unas pocas milésimas o van hacia abajo, y
+\texttt{gpt-5.4-nano} no mejora en ninguna de las cinco variables. La arquitectura no
+es útil ni inútil en abstracto, sino que \textbf{amplifica lo que cada modelo ya
+trae}. Aprovechar la carga bajo demanda exige que el modelo sepa decidir qué necesita
+y cuándo, una competencia desigual entre modelos, y cuando falta, el componente aporta
+contexto que satura en lugar de ayudar.
+
+De la descomposición por componentes (Sección~\ref{subsec:iris_descomposicion}) se
+sigue además una recomendación práctica, con la cautela de que ninguna configuración
+se impone en las cinco variables. La recuperación en vivo sobre las guías no produce
+una ganancia que justifique su coste, ya que sobre la configuración mínima mejora el
+F1 de la clase positiva en nueve de las veinte celdas y lo empeora en ocho. La
+preferible para un despliegue real es la de \textit{skills} con sus resúmenes, sin
+herramienta, que encabeza siete de las veinte celdas, más que ninguna otra, y es a la
+vez la más simple y la más barata. No es, con todo, una opción imbatible, ya que queda
+por detrás de la configuración mínima en siete celdas, y en una de ellas por mucho, la
+de \texttt{gpt-4o-mini} en \texttt{masc\_generico}, donde su F1 cae de 0,765 a
+0,401.
 
 
 \subsection{Exactitud, \texorpdfstring{$\kappa$}{kappa} y prevalencia: por qué informar de las tres}
@@ -58,7 +69,12 @@ desajuste entre dos causas que conviene no confundir.
 La primera es un \textbf{límite de la tarea}. Dos equipos expertos codificaron la
 misma variable con criterios muy distantes, hasta el punto de que
 \texttt{sexismo\_discurso} pasa del 11,5\,\% al 65,2\,\% de piezas marcadas según
-quién anote (Sección~\ref{subsec:iris_errores}). Cuando el criterio admite esa
+quién anote (Sección~\ref{subsec:iris_errores}). La brecha, además, no es
+institucional. Dentro de un mismo equipo esa variable va del 28,3\,\% al 97,8\,\%
+según quién codifique, un rango de 69,5 puntos que por sí solo supera a los 53,7 que
+separan a los dos equipos, de modo que dos personas con la misma formación y el mismo
+libro de códigos marcan, una, poco más de una de cada cuatro piezas, y la otra, casi
+todas. Cuando el criterio admite esa
 amplitud, el patrón de referencia deja de ser un suelo estable y el coeficiente
 $\kappa$ mide en buena parte distancia entre criterios más que error del sistema.
 Esta variabilidad no es un defecto del corpus de IRIS, sino un rasgo reconocido de
@@ -98,14 +114,20 @@ supera en algunas variables, como \texttt{asimetria\_mujer\_hombre}, donde obtie
 el mejor recall y la mejor precisión de los cuatro
 (Sección~\ref{subsec:iris_local}). Para una institución que maneja material sujeto
 a privacidad, esto significa que preservar los datos y prescindir de tarifas no
-obliga a renunciar al rendimiento, a cambio de asumir un coste de cómputo.
+obliga a renunciar al rendimiento, a cambio de asumir un coste de cómputo. Ese coste,
+además, se comporta al revés que el de los modelos de pago, en los que el empaquetado
+multiplica la factura por 2,2. En el local la reduce, ya que procesar una pieza pasa
+de 319,3 segundos en el nivel de control a 218,6 en el desplegado, porque la carga bajo
+demanda incorpora solo la \textit{skill} que hace falta en lugar de arrastrar la
+metodología completa en cada llamada.
 
 \paragraph{Conviene tratar cada variable por separado.} Ni la configuración óptima
 ni la utilidad del sistema son las mismas en las cinco. En
-\texttt{masc\_generico} el sistema detecta ya tres de cada cuatro casos señalados
-por las expertas y puede incorporarse al flujo de trabajo, mientras que en
-\texttt{lenguaje\_sexista} no aporta información utilizable pese a consumir la
-mayor parte del presupuesto de inferencia (Sección~\ref{subsec:iris_coste}).
+\texttt{masc\_generico} el sistema detecta ya casi tres de cada cuatro casos
+señalados por las expertas y puede incorporarse al flujo de trabajo, mientras que en
+\texttt{lenguaje\_sexista} no aporta información utilizable pese a ser la variable
+que más presupuesto de inferencia consume, el 24,2\,\% del total
+(Sección~\ref{subsec:iris_coste}).
 Concentrar el esfuerzo donde el sistema funciona, y no distribuirlo por igual,
 mejora el rendimiento y reduce el gasto a la vez. Esa afirmación admite una cifra.
 Asignar a cada variable el modelo que mejor se comporta en ella supone 8,77 USD sobre
@@ -139,7 +161,10 @@ supone unos segundos de descarte para la analista mientras que un falso negativo
 es un caso que nadie revisará (Sección~\ref{sec:metricas_eval}). Los resultados
 apuntan en la dirección contraria a la deseable, puesto que el sistema falla
 precisamente por defecto, de modo que cualquier ajuste futuro debería orientarse a
-elevar el recall aun a costa de la precisión.
+elevar el recall aun a costa de la precisión. La Sección~\ref{subsec:iris_equipo_ia}
+apunta una vía concreta en ese sentido, la de marcar la pieza cuando lo haga
+cualquiera de los modelos, que eleva el recall en las cinco variables, si bien obliga
+a ejecutarlos todos sobre cada pieza.
 
 Con estas cuatro orientaciones, el sistema encaja mejor como asistente que como
 decisor. Su salida trazable, con código, explicación y evidencias literales,
