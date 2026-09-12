@@ -22,8 +22,17 @@ a cambiar. No abordarlas mientras se estén aplicando comentarios de las tutoras
       demasiado categorica. El capitulo cierra ahora con el desacoplamiento entre
       exactitud y acuerdo. Consecuencias:
       - `tabla_sintesis.tex` y su generador quedan sin uso.
-      - `fig_b0b1_barras_blanco.pdf` queda sin uso y puede borrarse de `imagenes/`,
-        igual que `fig_acuerdo_por_dolar_blanco.pdf`.
+      - Se retira tambien la subseccion del desacoplamiento entre exactitud y acuerdo,
+        por el mismo motivo (su figura promediaba las cinco variables) y porque el
+        fenomeno ya se describe en V25 y V33 y se discute en 5.2.2. El capitulo 5.1
+        cierra ahora con el origen de la infradeteccion.
+      - `fig_b0b1_barras_blanco.pdf` y `fig_b0b1_slope_blanco.pdf` quedan sin uso y
+        pueden borrarse de `imagenes/`, igual que `fig_acuerdo_por_dolar_blanco.pdf`.
+      - **Pendiente**: la subseccion 5.2.2 ("Exactitud, kappa y prevalencia") se queda
+        como unico sitio donde se explica el desacoplamiento, y era un parrafo que se
+        apoyaba en la seccion retirada. Al revisar 5.2 conviene ampliarla con el
+        mecanismo (el modelo desplaza su prevalencia predicha hacia la clase
+        mayoritaria) y con la comprobacion practica que de ahi se sigue.
       - **Pendiente**: la estimacion de coste de despliegue (8,77 USD asignando el mejor
         modelo a cada variable, frente a 13,16 con `gemini` y 6,89 con `gpt-4o-mini`)
         solo estaba ahi. Valorar si recuperarla en la discusion (5.2), que es donde el

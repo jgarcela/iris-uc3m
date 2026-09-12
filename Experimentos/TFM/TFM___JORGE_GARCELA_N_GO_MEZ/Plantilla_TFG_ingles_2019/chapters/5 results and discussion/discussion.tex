@@ -26,12 +26,16 @@ ningún caso peor.
 
 
 \subsection{Exactitud, \texorpdfstring{$\kappa$}{kappa} y prevalencia: por qué informar de las tres}
+\label{subsec:iris_tres_metricas}
 
 El segundo aprendizaje es metodológico. En tareas con clases muy desequilibradas, la
 exactitud y el coeficiente $\kappa$ pueden desacoplarse y llegar a moverse en
 sentidos opuestos. Una intervención que vuelve al modelo menos conservador aumenta
 los aciertos triviales por efecto de la distribución marginal, sin que mejore su capacidad
-discriminativa (Sección~\ref{subsec:iris_divergencia}). Este trabajo lo ilustra:
+discriminativa. Este trabajo lo ilustra en dos celdas opuestas
+(Tablas~\ref{tab:var-v25} y~\ref{tab:var-v33}), la de un modelo que se vuelve menos
+conservador y la de otro que se vuelve mucho más, ya que en ambas la exactitud mejora
+al acercarse el modelo a la clase mayoritaria sin que su recall lo acompañe:
 apoyarse solo en la exactitud llevaría a concluir que las \textit{Agent Skills}
 mejoran el sistema, cuando el $\kappa$ indica lo contrario. Por eso, en tareas
 desequilibradas, la exactitud debe interpretarse siempre junto al $\kappa$ y a la
