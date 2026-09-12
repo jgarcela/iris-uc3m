@@ -28,15 +28,14 @@ a cambiar. No abordarlas mientras se estén aplicando comentarios de las tutoras
         cierra ahora con el origen de la infradeteccion.
       - `fig_b0b1_barras_blanco.pdf` y `fig_b0b1_slope_blanco.pdf` quedan sin uso y
         pueden borrarse de `imagenes/`, igual que `fig_acuerdo_por_dolar_blanco.pdf`.
-      - **Pendiente**: la subseccion 5.2.2 ("Exactitud, kappa y prevalencia") se queda
-        como unico sitio donde se explica el desacoplamiento, y era un parrafo que se
-        apoyaba en la seccion retirada. Al revisar 5.2 conviene ampliarla con el
-        mecanismo (el modelo desplaza su prevalencia predicha hacia la clase
-        mayoritaria) y con la comprobacion practica que de ahi se sigue.
-      - **Pendiente**: la estimacion de coste de despliegue (8,77 USD asignando el mejor
-        modelo a cada variable, frente a 13,16 con `gemini` y 6,89 con `gpt-4o-mini`)
-        solo estaba ahi. Valorar si recuperarla en la discusion (5.2), que es donde el
-        texto la remite ahora.
+      - **Resuelto el 12/09/2026**: 5.2.2 ("Exactitud, kappa y prevalencia") se amplia
+        con los dos casos que evidencian el desacoplamiento, gpt-4o-mini en V25 y
+        gpt-5.4-nano en V33, con sus cifras.
+      - **Resuelto el 12/09/2026**: la estimacion de coste de despliegue (8,77 USD
+        asignando el mejor modelo a cada variable, frente a 13,16 con `gemini` y 6,89
+        con `gpt-4o-mini`) se recupera en 5.2.4, en el parrafo que ya recomendaba
+        tratar cada variable por separado. Cifras reverificadas contra
+        `coste_por_variable.csv` y `metricas_por_variable.csv`.
 - [x] **Figura de la Tabla 5.14** (`fig_coste_variable_blanco.pdf`): añadida el
       12/09/2026 acompañando a la tabla, no sustituyéndola, porque el texto cita
       cifras por modelo (3,43, 2,13, 2,46, 0,98) que la figura no rotula.

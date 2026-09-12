@@ -32,12 +32,18 @@ El segundo aprendizaje es metodológico. En tareas con clases muy desequilibrada
 exactitud y el coeficiente $\kappa$ pueden desacoplarse y llegar a moverse en
 sentidos opuestos. Una intervención que vuelve al modelo menos conservador aumenta
 los aciertos triviales por efecto de la distribución marginal, sin que mejore su capacidad
-discriminativa. Este trabajo lo ilustra en dos celdas opuestas
-(Tablas~\ref{tab:var-v25} y~\ref{tab:var-v33}), la de un modelo que se vuelve menos
-conservador y la de otro que se vuelve mucho más, ya que en ambas la exactitud mejora
-al acercarse el modelo a la clase mayoritaria sin que su recall lo acompañe:
-apoyarse solo en la exactitud llevaría a concluir que las \textit{Agent Skills}
-mejoran el sistema, cuando el $\kappa$ indica lo contrario. Por eso, en tareas
+discriminativa. Este trabajo lo ilustra en dos celdas opuestas. En
+\texttt{lenguaje\_sexista}, cuya clase mayoritaria es el \textit{Sí},
+\texttt{gpt-4o-mini} se vuelve menos conservador al recibir las \textit{skills} y pasa
+de marcar el 9,0\,\% de las piezas al 46,2\,\%, con lo que su exactitud sube de 0,236 a
+0,457 mientras su $\kappa$ baja de $-0,013$ a $-0,037$ (Tabla~\ref{tab:var-v25}). En
+\texttt{asimetria\_mujer\_hombre}, cuya clase mayoritaria es el \textit{No},
+\texttt{gpt-5.4-nano} hace justo lo contrario y pasa del 37,5\,\% al 0,7\,\%, de modo
+que su exactitud salta de 0,619 a 0,931 al tiempo que su recall cae de 0,457 a cero
+(Tabla~\ref{tab:var-v33}). En ninguno de los dos casos discrimina mejor el modelo, sino
+que se acerca a la respuesta que más se repite y la exactitud premia ese acercamiento.
+Apoyarse solo en ella llevaría a concluir que las \textit{Agent Skills} mejoran el
+sistema, cuando el $\kappa$ indica lo contrario. Por eso, en tareas
 desequilibradas, la exactitud debe interpretarse siempre junto al $\kappa$ y a la
 prevalencia, para no tomar un cambio en la distribución de respuestas por una mejora
 real de criterio.
@@ -101,7 +107,15 @@ por las expertas y puede incorporarse al flujo de trabajo, mientras que en
 \texttt{lenguaje\_sexista} no aporta información utilizable pese a consumir la
 mayor parte del presupuesto de inferencia (Sección~\ref{subsec:iris_coste}).
 Concentrar el esfuerzo donde el sistema funciona, y no distribuirlo por igual,
-mejora el rendimiento y reduce el gasto a la vez.
+mejora el rendimiento y reduce el gasto a la vez. Esa afirmación admite una cifra.
+Asignar a cada variable el modelo que mejor se comporta en ella supone 8,77 USD sobre
+las 1.313 piezas, cantidad en la que \texttt{asimetria\_mujer\_hombre} no devenga
+tarifa por recaer en el modelo local, si bien consume tiempo de cómputo. Fijar en
+cambio un único modelo para las cinco costaría 13,16 USD con \texttt{gemini}, que es el
+de mayor acuerdo, y 6,89 USD con \texttt{gpt-4o-mini}, que sale más barato pero queda
+por detrás en tres de las cinco variables. La asignación por variable se sitúa, por
+tanto, entre ambas en coste y por delante de las dos en rendimiento, que es cuanto cabe
+pedirle a una decisión de despliegue.
 
 \paragraph{La supervisión humana no es un remedio provisional.} Que el sistema
 requiera revisión experta no constituye una anomalía de esta implementación, sino
