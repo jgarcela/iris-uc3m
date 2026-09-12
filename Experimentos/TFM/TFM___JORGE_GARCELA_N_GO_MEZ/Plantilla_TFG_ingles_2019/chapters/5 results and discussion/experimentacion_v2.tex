@@ -301,20 +301,25 @@ pasa de un recall de 0,099 a 0,008 y \texttt{gemini} se mantiene en valores igua
 bajos. El empaquetado vuelve al sistema más restrictivo justo en la variable en la que
 ya marcaba poco.
 
-\textbf{Nivel alcanzado.} Ningún modelo supera un recall de 0,046 ni un F1 de la clase
-positiva de 0,082, de modo que la variable queda fuera del alcance del sistema tal y
-como está configurado. La exactitud, cercana a 0,89 en los cuatro, no debe leerse como
-un buen resultado, ya que responder siempre \textit{No} acertaría en el 90,0\,\% de las
-piezas y ninguno se distancia de esa cifra. Con una prevalencia del 10,0\,\%, el F1 de
-la clase positiva vuelve a ser aquí la lectura más ajustada
-(Sección~\ref{sec:metricas_eval}).
+\textbf{Nivel alcanzado.} Los cuatro modelos marcan entre 1 y 19 piezas de las 1.313,
+frente a las 131 que señalan las expertas, de modo que ninguno supera un recall de
+0,046 ni un F1 de la clase positiva de 0,082. La precisión de 1,000 que aparece en la
+tabla corresponde a \texttt{gpt-5.4-nano} y descansa sobre la única pieza que marca, en
+la que acierta.
 
-\textbf{Una particularidad, la precisión de \texttt{gpt-5.4-nano}.} Este modelo marca
-\textit{Sí} en tan pocas piezas que su precisión de 1,000 descansa sobre un puñado de
-predicciones y no permite conclusión alguna sobre su fiabilidad general. Dicho esto, y
-aunque un recall de 0,008 lo vuelve inservible como detector, el dato tiene una lectura
-menos desfavorable, y es que cuando ese modelo decide marcar, acierta. Un sistema así
-resulta inútil para revisar un corpus completo, pero no genera falsas alarmas.
+\textbf{Una particularidad, un juicio comparativo.} El libro de códigos define esta
+variable como la identificación de la mujer por su aspecto, su rol familiar o su
+relación con un varón \emph{en detrimento} de su función profesional o del motivo
+informativo por el que aparece (Sección~\ref{sec:iris_variables}). No basta, por tanto,
+con localizar una expresión en el texto, sino que hay que ponderar si desplaza a
+aquello que la pieza debería haber destacado, lo que obliga a compararlo con lo que no
+está escrito. Las cifras encajan con esa dificultad. Los modelos no solo se apartan de la anotación,
+sino que tampoco coinciden entre sí en qué piezas cumplen el criterio, ya que el
+acuerdo entre ellos cae aquí de una mediana de 0,126 en B0 a 0,026 en B1, el mayor
+descenso de las cinco variables (Tabla~\ref{tab:iris-intraia}). Y de las piezas que
+llegan a marcar, \texttt{gemini} acierta 2 de 12, \texttt{gpt-4o-mini} 6 de 16 y
+\texttt{gemma} 3 de 19, de manera que tampoco la decisión de marcar, cuando se toma,
+coincide con la de las expertas.
 
 \subsubsection{Patrones comunes a las cinco variables}
 
