@@ -3,11 +3,12 @@
 %----------
 
 Los resultados expuestos hasta aquí condicionan el modo en que este sistema puede
-emplearse. El acuerdo con la anotación experta es limitado, y una parte de ese
-desacuerdo obedece a la amplitud y variabilidad del criterio experto antes que a
-un fallo de detección (Sección~\ref{sec:discussion}). El sistema no se plantea,
-por tanto, como un clasificador autónomo, sino como un \textbf{apoyo a la
-postedición} que se inserta en el flujo de trabajo de quien revisa un texto ya
+emplearse. El acuerdo con la anotación experta es limitado, y la discusión reparte ese
+desajuste entre dos causas, la amplitud del criterio experto en algunas variables y una
+infradetección del propio sistema en otras (Sección~\ref{subsec:iris_dos_limites}).
+Cualquiera de las dos desaconseja por igual un uso autónomo. El sistema no se plantea,
+por tanto, como un clasificador que decida por su cuenta, sino como un \textbf{apoyo a
+la postedición} que se inserta en el flujo de trabajo de quien revisa un texto ya
 redactado. Su cometido consiste en señalar las piezas candidatas y aportar en cada
 caso las evidencias y la justificación del veredicto, de modo que la persona analista
 acepte, rechace o matice ese diagnóstico con plena trazabilidad, en lugar de
@@ -15,8 +16,8 @@ partir de cero.
 
 Para hacer efectiva esa aplicabilidad, el sistema de detección se ha integrado en
 la \textbf{herramienta web del proyecto IRIS}~\cite{avi2026}\footnote{\url{https://dei.inf.uc3m.es/iris/} [Último acceso: 05/08/2026]},
-lo que permite aplicarlo al conjunto del corpus, incluidas las miles de piezas que
-carecen de anotación.
+lo que permite aplicarlo al conjunto del corpus, incluidas las 5.800 piezas que
+carecen de anotación de referencia (Sección~\ref{subsec:iris_subconjunto}).
 
 La asistencia cubre los dos planos del análisis de contenido experto
 (Sección~\ref{sec:experts}). En el plano \textbf{cuantitativo}, la herramienta agrega
@@ -30,9 +31,23 @@ examinar el fundamento de cada decisión.
 
 Las Figuras~\ref{fig:iris-web-informe} y~\ref{fig:iris-web-analisis} ilustran ambas
 vistas de la herramienta web, la de informe cuantitativo y la de análisis por pieza.
-La validación de esta integración con redacciones reales, mediante estudios de uso
-con profesionales, queda fuera del alcance de este trabajo y se plantea como línea
-futura (Sección~\ref{sec:futurework_usecases}).
+
+Que la herramienta admita las cinco variables no significa que convenga emplearlas
+todas por igual. El capítulo recomienda decidirlo variable a variable
+(Sección~\ref{subsec:iris_implicaciones}), de modo que en \texttt{masc\_generico} el
+sistema recupera casi tres de cada cuatro casos señalados por las expertas y puede
+incorporarse ya al flujo de trabajo, mientras que en las demás la proporción de casos
+que deja sin señalar es lo bastante alta como para que su salida sirva de exploración
+antes que de cribado.
+
+Dos validaciones quedan fuera del alcance de este trabajo y se plantean como línea
+futura (Sección~\ref{sec:futurework_usecases}). La primera es la del uso de la
+herramienta con redacciones reales, mediante estudios con profesionales. La segunda
+atañe al plano cualitativo que acaba de describirse, ya que la evaluación de este
+capítulo mide la etiqueta y no la calidad de las evidencias ni de las explicaciones,
+por no existir un marcado experto con el que contrastarlas
+(Sección~\ref{subsec:limitacion_fiabilidad}). Las vistas que siguen muestran, en
+consecuencia, una capacidad implementada y no una capacidad medida.
 
 \begin{figure}[H]
     \centering
