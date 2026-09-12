@@ -1,5 +1,12 @@
 # -*- coding: utf-8 -*-
-"""Tabla de recall y kappa por equipo de anotacion y variable."""
+"""Tabla de recall por equipo de anotacion y variable.
+
+La tabla de kappa por equipo se retiro: las prevalencias de los dos equipos son muy
+distintas (en sexismo_discurso, 11,5 % frente a 65,2 %), de modo que el acuerdo
+esperado por azar no es el mismo en las dos columnas y los coeficientes no se pueden
+comparar entre ellas. Es la misma cautela que el capitulo aplica a kappa entre
+variables. La heterogeneidad de la anotacion la recoge ahora gen_tabla_heterogeneidad.py.
+"""
 import csv, os, io
 BASE=os.path.dirname(os.path.abspath(__file__))
 rows=list(csv.DictReader(open(os.path.join(BASE,"equipos_por_variable.csv"))))
@@ -14,7 +21,7 @@ def num(x,pct=False):
     return f"{v:.3f}".replace(".",",").replace("-","$-$")
 o=io.StringIO()
 o.write("% Generado por gen_tabla_equipos.py. No editar a mano.\n")
-for metric,nom,lab in [("recall","recall","recall"),("kappa","kappa",r"$\kappa$")]:
+for metric,nom,lab in [("recall","recall","recall")]:
     o.write("\n\\begin{table}[H]\n    \\centering\n    \\begingroup\n    \\scriptsize\n")
     o.write("    \\setlength{\\tabcolsep}{4pt}\n    \\renewcommand{\\texttt}[1]{{\\ttfamily #1}}\n")
     o.write("    \\ttabbox[\\FBwidth]{\n")

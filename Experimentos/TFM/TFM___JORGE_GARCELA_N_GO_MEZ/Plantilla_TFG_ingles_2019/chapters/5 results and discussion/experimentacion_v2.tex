@@ -655,9 +655,10 @@ traslada al cómputo. Las implicaciones prácticas para IRIS se retoman en la di
 \subsection{El origen de la infradetección: la tarea y los modelos}
 \label{subsec:iris_errores}
 
-El bajo acuerdo absoluto plantea la pregunta que condiciona la interpretación de
-todo el capítulo: ¿refleja una limitación de los modelos, o un límite intrínseco de
-la propia tarea? Tres análisis complementarios apuntan en la misma dirección, y una
+El bajo acuerdo con la anotación experta plantea la pregunta que condiciona la
+interpretación de todo el capítulo: ¿refleja una limitación de los modelos, o un
+límite intrínseco de la propia tarea? La respuesta no es una de las dos, sino un
+reparto entre ambas, y a establecerlo se dirigen los tres análisis que siguen. Una
 pieza concreta permite después ver el mecanismo del fallo por dentro.
 
 \subsubsection{Heterogeneidad entre equipos de anotación}
@@ -672,18 +673,21 @@ por separado, a modo de análisis de sensibilidad.
 \input{chapters/5 results and discussion/tablas_equipos}
 
 La Tabla~\ref{tab:iris-equipos-recall} recoge, para cada variable, cuánto marca cada
-equipo y qué recall alcanza cada modelo frente a él. La
-Tabla~\ref{tab:iris-equipos-kappa} añade el coeficiente $\kappa$ en la misma
-disposición. El resultado no es uniforme entre variables, de ahí que convenga
-examinarlo una a una.
+equipo y qué recall alcanza cada modelo frente a él. El acuerdo no se mide aquí con
+$\kappa$, porque las prevalencias de los dos equipos son muy distintas y el acuerdo
+esperado por azar no es el mismo en una columna que en la otra, de modo que sus
+coeficientes no admiten comparación. El resultado no es uniforme entre variables, de
+ahí que convenga examinarlo una a una.
 
 \textbf{UCM3 marca sistemáticamente más que Indexa en las cinco variables}, y en
 algunas la diferencia es enorme. En \texttt{sexismo\_discurso} el salto va del
-11,5\,\% al 65,2\,\%, casi seis veces, y en
-\texttt{asimetria\_mujer\_hombre} y \texttt{denominacion\_sexualizada} se duplica.
+11,5\,\% al 65,2\,\%, casi seis veces, y en \texttt{asimetria\_mujer\_hombre} y
+\texttt{denominacion\_sexualizada} ronda el doble, 2,5 y 1,9 veces respectivamente.
 Son proporciones de la anotación humana y, por tanto, \textbf{no dependen de ningún
-modelo}: reflejan que la misma variable se entiende de forma muy distinta según
-quién la codifique.
+modelo}. Cada equipo codificó piezas distintas, de manera que esa distancia mezcla
+dos factores, el criterio de cada uno y la muestra que le correspondió, si bien una
+diferencia de casi seis veces como la de \texttt{sexismo\_discurso} difícilmente se
+explica solo por el segundo.
 
 Lo relevante es qué le ocurre al sistema ante esa diferencia. \textbf{Allí donde
 UCM3 marca más, el recall de los modelos cae}, que es tanto como decir que los casos
@@ -694,7 +698,10 @@ a Indexa a 0,016 frente a UCM3, y \texttt{gemma} de 0,278 a 0,127. En
 0,063 a 0,020. El efecto se repite, más atenuado, en
 \texttt{denominacion\_sexualizada}. Si el sistema detectase el fenómeno con
 independencia de quién lo anote, el recall se mantendría al cambiar de referencia.
-No es lo que ocurre.
+No es lo que ocurre. En \texttt{asimetria\_mujer\_hombre} esa dependencia llega a
+pesar más que la elección del modelo, ya que los 0,262 que separan a \texttt{gemini}
+entre un equipo y otro superan al rango completo de recall que separa a los cuatro
+modelos en esa variable, de 0,160.
 
 Hay dos excepciones que conviene no ocultar. En \texttt{masc\_generico} el recall
 apenas varía entre equipos, e incluso sube ligeramente frente a UCM3 en
@@ -703,15 +710,22 @@ resulta coherente con que sea la variable de criterio más explícito y la únic
 acuerdo apreciable. En \texttt{lenguaje\_sexista}, el recall es tan bajo frente a
 ambos equipos que la comparación no aporta información.
 
-El coeficiente $\kappa$ muestra el mismo patrón de forma más acusada
-(Tabla~\ref{tab:iris-equipos-kappa}). En \texttt{asimetria\_mujer\_hombre},
-\texttt{gemini} obtiene 0,202 frente a Indexa y $-0,027$ frente a UCM3, una
-diferencia de 0,229 que supera con holgura a la que separa a los cuatro modelos
-entre sí en esa misma variable. En \texttt{sexismo\_discurso} los cuatro modelos
-pasan de valores positivos frente a Indexa a valores nulos o negativos frente a
-UCM3. Dicho de otro modo, \textbf{contra qué equipo se compare puede pesar tanto
-como qué modelo se emplee}, y esa magnitud constituye una evidencia del techo de la
-tarea que no requiere doble codificación.
+Conviene dar un paso más, porque \textbf{la divergencia no es institucional, sino
+personal}. La Tabla~\ref{tab:iris-heterogeneidad} deja de agrupar por equipos y
+recorre a las anotadoras una a una, y en las cinco variables la distancia entre
+personas duplica o quintuplica a la que separa a los dos equipos. En
+\texttt{sexismo\_discurso}, donde los equipos distan 53,7 puntos, las anotadoras van
+del 3,9\,\% al 97,8\,\% de piezas marcadas.
+
+\input{chapters/5 results and discussion/tabla_heterogeneidad}
+
+Lo decisivo es que esa dispersión tampoco procede de comparar equipos distintos.
+Dentro del propio UCM3, \texttt{sexismo\_discurso} va del 28,3\,\% al 97,8\,\%, un
+rango de 69,5 puntos que por sí solo supera a la brecha entre los dos equipos. Dos
+personas con la misma formación y el mismo libro de códigos marcan, una, algo más de
+una de cada cuatro piezas, y la otra, casi todas. \textbf{Ningún sistema automático
+puede aproximarse a la vez a las dos}, y esa es la evidencia más directa del techo de
+la tarea, que además no requiere doble codificación ni depende de ningún modelo.
 
 \subsubsection{Consenso de los modelos frente al \textit{ground truth}}
 
@@ -894,10 +908,15 @@ de la misma empresa proveedora, y el par formado por \texttt{gemma} y
 \texttt{sexismo\_discurso} (0,236), ambos de la familia de modelos de Google. Fuera
 de esas coincidencias por familia, los modelos no comparten criterio.
 
-Conviene señalar que el acuerdo bruto entre modelos sí es alto en V25, V33 y V35,
-por encima del 92\,\% en la mayoría de los pares, pero se trata de un artefacto de
-que casi todos responden \textit{No} en casi todas las piezas. Es la misma cautela
-que exige la exactitud frente al clasificador trivial
+Conviene señalar que el acuerdo bruto entre modelos sí resulta alto en algunos
+pares, pero se trata de un artefacto de que casi todos responden \textit{No} en casi
+todas las piezas. En \texttt{denominacion\_sexualizada} supera el 97\,\% en los seis
+pares, porque ninguno de los cuatro modelos marca más del 1,4\,\% de las piezas. En
+\texttt{lenguaje\_sexista} y en \texttt{asimetria\_mujer\_hombre} ese acuerdo alto se
+limita a los tres pares que excluyen a \texttt{gpt-4o-mini}, que es el único que
+marca de forma abundante en ellas, y en cuanto ese modelo entra en el par el acuerdo
+cae al entorno del 54\,\% en la primera y del 84\,\% en la segunda. Es la misma
+cautela que exige la exactitud frente al clasificador trivial
 (Sección~\ref{sec:iris_variables}), aplicada ahora al acuerdo entre sistemas.
 
 No existe, por tanto, un criterio común a los modelos. Cada uno presenta su propio

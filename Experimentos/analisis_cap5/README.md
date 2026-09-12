@@ -34,7 +34,11 @@ no se editan a mano.
 - `gen_tablas_porvariable.py` → `tabla_var_v25.tex` … `tabla_var_v35.tex` (una por
   variable, B0 frente a B1).
 - `gen_tablas_ablacion.py` → `tablas_ablacion.tex`.
-- `gen_tabla_equipos.py` → `tablas_equipos.tex`.
+- `gen_tabla_equipos.py` → `tablas_equipos.tex` (prevalencia de cada equipo y recall de
+  los cuatro modelos frente a cada uno; la tabla de kappa por equipo se retiro porque
+  las prevalencias de los dos equipos hacen incomparables sus coeficientes).
+- `gen_tabla_heterogeneidad.py` → `tabla_heterogeneidad.tex` (dispersion del criterio
+  humano por variable, entre equipos y entre anotadoras con n>=50, sin modelos).
 - `gen_tabla_intraia.py` → `tabla_intraia.tex`.
 - `gen_tabla_prev_modelo.py` → `tabla_prev_modelo.tex` (prevalencia de Sí predicha por
   cada modelo en B1).
