@@ -1,0 +1,26 @@
+% Generado por gen_tabla_local_tiempo.py. No editar a mano.
+
+\begin{table}[H]
+    \centering
+    \begingroup
+    \small
+    \setlength{\tabcolsep}{6pt}
+    \ttabbox[\FBwidth]{
+        \caption{Coste en tiempo de cómputo del modelo local sobre las 1.313 piezas, por configuración. Las dos últimas columnas recogen lo que tarda una pasada completa sobre el corpus en un solo servidor y repartida en los cuatro que se emplearon, uno por \textit{shard}. La instrumentación registra el tiempo por pieza y no por variable, de modo que la primera columna es ese tiempo dividido entre las cinco y no un desglose medido.}
+        \label{tab:iris-local-tiempo}
+    }{
+        \begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}l c c >{\columncolor{gray!15}}c >{\columncolor{gray!15}}c@{}}
+            \toprule
+            \textbf{Configuración} & \textbf{s/variable} & \textbf{s/pieza} & \textbf{1 servidor} & \textbf{4 servidores} \\
+            \midrule
+            B0, metodología en el \textit{prompt} & 63,9 & 319,3 & 116,5\,h & 29,1\,h \\
+            \midrule
+            B1, solo \textit{skills} & 42,1 & 210,5 & 76,8\,h & 19,2\,h \\
+            B1, \textit{skills} y resúmenes & 42,3 & 211,3 & 77,1\,h & 19,3\,h \\
+            B1, \textit{skills} y RAG & 43,0 & 214,9 & 78,4\,h & 19,6\,h \\
+            B1, configuración completa & 43,7 & 218,6 & 79,7\,h & 19,9\,h \\
+            \bottomrule
+        \end{tabular*}
+    }
+    \endgroup
+\end{table}

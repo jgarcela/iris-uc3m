@@ -42,6 +42,8 @@ no se editan a mano.
   modelo, su mejor configuración, el coste y si admite apoyo automático).
 - `gen_tabla_coste_modelo.py` → `tabla_coste_modelo.tex` (coste desglosado por
   variable, modelo y nivel, B0 y B1, solo los tres accesibles por API).
+- `gen_tabla_local_tiempo.py` → `tabla_local_tiempo.tex` (coste en tiempo de computo
+  del modelo local, por configuracion, sobre los ficheros del cluster).
 
 ## Criterios
 

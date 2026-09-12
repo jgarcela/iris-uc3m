@@ -11,6 +11,13 @@ a cambiar. No abordarlas mientras se estén aplicando comentarios de las tutoras
       El script matplotlib que las genera no está en el repositorio, así que hay que
       localizarlo o regenerarlas.
 - [ ] **Figuras: tamaño y colocación** de las imágenes en general.
+- [x] **Figura del acuerdo frente al coste**: rehecha el 12/09/2026 como
+      `fig_rendimiento_coste_blanco.pdf`, sobre F1 macro en lugar de $\kappa$.
+      Actualizados el pie y el párrafo que la comenta. `fig_acuerdo_por_dolar_blanco.pdf`
+      queda sin uso y puede borrarse de `imagenes/`.
+- [x] **Figura de la Tabla 5.14** (`fig_coste_variable_blanco.pdf`): añadida el
+      12/09/2026 acompañando a la tabla, no sustituyéndola, porque el texto cita
+      cifras por modelo (3,43, 2,13, 2,46, 0,98) que la figura no rotula.
 - [ ] **Mover el código a `github.com/jgarcela/tfm-iris-uc3m`** (repo creado el
       06/09/2026, vacío por ahora). El Apéndice B ya lo enlaza. Solo el código: el
       corpus y las anotaciones de IRIS_IAMEDIA e InfoIA no se difunden con él.
