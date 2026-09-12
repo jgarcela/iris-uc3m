@@ -151,10 +151,11 @@ cuestión metodológica en la Sección~\ref{subsec:iris_divergencia}. Los otros 
 apenas se mueven, con recalls que siguen en el entorno de la centésima en los dos
 niveles.
 
-\textbf{Nivel alcanzado.} Es el resultado más severo del capítulo. El recall es
-prácticamente nulo en tres de los cuatro modelos (0,046 en \texttt{gemini}, 0,014 en
-\texttt{gemma} y 0,001 en \texttt{gpt-5.4-nano}), de modo que el sistema deja sin
-señalar casi todo el lenguaje sexista que las expertas identifican. No se trata de un
+\textbf{Nivel alcanzado.} El recall es prácticamente nulo en tres de los cuatro
+modelos (0,046 en \texttt{gemini}, 0,014 en \texttt{gemma} y 0,001 en
+\texttt{gpt-5.4-nano}), de modo que el sistema deja sin señalar casi todo el lenguaje
+sexista que las expertas identifican, 1.014 de las 1.063 piezas en el caso de
+\texttt{gemini}. No se trata de un
 matiz de umbral ni de un desacuerdo sobre casos dudosos, sino de que \textbf{el modelo
 no detecta el fenómeno}. La magnitud de esa omisión se aprecia al contrastarla con la
 anotación humana, ya que los dos equipos marcan la variable en la mayoría de las
@@ -192,15 +193,18 @@ de forma diferenciada.
 poco más de la cuarta parte del masculino genérico que marcan las expertas a detectar
 casi tres cuartas partes. La exactitud acompaña (de 0,397 a 0,708) y también lo hace el
 $\kappa$ (de 0,073 a 0,261), mientras que la precisión apenas cede (de 0,902 a 0,887).
-Que la ganancia en detección no se pague con falsos positivos, y que el $\kappa$ suba
-en la misma dirección, descarta que se trate de un artefacto de la distribución. \texttt{gemma4:e4b} mejora de forma más
+Que la precisión se mantenga mientras el recall se multiplica, y que el $\kappa$ suba
+en la misma dirección, apunta a una ganancia real antes que a un artefacto de la
+distribución. Los falsos positivos crecen de 33 a 99, pero lo hacen sobre un número de
+piezas marcadas que pasa de 338 a 879. \texttt{gemma4:e4b} mejora de forma más
 modesta (recall de 0,359 a 0,408) y \texttt{gpt-4o-mini} apenas se mueve. En sentido
 contrario, \texttt{gpt-5.4-nano} se vuelve mucho más conservador al recibir las
 \textit{skills}, ya que su recall cae de 0,582 a 0,104 y su F1 de 0,692 a 0,186. El
 empaquetado, por tanto, desplaza el umbral de cada modelo, y no siempre en la misma
 dirección.
 
-\textbf{Nivel alcanzado.} Es la única variable en que el sistema detecta de verdad.
+\textbf{Nivel alcanzado.} Es la única variable en la que algún modelo alcanza una
+detección aprovechable.
 \texttt{gemini} recupera el 73,3\,\% del masculino genérico que marcan las expertas,
 con una precisión de 0,887 y un F1 de 0,803, cifras que lo convierten en un detector
 utilizable. El local \texttt{gemma4:e4b} queda en segundo lugar, con un recall de 0,408
@@ -208,11 +212,12 @@ y un F1 de 0,561. Los dos modelos de OpenAI, en cambio, son mucho más conservad
 (recall 0,206 y 0,104), es decir, marcan el masculino genérico en muy pocas piezas.
 
 \textbf{Una particularidad, el umbral.} La variable es propensa a este desajuste,
-porque el español emplea el masculino genérico de forma pervasiva
+porque el español emplea el masculino genérico de forma generalizada
 (\textit{los trabajadores}, \textit{los ciudadanos}) y la anotación tiende a marcarlo
-de forma sistemática, de modo que un modelo restrictivo se queda corto. El umbral en el
-que cada modelo decide marcar es una característica del propio modelo, y los de OpenAI
-lo sitúan más alto que \texttt{gemini} o \texttt{gemma}.
+de forma sistemática, de modo que un modelo restrictivo se queda corto. Cada modelo
+sitúa ese umbral en un punto distinto, y los de OpenAI más alto que \texttt{gemini} o
+\texttt{gemma}, si bien el empaquetado también lo desplaza, como muestra el caso de
+\texttt{gpt-5.4-nano}.
 
 \subsubsection{Sexismo en el discurso (V30)}
 
@@ -532,7 +537,8 @@ variables más caras son precisamente \texttt{lenguaje\_sexista} y
 de decidirse.
 
 El contraste con las dos últimas columnas es el dato relevante para el proyecto.
-\texttt{masc\_generico} es la variable en que el sistema detecta de verdad, con un
+\texttt{masc\_generico} es la variable en que el sistema alcanza una detección
+aprovechable, con un
 recall de 0,733 y un F1 de 0,803, y cuesta 6,82 USD. \texttt{lenguaje\_sexista}
 cuesta más, 7,48 USD, y su mejor recall (0,450) procede del modelo que marca casi
 la mitad de las piezas sin coincidir con las anotadoras, de modo que ese número no
