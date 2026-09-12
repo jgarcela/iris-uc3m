@@ -79,9 +79,10 @@ a cambiar. No abordarlas mientras se estén aplicando comentarios de las tutoras
       pasado, así que `discussion.tex` no está cerrado. Lo mismo vale para el Cap 6,
       que además arrastra el encuadre antiguo ("el techo lo pone la tarea") y hay que
       poner al día con las conclusiones del Cap 5 reordenado.
-- [ ] **Rehacer el abstract** al final, una vez reordenado el Cap 5.
-- [ ] Apellido de Harold en los agradecimientos.
-- [ ] Decidir el título definitivo del TFM.
+- [x] **Abstract rehecho** el 12/09/2026, con el Cap 5 ya cerrado.
+- [x] Apellido de Harold: confirmado el 12/09/2026, es Harold Molina, tal como ya
+      figura en la dedicatoria. Sin cambios.
+- [x] Título del TFM: el usuario confirma el 12/09/2026 que se queda como está.
 
 ## Entrega
 
