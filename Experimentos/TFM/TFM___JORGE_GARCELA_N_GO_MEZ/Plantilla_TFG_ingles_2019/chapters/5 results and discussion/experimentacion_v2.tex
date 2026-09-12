@@ -179,7 +179,7 @@ piezas, Indexa en el 74,6\,\% y UCM3 en el 85,5\,\%
 que el fenómeno está presente. La única excepción es \texttt{gpt-4o-mini}, que sí marca de
 forma abundante (recall 0,450), pero su acuerdo sigue siendo negativo
 ($\kappa = -0,037$), lo que indica que marca en piezas distintas de aquellas en que lo
-hacen las anotadoras. Ni detectar poco ni detectar mucho aproxima al modelo al criterio
+hacen las personas anotadoras. Ni detectar poco ni detectar mucho aproxima al modelo al criterio
 experto. Una posible explicación es que se trata de la variable más genérica del
 bloque, definida como el uso discriminatorio del lenguaje por razón de sexo sin remitir
 a un mecanismo concreto, lo que exige al modelo reconocer un fenómeno que no se le
@@ -414,7 +414,7 @@ equilibrio (recall 0,185 con precisión 0,174, $\kappa = 0,124$). En
 y RAG (recall 0,115 con precisión 0,294). En \texttt{lenguaje\_sexista} (V25),
 finalmente, ninguna configuración logra una detección aprovechable, ya que los
 valores de recall siguen siendo muy bajos salvo en el modelo que marca casi la mitad
-de las piezas sin coincidir con las anotadoras, y todos los $\kappa$ rondan el cero o
+de las piezas sin coincidir con las personas anotadoras, y todos los $\kappa$ rondan el cero o
 son negativos.
 
 De ello se sigue que la arquitectura no admite una respuesta única, sino que
@@ -536,7 +536,7 @@ El contraste con las dos últimas columnas es el dato relevante para el proyecto
 aprovechable, con un recall de 0,733 y un F1 de 0,803 (Tabla~\ref{tab:var-v26}), y
 cuesta 6,82 USD. \texttt{lenguaje\_sexista} cuesta más, 7,48 USD, y su mejor recall
 (0,450) procede del modelo que marca casi la mitad de las piezas sin coincidir con
-las anotadoras (Tabla~\ref{tab:var-v25}), de modo que ese número no se traduce en
+las personas anotadoras (Tabla~\ref{tab:var-v25}), de modo que ese número no se traduce en
 detección aprovechable. En \texttt{denominacion\_sexualizada} se gastan 5,42 USD
 para recuperar menos del 5\,\% de los casos. Dicho de otro modo,
 \textbf{el gasto no se corresponde con el rendimiento}, y una parte apreciable del
@@ -573,7 +573,7 @@ más en \texttt{masc\_generico} (3,43 USD, frente a 2,13 en
 \texttt{denominacion\_sexualizada}), que es justamente la variable en la que detecta
 (Tabla~\ref{tab:var-v26}). \texttt{gpt-4o-mini} concentra el suyo en
 \texttt{lenguaje\_sexista} (2,46 USD frente a 0,98 en \texttt{sexismo\_discurso}),
-donde marca casi la mitad de las piezas sin coincidir con las anotadoras
+donde marca casi la mitad de las piezas sin coincidir con las personas anotadoras
 (Tabla~\ref{tab:var-v25}). Y \texttt{gpt-5.4-nano} reparte de forma bastante
 uniforme, entre 1,87 y 2,31 USD.
 
@@ -714,8 +714,8 @@ Conviene dar un paso más, porque \textbf{la divergencia no es institucional, si
 personal}. La Tabla~\ref{tab:iris-heterogeneidad} deja de agrupar por equipos y
 recorre a las personas anotadoras una a una, y en las cinco variables la distancia entre
 personas duplica o quintuplica a la que separa a los dos equipos. En
-\texttt{sexismo\_discurso}, donde los equipos distan 53,7 puntos, las anotadoras van
-del 3,9\,\% al 97,8\,\% de piezas marcadas.
+\texttt{sexismo\_discurso}, donde los equipos distan 53,7 puntos, las personas
+anotadoras van del 3,9\,\% al 97,8\,\% de piezas marcadas.
 
 \input{chapters/5 results and discussion/tabla_heterogeneidad}
 
@@ -741,7 +741,7 @@ es prácticamente unánime: en \textbf{1.363 casos} los cuatro modelos responden
 donde la anotación dice \textit{Sí}, y solo en 1 caso ocurre lo contrario. La
 infradetección observada por variable es, por tanto, un \textbf{sesgo sistemático},
 no aleatorio, y constituye el hallazgo principal de este análisis: \textbf{los
-modelos detectan de forma consistente menos sexismo que las anotadoras}.
+modelos detectan de forma consistente menos sexismo que las personas anotadoras}.
 
 Conviene precisar qué acredita exactamente ese recuento. Cada modelo deja sin marcar
 por su cuenta una proporción muy alta de los positivos, de manera que la coincidencia
@@ -800,7 +800,7 @@ en esos mismos casos el 89,5\,\%, de manera que el contraste entre ambos ilustra
 qué punto el comportamiento depende del sistema concreto. En español y sobre sexismo,
 De Grazia et al.~\cite{degrazia2025} constatan que los modelos de lenguaje resuelven
 razonablemente el sexismo explícito pero se atascan en el implícito, que es
-precisamente donde también desciende el acuerdo entre anotadoras.
+precisamente donde también desciende el acuerdo entre las personas que anotan.
 
 Conviene, no obstante, no elevar esta coincidencia a ley general. Otros trabajos
 observan el sesgo contrario, con modelos que marcan en exceso enunciados inocuos que
@@ -844,7 +844,7 @@ corpus. La cuestión deja de ser \textit{``¿acierta o no el modelo?''} y pasa a
 Los modelos se tratan así formalmente como un tercer equipo de anotación, junto a
 Indexa y UCM3.
 
-Como cada noticia la codificó una sola persona, no hay solapamiento entre anotadoras. Lo que
+Como cada noticia la codificó una sola persona, no hay solapamiento entre ellas. Lo que
 sí compara todos los criterios es la \textbf{prevalencia del \textit{Sí}}: la proporción de
 piezas en que cada entidad codificadora, humana o artificial, marca la variable. La
 Tabla~\ref{tab:iris-criterios} ordena por esa proporción, promediada sobre las cinco
@@ -894,7 +894,7 @@ variables, a las nueve personas anotadoras y a los cuatro modelos evaluados.
     \endgroup
 \end{table}
 
-Los cuatro modelos quedan por debajo de la anotadora humana que menos marca, esto
+Los cuatro modelos quedan por debajo de la persona anotadora que menos marca, esto
 es, fuera del rango humano completo. La diferencia no debe leerse como una postura
 más permisiva ante el sexismo, puesto que los modelos no sostienen un criterio
 alternativo, sino como una capacidad de detección menor. Es la infradetección
@@ -905,7 +905,7 @@ Ese retrato, no obstante, es el del promedio. El desglose por variable matiza el
 cuadro, porque en algunas variables ciertos modelos son más inclusivos que la mayoría
 de las personas. El caso más claro es \texttt{gpt-4o-mini} en
 \texttt{asimetria\_mujer\_hombre}, que marca el fenómeno en el 14,4\,\% de las piezas,
-por encima de todas las anotadoras salvo una (UCM3-4, con el 27,1\,\%). También
+por encima de todas las personas anotadoras salvo una (UCM3-4, con el 27,1\,\%). También
 \texttt{gemini} marca \texttt{masc\_generico} (66,9\,\%) dentro del rango humano. La ceguera global de los modelos convive, por tanto, con
 puntos de mayor sensibilidad en variables concretas, habitualmente las más explícitas y sencillas de definir.
 
@@ -996,7 +996,10 @@ acuerdo (Sección~\ref{subsec:iris_divergencia}).
 \label{subsec:iris_caso}
 
 Los análisis anteriores establecen la dirección y la magnitud del desajuste, pero no
-permiten ver en qué consiste un fallo de detección. Conviene por ello examinar una pieza del corpus, elegida entre
+permiten ver en qué consiste un fallo de detección. Conviene por ello examinar una pieza del corpus,\footnote{\textit{El ``speed dating''
+de la innovación en la UAB}, publicada el 15/10/2024.
+\url{https://elpais.com/espana/catalunya/2024-10-15/el-speed-dating-de-la-innovacion-en-la-uab.html}
+[Último acceso: 12/09/2026].} elegida entre
 las 567 en que los cuatro modelos coinciden en no marcar
 \texttt{lenguaje\_sexista} pese a que la anotación sí lo marca
 (Tabla~\ref{tab:iris-consenso}).
@@ -1016,7 +1019,7 @@ interesadas y a otros investigadores''.
 UAB para explotar los resultados de su investigación''.
 \end{quote}
 
-La anotadora codificó la variable como presente. Los cuatro modelos respondieron
+La persona que la codificó marcó la variable como presente. Los cuatro modelos respondieron
 que no, y sus justificaciones resultan más reveladoras que el propio veredicto. El
 sistema no pasó por alto las expresiones, sino que las examinó y las declaró
 correctas. \texttt{gemini} razonó que el texto emplea
@@ -1091,7 +1094,7 @@ encima del azar, mientras que en las otras cuatro el sistema deja sin señalar l
 mayor parte de los casos. Los cuatro noes, además, no son el mismo no. En
 \texttt{lenguaje\_sexista} el modelo que más marca alcanza un recall de 0,450 pero
 con acuerdo negativo, de modo que marca en piezas distintas de aquellas en que lo
-hacen las anotadoras. En \texttt{sexismo\_discurso} la infradetección convive con una
+hacen las personas anotadoras. En \texttt{sexismo\_discurso} la infradetección convive con una
 anotación humana profundamente dividida. Y en \texttt{asimetria\_mujer\_hombre} y
 \texttt{denominacion\_sexualizada} el fenómeno es tan infrecuente que el sistema
 apenas encuentra qué detectar.
