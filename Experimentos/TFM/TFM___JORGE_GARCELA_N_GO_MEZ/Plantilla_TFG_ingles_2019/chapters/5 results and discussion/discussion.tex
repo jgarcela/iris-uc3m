@@ -36,6 +36,15 @@ por detrás de la configuración mínima en siete celdas, y en una de ellas por 
 de \texttt{gpt-4o-mini} en \texttt{masc\_generico}, donde su F1 cae de 0,765 a
 0,401.
 
+Conviene, en todo caso, situar esa decisión en su magnitud, porque \textbf{la elección
+del modelo pesa bastante más que la de la configuración}. En las cinco variables, la
+distancia en F1 de la clase positiva entre el mejor y el peor modelo supera a la que
+separa a las cuatro configuraciones dentro de un mismo modelo, y lo hace por un factor
+de entre 5 y 20 en cuatro de ellas. Solo en \texttt{denominacion\_sexualizada} ambas se
+aproximan, que es justamente la variable en la que ninguna de las dos elecciones llega
+a producir detección. Afinar los componentes mejora, por tanto, un resultado cuyo orden
+de magnitud lo ha fijado antes la elección del modelo.
+
 
 \subsection{Exactitud, \texorpdfstring{$\kappa$}{kappa} y prevalencia: por qué informar de las tres}
 \label{subsec:iris_tres_metricas}
@@ -193,6 +202,12 @@ decisor. Su salida trazable, con código, explicación y evidencias literales,
 permite que la analista audite, acepte o corrija cada predicción, y el caso
 analizado en la Sección~\ref{subsec:iris_caso} muestra que esa explicación no es un
 añadido cosmético, sino lo que permite entender por qué falla el sistema y, con
-ello, corregirlo. El valor no está en sustituir el criterio experto, sino en
+ello, corregirlo. Queda por comprobar, eso sí, en qué medida esa salida cumple lo que
+promete, ya que este trabajo mide la etiqueta y no la calidad de las explicaciones ni
+de las evidencias, por no disponer de un marcado experto con el que contrastarlas
+(Sección~\ref{subsec:limitacion_fiabilidad}). El caso examinado es un indicio
+favorable, no una medida, y su evaluación sistemática queda como línea futura
+(Sección~\ref{sec:futurework_usecases}). El valor no está en sustituir el criterio
+experto, sino en
 ordenar el corpus, señalar los casos que merecen atención y hacerlo de forma
 auditable.

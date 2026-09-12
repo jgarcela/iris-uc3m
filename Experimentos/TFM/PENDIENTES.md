@@ -55,6 +55,13 @@ a cambiar. No abordarlas mientras se estén aplicando comentarios de las tutoras
       - El "mayor acuerdo de control" del modelo local ya no se afirma. Se anade ademas
         que su ventaja en asimetria_mujer_hombre es de una sola pieza, y se apoya la
         recomendacion en masc_generico.
+- [ ] **Seccion de limitaciones**: el TFM no tiene ninguna. La unica limitacion
+      declarada como tal es la ausencia de doble codificacion, y esta en el Cap 3
+      (`subsec:limitacion_fiabilidad`). Hay material en 5.1 para un apartado corto: sin
+      doble codificacion, plano cualitativo sin evaluar, V33 y V35 con 81 y 131
+      positivos, el salto semantico no evaluable porque la anotacion no usa el valor 3,
+      un solo corpus y un solo idioma, y cuatro modelos en un momento concreto. Decidir
+      si va al final de 5.2 o al Cap 6.
 - [ ] **Mover el código a `github.com/jgarcela/tfm-iris-uc3m`** (repo creado el
       06/09/2026, vacío por ahora). El Apéndice B ya lo enlaza. Solo el código: el
       corpus y las anotaciones de IRIS_IAMEDIA e InfoIA no se difunden con él.
