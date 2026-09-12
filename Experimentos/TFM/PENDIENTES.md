@@ -7,6 +7,14 @@ a cambiar. No abordarlas mientras se estén aplicando comentarios de las tutoras
 
 ## Revisión final
 
+- [x] **Bibliografia del libro de codigos** (12/09/2026). Se anaden las seis
+      referencias canonicas que `variables.json` declara y que faltaban (Garcia
+      Meseguer 1977 y 1994, Lledo Cunill 1992, Sainz de Baranda 2014, Bengoechea 2015,
+      Bengoechea y Calero 2003), citadas variable a variable en `iris_variables.tex`
+      segun el mapa del propio libro de codigos. Metadatos verificados contra fuentes
+      externas, los de `variables.json` eran correctos. No confundir con el bloque de
+      guias institucionales, que son las nueve del RAG (`methodology_manifest.json`) y
+      se citan en `iris_analisis_experto.tex`.
 - [ ] **Figuras: tamaño de letra.** Las gráficas tienen la fuente demasiado pequeña.
       El script matplotlib que las genera no está en el repositorio, así que hay que
       localizarlo o regenerarlas.
@@ -59,6 +67,20 @@ a cambiar. No abordarlas mientras se estén aplicando comentarios de las tutoras
       un parrafo de `conclusions.tex` (Cap 6). Se le anaden las dos que faltaban de 5.1,
       los 81 y 131 positivos de V33 y V35, y que el salto semantico no es evaluable
       porque la anotacion no usa el valor 3 en ninguna pieza.
+- [ ] **Descartado por falta de tiempo (12/09/2026), de `REUNION_DIRECTORA.md`.** Tres
+      compromisos de la reunion del 29/07 que no han llegado a la memoria. Se dejan
+      fuera a proposito, no por olvido:
+      1. **Analisis de confianza y calibracion (exp22).** Los datos estan en
+         `experiments/experimento_22_confianza/`. La probabilidad declarada es bimodal,
+         el modelo esta mal calibrado y en los desacuerdos esta confiadamente
+         equivocado. Version barata si hace falta: tres frases en el parrafo de
+         limitaciones del Cap 6 diciendo que se exploro y no dio un filtro util.
+      2. **Las diez piezas del analisis cualitativo.** Se acordo seleccionar 10 y que
+         las expertas las anotasen. La memoria lleva una (5.1.5.4) y es lectura propia.
+         Depende de terceros, no es viable ahora.
+      3. **La contradiccion del libro de codigos en V25** (regla de inversion frente a
+         clausula agregadora). Era la decision 3 que se le planteaba a la directora y
+         no consta si se resolvio. No se menciona en la memoria.
 - [ ] **Mover el código a `github.com/jgarcela/tfm-iris-uc3m`** (repo creado el
       06/09/2026, vacío por ahora). El Apéndice B ya lo enlaza. Solo el código: el
       corpus y las anotaciones de IRIS_IAMEDIA e InfoIA no se difunden con él.
@@ -69,16 +91,24 @@ a cambiar. No abordarlas mientras se estén aplicando comentarios de las tutoras
       golden standard y Ollama a la de terminos. Comprobado que VP, FP, VN y FN si se
       definen en eval.tex y que los hsize de las dos tablas suman 3,00.
 
-- [ ] **Comentario de la "ceguera" (Carmen).** Reencuadrar el trabajo de
-      "divergencia de opiniones" a "dificultad de detección / ceguera patriarcal".
-      Afecta al abstract, a la discusión del recall y a las implicaciones para IRIS.
-      Empezado en la introducción del Cap 5, falta el resto. Los términos "ceguera
-      patriarcal" y "espejismo de neutralidad androcéntrica" están sin citar.
-- [ ] **`NEW_REUNION.md`**: los nueve puntos de la reunión con las tutoras.
-- [ ] **Comentarios de las tutoras en la Discusión (5.2).** Jorge todavía no los ha
-      pasado, así que `discussion.tex` no está cerrado. Lo mismo vale para el Cap 6,
-      que además arrastra el encuadre antiguo ("el techo lo pone la tarea") y hay que
-      poner al día con las conclusiones del Cap 5 reordenado.
+- [x] **Comentario de la "ceguera" (Carmen)** (12/09/2026). Reencuadrado en los dos
+      unicos sitios donde sobrevivia el enfoque de "divergencia de opiniones", la
+      entradilla del Cap 5 y 5.2.3: el bajo acuerdo se explica ahora por la dificultad
+      de percibir el fenomeno, tambien para quien esta formada, y no por criterios
+      enfrentados. **Los dos terminos siguen sin citar**, por decision de Jorge. No he
+      encontrado fuente que los acune y no procede inventarla.
+- [x] **`NEW_REUNION.md`** (12/09/2026): 8 de sus 10 puntos hechos (kappa fuera como
+      metrica de referencia, sin conclusiones categoricas, promedios fuera y analisis
+      por variable con coste por variable, el recall bajo discutido, la literatura de
+      que los modelos deben mejorar, el ejemplo de noticia analizada, el enfasis en el
+      plano cualitativo y por que no esta, y FP frente a FN). Queda solo el tamano de
+      las figuras, que ya tiene entrada propia arriba.
+- [x] **Comentarios de Carmen a la Discusion (5.2)** (12/09/2026). Los dos atendidos.
+      El titulo "El techo lo pone la tarea" ya no existe y 5.2.3 reparte el desajuste
+      entre los dos limites. **Ojo al trasladarselo**: su hipotesis de que el techo de
+      la tarea valdria en las variables de poca prevalencia NO la sostienen los datos,
+      ya que el unico sitio donde esta documentado es sexismo_discurso, de prevalencia
+      media (0,428). El Cap 6 y el resumen quedan tambien al dia.
 - [x] **Abstract rehecho** el 12/09/2026, con el Cap 5 ya cerrado.
 - [x] Apellido de Harold: confirmado el 12/09/2026, es Harold Molina, tal como ya
       figura en la dedicatoria. Sin cambios.
@@ -86,4 +116,4 @@ a cambiar. No abordarlas mientras se estén aplicando comentarios de las tutoras
 
 ## Entrega
 
-- [ ] Compilar en Overleaf y subir las figuras que están en `.gitignore`.
+- [x] Compilar en Overleaf y subir las figuras que están en `.gitignore` (hecho por Jorge, 12/09/2026).

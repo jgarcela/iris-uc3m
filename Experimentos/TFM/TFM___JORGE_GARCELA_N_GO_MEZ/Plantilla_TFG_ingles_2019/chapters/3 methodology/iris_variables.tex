@@ -60,31 +60,39 @@ conclusiones, a una cobertura amplia pero superficial de las quince.
 \label{sec:iris_variables}
 
 Las cinco variables seleccionadas, definidas a partir de las guías de lenguaje no
-sexista y del conocimiento experto del proyecto, son las siguientes:
+sexista y del conocimiento experto del proyecto, son las siguientes. Cada una se
+acompaña de las obras sobre las que el libro de códigos apoya su definición, un fondo
+que va de los trabajos fundacionales sobre el sexismo y el androcentrismo en la
+lengua~\cite{garciameseguer1977, garciameseguer1994, lledo1992} a los estudios sobre su
+presencia en la prensa española~\cite{sainzdebaranda2013, sainzdebaranda2014,
+bengoechea2015, bengoecheacalero2003}:
 
 \begin{itemize}
     \item \textbf{V25 (\texttt{lenguaje\_sexista}).} Uso discriminatorio del
     lenguaje por razón de sexo. Admite un tercer valor específico para el
     \emph{salto semántico}, esto es, el caso en que un masculino presentado
     como genérico se revela posteriormente no inclusivo al aparecer una marca
-    explícita de mujer.
+    explícita de mujer~\cite{garciameseguer1994, lledo1992, sainzdebaranda2013}.
 
     \item \textbf{V26 (\texttt{masc\_generico}).} Empleo del masculino
-    gramatical como pretendido genérico cuando existe alternativa inclusiva.
+    gramatical como pretendido genérico cuando existe alternativa
+    inclusiva~\cite{garciameseguer1994, lledo1992, bengoechea2015}.
 
     \item \textbf{V30 (\texttt{sexismo\_discurso}).} Sexismo situado en el
     \emph{fondo} del mensaje (en aquello que se cuenta) y no en la forma
     lingüística elegida. Es la única de las cinco que atañe al contenido y no a la
-    forma, de modo que una pieza puede presentarla con independencia de las demás.
+    forma, de modo que una pieza puede presentarla con independencia de las
+    demás~\cite{garciameseguer1977, bengoechea2015, sainzdebaranda2013}.
 
     \item \textbf{V33 (\texttt{asimetria\_mujer\_hombre}).} Tratamiento
     asimétrico de mujeres y hombres dentro de una misma pieza: diferencias en el
-    uso del nombre, el apellido, el título profesional o el tratamiento.
+    uso del nombre, el apellido, el título profesional o el
+    tratamiento~\cite{sainzdebaranda2013, lledo1992, bengoecheacalero2003}.
 
     \item \textbf{V35 (\texttt{denominacion\_sexualizada}).} Identificación de
     la mujer por su aspecto físico, su rol familiar o su relación con un varón,
     en detrimento de su función profesional o del motivo informativo por el que
-    aparece en la pieza.
+    aparece en la pieza~\cite{sainzdebaranda2013, lledo1992, bengoecheacalero2003}.
 \end{itemize}
 
 La Figura~\ref{fig:iris-variables-ejemplos} ilustra cada variable con un ejemplo,
