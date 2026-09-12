@@ -39,11 +39,12 @@ a cambiar. No abordarlas mientras se estén aplicando comentarios de las tutoras
 - [x] **Figura de la Tabla 5.14** (`fig_coste_variable_blanco.pdf`): añadida el
       12/09/2026 acompañando a la tabla, no sustituyéndola, porque el texto cita
       cifras por modelo (3,43, 2,13, 2,46, 0,98) que la figura no rotula.
-- [ ] **Citas de 5.2 sin reverificar**: las cifras de Pangakis et al. (nueve de
-      veintisiete tareas con precision o recall por debajo de 0,5) y de Kocon et al.
-      (perdida media del 25,5 % en tareas subjetivas) son las dos unicas de 5.2 que no
-      se han contrastado contra la fuente. Conviene hacerlo como se hizo con ElSherief
-      y Rottger.
+- [x] **Citas de 5.2 contrastadas contra la fuente** (12/09/2026, arXiv 2306.00176 y
+      2302.10724). Pangakis et al. cuadra literal ("nine of the 27 tasks had either
+      precision or recall below 0.5"). Kocon et al. estaba mal atribuido: el 25,5 % es
+      la perdida media sobre las 25 tareas, no la de las subjetivas. Corregido, y se
+      anade el dato que si sostiene la afirmacion, que al descartar las ocho tareas de
+      emociones la perdida cae al 12,8 %.
 - [ ] **Mover el código a `github.com/jgarcela/tfm-iris-uc3m`** (repo creado el
       06/09/2026, vacío por ahora). El Apéndice B ya lo enlaza. Solo el código: el
       corpus y las anotaciones de IRIS_IAMEDIA e InfoIA no se difunden con él.
