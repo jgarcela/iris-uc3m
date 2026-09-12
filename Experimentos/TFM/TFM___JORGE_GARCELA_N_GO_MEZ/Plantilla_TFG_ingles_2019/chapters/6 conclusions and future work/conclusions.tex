@@ -15,20 +15,29 @@ y cuatro modelos de lenguaje, tres accesibles por API y uno local.
 La evaluación experimental, interpretada en detalle en la Sección~\ref{sec:discussion},
 deja varias conclusiones que aquí se recogen de forma sintética. La primera es que
 empaquetar la metodología como \textit{Agent Skills} \textbf{no mejora el acuerdo por
-sí mismo}: de los cuatro modelos, solo uno se beneficia en coeficiente $\kappa$, de modo
-que la arquitectura amplifica la capacidad que cada modelo ya trae en lugar de
-conferirla, y la herramienta de recuperación en vivo (RAG) no compensa en este dominio. La segunda es de alcance metodológico: en una tarea con
+sí mismo}, ya que solo un modelo registra una ganancia de entidad, la de
+\texttt{gemini} en \texttt{masc\_generico}, donde su $\kappa$ sube 0,188 puntos,
+mientras en los demás los movimientos se quedan en unas pocas milésimas o van hacia
+abajo. La arquitectura amplifica, por tanto, la capacidad que cada modelo ya trae en
+lugar de conferirla, y la herramienta de recuperación en vivo (RAG) no aporta una
+ganancia que justifique su coste. La segunda es de alcance metodológico: en una tarea con
 clases muy desequilibradas, la exactitud y $\kappa$ pueden moverse en sentidos opuestos,
 por lo que reportar solo la exactitud llevaría a la conclusión contraria y se impone
 informar de exactitud, $\kappa$ y prevalencia de forma conjunta. La tercera es que el
-bajo acuerdo absoluto refleja un \textbf{techo de la propia tarea} más que una
-incapacidad de los modelos: se trata de textos extensos y profesionales donde el sesgo
-es sutil, y donde dos equipos codifican la misma variable de forma muy distinta, con los
-sistemas situados en el extremo más permisivo del criterio humano, de manera que el
-desacuerdo mide distancia de criterio tanto como error. La cuarta es que un modelo local
-de pesos abiertos, \texttt{gemma4:e4b}, iguala o supera a los servicios comerciales de
-API en acuerdo de control, preservando la privacidad del material y sin tarifas de
-inferencia, a cambio de trasladar el coste al tiempo de cómputo. Esta comparación sobre la misma tarea y el mismo corpus con un flujo de procesamiento agnóstico a la empresa
+bajo acuerdo absoluto responde a \textbf{dos causas que conviene no confundir}. Una es
+un techo de la propia tarea, visible allí donde el criterio experto admite lecturas muy
+distantes, como en \texttt{sexismo\_discurso}, que dos equipos marcan en el 11,5\,\% y
+en el 65,2\,\% de las piezas. La otra es una limitación de los modelos, que en
+\texttt{lenguaje\_sexista} dejan sin señalar casi todo lo que ambos equipos coinciden en
+marcar. El peso de cada una cambia según la variable, y ninguna absuelve a la otra, de
+manera que el desacuerdo mide a la vez distancia de criterio y error de detección. Cabe
+precisar, además, que los cuatro modelos quedan por debajo de la persona que menos
+marca, esto es, fuera del rango humano, lo que no expresa un criterio alternativo más
+permisivo sino una capacidad de detección menor. La cuarta es que un modelo local
+de pesos abiertos, \texttt{gemma4:e4b}, compite variable a variable con los servicios
+comerciales accesibles por API, a los que supera en \texttt{asimetria\_mujer\_hombre} y
+adelanta en \texttt{masc\_generico}, preservando la privacidad del material y sin
+tarifas de inferencia, a cambio de trasladar el coste al tiempo de cómputo. Esta comparación sobre la misma tarea y el mismo corpus con un flujo de procesamiento agnóstico a la empresa
 proveedora, ha sido uno de los ejes metodológicos del trabajo.
 
 En cuanto al cumplimiento de los objetivos de la Sección~\ref{sec:objectives_motivation},
@@ -66,7 +75,12 @@ del libro de códigos, de modo que la generalización a otros medios, idiomas o 
 queda por comprobar. La evaluación se ha realizado en régimen \textit{zero-shot} y
 sobre modelos ligeros y económicos, sin explorar el ajuste fino (\textit{fine-tuning})
 ni modelos de mayor capacidad. La recuperación sobre las guías se implementó con similitud léxica (TF-IDF),
-y una variante semántica podría comportarse de otro modo. Como cada pieza fue
+y una variante semántica podría comportarse de otro modo. Dos de las variables
+descansan además sobre muy pocos casos positivos, 81 en
+\texttt{asimetria\_mujer\_hombre} y 131 en \texttt{denominacion\_sexualizada}, de modo
+que sus cifras se juegan en un puñado de piezas y admiten menos confianza que las
+demás. Tampoco ha podido evaluarse el salto semántico, ya que la anotación de
+referencia no emplea ese valor en ninguna pieza del corpus. Como cada pieza fue
 codificada por una sola persona, no fue posible calcular la fiabilidad
 intercodificadora, por lo que el techo de la tarea se acota de forma indirecta.
 Por último, y como ya se ha señalado, solo se ha evaluado el plano cuantitativo de la
