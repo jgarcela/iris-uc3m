@@ -131,6 +131,14 @@ clasificadores triviales de la Sección~\ref{subsec:iris_referencia}, ya que en 
 variables de prevalencia extrema es fácil alcanzar cifras altas sin haber detectado
 nada.
 
+En el nivel B1 los cuatro modelos emitieron una respuesta válida en las
+6.565 celdas. En el de control hubo 133 sin formato válido, 118 de ellas del modelo
+local, y se contabilizan como negativas, ya que en un despliegue real una respuesta que
+el sistema no puede interpretar deja la pieza sin señalar. Excluirlas alteraría el
+número de piezas sobre el que se calcula cada celda y haría incomparables los dos
+niveles. El recálculo con ambos criterios arroja diferencias en $\kappa$ no superiores
+a 0,005.
+
 \subsubsection{Lenguaje sexista (V25)}
 
 \input{chapters/5 results and discussion/tabla_var_v25}
@@ -358,32 +366,28 @@ componente de forma independiente, sobre los cuatro modelos y las 1.313 noticias
 
 Las Tablas~\ref{tab:abl-v25} a~\ref{tab:abl-v35} recogen el resultado
 \textbf{variable a variable}, con las cinco métricas de la
-Sección~\ref{sec:metricas_eval} y el coeficiente $\kappa$. Conviene justificar por
-qué también aquí se renuncia al agregado, y la razón no es solo que las
-prevalencias vayan del 6,2\,\% al 81,0\,\% y hagan incomparables los valores entre
-variables. Es que \textbf{la configuración que resulta mejor cambia de una variable
-a otra}. En las veinte celdas que forman los cuatro modelos por las cinco
-variables, las cuatro configuraciones ganan en alguna, y ningún modelo conserva la
-misma configuración ganadora en las cinco. Un promedio tendría que declarar un único
-vencedor por modelo, que sería falso en la mayoría de las celdas, y además lo
-decidirían las dos variables de prevalencia alta, donde el F1 de la clase positiva
-alcanza valores mucho mayores que en las otras tres y domina cualquier media. En
-\texttt{gemini}, sin ir más lejos, el promedio situaría a la configuración completa
-por delante de la variante sin RAG por una milésima, cuando lo que muestran las
-tablas es que su mejor configuración cambia según la variable.
+Sección~\ref{sec:metricas_eval} y el coeficiente $\kappa$. Se presentan así porque
+\textbf{la configuración que resulta mejor cambia de una variable a otra}. En las
+veinte combinaciones de modelo y variable, la que obtiene el mejor F1 de la clase
+positiva es la de solo \textit{skills} en cinco, la de \textit{skills} con resúmenes
+en siete, la de \textit{skills} con RAG en cinco y la completa en tres. Ningún modelo
+repite ganadora en las cinco variables, de modo que un promedio por modelo tendría que
+nombrar una sola configuración, que sería la equivocada en la mayoría de las celdas.
 
 La comparación pertinente es, por tanto, la que se hace dentro de cada modelo, entre
-sus cuatro configuraciones, y no la que se hace entre modelos. Las escasas respuestas
-que el modelo no llegó a emitir en un formato válido se contabilizan como negativas,
-de modo que todas las configuraciones se evalúan sobre las mismas 1.313 piezas.
+sus cuatro configuraciones, ya que es la única que aísla el efecto del componente. Al
+cambiar también de modelo cambiarían dos factores a la vez y el resultado no diría cuál
+de los dos explica la diferencia.
 
 \input{chapters/5 results and discussion/tablas_ablacion}
 
-La primera lectura afecta a la \textbf{recuperación en vivo}. La configuración con
-RAG rara vez es la mejor de su modelo, y su aportación no se sostiene en ninguna
-variable de forma consistente. Dado que es además el componente más costoso en
-tiempo y en \textit{tokens}, la evidencia no respalda mantenerlo, conclusión que ya
-apuntaba la implementación al describir las limitaciones del índice léxico
+La primera lectura afecta a la \textbf{recuperación en vivo (RAG)}. Añadirla no produce una
+ganancia consistente. Sobre la configuración mínima, al pasar de solo \textit{skills} a
+\textit{skills} con RAG, mejora el F1 de la clase positiva en nueve de las veinte celdas
+y lo empeora en ocho. Sobre la variante con resúmenes, al pasar a la configuración
+completa, mejora en siete y empeora en doce. Dado que es además el componente más
+costoso en tiempo y en \textit{tokens}, la evidencia no respalda mantenerlo, conclusión
+que ya apuntaba la implementación al describir las limitaciones del índice léxico
 (Sección~\ref{rag}).
 
 La segunda lectura es menos cómoda y responde a una pregunta legítima, la de si
@@ -583,11 +587,9 @@ entre las cinco variables queda, por tanto, sin medir.
 \subsection{El origen de la infradetección: la tarea y los modelos}
 \label{subsec:iris_errores}
 
-El recall es bajo en casi todas las celdas del apartado anterior, es decir, los modelos
-detectan solo una fracción del sexismo que marcan las expertas. Esa
-\textbf{infradetección generalizada} es el patrón dominante del capítulo, y plantea la
-pregunta que condiciona la interpretación de todo él: ¿refleja una limitación de los
-modelos, o un límite intrínseco de la propia tarea? Tres análisis complementarios apuntan en la misma dirección, y una
+El bajo acuerdo absoluto plantea la pregunta que condiciona la interpretación de
+todo el capítulo: ¿refleja una limitación de los modelos, o un límite intrínseco de
+la propia tarea? Tres análisis complementarios apuntan en la misma dirección, y una
 pieza concreta permite después ver el mecanismo del fallo por dentro.
 
 \subsubsection{Heterogeneidad entre equipos de anotación}
@@ -737,9 +739,7 @@ Como cada noticia la codificó una sola persona, no hay solapamiento entre anota
 sí compara todos los criterios es la \textbf{prevalencia del \textit{Sí}}: la proporción de
 piezas en que cada entidad codificadora, humana o artificial, marca la variable. La
 Tabla~\ref{tab:iris-criterios} ordena por esa proporción, promediada sobre las cinco
-variables, a las nueve personas anotadoras y a los cuatro modelos evaluados, cuyas
-proporciones ya aparecieron en la Tabla~\ref{tab:iris-prev-modelo-var} y se recogen
-aquí en la misma escala que las de las personas.
+variables, a las nueve personas anotadoras y a los cuatro modelos evaluados.
 
 \begin{table}[H]
     \centering
