@@ -3,7 +3,7 @@
 Tareas transversales que se dejan para una pasada final, cuando el texto ya no vaya
 a cambiar. No abordarlas mientras se estén aplicando comentarios de las tutoras.
 
-Última actualización: 06/09/2026
+Última actualización: 12/09/2026
 
 ## Revisión final
 
@@ -27,6 +27,10 @@ a cambiar. No abordarlas mientras se estén aplicando comentarios de las tutoras
       Empezado en la introducción del Cap 5, falta el resto. Los términos "ceguera
       patriarcal" y "espejismo de neutralidad androcéntrica" están sin citar.
 - [ ] **`NEW_REUNION.md`**: los nueve puntos de la reunión con las tutoras.
+- [ ] **Comentarios de las tutoras en la Discusión (5.2).** Jorge todavía no los ha
+      pasado, así que `discussion.tex` no está cerrado. Lo mismo vale para el Cap 6,
+      que además arrastra el encuadre antiguo ("el techo lo pone la tarea") y hay que
+      poner al día con las conclusiones del Cap 5 reordenado.
 - [ ] **Rehacer el abstract** al final, una vez reordenado el Cap 5.
 - [ ] Apellido de Harold en los agradecimientos.
 - [ ] Decidir el título definitivo del TFM.
