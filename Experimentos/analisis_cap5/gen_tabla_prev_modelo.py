@@ -34,11 +34,11 @@ o.write(r"""\begin{table}[H]
     }{
         \begin{tabularx}{\textwidth}{
             >{\hsize=2\hsize\raggedright\arraybackslash\ttfamily}X
-            >{\hsize=0.7875\hsize\columncolor{gray!12}\centering\arraybackslash}X
-            >{\hsize=0.7875\hsize\centering\arraybackslash}X
-            >{\hsize=0.7875\hsize\centering\arraybackslash}X
-            >{\hsize=0.7875\hsize\centering\arraybackslash}X
-            >{\hsize=0.7875\hsize\centering\arraybackslash}X
+            >{\hsize=0.8\hsize\columncolor{gray!12}\centering\arraybackslash}X
+            >{\hsize=0.8\hsize\centering\arraybackslash}X
+            >{\hsize=0.8\hsize\centering\arraybackslash}X
+            >{\hsize=0.8\hsize\centering\arraybackslash}X
+            >{\hsize=0.8\hsize\centering\arraybackslash}X
         }
             \toprule
             \normalfont\textbf{Variable} & \textbf{Prev. Sí} & \textbf{Gemini} & \textbf{GPT-4o-mini} & \textbf{GPT-5.4-nano} & \textbf{Gemma} \\

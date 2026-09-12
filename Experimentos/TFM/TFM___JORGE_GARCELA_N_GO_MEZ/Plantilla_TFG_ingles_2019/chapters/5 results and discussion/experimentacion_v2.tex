@@ -712,7 +712,7 @@ ambos equipos que la comparación no aporta información.
 
 Conviene dar un paso más, porque \textbf{la divergencia no es institucional, sino
 personal}. La Tabla~\ref{tab:iris-heterogeneidad} deja de agrupar por equipos y
-recorre a las anotadoras una a una, y en las cinco variables la distancia entre
+recorre a las personas anotadoras una a una, y en las cinco variables la distancia entre
 personas duplica o quintuplica a la que separa a los dos equipos. En
 \texttt{sexismo\_discurso}, donde los equipos distan 53,7 puntos, las anotadoras van
 del 3,9\,\% al 97,8\,\% de piezas marcadas.
@@ -743,15 +743,61 @@ infradetección observada por variable es, por tanto, un \textbf{sesgo sistemát
 no aleatorio, y constituye el hallazgo principal de este análisis: \textbf{los
 modelos detectan de forma consistente menos sexismo que las anotadoras}.
 
+Conviene precisar qué acredita exactamente ese recuento. Cada modelo deja sin marcar
+por su cuenta una proporción muy alta de los positivos, de manera que la coincidencia
+de los cuatro en el \textit{No} es en buena medida esperable sin necesidad de que
+compartan patrón alguno. De hecho, el número de celdas con consenso se aparta poco del
+que predicen los recalls individuales, salvo en \texttt{masc\_generico}, que es
+justamente la única variable con detección aprovechable. Lo que estas celdas
+establecen, por tanto, es que los cuatro modelos infradetectan a la vez, no que
+fallen en las mismas piezas, y su valor está en la dirección del error antes que en
+su volumen.
+
+\begin{table}[H]
+    \centering
+    \begingroup
+    \small
+    \renewcommand{\texttt}[1]{{\ttfamily #1}}
+    \ttabbox[\FBwidth]{
+        \caption{Desglose por variable de las 1.364 celdas en que los cuatro modelos coinciden entre sí pero difieren del \textit{ground truth} (B1). ``No/Sí'' = los modelos marcan \textit{No} donde la anotación dice \textit{Sí} (infradetección). ``Sí/No'' = lo contrario (sobredetección).}
+        \label{tab:iris-consenso}
+    }{
+        % Los factores \hsize deben sumar el numero de columnas (4) para que el
+        % ancho total sea exactamente \textwidth.
+        \begin{tabularx}{\textwidth}{
+            >{\hsize=1.7\hsize\raggedright\arraybackslash\ttfamily}X
+            >{\hsize=1.1\hsize\centering\arraybackslash}X
+            >{\hsize=0.6\hsize\centering\arraybackslash}X
+            >{\hsize=0.6\hsize\centering\arraybackslash}X
+        }
+            \toprule
+            \normalfont\textbf{Variable} & \textbf{Consenso $\neq$ GT} & \textbf{No/Sí} & \textbf{Sí/No} \\
+            \midrule
+            lenguaje\_sexista & 567 & 567 & 0 \\
+            masc\_generico & 169 & 169 & 0 \\
+            sexismo\_discurso & 447 & 447 & 0 \\
+            asimetria\_mujer\_hombre & 61 & 60 & 1 \\
+            denominacion\_sexualizada & 120 & 120 & 0 \\
+            \midrule
+            \textbf{Total} & \textbf{1.364} & \textbf{1.363} & \textbf{1} \\
+            \bottomrule
+        \end{tabularx}
+    }
+    \endgroup
+\end{table}
+
 Este resultado no es aislado. La literatura sobre detección automática de discurso
 discriminatorio viene documentando que los sistemas rinden bastante peor cuando el
 fenómeno no se apoya en marcas explícitas. ElSherief et al.~\cite{elsherief2021}
-muestran que los clasificadores del estado del arte dejan sin marcar buena parte del
-odio implícito, con proporciones de casos clasificados como inocuos que llegan al
-36\,\% en algunas categorías. La evaluación funcional de
-Röttger et al.~\cite{rottger2021} ofrece un dato aún más severo sobre sistemas en
-producción, ya que uno de los servicios comerciales examinados solo identifica como
-odio el 9,0\,\% de los casos que sí lo son. En español y sobre sexismo,
+comprueban que su mejor modelo deja sin marcar buena parte del odio implícito de su
+propio conjunto de prueba, y que la proporción de casos clasificados como inocuos
+alcanza el 36,3\,\% en la categoría de incitación y el 29,6\,\% en la de agravio.
+La batería de pruebas funcionales de Röttger et al.~\cite{rottger2021} ofrece un dato
+aún más severo sobre un servicio comercial, ya que uno de los dos examinados solo
+identifica como odio el 9,0\,\% de los casos que sí lo son, por una tendencia acusada
+a clasificarlo todo como inofensivo. Conviene precisar que el otro servicio alcanza
+en esos mismos casos el 89,5\,\%, de manera que el contraste entre ambos ilustra hasta
+qué punto el comportamiento depende del sistema concreto. En español y sobre sexismo,
 De Grazia et al.~\cite{degrazia2025} constatan que los modelos de lenguaje resuelven
 razonablemente el sexismo explícito pero se atascan en el implícito, que es
 precisamente donde también desciende el acuerdo entre anotadoras.
@@ -775,36 +821,7 @@ Esto refuerza el mensaje del apartado: el sesgo no solo es sistemático (direcci
 unánime), sino que se concentra en las variables de alta prevalencia, enlazando con
 el análisis por variable (Sección~\ref{subsec:iris_porvariable}).
 
-\begin{table}[H]
-    \centering
-    \begingroup
-    \scriptsize
-    \renewcommand{\texttt}[1]{{\ttfamily #1}}
-    \ttabbox[\FBwidth]{
-        \caption{Desglose por variable de las 1.364 celdas en que los cuatro modelos coinciden entre sí pero difieren del \textit{ground truth} (B1). ``No/Sí'' = los modelos marcan \textit{No} donde la anotación dice \textit{Sí} (infradetección). ``Sí/No'' = lo contrario (sobredetección).}
-        \label{tab:iris-consenso}
-    }{
-        \begin{tabularx}{\textwidth}{
-            >{\hsize=1.9\hsize\raggedright\arraybackslash\ttfamily}X
-            >{\hsize=0.9\hsize\centering\arraybackslash}X
-            >{\hsize=0.7\hsize\centering\arraybackslash}X
-            >{\hsize=0.7\hsize\centering\arraybackslash}X
-        }
-            \toprule
-            \normalfont\textbf{Variable} & \textbf{Consenso $\neq$ GT} & \textbf{No/Sí} & \textbf{Sí/No} \\
-            \midrule
-            lenguaje\_sexista & 567 & 567 & 0 \\
-            masc\_generico & 169 & 169 & 0 \\
-            sexismo\_discurso & 447 & 447 & 0 \\
-            asimetria\_mujer\_hombre & 61 & 60 & 1 \\
-            denominacion\_sexualizada & 120 & 120 & 0 \\
-            \midrule
-            \textbf{Total} & \textbf{1.364} & \textbf{1.363} & \textbf{1} \\
-            \bottomrule
-        \end{tabularx}
-    }
-    \endgroup
-\end{table}
+
 
 \subsubsection{El sistema como una anotadora más}
 \label{subsec:iris_equipo_ia}
@@ -835,14 +852,14 @@ variables, a las nueve personas anotadoras y a los cuatro modelos evaluados.
         \label{tab:iris-criterios}
     }{
         \begin{tabularx}{\textwidth}{
-            >{\hsize=1.5\hsize\raggedright\arraybackslash}X
-            >{\hsize=0.6\hsize\centering\arraybackslash}X
-            >{\hsize=0.8\hsize\centering\arraybackslash}X
-            >{\hsize=0.8\hsize\centering\arraybackslash}X
-            >{\hsize=0.8\hsize\centering\arraybackslash}X
-            >{\hsize=0.8\hsize\centering\arraybackslash}X
-            >{\hsize=0.8\hsize\centering\arraybackslash}X
-            >{\hsize=0.9\hsize\columncolor{gray!15}\centering\arraybackslash}X
+            >{\hsize=2.2\hsize\raggedright\arraybackslash}X
+            >{\hsize=0.7\hsize\centering\arraybackslash}X
+            >{\hsize=0.82\hsize\centering\arraybackslash}X
+            >{\hsize=0.82\hsize\centering\arraybackslash}X
+            >{\hsize=0.82\hsize\centering\arraybackslash}X
+            >{\hsize=0.82\hsize\centering\arraybackslash}X
+            >{\hsize=0.82\hsize\centering\arraybackslash}X
+            >{\hsize=1.0\hsize\columncolor{gray!15}\centering\arraybackslash}X
         }
             \toprule
             \textbf{Anotador/a} & \boldmath$n$ & \textbf{V25} & \textbf{V26} & \textbf{V30} & \textbf{V33} & \textbf{V35} & \textbf{Media} \\
