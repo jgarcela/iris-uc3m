@@ -307,7 +307,7 @@ frente a las 131 que señalan las expertas, de modo que ninguno supera un recall
 tabla corresponde a \texttt{gpt-5.4-nano} y descansa sobre la única pieza que marca, en
 la que acierta.
 
-\textbf{Una particularidad, un juicio comparativo.} El libro de códigos define esta
+\textbf{Una particularidad, dificultad de detección.} El libro de códigos define esta
 variable como la identificación de la mujer por su aspecto, su rol familiar o su
 relación con un varón \emph{en detrimento} de su función profesional o del motivo
 informativo por el que aparece (Sección~\ref{sec:iris_variables}). No basta, por tanto,
@@ -321,44 +321,28 @@ llegan a marcar, \texttt{gemini} acierta 2 de 12, \texttt{gpt-4o-mini} 6 de 16 y
 \texttt{gemma} 3 de 19, de manera que tampoco la decisión de marcar, cuando se toma,
 coincide con la de las expertas.
 
-\subsubsection{Patrones comunes a las cinco variables}
+\subsubsection{Cuánto marca cada modelo}
 
-El recorrido anterior deja dos conclusiones. La primera es que \textbf{el efecto de las
-\textit{skills} no es uniforme ni entre modelos ni entre variables}. Hay una mejora
-inequívoca en \texttt{masc\_generico} con \texttt{gemini}, una mejora modesta del
-modelo local en \texttt{asimetria\_mujer\_hombre}, ningún efecto apreciable en
-\texttt{sexismo\_discurso}, una degradación sistemática en
-\texttt{denominacion\_sexualizada} y, en \texttt{lenguaje\_sexista}, un cambio de umbral
-que mejora unas métricas y empeora otras sin que mejore la discriminación. El
-empaquetado no actúa, por tanto, como una mejora general del sistema, sino como un
-desplazamiento del criterio con el que cada modelo decide marcar.
-
-La segunda es que ese criterio es muy distinto en cada modelo. La
-Tabla~\ref{tab:iris-prev-modelo-var} recoge, por variable, la prevalencia de
-\textit{Sí} de cada uno en el nivel B1, que ayuda a interpretar el recall, ya que marcar
-poco impide detectar buena parte de lo que las expertas sí señalan. En las tres
-variables de prevalencia alta o media todos los modelos marcan muy por debajo de las
-expertas, con la única excepción de \texttt{gemini} en \texttt{masc\_generico}
-(66,9\,\% frente al 81,0\,\% anotado). El patrón, además, no es común, ya que
-\texttt{gpt-4o-mini} marca \texttt{lenguaje\_sexista} en el 46,2\,\% de las piezas
-donde \texttt{gemini} apenas llega al 3,9\,\%, mientras que en \texttt{masc\_generico}
-sucede lo contrario. Conviene, eso sí, no leer esta tabla como una medida de acierto,
-ya que \texttt{gemma4:e4b} reproduce casi exactamente la prevalencia anotada en
-\texttt{asimetria\_mujer\_hombre} (6,9\,\% frente a 6,2\,\%) y sin embargo solo
-detecta el 16,0\,\% de los casos, esto es, marca un número parecido de piezas pero no
-las mismas. Cada modelo tiene su propio umbral por variable.
+Las tablas anteriores dan el recall variable a variable, y para interpretarlo conviene
+saber cuánto marca cada modelo en términos absolutos, ya que marcar poco impide
+detectar buena parte de lo que las expertas sí señalan. La
+Tabla~\ref{tab:iris-prev-modelo-var} recoge esa proporción en el nivel desplegado,
+junto a la prevalencia anotada que sirve de referencia.
 
 \input{chapters/5 results and discussion/tabla_prev_modelo}
 
-Un rasgo atraviesa a las cinco variables: el recall es bajo casi en todas, es decir,
-los modelos detectan solo una fracción del sexismo que marcan las expertas. Esta
-\textbf{infradetección generalizada} es el patrón dominante del capítulo. La
-Sección~\ref{subsec:iris_errores} la examina para determinar \emph{qué parte} de ese
-desajuste corresponde a una limitación de los modelos y qué parte a la dificultad de
-la propia tarea, sin presuponer que se deba únicamente a una de las dos. A ello se
-añade el comportamiento dispar que se acaba de describir, que desaconseja tratar a los
-modelos como un bloque homogéneo y obliga a decidir la configuración variable a
-variable.
+En las variables de prevalencia alta o media todos los modelos marcan muy por debajo de
+las expertas, con la única excepción de \texttt{gemini} en \texttt{masc\_generico}
+(66,9\,\% frente al 81,0\,\% anotado). El patrón, además, no es común, ya que
+\texttt{gpt-4o-mini} marca \texttt{lenguaje\_sexista} en el 46,2\,\% de las piezas
+donde \texttt{gemini} apenas llega al 3,9\,\%, mientras que en \texttt{masc\_generico}
+sucede lo contrario. Cada modelo tiene, por tanto, su propio umbral por variable.
+
+Conviene, eso sí, no leer esta tabla como una medida de acierto. \texttt{gemma}
+reproduce casi exactamente la prevalencia anotada en
+\texttt{asimetria\_mujer\_hombre} (6,9\,\% frente a 6,2\,\%) y sin embargo solo detecta
+el 16,0\,\% de los casos, esto es, marca un número parecido de piezas pero no las
+mismas.
 
 \subsection{Descomposición de la arquitectura por componentes (ablación)}
 \label{subsec:iris_descomposicion}
@@ -599,9 +583,11 @@ entre las cinco variables queda, por tanto, sin medir.
 \subsection{El origen de la infradetección: la tarea y los modelos}
 \label{subsec:iris_errores}
 
-El bajo acuerdo absoluto plantea la pregunta que condiciona la interpretación de
-todo el capítulo: ¿refleja una limitación de los modelos, o un límite intrínseco de
-la propia tarea? Tres análisis complementarios apuntan en la misma dirección, y una
+El recall es bajo en casi todas las celdas del apartado anterior, es decir, los modelos
+detectan solo una fracción del sexismo que marcan las expertas. Esa
+\textbf{infradetección generalizada} es el patrón dominante del capítulo, y plantea la
+pregunta que condiciona la interpretación de todo él: ¿refleja una limitación de los
+modelos, o un límite intrínseco de la propia tarea? Tres análisis complementarios apuntan en la misma dirección, y una
 pieza concreta permite después ver el mecanismo del fallo por dentro.
 
 \subsubsection{Heterogeneidad entre equipos de anotación}
@@ -751,7 +737,9 @@ Como cada noticia la codificó una sola persona, no hay solapamiento entre anota
 sí compara todos los criterios es la \textbf{prevalencia del \textit{Sí}}: la proporción de
 piezas en que cada entidad codificadora, humana o artificial, marca la variable. La
 Tabla~\ref{tab:iris-criterios} ordena por esa proporción, promediada sobre las cinco
-variables, a las nueve personas anotadoras y a los cuatro modelos evaluados.
+variables, a las nueve personas anotadoras y a los cuatro modelos evaluados, cuyas
+proporciones ya aparecieron en la Tabla~\ref{tab:iris-prev-modelo-var} y se recogen
+aquí en la misma escala que las de las personas.
 
 \begin{table}[H]
     \centering
