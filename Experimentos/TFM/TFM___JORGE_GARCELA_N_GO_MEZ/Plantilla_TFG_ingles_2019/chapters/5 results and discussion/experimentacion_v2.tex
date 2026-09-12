@@ -224,14 +224,16 @@ sitúa ese umbral en un punto distinto, y los de OpenAI más alto que \texttt{ge
 \input{chapters/5 results and discussion/tabla_var_v30}
 
 \textbf{Efecto del empaquetado.} Es la variable en que las \textit{skills} menos
-cambian las cosas. Los recalls pasan de 0,018 a 0,020 en \texttt{gemini}, de 0,128 a
-0,112 en \texttt{gpt-4o-mini}, de 0,146 a 0,114 en \texttt{gpt-5.4-nano} y de 0,039 a
-0,025 en \texttt{gemma}, con movimientos equivalentes en F1 y en $\kappa$. Ni el
+cambian las cosas, con un cambio medio en recall de 0,016 entre los cuatro modelos
+frente a los 0,247 de \texttt{masc\_generico}. Los recalls pasan de 0,018 a 0,020 en
+\texttt{gemini}, de 0,128 a 0,112 en \texttt{gpt-4o-mini}, de 0,146 a 0,114 en
+\texttt{gpt-5.4-nano} y de 0,039 a 0,025 en \texttt{gemma}, con movimientos
+equivalentes en F1 y variaciones de $\kappa$ inferiores a la centésima en los cuatro. Ni el
 empaquetado ni el acceso a las guías alteran de forma apreciable el comportamiento del
 sistema en esta variable.
 
 \textbf{Nivel alcanzado.} El recall se mueve entre 0,020 y 0,114, de manera que, pese a
-una prevalencia anotada del 42,8\,\%, los modelos dejan sin señalar más del 88\,\% de
+una prevalencia anotada del 42,8\,\% (Tabla~\ref{tab:iris-referencia}), los modelos dejan sin señalar más del 88\,\% de
 los casos, y el F1 de la clase positiva no supera 0,181. El acuerdo ronda además el
 azar en los cuatro ($\kappa$ entre $-0,006$ y 0,011). La exactitud, en el entorno de
 0,56, tampoco aporta buenas noticias, ya que un clasificador que respondiera siempre
@@ -243,12 +245,13 @@ la de V25, pero su origen no es el mismo. Aquí la propia anotación humana est�
 profundamente dividida, ya que un equipo marca el fenómeno casi seis veces más que el
 otro (11,5\,\% frente a 65,2\,\%, Tabla~\ref{tab:iris-equipos-recall}), mientras que en
 V25 ambos equipos coincidían en marcar la mayoría de las piezas. En V25 los modelos no
-ven lo que las personas ven de forma concordante. En V30, en cambio, ni siquiera las
+marcan lo que las personas marcan de forma concordante. En V30, en cambio, ni siquiera las
 personas convergen en qué debe marcarse, así que el bajo acuerdo del sistema refleja a
-la vez una detección insuficiente y un criterio humano poco estabilizado. Es además la
-única variable de \emph{fondo} de las cinco, la que atañe a lo que se cuenta y no a
-cómo se dice (Sección~\ref{sec:iris_variables}), lo que la hace más dependiente de la
-interpretación del contexto social de la pieza.
+la vez una detección insuficiente y un criterio humano poco estabilizado. Pesa además el tipo de
+juicio que exige, ya que atañe a lo que se cuenta y no solo a cómo se dice
+(Sección~\ref{sec:iris_variables}), de modo que su codificación depende en buena medida
+de la interpretación del contexto social de la pieza, tanto para quien anota como para
+el sistema.
 
 \subsubsection{Asimetría entre mujeres y hombres (V33)}
 
@@ -537,8 +540,7 @@ variables más caras son precisamente \texttt{lenguaje\_sexista} y
 de decidirse.
 
 El contraste con las dos últimas columnas es el dato relevante para el proyecto.
-\texttt{masc\_generico} es la variable en que el sistema alcanza una detección
-aprovechable, con un
+\texttt{masc\_generico} es la variable en que el sistema detecta de verdad, con un
 recall de 0,733 y un F1 de 0,803, y cuesta 6,82 USD. \texttt{lenguaje\_sexista}
 cuesta más, 7,48 USD, y su mejor recall (0,450) procede del modelo que marca casi
 la mitad de las piezas sin coincidir con las anotadoras, de modo que ese número no
