@@ -811,15 +811,24 @@ resultados de este trabajo aportan evidencia propia sobre un dominio poco explor
 el de la prensa escrita en español evaluada con criterio experto.
 
 El desglose por variable de esas celdas (Tabla~\ref{tab:iris-consenso}) muestra
-además \emph{dónde} se concentra el sesgo. Casi tres cuartas partes de los casos se
-acumulan en \texttt{lenguaje\_sexista} (567) y \texttt{sexismo\_discurso} (447),
-justo las dos variables con mayor prevalencia anotada de \textit{Sí}: donde las
-expertas marcan más, los cuatro modelos coinciden en no marcar. La dirección es
-prácticamente absoluta, un único caso, en \texttt{asimetria\_mujer\_hombre}, invierte
-el patrón (los cuatro modelos marcan \textit{Sí} donde la anotación dice \textit{No}).
-Esto refuerza el mensaje del apartado: el sesgo no solo es sistemático (dirección
-unánime), sino que se concentra en las variables de alta prevalencia, enlazando con
-el análisis por variable (Sección~\ref{subsec:iris_porvariable}).
+además \emph{dónde} se concentra el sesgo. En términos absolutos, casi tres cuartas
+partes de los casos se acumulan en \texttt{lenguaje\_sexista} (567) y
+\texttt{sexismo\_discurso} (447), aunque eso obedece sobre todo a que son dos de las
+variables con más positivos anotados. La lectura pertinente es la relativa, esto es,
+qué proporción de los positivos de cada variable cae en consenso, y ahí el orden es
+otro: el 91,6\,\% en \texttt{denominacion\_sexualizada}, el 79,5\,\% en
+\texttt{sexismo\_discurso}, el 74,1\,\% en \texttt{asimetria\_mujer\_hombre}, el
+53,3\,\% en \texttt{lenguaje\_sexista} y solo el 15,9\,\% en
+\texttt{masc\_generico}.
+
+Ese orden no lo explica la prevalencia. \texttt{lenguaje\_sexista} y
+\texttt{masc\_generico} la tienen idéntica, del 81,0\,\%, y ocupan sin embargo
+extremos opuestos de esa lista. \textbf{Lo que ordena el desglose es si los modelos
+detectan o no}, de modo que el consenso en contra de la anotación escasea justamente
+en la única variable donde el sistema alcanza una detección aprovechable. La
+dirección, en cambio, sí es prácticamente absoluta, ya que un único caso, en
+\texttt{asimetria\_mujer\_hombre}, invierte el patrón y los cuatro modelos marcan
+\textit{Sí} donde la anotación dice \textit{No}.
 
 
 
