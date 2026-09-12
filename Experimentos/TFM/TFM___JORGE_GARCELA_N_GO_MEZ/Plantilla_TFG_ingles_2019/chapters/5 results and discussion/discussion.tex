@@ -134,15 +134,18 @@ que solo coinciden en su dirección.
 \subsection{Implicaciones para IRIS}
 \label{subsec:iris_implicaciones}
 
-De los resultados se desprenden cuatro orientaciones prácticas para el proyecto.
+Queda por decir qué hacer con todo ello. El análisis deja cuatro orientaciones
+prácticas para IRIS, relativas a qué modelo conviene desplegar, en qué variables, qué
+papel corresponde a la revisión experta y hacia dónde debería ajustarse el sistema.
 
 \paragraph{El despliegue local es viable.} El modelo abierto \texttt{gemma},
 ejecutado en infraestructura propia, compite con los servicios comerciales
-(Sección~\ref{subsec:iris_local}). Encabeza \texttt{asimetria\_mujer\_hombre} en recall
-y en precisión, si bien no conviene apoyarse en ese dato, porque su ventaja sobre el
-segundo es de una sola pieza acertada. El respaldo firme está en
-\texttt{masc\_generico}, donde queda segundo con un recall de 0,408 frente al 0,206 y
-el 0,104 de los dos modelos de OpenAI. Para una institución que maneja material sujeto
+(Sección~\ref{subsec:iris_local}). Encabeza \texttt{asimetria\_mujer\_hombre}, donde su
+F1 de la clase positiva casi dobla al del siguiente (0,151 frente a 0,091), si bien esa
+ventaja pide cautela, porque descansa sobre 81 piezas positivas y en número de aciertos
+se reduce a uno, 13 frente a los 12 de \texttt{gpt-4o-mini}. El respaldo más firme está
+en \texttt{masc\_generico}, donde queda segundo con un recall de 0,408 frente al 0,206
+y el 0,104 de los dos modelos de OpenAI. Para una institución que maneja material sujeto
 a privacidad, esto significa que preservar los datos y prescindir de tarifas no
 obliga a renunciar al rendimiento, a cambio de asumir un coste de cómputo. Ese coste,
 además, se comporta al revés que el de los modelos de pago, en los que el empaquetado
@@ -162,9 +165,13 @@ Concentrar el esfuerzo donde el sistema funciona, y no distribuirlo por igual,
 mejora el rendimiento y reduce el gasto a la vez. Esa afirmación admite una cifra.
 Asignar a cada variable el modelo que mejor se comporta en ella supone 8,77 USD sobre
 las 1.313 piezas, cantidad en la que \texttt{asimetria\_mujer\_hombre} no devenga
-tarifa por recaer en el modelo local, si bien consume tiempo de cómputo. Fijar en
+tarifa por recaer en el modelo local, si bien consume tiempo de cómputo. Que esa
+variable sea la de evidencia más frágil no altera la conclusión, ya que asignarla a un
+modelo de pago dejaría la cifra en 10,01 USD con \texttt{gpt-4o-mini} o en 11,23 con
+\texttt{gemini}. Fijar en
 cambio un único modelo para las cinco costaría 13,16 USD con \texttt{gemini}, que es el
-de mayor acuerdo, y 6,89 USD con \texttt{gpt-4o-mini}, que sale más barato pero queda
+que alcanza el mayor acuerdo del capítulo, y 6,89 USD con \texttt{gpt-4o-mini}, que
+sale más barato pero queda
 por detrás en tres de las cinco variables. La asignación por variable se sitúa, por
 tanto, entre ambas en coste y por delante de las dos en rendimiento, que es cuanto cabe
 pedirle a una decisión de despliegue.
@@ -194,8 +201,9 @@ apuntan en la dirección contraria a la deseable, puesto que el sistema falla
 precisamente por defecto, de modo que cualquier ajuste futuro debería orientarse a
 elevar el recall aun a costa de la precisión. La Sección~\ref{subsec:iris_equipo_ia}
 apunta una vía concreta en ese sentido, la de marcar la pieza cuando lo haga
-cualquiera de los modelos, que eleva el recall en las cinco variables, si bien obliga
-a ejecutarlos todos sobre cada pieza.
+cualquiera de los modelos, que eleva el recall en las cinco variables. Tiene dos
+contrapartidas, la de ejecutar los cuatro modelos sobre cada pieza y la de que el
+$\kappa$ desciende en cuatro de las cinco, algo esperable en una regla que marca más.
 
 Con estas cuatro orientaciones, el sistema encaja mejor como asistente que como
 decisor. Su salida trazable, con código, explicación y evidencias literales,
