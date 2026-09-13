@@ -389,8 +389,8 @@ de los dos explica la diferencia.
 
 La primera lectura afecta a la \textbf{recuperación en vivo (RAG)}. Añadirla no produce una
 ganancia consistente. Sobre la configuración mínima, al pasar de solo \textit{skills} a
-\textit{skills} con RAG, mejora el F1 de la clase positiva en nueve de las veinte celdas
-y lo empeora en ocho. Sobre la variante con resúmenes, al pasar a la configuración
+\textit{skills} con RAG, mejora el F1 de la clase positiva en nueve de las veinte celdas,
+lo empeora en ocho y lo deja igual en tres. Sobre la variante con resúmenes, al pasar a la configuración
 completa, mejora en siete y empeora en trece. Dado que es además el componente más
 costoso en tiempo y en \textit{tokens}, como confirma el desglose por configuración
 del modelo local (Tabla~\ref{tab:iris-local-tiempo}), la evidencia no respalda
@@ -986,13 +986,14 @@ a unos sistemas que no coinciden.
 Cabe entonces probar lo contrario, esto es, una estrategia de unión que marque la pieza
 cuando lo haga cualquiera de los cuatro. Comprobada sobre el mismo nivel B1, eleva el
 recall en las cinco variables y el F1 de la clase positiva en cuatro de ellas, con una
-precisión que apenas cede en las tres variables de mayor prevalencia y que cae de forma
-apreciable en \texttt{asimetria\_mujer\_hombre} y \texttt{denominacion\_sexualizada}. En \texttt{masc\_generico} alcanza un recall de
+precisión que, frente a la del modelo de mejor F1 en cada variable, apenas cede en las
+tres de mayor prevalencia y cae de forma apreciable en \texttt{asimetria\_mujer\_hombre} y \texttt{denominacion\_sexualizada}. En \texttt{masc\_generico} alcanza un recall de
 0,841 con una precisión de 0,861, cifras superiores a las del mejor modelo individual
 (0,733 y 0,887). Es un resultado que merece explorarse, si bien queda fuera de lo que
 este trabajo puede recomendar, por dos motivos. El primero es que obliga a ejecutar los
 cuatro modelos sobre cada pieza, de modo que multiplica el coste de inferencia. El
-segundo es que el $\kappa$ desciende en cuatro de las cinco variables, algo esperable
+segundo es que el $\kappa$ desciende en cuatro de las cinco variables frente al mejor
+$\kappa$ individual, algo esperable
 en una regla que marca más y que remite de nuevo al desacoplamiento entre exactitud y
 acuerdo (Sección~\ref{subsec:iris_tres_metricas}).
 
