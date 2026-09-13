@@ -84,7 +84,7 @@ sistema debe superar para aportar información.
 \begin{table}[H]
     \centering
     \begingroup
-    \scriptsize
+    \small
     \ttabbox[\FBwidth]{
         \caption{Prevalencia de la clase positiva y rendimiento del clasificador
         trivial que no lee el texto y marca todas las piezas como positivas
@@ -553,11 +553,11 @@ Figura~\ref{fig:iris-coste-variable} lo representa.
 \input{chapters/5 results and discussion/tabla_coste_modelo}
 
 \begin{figure}[H]
-    \centering
-    % Se desborda sobre los margenes (18 cm de 21) para ganar tamano, centrada
-    % dentro de una caja del ancho del texto.
-    \makebox[\textwidth][c]{\includegraphics[width=1.2\textwidth]{fig_coste_variable_blanco.pdf}}
-    \caption{Coste de inferencia por variable y nivel, en USD sobre las 1.313
+\centering
+\makebox[\textwidth][c]{%
+  \includegraphics[width=1.1\textwidth]{Plantilla_TFG_ingles_2019/imagenes/fig_coste_variable_blanco.pdf}%
+}
+\caption{Coste de inferencia por variable y nivel, en USD sobre las 1.313
     piezas. Cada barra se reparte entre los tres modelos accesibles por API, con
     B0 en tono claro y B1 en tono pleno. La longitud de cada tramo es lo que ese
     modelo gasta en esa variable.}
@@ -640,8 +640,10 @@ traslada al cómputo. Las implicaciones prácticas para IRIS se retoman en la di
 (Sección~\ref{sec:discussion}).
 
 \begin{figure}[H]
-    \centering
-    \makebox[\textwidth][c]{\includegraphics[width=1.3\textwidth]{fig_rendimiento_coste_blanco.pdf}}
+\centering
+\makebox[\textwidth][c]{%
+  \includegraphics[width=1.1\textwidth]{Plantilla_TFG_ingles_2019/imagenes/fig_rendimiento_coste_blanco.pdf}%
+}
     \caption{F1 macro en el nivel B1 frente al coste de inferencia sobre el corpus
     completo, por modelo ($N=1.313$). El modelo local alcanza un F1 macro próximo al
     de los dos mejores sin coste monetario alguno, si bien ese coste se traslada al

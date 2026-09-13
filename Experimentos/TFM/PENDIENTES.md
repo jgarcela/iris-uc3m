@@ -15,10 +15,8 @@ a cambiar. No abordarlas mientras se estén aplicando comentarios de las tutoras
       externas, los de `variables.json` eran correctos. No confundir con el bloque de
       guias institucionales, que son las nueve del RAG (`methodology_manifest.json`) y
       se citan en `iris_analisis_experto.tex`.
-- [ ] **Figuras: tamaño de letra.** Las gráficas tienen la fuente demasiado pequeña.
-      El script matplotlib que las genera no está en el repositorio, así que hay que
-      localizarlo o regenerarlas.
-- [ ] **Figuras: tamaño y colocación** de las imágenes en general.
+- [x] **Figuras: tamaño de letra.** Revisadas por Jorge el 13/09/2026.
+- [x] **Figuras: tamaño y colocación.** Revisadas por Jorge el 13/09/2026.
 - [x] **Figura del acuerdo frente al coste**: rehecha el 12/09/2026 como
       `fig_rendimiento_coste_blanco.pdf`, sobre F1 macro en lugar de $\kappa$.
       Actualizados el pie y el párrafo que la comenta. `fig_acuerdo_por_dolar_blanco.pdf`
