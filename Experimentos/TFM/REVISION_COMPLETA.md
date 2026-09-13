@@ -1,6 +1,6 @@
 # Revisión completa del TFM
 
-**Fecha:** 13/09/2026 (estado de aplicación actualizado el 13/09/2026: columna "Hecho" en las tablas A y B; las filas tachadas están aplicadas; A.3 confirmada en el commit c3d667e, A.2 aplicada en el árbol de trabajo y pendiente de commit)
+**Fecha:** 13/09/2026 (estado de aplicación actualizado el 13/09/2026: columna "Hecho" en las tablas A y B; las filas tachadas están aplicadas; A.3 confirmada en c3d667e, A.2 en el commit siguiente)
 **Método:** siete agentes de revisión en paralelo, cada uno con un ámbito cerrado, todos en modo solo lectura. Ninguno editó ficheros. Los hallazgos se consolidan aquí sin duplicados y ordenados por lo que piden: primero lo que se aplica sin discusión (A), luego lo que exige decisión del autor (B), después lo informativo (C). Al final, lo que cada agente confirmó como correcto.
 
 | Agente | Ámbito | Estado |
