@@ -2,13 +2,13 @@
 %	APPENDIX 1: BUDGET
 %----------	
 
-En este anexo se desglosa la estimación económica necesaria para el desarrollo del presente TFM, cuyos importes quedan recogidos en la Tabla \ref{tab:budget}.
+En este anexo se desglosa la estimación económica necesaria para el desarrollo del presente TFM, cuyos importes quedan recogidos en la Tabla~\ref{tab:budget}.
 
 
-En cuanto a los costes operativos de personal, se ha cuantificado la dedicación del estudiante a razón de 5 horas diarias a lo largo de los 6 meses que ha durado el proyecto. Tomando como referencia el contrato de investigación de IRIS\_IAMEDIA, supone una tarifa total aproximada de 9300€ a razón de 15,5 €/hora. Por su parte, la supervisión y dirección académica ha corrido a cargo de dos tutoras, con las que se han mantenido en torno a 25 reuniones de una hora a lo largo de los seis meses del proyecto, esto es, aproximadamente una reunión semanal. Al asistir ambas tutoras, la dedicación conjunta asciende a unas 50 horas. Asignando a este rol de dirección una tarifa de 25,64 € por hora (equivalente a un perfil de ingeniería senior o investigador principal\footnote{Fuente: \url{https://es.talent.com/salary?job=senior+data+analyst}, último acceso 28/07/24}), esta partida suma un total de 1.282,00 €.
+En cuanto a los costes operativos de personal, se ha cuantificado la dedicación del estudiante a razón de 5 horas diarias a lo largo de los 6 meses que ha durado el proyecto. Tomando como referencia el contrato de investigación de IRIS\_IAMEDIA, supone una tarifa total aproximada de 9.300 € a razón de 15,5 €/hora. Por su parte, la supervisión y dirección académica ha corrido a cargo de dos tutoras, con las que se han mantenido en torno a 25 reuniones de una hora a lo largo de los seis meses del proyecto, esto es, aproximadamente una reunión semanal. Al asistir ambas tutoras, la dedicación conjunta asciende a unas 50 horas. Asignando a este rol de dirección una tarifa de 25,64 € por hora (equivalente a un perfil de ingeniería senior o investigador principal\footnote{Fuente: \url{https://es.talent.com/salary?job=senior+data+analyst}, [Último acceso: 28/07/2026]}), esta partida suma un total de 1.282,00 €.
 
 
-En cuanto al equipamiento informático, el desarrollo se ha llevado a cabo utilizando un equipo MacBook Pro M4 de 2024, cuyo valor de mercado se sitúa en 2500 €. Siguiendo los criterios contables estandarizados, la vida útil de este dispositivo se amortiza en un periodo de 4 años, lo que se traduce en una depreciación de 625 € anuales. Al circunscribirse el uso de la máquina a los 6 meses de duración de esta investigación, la cantidad imputable al presupuesto general es de 312,50 €. Adicionalmente, la ejecución del modelo local \texttt{gemma4:e4b} se realizó sobre la granja de GPU (NVIDIA RTX 3090 y 4090) del Departamento de Teoría de la Señal y Comunicaciones (TSC) de la Universidad Carlos III de Madrid. Al tratarse de infraestructura institucional de investigación, su uso no ha supuesto un coste directo para el proyecto y se imputa a 0 €, si bien su disponibilidad ha sido esencial para el despliegue agéntico del modelo local.
+En cuanto al equipamiento informático, el desarrollo se ha llevado a cabo utilizando un equipo MacBook Pro M4 de 2024, cuyo valor de mercado se sitúa en 2.500 €. Siguiendo los criterios contables estandarizados, la vida útil de este dispositivo se amortiza en un periodo de 4 años, lo que se traduce en una depreciación de 625 € anuales. Al circunscribirse el uso de la máquina a los 6 meses de duración de esta investigación, la cantidad imputable al presupuesto general es de 312,50 €. Adicionalmente, la ejecución del modelo local \texttt{gemma4:e4b} se realizó sobre la granja de GPU (NVIDIA RTX 3090 y 4090) del Departamento de Teoría de la Señal y Comunicaciones (TSC) de la Universidad Carlos III de Madrid. Al tratarse de infraestructura institucional de investigación, su uso no ha supuesto un coste directo para el proyecto y se imputa a 0 €, si bien su disponibilidad ha sido esencial para el despliegue agéntico del modelo local.
 
 Finalmente, el apartado de software contempla tres partidas: 90 € para el acceso a las noticias de pago de los periódicos analizados, 131,94 € para la suscripción al modelo Gemini Pro (Gemini Advanced) durante los seis meses, y el coste de inferencia de las API comerciales empleadas en la evaluación, esto es, Gemini de Google y los modelos de OpenAI, que ascendió a unos 45 USD (en torno a 41,94 €) según el detalle recogido en el Capítulo~\ref{results_and_discussion}. Conviene matizar que el acceso a los periódicos y la suscripción a Gemini Pro no han supuesto un desembolso real, al estar cubiertos por las licencias y suscripciones institucionales de la Universidad Carlos III de Madrid. El coste de inferencia de las API, en cambio, sí ha constituido un gasto efectivo del proyecto. De este modo, la ejecución global del proyecto supone un coste estimado de 11.158,38 €.
 
@@ -21,33 +21,33 @@ Finalmente, el apartado de software contempla tres partidas: 90 € para el acce
     \label{tab:budget}
     \small % font size
     \begin{tabularx}{\textwidth}{
-        >{\hsize=0.6\hsize}X % Category
-        >{\hsize=0.6\hsize}X % Name
-        >{\hsize=1.8\hsize}X % Details
-        >{\hsize=0.5\hsize\centering\arraybackslash}X % Period
-        >{\hsize=0.5\hsize\centering\arraybackslash}X % Cost
+        >{\hsize=0.75\hsize}X % Category
+        >{\hsize=0.75\hsize}X % Name
+        >{\hsize=2.25\hsize}X % Details
+        >{\hsize=0.625\hsize\centering\arraybackslash}X % Period
+        >{\hsize=0.625\hsize\centering\arraybackslash}X % Cost
         }
         \hline
         \rowcolor{gray!30}
         \textbf{Categoría} & \textbf{Nombre} & \textbf{Detalles} & \textbf{Periodo} & \textbf{Coste (€)} \\
         \hline
-        \multirow{1}{*}{Coste Humano} & Estudiante & 5 horas/día (15.5€/h) & 6 meses & 9300 \\
+        \multirow{1}{*}{Coste Humano} & Estudiante & 5 horas/día (15,5 €/h) & 6 meses & 9.300 \\
         \cline{2-5}
-        & Tutoras (2) & 25 reuniones $\times$ 2 tutoras = 50 h (25.64€/h) & 6 meses & 1282.00 \\
+        & Tutoras (2) & 25 reuniones $\times$ 2 tutoras = 50 h (25,64 €/h) & 6 meses & 1.282,00 \\
         %\cline{2-5}
         %& Expert & Expert consultation and annotation, 4 meetings (25.64€/hour) & 1 month & 769.2 \\
         \hline
-        \multirow{2}{*}{Hardware} & 2024 MacBook Pro M4 & 2500€ valor, amortizado en 4 años (625€/año) & 6 meses & 312.50 \\
+        \multirow{2}{*}{Hardware} & 2024 MacBook Pro M4 & 2.500 € de valor, amortizado en 4 años (625 €/año) & 6 meses & 312,50 \\
         \cline{2-5}
         & Granja de GPU (TSC) & NVIDIA RTX 3090/4090, infraestructura institucional & 6 meses & 0 \\
         \hline
         \multirow{3}{*}{Software} & Licencias periódicos & Suscripción digital básica & 6 meses & 90 \\
         \cline{2-5}
-        & Gemini Pro & Suscripción a Gemini Advanced & 6 meses & 131.94 \\
+        & Gemini Pro & Suscripción a Gemini Advanced & 6 meses & 131,94 \\
         \cline{2-5}
-        & APIs de inferencia & Gemini (Google) y OpenAI, $\approx$45 USD & 6 meses & 41.94 \\
+        & APIs de inferencia & Gemini (Google) y OpenAI, $\approx$45 USD & 6 meses & 41,94 \\
         \hline
-        \multicolumn{4}{r}{} & \textbf{11158.38} \\
+        \multicolumn{4}{r}{} & \textbf{11.158,38} \\
         \hline
     \end{tabularx}
 \end{table}
