@@ -79,9 +79,14 @@ a cambiar. No abordarlas mientras se estén aplicando comentarios de las tutoras
       3. **La contradiccion del libro de codigos en V25** (regla de inversion frente a
          clausula agregadora). Era la decision 3 que se le planteaba a la directora y
          no consta si se resolvio. No se menciona en la memoria.
-- [ ] **Mover el código a `github.com/jgarcela/tfm-iris-uc3m`** (repo creado el
-      06/09/2026, vacío por ahora). El Apéndice B ya lo enlaza. Solo el código: el
-      corpus y las anotaciones de IRIS_IAMEDIA e InfoIA no se difunden con él.
+- [x] **Código publicado en `github.com/jgarcela/tfm-iris-uc3m`** (13/09/2026, commit
+      885d8a7). Solo el código: experimento 21 con sus 13 skills, `utils.py`,
+      `variables.json`, el manifiesto de guías, los scripts de `analisis_cap5`, la
+      ejecución en el clúster con el cliente del TSC y su licencia, README,
+      requirements y config de ejemplo. Fuera: corpus, anotaciones, predicciones,
+      guías, claves. El repositorio de trabajo está en `~/tfm-iris-uc3m/`. Pendiente
+      de decidir la licencia. Se empuja por SSH (la clave está en la cuenta jgarcela;
+      por HTTPS el terminal usa jorgegarcelan y da 403).
 - [x] **Glosario** (12/09/2026). Se retira la frase que prometia glosar cada termino
       en su primera aparicion, porque solo se cumplia en 2 de 12 casos. Se unifica
       "revelacion progresiva" (el cuerpo decia "divulgacion" en un sitio). Se anaden
