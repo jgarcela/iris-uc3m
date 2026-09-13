@@ -92,11 +92,12 @@ El bucle admite hasta ocho iteraciones. Si la agente emitiera \texttt{FINAL}
 sin haber usado ninguna herramienta, su comportamiento equivaldría al del
 \textit{baseline}, un \textit{``colapso a B0''} que en la práctica apenas se
 observa, porque todas las agentes cargan al menos su propia \textit{skill}. Para averiguar
-qué aporta realmente cada herramienta, el Capítulo~\ref{results_and_discussion}
-descompone la arquitectura activando y desactivando cada componente (\textit{skills},
-resúmenes de guías y recuperación en vivo) y mide su contribución al acuerdo. Ese
-análisis ayuda a interpretar por qué la arquitectura mejora en unos modelos y no en
-otros.
+qué aporta cada componente, el Capítulo~\ref{results_and_discussion} evalúa cuatro
+configuraciones de la arquitectura, siempre con la carga de la \textit{skill} de la
+variable y la verificación de evidencias activas: solo \textit{skills}, \textit{skills}
+con los resúmenes de guías, \textit{skills} con la recuperación en vivo, y la
+configuración completa, que reúne ambos componentes. Es la nomenclatura que emplean las
+tablas de la Sección~\ref{subsec:iris_descomposicion}.
 
 \begin{figure}[H]
 \centering

@@ -88,14 +88,20 @@ salida. Estas limitaciones no invalidan los hallazgos, pero delimitan su alcance
 orientan las líneas de trabajo que se proponen a continuación.
 
 De cara a una futura integración del sistema en entornos editoriales reales (OE5), el
-trabajo permite formular cinco directrices:
+trabajo permite formular siete directrices:
 \begin{itemize}
     \item Desplegarlo como asistente que ordena y prioriza el corpus, y no como decisor
     automático.
     \item Preservar la trazabilidad de cada predicción, con sus evidencias y explicación,
     para que la analista pueda auditarla, aceptarla o corregirla.
     \item Mantener a la persona en el bucle, de modo que su criterio prevalezca sobre la
-    salida del modelo, en especial en las variables cuyo criterio está más en disputa.
+    salida del modelo, en especial en las variables en las que el sistema deja sin
+    señalar la mayor parte de los positivos.
+    \item Decidir su uso variable a variable, asignando a cada una el modelo que mejor se
+    comporta en ella, en lugar de desplegar una única configuración para las cinco.
+    \item Orientar cualquier ajuste futuro a elevar el recall, aun a costa de la
+    precisión, porque en postedición un falso negativo es un caso que nadie revisará y
+    un falso positivo cuesta unos segundos de descarte.
     \item Favorecer el despliegue local cuando el material sea sensible, por razones de
     privacidad y de coste.
     \item Informar del desempeño con métricas conscientes del desequilibrio, esto es, acuerdo

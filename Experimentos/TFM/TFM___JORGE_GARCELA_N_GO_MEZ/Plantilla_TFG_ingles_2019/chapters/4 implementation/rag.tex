@@ -29,6 +29,16 @@ elaboración de la metodología. La acción \texttt{CONSULTAR\_GUIA} establece u
 vínculo directo y verificable: la agente recupera texto literal de las fuentes en
 tiempo de inferencia y puede incorporarlo a su justificación.
 
+La implementación tiene pocos parámetros y conviene dejarlos constar. El índice se
+construye sobre las nueve guías institucionales citadas en la
+Sección~\ref{sec:experts}, que un manifiesto enumera de forma explícita. Cada guía, en
+formato \textit{Markdown}, se trocea por encabezados y los fragmentos resultantes se
+agrupan hasta un máximo de 1.500 caracteres, de modo que cada pasaje conserva el título
+de la sección de la que procede y puede citarse con él. El texto se normaliza en
+minúsculas y sin tildes, se tokeniza en palabras de al menos tres caracteres y se
+filtra con una lista breve de palabras vacías. Ante una consulta, la agente recibe los
+dos pasajes de mayor puntuación, truncados a esa misma longitud.
+
 La recuperación se basa en coincidencia léxica (TF-IDF), no semántica. Funciona
 bien para términos precisos, como \textit{masculino genérico} o \textit{feminización de
 cargos}, pero no reconoce sinónimos ni paráfrasis, de modo que un pasaje
