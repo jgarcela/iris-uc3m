@@ -16,15 +16,19 @@ Tal como está marcado en el PDF: SÍ he usado datos confidenciales con autoriza
 
 ### Documentación y redacción
 
-**Soporte a la reflexión.** La he usado como interlocutora para decidir cómo organizar el capítulo de resultados y cómo enfocar la discusión. Por ejemplo, cuando dudaba de si mantener una sección de síntesis con métricas promediadas, le pedí que me dijera qué dependía de ella y qué alternativas tenía, y con eso decidí retirarla.
+**Soporte a la reflexión.** La he usado como interlocutora para decidir cómo organizar el capítulo de resultados y cómo enfocar la discusión: qué secciones sobraban, en qué orden contar los resultados y qué conclusiones podía sostener con los datos que tenía. Por ejemplo, cuando dudaba de si mantener una sección de síntesis con métricas promediadas, le pedí que me dijera qué dependía de ella y qué alternativas tenía, y con eso decidí retirarla. Cuando recibí los comentarios de mis tutoras, le pedí que los contrastara con los datos antes de decidir cómo responder a cada uno.
 
-**Revisión o reescritura de párrafos redactados previamente.** Sobre todo en los capítulos de resultados y conclusiones y en el resumen. Le pedía que reescribiera párrafos que me sonaban poco académicos o demasiado categóricos, y que propagara al resto de la memoria los cambios de enfoque que iba tomando con mis tutoras.
+**Revisión o reescritura de párrafos redactados previamente.** Sobre todo en los capítulos de resultados y conclusiones y en el resumen. Le pedía que reescribiera párrafos que me sonaban poco académicos o demasiado categóricos, que aplicara unas reglas de estilo que fijé al principio (registro académico, siglas en inglés desarrolladas en su primera aparición, fechas en un formato único, uso coherente del femenino para "la agente"), y que propagara al resto de la memoria los cambios de enfoque que iba tomando con mis tutoras, para que la introducción, el resumen y las conclusiones no se quedaran con la versión anterior. También me ayudó a recortar el resumen para que cupiera en una página sin perder ninguna de las conclusiones.
 
-**Búsqueda de información o respuesta a preguntas concretas.** Dudas de LaTeX (tablas que no cuadraban, referencias rotas, tamaños de fuente) y de métricas de clasificación, como por qué la exactitud y el coeficiente kappa pueden moverse en sentidos opuestos cuando las clases están desequilibradas.
+**Búsqueda de información o respuesta a preguntas concretas.** Dudas de LaTeX (tablas que no cuadraban, referencias rotas, tamaños de fuente, cómo se incrustan los metadatos del PDF), de métricas de clasificación (por qué la exactitud y el coeficiente kappa pueden moverse en sentidos opuestos cuando las clases están desequilibradas), y de normativa, como qué artículo del Reglamento de Inteligencia Artificial excluye a los sistemas de investigación científica.
 
-**Búsqueda y resumen de bibliografía.** No la he usado para buscar bibliografía nueva. Sí para contrastar algunas referencias ya citadas con su fuente original y comprobar que las cifras que atribuía a esos trabajos eran las correctas. En un caso detectó que había atribuido a un artículo un dato que no decía exactamente eso, y lo corregí.
+**Búsqueda y resumen de bibliografía.** No la he usado para buscar bibliografía nueva. Sí para contrastar referencias ya citadas con su fuente original y comprobar que las cifras que atribuía a esos trabajos eran las correctas; en un caso detectó que había atribuido a un artículo un dato que no decía exactamente eso, y lo corregí. También para completar y verificar los metadatos de las referencias del libro de códigos del proyecto antes de incorporarlas a la bibliografía, y para mantener el fichero de bibliografía coherente (claves citadas que faltaban, campos incompletos).
+
+**Glosario.** Me ayudó a construir y revisar el glosario de términos en inglés y de acrónimos, comprobando qué términos se usaban realmente en la memoria y cuáles faltaban o sobraban.
 
 **Traducción.** No.
+
+**Revisión final.** Al terminar, le pedí una revisión completa de la memoria, capítulo por capítulo, buscando cifras que no cuadraran con los datos, afirmaciones que fueran más allá de lo demostrado, contradicciones entre capítulos y problemas de estilo. Los hallazgos los revisé uno a uno y decidí cuáles aplicar y cuáles no.
 
 ### Desarrollar contenido específico
 
