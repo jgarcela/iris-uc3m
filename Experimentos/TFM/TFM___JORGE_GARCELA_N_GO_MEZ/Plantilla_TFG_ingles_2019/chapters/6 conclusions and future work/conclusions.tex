@@ -25,18 +25,21 @@ clases muy desequilibradas, la exactitud y $\kappa$ pueden moverse en sentidos o
 por lo que reportar solo la exactitud llevaría a la conclusión contraria y se impone
 informar de exactitud, $\kappa$ y prevalencia de forma conjunta. La tercera es que el
 bajo acuerdo absoluto responde a \textbf{dos causas que conviene no confundir}. Una es
-un techo de la propia tarea, visible allí donde el criterio experto admite lecturas muy
-distantes, como en \texttt{sexismo\_discurso}, que dos equipos marcan en el 11,5\,\% y
-en el 65,2\,\% de las piezas. La otra es una limitación de los modelos, que en
-\texttt{lenguaje\_sexista} dejan sin señalar casi todo lo que ambos equipos coinciden en
+un techo de la propia tarea, documentado en \texttt{sexismo\_discurso}, que dos equipos
+marcan en el 11,5\,\% y en el 65,2\,\% de las piezas y que dentro de un mismo equipo va
+del 28,3\,\% al 97,8\,\%, reflejo de lo difícil que resulta percibir el fenómeno incluso
+a quien lo busca. La otra es una limitación de los modelos, tres de los cuales dejan sin señalar en
+\texttt{lenguaje\_sexista} casi todo lo que ambos equipos coinciden en
 marcar. El peso de cada una cambia según la variable, y ninguna absuelve a la otra, de
-manera que el desacuerdo mide a la vez distancia de criterio y error de detección. Cabe
+manera que el desacuerdo recoge a la vez la dificultad de percibir el fenómeno y el
+error de detección del sistema. Cabe
 precisar, además, que los cuatro modelos quedan por debajo de la persona que menos
 marca, esto es, fuera del rango humano, lo que no expresa un criterio alternativo más
 permisivo sino una capacidad de detección menor. La cuarta es que un modelo local
 de pesos abiertos, \texttt{gemma4:e4b}, compite variable a variable con los servicios
-comerciales accesibles por API, a los que supera en \texttt{asimetria\_mujer\_hombre} y
-adelanta en \texttt{masc\_generico}, preservando la privacidad del material y sin
+comerciales accesibles por API, a los que supera en \texttt{asimetria\_mujer\_hombre}, con la cautela de que esa
+ventaja descansa en un solo acierto, y a dos de los cuales adelanta en
+\texttt{masc\_generico}, preservando la privacidad del material y sin
 tarifas de inferencia, a cambio de trasladar el coste al tiempo de cómputo. Realizar esa comparación sobre la misma tarea y el mismo corpus, con un flujo de procesamiento agnóstico a la
 empresa proveedora, ha sido uno de los ejes metodológicos del trabajo.
 
@@ -50,8 +53,8 @@ especializadas y sus flujos de análisis y verificación (OE1), y las estrategia
 empaquetados como \textit{skills} (OE2), se desarrollaron en el
 Capítulo~\ref{implementation} y se validaron en el Capítulo~\ref{results_and_discussion}.
 Las técnicas de representación y recuperación de información, incluida la RAG y la
-similitud léxica (OE3), se implementaron y evaluaron, con el hallazgo, valioso en sí
-mismo, de que no aportan en este dominio. La comparación
+similitud léxica (OE3), se implementaron y evaluaron, con el hallazgo de que la recuperación
+en vivo no produce una ganancia consistente que justifique su coste. La comparación
 entre modelos y su idoneidad para detectar sesgos explícitos e implícitos (OE4)
 constituye el núcleo del Capítulo~\ref{results_and_discussion}. Por último, la propuesta
 de directrices para la integración editorial y la supervisión humana (OE5) se concreta
