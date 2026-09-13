@@ -38,7 +38,7 @@ Tal como está marcado en el PDF: SÍ he usado datos confidenciales con autoriza
 
 **Inspiración de ideas.** Algunas propuestas de análisis surgieron en la conversación con la herramienta y las incorporé después de verificarlas con los datos. También le pedí ideas para organizar las secciones y los contenidos de la memoria, buscando un flujo narrativo coherente y fácil de seguir, de manera que cada capítulo prepare el siguiente y las conclusiones se apoyen en lo ya mostrado.
 
-**Otros usos.** Mensajes de commit y la lista de tareas pendientes del repositorio.
+**Otros usos.** Redacción de los mensajes de commit del repositorio y mantenimiento de la documentación de trabajo en ficheros Markdown: la lista de tareas pendientes con sus fechas límite y recordatorios, el registro de los cambios aplicados en cada sesión, las notas de las reuniones con mis tutoras y el seguimiento de sus comentarios hasta darlos por resueltos, y el informe consolidado de la revisión final de la memoria, con cada hallazgo, su estado y la decisión tomada.
 
 **Además, declaro haber usado el modelo GPT-4o-mini (OpenAI) para generar los resúmenes de guías de lenguaje no sexista que el sistema evaluado carga como parte de su metodología.** Los cuatro modelos de lenguaje que se evalúan en la memoria son el objeto de estudio del trabajo y no se declaran aquí como herramientas de apoyo.
 
