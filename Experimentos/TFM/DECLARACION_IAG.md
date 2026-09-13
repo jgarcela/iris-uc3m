@@ -32,7 +32,7 @@ Tal como está marcado en el PDF: SÍ he usado datos confidenciales con autoriza
 
 **Generación de esquemas o imágenes.** Las gráficas de resultados y los diagramas de la memoria los ha generado la herramienta a partir de los datos y las tablas. Previamente creé unos archivos de estilo con los colores, las tipografías y la estética de la página web de IRIS, para que todas las figuras tuvieran coherencia entre sí y con el proyecto.
 
-**Optimización.** Depuración de errores de LaTeX y de coherencia del documento tras reestructurar secciones.
+**Procesos de optimización.** Depuración de errores de LaTeX, de código Python y de coherencia del documento tras reestructurar secciones.
 
 **Tratamiento de datos.** Ha sido el uso más útil: recalcular desde los datos crudos las cifras que cito en la memoria, comprobar que las afirmaciones del texto las sostienen, y hacer análisis complementarios que no tenía previstos, como la dispersión de la anotación entre personas o la combinación de varios modelos.
 
