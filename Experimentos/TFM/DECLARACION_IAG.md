@@ -36,7 +36,7 @@ Tal como está marcado en el PDF: SÍ he usado datos confidenciales con autoriza
 
 **Tratamiento de datos.** Ha sido el uso más útil: recalcular desde los datos crudos las cifras que cito en la memoria, comprobar que las afirmaciones del texto las sostienen, y hacer análisis complementarios que no tenía previstos, como la dispersión de la anotación entre personas o la combinación de varios modelos.
 
-**Inspiración de ideas.** Algunas propuestas de análisis surgieron en la conversación con la herramienta y las incorporé después de verificarlas con los datos.
+**Inspiración de ideas.** Algunas propuestas de análisis surgieron en la conversación con la herramienta y las incorporé después de verificarlas con los datos. También le pedí ideas para organizar las secciones y los contenidos de la memoria, buscando un flujo narrativo coherente y fácil de seguir, de manera que cada capítulo prepare el siguiente y las conclusiones se apoyen en lo ya mostrado.
 
 **Otros usos.** Mensajes de commit y la lista de tareas pendientes del repositorio.
 
