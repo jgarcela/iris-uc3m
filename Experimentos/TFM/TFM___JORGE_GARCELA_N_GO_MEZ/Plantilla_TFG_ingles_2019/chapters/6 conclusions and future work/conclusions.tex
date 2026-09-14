@@ -31,11 +31,11 @@ del 28,3\,\% al 97,8\,\%, reflejo de lo difícil que resulta percibir el fenóme
 a quien lo busca. La otra es una limitación de los modelos: en \texttt{lenguaje\_sexista} los dos
 equipos marcan la variable en la mayoría de sus piezas, el 74,6\,\% y el 85,5\,\%
 respectivamente, y aun así tres de los cuatro modelos apenas la detectan, con un
-recall prácticamente nulo. El peso de cada una cambia según la variable, y ninguna absuelve a la otra, de
+recall prácticamente nulo. El peso de cada una cambia según la variable, y reparte responsabilidades, de
 manera que el desacuerdo recoge a la vez la dificultad de percibir el fenómeno y el
 error de detección del sistema. Cabe
 precisar, además, que los modelos quedan, salvo \texttt{gemini} en
-\texttt{masc\_generico}, por debajo de la persona que menos marca, lo que responde a
+\texttt{masc\_generico}, por debajo de la persona que menos marca en términos de \textit{recall}, lo que responde a
 una capacidad de detección menor y no a un criterio distinto. La cuarta es que un modelo local
 de pesos abiertos, \texttt{gemma4:e4b}, compite variable a variable con los servicios
 comerciales accesibles por API, a los que supera en \texttt{asimetria\_mujer\_hombre}, con la cautela de que esa
@@ -66,7 +66,7 @@ De todo ello se desprende, en coherencia con la discusión, que el sistema encaj
 como \textbf{asistente que como decisor}. Su salida tiene dos planos, y solo uno se ha
 podido evaluar. El primero es la etiqueta, el plano cuantitativo, que se contrasta con
 la anotación de referencia y es el que se mide aquí. El segundo es el marcado de
-evidencias y la explicación del veredicto, el plano cualitativo, esa segunda dimensión
+evidencias y la explicación del veredicto, es decir, el plano cualitativo, esa segunda dimensión
 que un análisis de contenido experto también necesita. Este último no cuenta todavía
 con un marcado experto de referencia con el que compararse, de modo que su validación
 queda como línea futura. El valor del sistema es, en definitiva, práctico y subordinado
@@ -86,7 +86,7 @@ que sus cifras se juegan en un puñado de piezas y admiten menos confianza que l
 demás. Tampoco ha podido evaluarse el salto semántico, ya que la anotación de
 referencia no emplea ese valor en ninguna pieza del corpus. Como cada pieza fue
 codificada por una sola persona, no fue posible calcular la fiabilidad
-intercodificadora, por lo que el techo de la tarea se acota de forma indirecta.
+intercodificadora, por lo que el techo de la tarea se acota de forma indirecta y con incertidumbre significativa.
 Por último, y como ya se ha señalado, solo se ha evaluado el plano cuantitativo de la
 salida. Estas limitaciones no invalidan los hallazgos, pero delimitan su alcance y
 orientan las líneas de trabajo que se proponen a continuación.
@@ -103,7 +103,7 @@ trabajo permite formular siete directrices:
     señalar la mayor parte de los positivos.
     \item Decidir su uso variable a variable, asignando a cada una el modelo que mejor se
     comporta en ella, en lugar de desplegar una única configuración para las cinco.
-    \item Orientar cualquier ajuste futuro a elevar el recall, aun a costa de la
+    \item Orientar cualquier ajuste futuro a elevar el \textit{recall}, aun a costa de la
     precisión, porque en postedición un falso negativo es un caso que nadie revisará y
     un falso positivo cuesta unos segundos de descarte.
     \item Favorecer el despliegue local cuando el material sea sensible, por razones de
