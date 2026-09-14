@@ -35,7 +35,7 @@ La Tabla~\ref{table:risks} recoge los principales riesgos identificados al plani
 
 Concluido el trabajo, el balance es el siguiente. Cuatro de los cinco riesgos se
 materializaron, uno de ellos solo de forma parcial, y en ellos las medidas previstas
-resultaron aplicables, aunque no siempre suficientes. El quinto no llegó a evaluarse.
+resultaron aplicables, aunque no siempre suficientes. El quinto no llegó a necesitarse.
 
 El \textbf{R1} se materializó de forma parcial. El corpus anotado estuvo disponible y
 bastó para evaluar el plano cuantitativo del sistema, pero no incluía doble
@@ -55,7 +55,7 @@ verificación automática de las evidencias, comparación sistemática entre mod
 validación contra el corpus experto. A ellas se sumó una medida no contemplada
 inicialmente, la desactivación del razonamiento explícito en los modelos que lo
 admiten, para que la comparación fuese justa
-(Sección~\ref{sec:genai_models_iris}).
+(Sección~\ref{genai_models}).
 
 El \textbf{R3} se materializó y su análisis es una de las aportaciones del trabajo. La
 recuperación aumentada (RAG), prevista como medida de mitigación, se implementó y se
@@ -66,7 +66,7 @@ incorporó y quedó materializada en la integración del sistema en la herramien
 del proyecto (Sección~\ref{poc}).
 
 El \textbf{R4} no llegó a evaluarse de forma sistemática. La integración del sistema
-en la herramienta web del proyecto (Sección~\ref{poc}) y las directrices de uso
+en la herramienta web del proyecto IRIS (Sección~\ref{poc}) y las directrices de uso
 editorial que cierran el trabajo (Sección~\ref{sec:conclusions}) responden a la
 medida prevista, pero la validación con redacciones reales queda como línea de
 trabajo futura (Sección~\ref{sec:futurework_usecases}).
@@ -74,7 +74,7 @@ trabajo futura (Sección~\ref{sec:futurework_usecases}).
 El \textbf{R5} se materializó en dos frentes concretos, y en ambos funcionó la
 contingencia prevista. Por un lado, OpenAI anunció la retirada de modelos de su
 interfaz, lo que motivó incorporar un modelo más reciente para no depender de uno
-solo (Sección~\ref{sec:genai_models_iris}). Por otro, las ejecuciones sobre la granja
+solo (Sección~\ref{genai_models}). Por otro, las ejecuciones sobre la granja
 de unidades de procesamiento gráfico (\textit{Graphics Processing Unit}, GPU por sus
 siglas en inglés) sufrieron interrupciones, para lo que se implementó una ejecución reanudable y
 un mecanismo de corte que evita registrar los fallos de infraestructura como
