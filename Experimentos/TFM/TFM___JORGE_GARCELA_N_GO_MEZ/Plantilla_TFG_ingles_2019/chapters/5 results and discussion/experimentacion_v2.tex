@@ -258,10 +258,14 @@ de negativos de la variable.
 la de V25, pero su origen no es el mismo. Aquí la propia anotación humana está
 profundamente dividida, ya que un equipo marca el fenómeno casi seis veces más que el
 otro (11,5\,\% frente a 65,2\,\%, Tabla~\ref{tab:iris-equipos-recall}), mientras que en
-V25 ambos equipos coincidían en marcar la mayoría de las piezas. En V25 los modelos no
-marcan suficientemente bien lo que las personas marcan pero los niveles de prevalencia entre las personas sí son los mismos. En V30, en cambio, ni siquiera los niveles de prevalencia en los marcados de las
-personas se acercan entre sí, así que el bajo acuerdo del sistema refleja a
-la vez una detección insuficiente y un criterio humano poco estabilizado. Pesa, además, el tipo de
+V25 ambos equipos marcaban la mayoría de sus piezas. Conviene precisar que cada pieza
+tiene una sola persona anotadora, de modo que lo que se compara no es el marcado de unas
+mismas piezas por varias personas, sino la proporción de piezas marcadas por cada
+equipo sobre subconjuntos distintos del corpus. En V25 los modelos no marcan
+suficientemente bien lo que las personas marcan, pero esa proporción es similar en
+los dos equipos (74,6\,\% y 85,5\,\%). En V30, en cambio, la proporción difiere tanto
+de un equipo a otro que el bajo acuerdo del sistema refleja a la vez una detección
+insuficiente y un criterio humano poco estabilizado. Pesa, además, el tipo de
 juicio que exige, ya que atañe a lo que se cuenta y no solo a cómo se dice
 (Sección~\ref{sec:iris_variables}), de modo que su codificación depende en buena medida
 de la interpretación del contexto social de la pieza, tanto para quien anota como para
@@ -1070,7 +1074,7 @@ anotación, que ningún sistema podría superar mientras el criterio admita
 interpretaciones tan distintas, y que aconseja no leer un $\kappa$ bajo como medida
 directa de incompetencia. Pero existe también una \textbf{limitación real de los
 modelos}, que en variables como \texttt{lenguaje\_sexista} no detectan un fenómeno
-que ambos equipos coinciden en marcar en la mayoría de las piezas. El peso relativo
+que cada equipo marca en la mayoría de sus piezas. El peso relativo
 de cada mitad cambia según la variable, y su distinción es la que ordena las
 implicaciones para el proyecto que se recogen en la
 Sección~\ref{sec:discussion}.
