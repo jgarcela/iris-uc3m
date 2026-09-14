@@ -243,6 +243,7 @@ hmargin=3cm
 \addbibresource{bibliografia/bibliografia.bib} % llama al archivo bibliografia.bib que utilizamos de ejemplo
 
 \usepackage{pdflscape}
+\usepackage{pdfpages} % para incrustar la declaracion de uso de IAG (Anexo D)
 
 
 
@@ -643,5 +644,10 @@ se aborda en la Sección~\ref{poc}.
 \label{appendix_ai_act}
 \pagenumbering{gobble} % Las páginas de los anexos no se numeran
 \input{Plantilla_TFG_ingles_2019/appendix/ai_act}
+
+\chapter{Declaración de uso de Inteligencia Artificial Generativa}
+\label{appendix_iag}
+\pagenumbering{gobble} % Las páginas de los anexos no se numeran
+\input{Plantilla_TFG_ingles_2019/appendix/declaracion_iag}
 
 \end{document}
