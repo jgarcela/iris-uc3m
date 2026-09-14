@@ -118,6 +118,19 @@ a cambiar. No abordarlas mientras se estén aplicando comentarios de las tutoras
       figura en la dedicatoria. Sin cambios.
 - [x] Título del TFM: el usuario confirma el 12/09/2026 que se queda como está.
 
+- [x] **Anotadoras con menos de 50 piezas excluidas de todas las cifras por equipo y
+      por persona** (14/09/2026, a peticion de Carmen). Son dos personas, con 12 y 1
+      piezas. Ya estaban fuera de las columnas por anotadora de la tabla de
+      heterogeneidad. Ahora tambien de las cifras por equipo (calc.py,
+      gen_tabla_equipos.py, gen_tabla_heterogeneidad.py) y de la tabla de criterios de
+      5.1.5.3, que es inline. Se trabaja con 1.300 piezas, 536 Indexa y 764 UCM3. Cifras
+      que cambian: V25 Indexa 74,6 -> 75,0 (brecha 10,5), V26 71,4/88,0 -> 71,8/88,1
+      (16,3), V30 11,5 -> 11,4 (53,8), V33 3,3 -> 3,4 (4,9, ratio 2,4), V35 6,6 -> 6,3
+      (6,1, ratio 2,0), recall gemini/gemma V30 Indexa 0,063 -> 0,066, V26 0,711/0,396
+      -> 0,712/0,395, prevalencia media humana minima 0,283 -> 0,289 (rango 0,350).
+      Sin cambio: 28,3/97,8, 3,9/97,8, 65,2, 85,5, 0,262 y 0,160. Propagado a discusion,
+      conclusiones y scripts del repo publico. El resumen no citaba ninguna de ellas.
+
 ## Entrega
 
 - [x] Compilar en Overleaf y subir las figuras que están en `.gitignore` (hecho por Jorge, 12/09/2026).

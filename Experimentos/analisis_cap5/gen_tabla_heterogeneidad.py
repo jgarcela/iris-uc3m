@@ -50,7 +50,7 @@ o.write(r"""\begin{table}[H]
     \setlength{\tabcolsep}{4pt}
     \renewcommand{\texttt}[1]{{\ttfamily #1}}
     \ttabbox[\FBwidth]{
-        \caption{Heterogeneidad de la anotación humana, en porcentaje de piezas marcadas como \textit{Sí}. Las tres primeras columnas comparan a los dos equipos. Las tres últimas recorren a las anotadoras una a una, restringidas a las """ + str(len(keep)) + r""" que codificaron al menos """ + str(MIN_N) + r""" piezas (""" + f"{len(g):,}".replace(",", ".") + r""" de las 1.313). Ningún modelo interviene en estas cifras.}
+        \caption{Heterogeneidad de la anotación humana, en porcentaje de piezas marcadas como \textit{Sí}. Las tres primeras columnas comparan a los dos equipos y las tres últimas recorren a las anotadoras una a una. Todas las cifras se restringen a las """ + str(len(keep)) + r""" anotadoras que codificaron al menos """ + str(MIN_N) + r""" piezas (""" + f"{len(g):,}".replace(",", ".") + r""" de las 1.313). Ningún modelo interviene en estas cifras.}
         \label{tab:iris-heterogeneidad}
     }{
         \begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}l cc c cc >{\columncolor{gray!15}}c@{}}
@@ -61,8 +61,8 @@ o.write(r"""\begin{table}[H]
             \midrule
 """)
 for v, cod in VAR:
-    i = G[G.equipo == "Indexa"][v].mean()
-    u = G[G.equipo == "UCM3"][v].mean()
+    i = g[g.equipo == "Indexa"][v].mean()
+    u = g[g.equipo == "UCM3"][v].mean()
     p = g.groupby("u")[v].mean()
     o.write(f"            {cod} \\texttt{{{v.replace('_', chr(92)+'_')}}} & {pct(i)} & {pct(u)} & "
             f"\\textbf{{{pct(abs(u-i))}}} & {pct(p.min())} & {pct(p.max())} & "

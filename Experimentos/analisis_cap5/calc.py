@@ -161,8 +161,14 @@ VT=VT[c2].sort_values(['codigo','modelo'])
 VT.to_csv(f'{OUT}/voto_mayoria.csv',index=False)
 # --- equipos de anotacion (nivel B1) ---
 # El equipo se deduce del campo no_NombreUsuario del corpus anotado.
-equipo=(gt.set_index('IdNoticia')['no_NombreUsuario'].astype(str)
-          .str.contains('ndexa',case=False).map({True:'Indexa',False:'UCM3'}))
+# Se excluyen las anotadoras con menos de MIN_N piezas (dos personas, con 12 y 1),
+# igual que en gen_tabla_heterogeneidad.py, para que ninguna cifra por equipo dependa
+# de un volumen no interpretable.
+MIN_N=50
+usuario=gt.set_index('IdNoticia')['no_NombreUsuario'].astype(str)
+tam=usuario.loc[G.index].value_counts()
+usuario=usuario[usuario.isin(tam[tam>=MIN_N].index)]
+equipo=usuario.str.contains('ndexa',case=False).map({True:'Indexa',False:'UCM3'})
 er=[]
 for v in V:
     for e in ['Indexa','UCM3']:

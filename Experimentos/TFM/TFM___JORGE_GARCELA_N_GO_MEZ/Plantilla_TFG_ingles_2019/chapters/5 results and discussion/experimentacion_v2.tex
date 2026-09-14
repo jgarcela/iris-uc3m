@@ -173,7 +173,7 @@ sexista que las expertas identifican, 1.014 de las 1.063 piezas en el caso de
 matiz de umbral ni de un desacuerdo sobre casos dudosos, sino de que \textbf{el modelo
 no detecta el fenómeno}. La magnitud de esa omisión se aprecia al contrastarla con la
 anotación humana, ya que los dos equipos marcan la variable en la mayoría de las
-piezas, Indexa en el 74,6\,\% y UCM3 en el 85,5\,\%
+piezas, Indexa en el 75,0\,\% y UCM3 en el 85,5\,\%
 (Tabla~\ref{tab:iris-equipos-recall}). Discrepan en la proporción, pero coinciden en
 que el fenómeno está presente. La única excepción es \texttt{gpt-4o-mini}, que sí marca de
 forma abundante (\textit{recall} 0,450), pero su acuerdo sigue siendo negativo
@@ -257,13 +257,13 @@ de negativos de la variable.
 \textbf{Una particularidad, la división de la anotación.} La infradetección se parece a
 la de V25, pero su origen no es el mismo. Aquí la propia anotación humana está
 profundamente dividida, ya que un equipo marca el fenómeno casi seis veces más que el
-otro (11,5\,\% frente a 65,2\,\%, Tabla~\ref{tab:iris-equipos-recall}), mientras que en
+otro (11,4\,\% frente a 65,2\,\%, Tabla~\ref{tab:iris-equipos-recall}), mientras que en
 V25 ambos equipos marcaban la mayoría de sus piezas. Conviene precisar que cada pieza
 tiene una sola persona anotadora, de modo que lo que se compara no es el marcado de unas
 mismas piezas por varias personas, sino la proporción de piezas marcadas por cada
 equipo sobre subconjuntos distintos del corpus. En V25 los modelos no marcan
 suficientemente bien lo que las personas marcan, pero esa proporción es similar en
-los dos equipos (74,6\,\% y 85,5\,\%). En V30, en cambio, la proporción difiere tanto
+los dos equipos (75,0\,\% y 85,5\,\%). En V30, en cambio, la proporción difiere tanto
 de un equipo a otro que el bajo acuerdo del sistema refleja a la vez una detección
 insuficiente y un criterio humano poco estabilizado. Pesa, además, el tipo de
 juicio que exige, ya que atañe a lo que se cuenta y no solo a cómo se dice
@@ -670,7 +670,10 @@ pieza concreta permite después ver el mecanismo del fallo por dentro.
 
 El corpus registra, para cada pieza, la persona que la codificó. Las 1.313
 noticias anotadas se reparten entre dos equipos: Indexa (548 piezas) y UCM3
-(765). Aunque la ausencia de doble codificación
+(765). Todas las cifras de esta sección excluyen a dos personas que codificaron 12
+piezas y 1 pieza respectivamente, un volumen insuficiente para que su proporción
+de marcado sea interpretable, de modo que se trabaja con 1.300 piezas, 536 de
+Indexa y 764 de UCM3. Aunque la ausencia de doble codificación
 (Sección~\ref{subsec:limitacion_fiabilidad}) impide calcular la fiabilidad
 intercodificadora, sí es posible medir el acuerdo del sistema con cada equipo
 por separado, a modo de análisis de sensibilidad.
@@ -685,41 +688,44 @@ coeficientes no admiten comparación. El resultado no es uniforme entre variable
 ahí que convenga examinarlo una a una.
 
 \textbf{UCM3 marca sistemáticamente más que Indexa en las cinco variables}, y en
-algunas la diferencia es enorme. En \texttt{sexismo\_discurso} el salto va del
-11,5\,\% al 65,2\,\%, casi seis veces, y en \texttt{asimetria\_mujer\_hombre} y
-\texttt{denominacion\_sexualizada} ronda el doble, 2,5 y 1,9 veces respectivamente.
+algunas la diferencia es muy significativa. En \texttt{sexismo\_discurso} el salto va del
+11,4\,\% al 65,2\,\%, casi seis veces, y en \texttt{asimetria\_mujer\_hombre} y
+\texttt{denominacion\_sexualizada} ronda el doble, 2,4 y 2,0 veces respectivamente.
 Son proporciones de la anotación humana y, por tanto, \textbf{no dependen de ningún
 modelo}. Cada equipo codificó piezas distintas, de manera que esa distancia mezcla
 dos factores, el criterio de cada uno y la muestra que le correspondió, si bien una
 diferencia de casi seis veces como la de \texttt{sexismo\_discurso} difícilmente se
-explica solo por el segundo.
+explica solo por el segundo. En el caso de las otras dos variables, este segundo factor sí podría explicar gran parte de la discrepancia puesto que al ser la prevalencia mucho más pequeña, la probabilidad de que a cada equipo le correspondieran más o menos muestras positivas puede tener mayor variabilidad.
 
-Lo relevante es qué le ocurre al sistema ante esa diferencia. \textbf{Allí donde
-UCM3 marca más, el \textit{recall} de los modelos cae}, que es tanto como decir que los casos
-adicionales señalados por ese equipo son precisamente los que el sistema no ve. En
+Lo relevante es qué le ocurre al sistema ante esa diferencia. \textbf{En las variables donde
+UCM3 marca más, el \textit{recall} de los modelos cae}, lo que podría indicar que son los casos
+adicionales señalados por ese equipo los que el sistema no ve. En
 \texttt{asimetria\_mujer\_hombre}, \texttt{gemini} pasa de un recall de 0,278 frente
 a Indexa a 0,016 frente a UCM3, y \texttt{gemma} de 0,278 a 0,127. En
-\texttt{sexismo\_discurso}, \texttt{gemini} baja de 0,063 a 0,014 y \texttt{gemma} de
-0,063 a 0,020. El efecto se repite, más atenuado, en
-\texttt{denominacion\_sexualizada}. Si el sistema detectase el fenómeno con
-independencia de quién lo anote, el \textit{recall} se mantendría al cambiar de referencia.
-No es lo que ocurre. En \texttt{asimetria\_mujer\_hombre} esa dependencia llega a
-pesar más que la elección del modelo, ya que los 0,262 que separan a \texttt{gemini}
-entre un equipo y otro superan al rango completo de recall que separa a los cuatro
+\texttt{sexismo\_discurso}, \texttt{gemini} baja de 0,066 a 0,014 y \texttt{gemma} de
+0,066 a 0,020. El efecto se repite, más atenuado, en
+\texttt{denominacion\_sexualizada}. Como ha de asumirse que el sistema detecta el
+fenómeno con la misma eficacia independientemente de quién lo haya anotado, los
+distintos niveles de \textit{recall} observados solo pueden deberse a las distintas
+eficacias de los dos equipos anotadores en detectarlo. En términos de \textit{recall},
+para \texttt{asimetria\_mujer\_hombre} esta diferencia llega a pesar más que las
+propias diferencias entre modelos, ya que los 0,262 que separan a \texttt{gemini}
+entre un equipo y otro superan al rango completo de \textit{recall} que separa a los cuatro
 modelos en esa variable, de 0,160.
 
-Hay dos excepciones que conviene no ocultar. En \texttt{masc\_generico} el \textit{recall}
+Hay dos excepciones que conviene no olvidar. En \texttt{masc\_generico} el \textit{recall}
 apenas varía entre equipos, e incluso sube ligeramente frente a UCM3 en
-\texttt{gemini} (de 0,711 a 0,746) y en \texttt{gemma} (de 0,396 a 0,415), lo cual
-resulta coherente con que sea la variable de criterio más explícito y la única con
-acuerdo apreciable. En \texttt{lenguaje\_sexista}, el recall es tan bajo frente a
+\texttt{gemini} (de 0,712 a 0,746) y en \texttt{gemma} (de 0,395 a 0,415), lo cual
+resulta coherente con que sea la variable de criterio más explícito y la única en la
+que algún modelo alcanza un acuerdo apreciable con la anotación de referencia. En \texttt{lenguaje\_sexista}, el recall es tan bajo frente a
 ambos equipos que la comparación no aporta información.
 
 Conviene dar un paso más, porque \textbf{la divergencia no es institucional, sino
 personal}. La Tabla~\ref{tab:iris-heterogeneidad} deja de agrupar por equipos y
 recorre a las personas anotadoras una a una, y en las cinco variables la distancia entre
-personas duplica o quintuplica a la que separa a los dos equipos. En
-\texttt{sexismo\_discurso}, donde los equipos distan 53,7 puntos, las personas
+personas duplica o quintuplica a la que separa a los dos equipos. Los mínimos y máximos
+proceden de las siete anotadoras consideradas, con entre 50 y 363 piezas cada una. En
+\texttt{sexismo\_discurso}, donde los equipos distan 53,8 puntos, las personas
 anotadoras van del 3,9\,\% al 97,8\,\% de piezas marcadas.
 
 \input{chapters/5 results and discussion/tabla_heterogeneidad}
@@ -727,33 +733,33 @@ anotadoras van del 3,9\,\% al 97,8\,\% de piezas marcadas.
 Lo decisivo es que esa dispersión tampoco procede de comparar equipos distintos.
 Dentro del propio UCM3, \texttt{sexismo\_discurso} va del 28,3\,\% al 97,8\,\%, un
 rango de 69,5 puntos que por sí solo supera a la brecha entre los dos equipos. Dos
-personas con la misma formación y el mismo libro de códigos marcan, una, algo más de
-una de cada cuatro piezas, y la otra, casi todas. \textbf{Ningún sistema automático
-puede aproximarse a la vez a las dos}, y esa es la evidencia más directa del techo de
-la tarea, que además no requiere doble codificación ni depende de ningún modelo.
+personas con el mismo libro de códigos marcan, una, algo más de
+una de cada cuatro piezas, y la otra, casi todas. Con las precauciones derivadas del hecho de que no hay codificación múltiple y de que varias variables tienen prevalencias bajas podemos decir que \textbf{ningún sistema automático
+podría aproximarse a la vez a las dos}, y esa es la evidencia más directa del techo de
+la tarea, que además no depende de ningún modelo y deriva directamente de la escasez de datos y la dificultad del marcado.
 
 \subsubsection{Consenso de los modelos frente al \textit{ground truth}}
 
 Un segundo análisis examina las celdas en las que \textbf{los cuatro modelos
 coinciden entre sí} pero difieren de la anotación experta. Son celdas informativas,
 porque descartan que el desajuste se deba a la particularidad de un modelo concreto,
-si bien conviene no sobreinterpretarlas, ya que la coincidencia de los cuatro no
+si bien conviene no malinterpretarlas, ya que la coincidencia de los cuatro no
 convierte a la anotación en errónea ni demuestra por sí sola una incapacidad general
-de los modelos de lenguaje. De
+de los modelos de lenguaje debida a sus sesgos. De
 las 6.565 celdas evaluadas (1.313 piezas $\times$ 5 variables), 1.364 presentan
 consenso de los cuatro modelos en contra del \textit{ground truth}. Su dirección
 es prácticamente unánime: en \textbf{1.363 casos} los cuatro modelos responden \textit{No}
 donde la anotación dice \textit{Sí}, y solo en 1 caso ocurre lo contrario. La
 infradetección observada por variable es, por tanto, un \textbf{sesgo sistemático},
 no aleatorio, y constituye el hallazgo principal de este análisis: \textbf{los
-modelos detectan de forma consistente menos sexismo que las personas anotadoras}.
+modelos detectan de forma consistente menos sexismo que las personas anotadoras}. Evaluar los orígenes de esta menor detección está fuera del alcance de este trabajo pero por sí solo, supone una llamada a la precaución en el uso de los modelos incluso cuando se han diseñado los \textit{prompts} específicamente para detectar sexismo.
 
 Conviene precisar qué acredita exactamente ese recuento. Cada modelo deja sin marcar
 por su cuenta una proporción muy alta de los positivos, de manera que la coincidencia
 de los cuatro en el \textit{No} es en buena medida esperable sin necesidad de que
 compartan patrón alguno. De hecho, el número de celdas con consenso se aparta poco del
 que predicen los \textit{recalls} individuales, salvo en \texttt{masc\_generico}, que es
-justamente la única variable con detección aprovechable. Lo que estas celdas
+justamente la única variable con detección considerable. Lo que estas celdas
 establecen, por tanto, es que los cuatro modelos infradetectan a la vez, no que
 fallen en las mismas piezas, y su valor está en la dirección del error antes que en
 su volumen.
@@ -820,7 +826,7 @@ además \emph{dónde} se concentra el sesgo. En términos absolutos, casi tres c
 partes de los casos se acumulan en \texttt{lenguaje\_sexista} (567) y
 \texttt{sexismo\_discurso} (447), aunque eso obedece sobre todo a que son dos de las
 variables con más positivos anotados. La lectura pertinente es la relativa, esto es,
-qué proporción de los positivos de cada variable cae en consenso, y ahí el orden es
+qué proporción de los positivos de cada variable cae en el consenso entre modelos, y ahí el orden es
 otro: el 91,6\,\% en \texttt{denominacion\_sexualizada}, el 79,5\,\% en
 \texttt{sexismo\_discurso}, el 74,1\,\% en \texttt{asimetria\_mujer\_hombre}, el
 53,3\,\% en \texttt{lenguaje\_sexista} y solo el 15,9\,\% en
@@ -830,10 +836,10 @@ Ese orden no lo explica la prevalencia. \texttt{lenguaje\_sexista} y
 \texttt{masc\_generico} la tienen idéntica, del 81,0\,\%, y ocupan sin embargo
 extremos opuestos de esa lista. \textbf{Lo que ordena el desglose es si los modelos
 detectan o no}, de modo que el consenso en contra de la anotación escasea justamente
-en la única variable donde el sistema alcanza una detección aprovechable. La
+en la única variable donde el sistema alcanza una detección considerable. La
 dirección, en cambio, sí es prácticamente absoluta, ya que un único caso, en
 \texttt{asimetria\_mujer\_hombre}, invierte el patrón y los cuatro modelos marcan
-\textit{Sí} donde la anotación dice \textit{No}.
+\textit{Sí} donde la anotación dice \textit{No}. Está claro, entonces que los modelos no tienen falsos positivos apreciables.
 
 
 
@@ -853,7 +859,8 @@ Como cada noticia la codificó una sola persona, no hay solapamiento entre ellas
 sí compara todos los criterios es la \textbf{prevalencia del \textit{Sí}}: la proporción de
 piezas en que cada entidad codificadora, humana o artificial, marca la variable. La
 Tabla~\ref{tab:iris-criterios} ordena por esa proporción, promediada sobre las cinco
-variables, a las nueve personas anotadoras y a los cuatro modelos evaluados.
+variables, a las siete personas anotadoras con al menos 50 piezas codificadas y a los
+cuatro modelos evaluados.
 
 \begin{table}[H]
     \centering
@@ -882,12 +889,10 @@ variables, a las nueve personas anotadoras y a los cuatro modelos evaluados.
             UCM3 3 & 363 & 0,986 & 0,975 & 0,978 & 0,041 & 0,215 & 0,639 \\
             UCM3 4 & 166 & 0,831 & 0,855 & 0,283 & 0,271 & 0,084 & 0,465 \\
             Indexa 1 & 127 & 0,772 & 0,756 & 0,307 & 0,087 & 0,118 & 0,408 \\
-            UCM3 6 & 1 & 1,000 & 0,000 & 1,000 & 0,000 & 0,000 & 0,400 \\
             Indexa 5 & 50 & 0,940 & 0,920 & 0,100 & 0,020 & 0,000 & 0,396 \\
             UCM3 5 & 235 & 0,668 & 0,753 & 0,409 & 0,013 & 0,013 & 0,371 \\
             Indexa 2 & 128 & 0,742 & 0,727 & 0,062 & 0,031 & 0,062 & 0,325 \\
             Indexa 3 & 231 & 0,701 & 0,649 & 0,039 & 0,009 & 0,048 & 0,289 \\
-            Indexa 4 & 12 & 0,583 & 0,500 & 0,167 & 0,000 & 0,167 & 0,283 \\
             \midrule[\heavyrulewidth]
             \texttt{gpt-4o-mini} & 1.313 & 0,462 & 0,191 & 0,107 & 0,144 & 0,012 & 0,183 \\
             \texttt{gemini} & 1.313 & 0,039 & 0,669 & 0,020 & 0,039 & 0,009 & 0,155 \\
@@ -900,14 +905,13 @@ variables, a las nueve personas anotadoras y a los cuatro modelos evaluados.
 \end{table}
 
 Los cuatro modelos quedan por debajo de la persona anotadora que menos marca, esto
-es, fuera del rango humano completo. La diferencia no debe leerse como una postura
-más permisiva ante el sexismo, puesto que los modelos no sostienen un criterio
-alternativo, sino como una capacidad de detección menor. Es la infradetección
-sistemática de la subsección anterior, leída ahora sobre una escala común a personas
-y máquinas.
+es, fuera del rango humano completo. Esa distancia responde a una capacidad de
+detección menor, y no a que los modelos apliquen un criterio propio más restrictivo
+sobre qué constituye sexismo. Es la infradetección sistemática de la subsección
+anterior, leída ahora sobre una escala común a personas y máquinas.
 
 Ese retrato, no obstante, es el del promedio. El desglose por variable matiza el
-cuadro, porque en algunas variables ciertos modelos son más inclusivos que la mayoría
+cuadro, porque en algunas variables ciertos modelos son más sensibles que la mayoría
 de las personas. El caso más claro es \texttt{gpt-4o-mini} en
 \texttt{asimetria\_mujer\_hombre}, que marca el fenómeno en el 14,4\,\% de las piezas,
 por encima de todas las personas anotadoras salvo una (UCM3-4, con el 27,1\,\%). También
@@ -915,8 +919,8 @@ por encima de todas las personas anotadoras salvo una (UCM3-4, con el 27,1\,\%).
 puntos de mayor sensibilidad en variables concretas, habitualmente las más explícitas y sencillas de definir.
 
 La misma tabla depara otra lectura, y es que la dispersión \emph{entre las propias
-personas} resulta mayor que la que separa a los modelos entre sí. La prevalencia media humana va de 0,283 a 0,639 (un
-rango de 0,356), mientras que la de los cuatro modelos va de 0,043 a 0,183 (un rango
+personas} resulta mayor que la que separa a los modelos entre sí. La prevalencia media humana va de 0,289 a 0,639 (un
+rango de 0,350), mientras que la de los cuatro modelos va de 0,043 a 0,183 (un rango
 de 0,140). El criterio humano no es un punto de referencia fijo, sino una franja
 ancha, y esa amplitud es justamente la que acota el acuerdo alcanzable. Como cada persona
 codificó piezas distintas, su prevalencia mezcla dos factores: el criterio propio y
@@ -938,10 +942,10 @@ se trata de modelos de la misma empresa proveedora. Los dos de OpenAI alcanzan
 $\kappa = 0,300$ en \texttt{sexismo\_discurso}, y el formado por \texttt{gemma} y
 \texttt{gemini}, ambos de la familia de Google, llega a 0,259 en
 \texttt{asimetria\_mujer\_hombre} y a 0,236 en \texttt{sexismo\_discurso}. Fuera de
-esas coincidencias por familia, los modelos no comparten criterio.
+esas coincidencias por familia, no podemos decir que los modelos compartan un criterio claro.
 
 Conviene señalar que el acuerdo bruto entre modelos sí resulta alto en algunos
-pares, pero se trata de un artefacto de que casi todos responden \textit{No} en casi
+pares, pero se trata de un artefacto derivado de que casi todos responden \textit{No} en casi
 todas las piezas. En \texttt{denominacion\_sexualizada} supera el 97\,\% en los seis
 pares, porque ninguno de los cuatro modelos marca más del 1,4\,\% de las piezas. En
 \texttt{lenguaje\_sexista} y en \texttt{asimetria\_mujer\_hombre} ese acuerdo alto se
@@ -952,8 +956,8 @@ cautela que exige la exactitud frente al clasificador trivial
 (Sección~\ref{sec:iris_variables}), aplicada ahora al acuerdo entre sistemas.
 
 No existe, por tanto, un criterio común a los modelos. Cada uno presenta su propio
-patrón de respuesta, y lo que comparten se limita a la dirección del sesgo, la
-tendencia a marcar de menos, no a los casos concretos en que lo aplican. Este
+patrón de respuesta, y lo que comparten se limita a la dirección del sesgo (la
+tendencia a marcar de menos), no a los casos concretos en que lo aplican. Este
 resultado matiza la idea de un sesgo único y uniforme de la inteligencia artificial,
 ya que se observan más bien cuatro comportamientos distintos que solo coinciden en
 sus limitaciones de detección.
@@ -964,7 +968,7 @@ nivel, y en la dirección contraria a la esperable, porque las \textit{Agent Ski
 \textbf{reducen} el acuerdo entre modelos en veintitrés de las treinta celdas. El descenso más llamativo es el de los dos modelos de OpenAI en
 \texttt{sexismo\_discurso}, de 0,550 a 0,300, y en \texttt{denominacion\_sexualizada},
 de 0,316 a $-0,001$. Las \textit{skills} acentúan las particularidades de cada
-modelo en lugar de acercarlos a un criterio compartido.
+modelo en lugar de acercarlos a un criterio compartido. No obstante, remarcamos que el que hubiera un criterio compartido no tendría por qué ser un rasgo deseable ya que simplemente significaría que unos modelos lo hacen mejor que otros.
 
 \paragraph{¿Serviría combinar los modelos?} El bajo acuerdo entre ellos plantea de
 forma natural si una decisión por mayoría mejoraría el resultado, ya que combinar
