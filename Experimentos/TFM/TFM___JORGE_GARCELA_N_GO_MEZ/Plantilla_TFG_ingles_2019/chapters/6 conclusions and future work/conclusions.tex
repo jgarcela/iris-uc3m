@@ -3,7 +3,7 @@
 %----------
 
 Este trabajo ha abordado la detección automática de lenguaje sexista en la prensa
-española escrita en el marco del proyecto IRIS, con el fin de asistir el análisis
+española escrita, a partir del corpus y la metodología del proyecto IRIS, con el fin de asistir el análisis
 experto de la representación mediática de las mujeres. La propuesta central ha sido
 empaquetar la metodología experta como \textit{Agent Skills} cargables bajo demanda,
 sobre una arquitectura de agentes especializadas, una por cada variable del libro de
@@ -28,9 +28,10 @@ bajo acuerdo absoluto responde a \textbf{dos causas que conviene no confundir}. 
 un techo de la propia tarea, documentado en \texttt{sexismo\_discurso}, que dos equipos
 marcan en el 11,5\,\% y en el 65,2\,\% de las piezas y que dentro de un mismo equipo va
 del 28,3\,\% al 97,8\,\%, reflejo de lo difícil que resulta percibir el fenómeno incluso
-a quien lo busca. La otra es una limitación de los modelos, tres de los cuales dejan sin señalar en
-\texttt{lenguaje\_sexista} casi todo lo que ambos equipos coinciden en
-marcar. El peso de cada una cambia según la variable, y ninguna absuelve a la otra, de
+a quien lo busca. La otra es una limitación de los modelos: en \texttt{lenguaje\_sexista} los dos
+equipos marcan la variable en la mayoría de sus piezas, el 74,6\,\% y el 85,5\,\%
+respectivamente, y aun así tres de los cuatro modelos apenas la detectan, con un
+recall prácticamente nulo. El peso de cada una cambia según la variable, y ninguna absuelve a la otra, de
 manera que el desacuerdo recoge a la vez la dificultad de percibir el fenómeno y el
 error de detección del sistema. Cabe
 precisar, además, que los modelos quedan, salvo \texttt{gemini} en
