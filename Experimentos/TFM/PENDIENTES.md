@@ -84,8 +84,9 @@ a cambiar. No abordarlas mientras se estén aplicando comentarios de las tutoras
       `variables.json`, el manifiesto de guías, los scripts de `analisis_cap5`, la
       ejecución en el clúster con el cliente del TSC y su licencia, README,
       requirements y config de ejemplo. Fuera: corpus, anotaciones, predicciones,
-      guías, claves. El repositorio de trabajo está en `~/tfm-iris-uc3m/`. Pendiente
-      de decidir la licencia. Se empuja por SSH (la clave está en la cuenta jgarcela;
+      guías, claves. El repositorio de trabajo está en `~/tfm-iris-uc3m/`. El 14/09/2026, a
+      peticion de Carmen, el repositorio pasa a privado (acceso a peticion), y el
+      Apendice B y reg_framework.tex se redactan en consecuencia. Se empuja por SSH (la clave está en la cuenta jgarcela;
       por HTTPS el terminal usa jorgegarcelan y da 403).
 - [x] **Glosario** (12/09/2026). Se retira la frase que prometia glosar cada termino
       en su primera aparicion, porque solo se cumplia en 2 de 12 casos. Se unifica
