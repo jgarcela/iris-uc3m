@@ -76,13 +76,13 @@ real de criterio.
 El acuerdo absoluto es bajo, y el análisis de la Sección~\ref{subsec:iris_errores} permite repartir ese
 desajuste entre dos causas que conviene no confundir.
 
-La primera es un \textbf{límite de la tarea}. Dos equipos expertos codificaron la
-misma variable con criterios muy distantes, hasta el punto de que
+La primera es un \textbf{límite de la tarea}. Con la prudencia obligada pues no hay anotaciones múltiples de cada pieza, vemos que dos equipos expertos codificaron la
+misma variable con desempeños muy distantes en términos de detección, hasta el punto de que
 \texttt{sexismo\_discurso} pasa del 11,5\,\% al 65,2\,\% de piezas marcadas según
 quién anote (Sección~\ref{subsec:iris_errores}). La brecha, además, no es
 institucional. Dentro de un mismo equipo esa variable va del 28,3\,\% al 97,8\,\%
 según quién codifique, un rango de 69,5 puntos que por sí solo supera a los 53,7 que
-separan a los dos equipos, de modo que dos personas con la misma formación y el mismo
+separan a los dos equipos, de modo que dos personas con el mismo
 libro de códigos marcan, una, poco más de una de cada cuatro piezas, y la otra, casi
 todas. Cuando el criterio admite esa
 amplitud, el patrón de referencia deja de ser un suelo estable, y el coeficiente
@@ -101,9 +101,9 @@ sola~\cite{plaza2024}.
 La segunda es un \textbf{límite de los modelos}, y sería un error disolverlo en el
 anterior. En \texttt{lenguaje\_sexista} cada equipo marca la variable en la mayoría de
 sus piezas, el 74,6\,\% y el 85,5\,\% respectivamente, y
-aun así tres de los cuatro modelos presentan un recall prácticamente nulo. Ahí no
+aun así tres de los cuatro modelos presentan un \textit{recall} prácticamente nulo. Ahí no
 hay criterio en disputa, hay un fenómeno que las personas ven y el sistema no. El
-caso examinado en la Sección~\ref{subsec:iris_caso} muestra el mecanismo, ya que
+caso examinado en la Sección~\ref{subsec:iris_caso} muestra uno de los posibles mecanismos, ya que
 los modelos localizan el masculino genérico y lo declaran un colectivo mixto
 válido, reproduciendo el mismo automatismo que se les pedía detectar.
 
@@ -115,22 +115,22 @@ la mayoría de las piezas y se separan menos de veinte puntos, de modo que allí
 criterio en disputa y lo que falla es el sistema. En
 \texttt{asimetria\_mujer\_hombre} y \texttt{denominacion\_sexualizada}, por último, la
 distancia ronda los cinco puntos, lo que en términos relativos supone que un equipo
-marca alrededor del doble que el otro, si bien sobre proporciones tan bajas que el
+marca alrededor del doble que el otro, si bien esto ocurre sobre proporciones tan bajas que el
 obstáculo principal no es el desacuerdo sino la escasez de positivos, 81 y 131 piezas
 en todo el corpus.
 
-Conviene, por ello, no dejar que el techo de la tarea absuelva al sistema. En el nivel
-desplegado, el mejor recall que alcanza alguno de los cuatro modelos se queda en 0,450
+Conviene, por ello, no dejar que el techo de la tarea oscurezca la necesidad de mejorar el sistema. En el nivel
+desplegado, el mejor \textit{recall} que alcanza alguno de los cuatro modelos se queda en 0,450
 en \texttt{lenguaje\_sexista}, 0,114 en \texttt{sexismo\_discurso}, 0,160 en
 \texttt{asimetria\_mujer\_hombre} y 0,046 en \texttt{denominacion\_sexualizada}, y solo
 en \texttt{masc\_generico} llega a 0,733. Con cifras así, el margen de mejora de los
-modelos sigue siendo amplio al margen de cuánto converja la anotación humana.
+modelos sigue siendo amplio independientemente de cuánto se estabilice el criterio de anotación.
 
 De ahí que ese margen tenga dos vías. Una consiste en explicitar mejor el constructo en
 el libro de códigos, apoyándose en anotaciones cualitativas que lo delimiten con
 ejemplos, y conviene priorizarla en las variables de criterio más implícito. La
-otra consiste en mejorar la sensibilidad del sistema en aquello que las expertas sí
-identifican de forma concordante. Conviene además evitar una simplificación, ya que
+otra consiste en mejorar la sensibilidad del sistema en las variables en las que las
+expertas marcan el fenómeno de forma mayoritaria con independencia de quién anote. Conviene además evitar una simplificación, ya que
 los modelos no comparten un sesgo homogéneo, sino cuatro comportamientos distintos
 que solo coinciden en su dirección.
 
@@ -177,7 +177,7 @@ que alcanza el mayor acuerdo del capítulo, y 6,89 USD con \texttt{gpt-4o-mini},
 sale más barato pero queda
 por detrás en tres de las cinco variables. La asignación por variable se sitúa, por
 tanto, entre ambas en coste y por delante de las dos en rendimiento, que es cuanto cabe
-pedirle a una decisión de despliegue.
+pedirle a una decisión de despliegue. Por este motivo, no es sencillo inferir qué podría ocurrir con el resto de las variables no contempladas en este trabajo.
 
 \paragraph{La supervisión humana no es un remedio provisional.} Que el sistema
 requiera revisión experta no constituye una anomalía de esta implementación, sino
@@ -185,7 +185,7 @@ lo que la literatura viene recomendando para las tareas de anotación con carga
 interpretativa. Pangakis et al.~\cite{pangakis2023} replican veintisiete tareas de
 anotación procedentes de la investigación en ciencias sociales y concluyen que
 ningún proceso automático puede darse por válido sin contrastarlo con etiquetas
-humanas, ya que en nueve de ellas la precisión o el recall caen por debajo de 0,5.
+humanas, ya que en nueve de ellas la precisión o el \textit{recall} caen por debajo de 0,5.
 Kocoń et al.~\cite{kocon2023} evalúan un modelo general en veinticinco tareas de
 procesamiento del lenguaje y miden una pérdida media del 25,5\,\% frente a los
 sistemas especializados, pérdida que se concentra en las tareas subjetivas, ya que al
@@ -198,13 +198,13 @@ sitúa, por tanto, en el consenso de la disciplina.
 \paragraph{Ante la duda, conviene marcar de más.} Como herramienta de apoyo a la
 postedición, el sistema no decide, sino que selecciona lo que merece una segunda
 lectura. En ese uso los dos errores no cuestan lo mismo, ya que un falso positivo
-supone unos segundos de descarte para la analista mientras que un falso negativo
+supone unos segundos de descarte para el o la analista mientras que un falso negativo
 es un caso que nadie revisará (Sección~\ref{sec:metricas_eval}). Los resultados
 apuntan en la dirección contraria a la deseable, puesto que el sistema falla
 precisamente por defecto, de modo que cualquier ajuste futuro debería orientarse a
-elevar el recall aun a costa de la precisión. La Sección~\ref{subsec:iris_equipo_ia}
+elevar el \textit{recall} aun a costa de la precisión. La Sección~\ref{subsec:iris_equipo_ia}
 apunta una vía concreta en ese sentido, la de marcar la pieza cuando lo haga
-cualquiera de los modelos, que eleva el recall en las cinco variables. Tiene dos
+cualquiera de los modelos, que eleva el \textit{recall} en las cinco variables. Tiene dos
 contrapartidas, la de ejecutar los cuatro modelos sobre cada pieza y la de que el
 $\kappa$ desciende en cuatro de las cinco, algo esperable en una regla que marca más.
 
@@ -215,7 +215,7 @@ analizado en la Sección~\ref{subsec:iris_caso} muestra que esa explicación no 
 añadido cosmético, sino lo que permite entender por qué falla el sistema y, con
 ello, corregirlo. Queda por comprobar, eso sí, en qué medida esa salida cumple lo que
 promete, ya que este trabajo mide la etiqueta y no la calidad de las explicaciones ni
-de las evidencias, por no disponer de un marcado experto con el que contrastarlas
+de las evidencias, por no disponer de un marcado cualitativo experto con el que contrastarlas
 (Sección~\ref{subsec:limitacion_fiabilidad}). El caso examinado es un indicio
 favorable, no una medida, y su evaluación sistemática queda como línea futura
 (Sección~\ref{sec:futurework_usecases}). El valor no está en sustituir el criterio
