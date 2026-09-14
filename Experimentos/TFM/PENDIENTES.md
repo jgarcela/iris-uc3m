@@ -131,6 +131,16 @@ a cambiar. No abordarlas mientras se estén aplicando comentarios de las tutoras
       Sin cambio: 28,3/97,8, 3,9/97,8, 65,2, 85,5, 0,262 y 0,160. Propagado a discusion,
       conclusiones y scripts del repo publico. El resumen no citaba ninguna de ellas.
 
+- [x] **Cap 5 dividido en Resultados (5) y Discusion (6)** (14/09/2026). El Cap 5 queda
+      con la experimentacion, subida un nivel (5.1 referencia, 5.2 metricas por variable,
+      5.3 ablacion, 5.4 coste y modelo local, 5.5 origen de la infradeteccion). El Cap 6
+      "Discusion" tiene 6.1 "Lectura transversal de los resultados" (antiguo 5.2, entrada
+      breve en el fichero principal) y 6.2 "Aplicabilidad editorial" (antiguo 5.3).
+      Conclusiones pasa a Cap 7. Etiquetas conservadas: `results_and_discussion` y
+      `sec:iris_experimentacion` apuntan ahora al Cap 5, `sec:discussion` a 6.1, `poc` a
+      6.2, y nueva `discussion_chapter` para el Cap 6. Tabla de estructura del Cap 1 al
+      dia. discussion.tex y aplicabilidad.tex movidos a `chapters/6 discussion/` (el fichero se llama discussion_v2.tex, como en Overleaf) y la carpeta de conclusiones renombrada a `7 conclusions and future work`. La carpeta `5 results and discussion` conserva su nombre porque los generadores de tablas escriben en ella.
+
 ## Entrega
 
 - [x] Compilar en Overleaf y subir las figuras que están en `.gitignore` (hecho por Jorge, 12/09/2026).

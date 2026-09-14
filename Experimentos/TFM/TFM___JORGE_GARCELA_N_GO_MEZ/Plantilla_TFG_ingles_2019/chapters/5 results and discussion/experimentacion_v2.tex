@@ -70,7 +70,7 @@ interpretación de las métricas exige tener presente la prevalencia de cada var
 y la exactitud trivial asociada, recogidas en la
 Tabla~\ref{tab:iris-prevalencia-imp} del Capítulo~\ref{sec:methodology}. Reproducimos esta tabla en la siguiente sección también por comodidad en la lectura.
 
-\subsection{Referencia de partida: prevalencia y clasificador trivial}
+\section{Referencia de partida: prevalencia y clasificador trivial}
 \label{subsec:iris_referencia}
 
 Toda lectura de los resultados exige tener presente la distribución de clases de
@@ -114,7 +114,7 @@ organización de este capítulo, que examina cada variable por separado antes de
 plantearse cualquier lectura de conjunto.
 
 
-\subsection{Métricas por variable}
+\section{Métricas por variable}
 \label{subsec:iris_porvariable}
 
 Las Tablas~\ref{tab:var-v25} a~\ref{tab:var-v35} recogen, para cada variable, el
@@ -144,7 +144,7 @@ número de piezas sobre el que se calcula cada celda y haría incomparables los 
 niveles. El recálculo con ambos criterios arroja diferencias en $\kappa$ no superiores
 a 0,005.
 
-\subsubsection{Lenguaje sexista (V25)}
+\subsection{Lenguaje sexista (V25)}
 
 \input{chapters/5 results and discussion/tabla_var_v25}
 
@@ -198,7 +198,7 @@ valores 2 y 3 no altera en nada la referencia. La identificación de este fenóm
 como línea de trabajo futura, condicionada a que una anotación posterior lo codifique
 de forma diferenciada.
 
-\subsubsection{Masculino genérico (V26)}
+\subsection{Masculino genérico (V26)}
 
 \input{chapters/5 results and discussion/tabla_var_v26}
 
@@ -233,7 +233,7 @@ sitúa ese umbral en un punto distinto, y los de OpenAI más alto que \texttt{ge
 \texttt{gemma}, si bien el empaquetado también lo desplaza, como muestra el caso de
 \texttt{gpt-5.4-nano}.
 
-\subsubsection{Sexismo en el discurso (V30)}
+\subsection{Sexismo en el discurso (V30)}
 
 \input{chapters/5 results and discussion/tabla_var_v30}
 
@@ -271,7 +271,7 @@ juicio que exige, ya que atañe a lo que se cuenta y no solo a cómo se dice
 de la interpretación del contexto social de la pieza, tanto para quien anota como para
 el sistema.
 
-\subsubsection{Asimetría entre mujeres y hombres (V33)}
+\subsection{Asimetría entre mujeres y hombres (V33)}
 
 \input{chapters/5 results and discussion/tabla_var_v33}
 
@@ -306,7 +306,7 @@ entre los dos equipos, ya que 63 de los 81 proceden de UC3M y 18 de Indexa
 medida del criterio de uno de ellos. Conviene, por tanto, leer esta variable con más
 cautela que las demás.
 
-\subsubsection{Denominación sexualizada (V35)}
+\subsection{Denominación sexualizada (V35)}
 
 \input{chapters/5 results and discussion/tabla_var_v35}
 
@@ -338,7 +338,7 @@ llegan a marcar, \texttt{gemini} acierta 2 de 12, \texttt{gpt-4o-mini} 6 de 16 y
 \texttt{gemma} 3 de 19, de manera que tampoco la decisión de marcar, cuando se toma,
 coincide con la de las expertas.
 
-\subsubsection{Cuánto marca cada modelo}
+\subsection{Cuánto marca cada modelo}
 
 Las tablas anteriores dan el \textit{recall} variable a variable, y para interpretarlo conviene
 saber cuánto marca cada modelo en términos absolutos, ya que marcar poco impide
@@ -361,7 +361,7 @@ reproduce casi exactamente la prevalencia anotada en
 el 16,0\,\% de los casos, esto es, marca un número parecido de piezas pero no las
 mismas.
 
-\subsection{Descomposición de la arquitectura por componentes (ablación)}
+\section{Descomposición de la arquitectura por componentes (ablación)}
 \label{subsec:iris_descomposicion}
 
 El nivel B1 combina tres componentes, descritos en el Capítulo~\ref{implementation}:
@@ -453,7 +453,7 @@ por tanto, sobre diferencias pequeñas en la mayoría de los casos, de modo que 
 sostener que la configuración completa no muestra ventaja.
 
 
-\subsection{Coste de inferencia y modelo local}
+\section{Coste de inferencia y modelo local}
 \label{subsec:iris_local}\label{subsec:iris_coste}
 
 Elegir con qué modelo desplegar el sistema no se resuelve mirando una sola cifra, y
@@ -481,7 +481,7 @@ en el modelo local, que es el que obliga a plantear el coste en estos términos.
 de ello se sigue para un despliegue en IRIS se retoma en la discusión
 (Sección~\ref{sec:discussion}).
 
-\subsubsection{El coste, variable a variable}
+\subsection{El coste, variable a variable}
 
 El coste real de inferencia sobre las 1.313 noticias asciende a 30,91 USD en el
 sistema agéntico (B1), frente a los 13,83 USD del \textit{baseline} (B0) en los tres
@@ -586,7 +586,7 @@ esfuerzo adicional se traduce en la única detección utilizable del capítulo, 
 coincide con el criterio experto. Para un despliegue, esto refuerza la conveniencia de decidir modelo y variable a la
 vez, ya que el modelo más caro en una variable no lo es en la siguiente.
 
-\subsubsection{El modelo local}
+\subsection{El modelo local}
 
 El modelo local queda fuera de las tablas de coste del apartado anterior, y merece un
 apartado propio por dos razones. La primera es que su rendimiento se sitúa en el
@@ -657,7 +657,7 @@ traslada al cómputo. Las implicaciones prácticas para IRIS se retoman en la di
     \label{fig:iris-rendimiento-coste}
 \end{figure}
 
-\subsection{El origen de la infradetección: la tarea y los modelos}
+\section{El origen de la infradetección: la tarea y los modelos}
 \label{subsec:iris_errores}
 
 El bajo acuerdo con la anotación experta plantea la pregunta que condiciona la
@@ -666,7 +666,7 @@ límite intrínseco de la propia tarea? La respuesta no es una de las dos, sino 
 reparto entre ambas, y a establecerlo se dirigen los tres análisis que siguen. Una
 pieza concreta permite después ver el mecanismo del fallo por dentro.
 
-\subsubsection{Heterogeneidad entre equipos de anotación}
+\subsection{Heterogeneidad entre equipos de anotación}
 
 El corpus registra, para cada pieza, la persona que la codificó. Las 1.313
 noticias anotadas se reparten entre dos equipos: Indexa (548 piezas) y UC3M
@@ -738,7 +738,7 @@ una de cada cuatro piezas, y la otra, casi todas. Con las precauciones derivadas
 podría aproximarse a la vez a las dos}, y esa es la evidencia más directa del techo de
 la tarea, que además no depende de ningún modelo y deriva directamente de la escasez de datos y la dificultad del marcado.
 
-\subsubsection{Consenso de los modelos frente al \textit{ground truth}}
+\subsection{Consenso de los modelos frente al \textit{ground truth}}
 
 Un segundo análisis examina las celdas en las que \textbf{los cuatro modelos
 coinciden entre sí} pero difieren de la anotación experta. Son celdas informativas,
@@ -843,7 +843,7 @@ dirección, en cambio, sí es prácticamente absoluta, ya que un único caso, en
 
 
 
-\subsubsection{El sistema como una persona anotadora más}
+\subsection{El sistema como una persona anotadora más}
 \label{subsec:iris_equipo_ia}
 
 Los análisis anteriores comparan cada modelo contra la anotación experta tomada
@@ -1004,7 +1004,7 @@ $\kappa$ individual, algo esperable
 en una regla que marca más y que remite de nuevo al desacoplamiento entre exactitud y
 acuerdo (Sección~\ref{subsec:iris_tres_metricas}).
 
-\subsubsection{Anatomía de un fallo de detección}
+\subsection{Anatomía de un fallo de detección}
 \label{subsec:iris_caso}
 
 Los análisis anteriores establecen la dirección y la magnitud del desajuste, pero no
