@@ -20,7 +20,7 @@ def num(x,pct=False):
     if abs(v)<5e-4: v=0.0
     return f"{v:.3f}".replace(".",",").replace("-","$-$")
 nI=int([x for x in rows if x["codigo"]=="V25" and x["equipo"]=="Indexa"][0]["n"])
-nU=int([x for x in rows if x["codigo"]=="V25" and x["equipo"]=="UCM3"][0]["n"])
+nU=int([x for x in rows if x["codigo"]=="V25" and x["equipo"]=="UC3M"][0]["n"])
 o=io.StringIO()
 o.write("% Generado por gen_tabla_equipos.py. No editar a mano.\n")
 for metric,nom,lab in [("recall","recall","recall")]:
@@ -30,7 +30,7 @@ for metric,nom,lab in [("recall","recall","recall")]:
     if metric=="recall":
         o.write("        \\caption{Prevalencia anotada por cada equipo y "+lab+" de los cuatro modelos "
                 "frente a cada uno, por variable (nivel B1). Se consideran las "+f"{nI+nU:,}".replace(",",".")+" piezas de las anotadoras "
-                "con al menos 50 piezas codificadas: "+str(nI)+" de Indexa y "+str(nU)+" de UCM3.}\n        \\label{tab:iris-equipos-recall}\n")
+                "con al menos 50 piezas codificadas: "+str(nI)+" de Indexa y "+str(nU)+" de UC3M.}\n        \\label{tab:iris-equipos-recall}\n")
     else:
         o.write("        \\caption{Coeficiente "+lab+" de los cuatro modelos frente a cada equipo de "
                 "anotación, por variable (nivel B1).}\n        \\label{tab:iris-equipos-kappa}\n")
@@ -40,7 +40,7 @@ for metric,nom,lab in [("recall","recall","recall")]:
             +" & ".join("\\texttt{%s}"%s for _,s in MODS)+" \\\\\n")
     for cod,nomv in VAR:
         o.write("            \\midrule\n")
-        for i,eq in enumerate(["Indexa","UCM3"]):
+        for i,eq in enumerate(["Indexa","UC3M"]):
             r=[x for x in rows if x["codigo"]==cod and x["equipo"]==eq][0]
             cells=[num(r[f"{metric}_{m}"]) for m,_ in MODS]
             first = "\\texttt{%s}"%nomv if i==0 else ""

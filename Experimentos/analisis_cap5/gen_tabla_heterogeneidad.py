@@ -32,7 +32,7 @@ for v in V:
     G[v] = binar(gt[v])
 G = G.dropna(subset=V)
 assert len(G) == 1313, len(G)
-G["equipo"] = G.u.str.contains("ndexa", case=False).map({True: "Indexa", False: "UCM3"})
+G["equipo"] = G.u.str.contains("ndexa", case=False).map({True: "Indexa", False: "UC3M"})
 
 tam = G.groupby("u").size()
 keep = tam[tam >= MIN_N].index
@@ -57,12 +57,12 @@ o.write(r"""\begin{table}[H]
             \toprule
             & \multicolumn{3}{c}{\textbf{Entre equipos}} & \multicolumn{3}{c}{\textbf{Entre anotadoras}} \\
             \cmidrule(lr){2-4} \cmidrule(lr){5-7}
-            \textbf{Variable} & Indexa & UCM3 & \textbf{Brecha} & Mín. & Máx. & \textbf{Rango} \\
+            \textbf{Variable} & Indexa & UC3M & \textbf{Brecha} & Mín. & Máx. & \textbf{Rango} \\
             \midrule
 """)
 for v, cod in VAR:
     i = g[g.equipo == "Indexa"][v].mean()
-    u = g[g.equipo == "UCM3"][v].mean()
+    u = g[g.equipo == "UC3M"][v].mean()
     p = g.groupby("u")[v].mean()
     o.write(f"            {cod} \\texttt{{{v.replace('_', chr(92)+'_')}}} & {pct(i)} & {pct(u)} & "
             f"\\textbf{{{pct(abs(u-i))}}} & {pct(p.min())} & {pct(p.max())} & "

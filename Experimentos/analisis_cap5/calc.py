@@ -168,10 +168,10 @@ MIN_N=50
 usuario=gt.set_index('IdNoticia')['no_NombreUsuario'].astype(str)
 tam=usuario.loc[G.index].value_counts()
 usuario=usuario[usuario.isin(tam[tam>=MIN_N].index)]
-equipo=usuario.str.contains('ndexa',case=False).map({True:'Indexa',False:'UCM3'})
+equipo=usuario.str.contains('ndexa',case=False).map({True:'Indexa',False:'UC3M'})
 er=[]
 for v in V:
-    for e in ['Indexa','UCM3']:
+    for e in ['Indexa','UC3M']:
         idx=[i for i in G.index if equipo.get(i)==e]
         y=G.loc[idx,v].astype(int)
         row=dict(codigo=CODE[v],equipo=e,n=len(idx),prev=y.mean())

@@ -173,7 +173,7 @@ sexista que las expertas identifican, 1.014 de las 1.063 piezas en el caso de
 matiz de umbral ni de un desacuerdo sobre casos dudosos, sino de que \textbf{el modelo
 no detecta el fenómeno}. La magnitud de esa omisión se aprecia al contrastarla con la
 anotación humana, ya que los dos equipos marcan la variable en la mayoría de las
-piezas, Indexa en el 75,0\,\% y UCM3 en el 85,5\,\%
+piezas, Indexa en el 75,0\,\% y UC3M\footnote{Los dos equipos de anotación se designan por el nombre con que figuran en la plataforma de anotación, Indexa y UC3M, este último normalizado desde la etiqueta original \texttt{UCM3}.} en el 85,5\,\%
 (Tabla~\ref{tab:iris-equipos-recall}). Discrepan en la proporción, pero coinciden en
 que el fenómeno está presente. La única excepción es \texttt{gpt-4o-mini}, que sí marca de
 forma abundante (\textit{recall} 0,450), pero su acuerdo sigue siendo negativo
@@ -301,7 +301,7 @@ sobre 81 piezas positivas en todo el corpus (Tabla~\ref{tab:iris-referencia}), d
 que cada una vale 0,012 de \textit{recall} y las diferencias entre modelos se juegan en un puñado
 de casos. La ventaja del modelo local sobre \texttt{gpt-4o-mini} es de una sola pieza,
 13 aciertos frente a 12. A ello se añade que los positivos no se reparten por igual
-entre los dos equipos, ya que 63 de los 81 proceden de UCM3 y 18 de Indexa
+entre los dos equipos, ya que 63 de los 81 proceden de UC3M y 18 de Indexa
 (Tabla~\ref{tab:iris-equipos-recall}), de manera que el resultado depende en buena
 medida del criterio de uno de ellos. Conviene, por tanto, leer esta variable con más
 cautela que las demás.
@@ -669,11 +669,11 @@ pieza concreta permite después ver el mecanismo del fallo por dentro.
 \subsubsection{Heterogeneidad entre equipos de anotación}
 
 El corpus registra, para cada pieza, la persona que la codificó. Las 1.313
-noticias anotadas se reparten entre dos equipos: Indexa (548 piezas) y UCM3
+noticias anotadas se reparten entre dos equipos: Indexa (548 piezas) y UC3M
 (765). Todas las cifras de esta sección excluyen a dos personas que codificaron 12
 piezas y 1 pieza respectivamente, un volumen insuficiente para que su proporción
 de marcado sea interpretable, de modo que se trabaja con 1.300 piezas, 536 de
-Indexa y 764 de UCM3. Aunque la ausencia de doble codificación
+Indexa y 764 de UC3M. Aunque la ausencia de doble codificación
 (Sección~\ref{subsec:limitacion_fiabilidad}) impide calcular la fiabilidad
 intercodificadora, sí es posible medir el acuerdo del sistema con cada equipo
 por separado, a modo de análisis de sensibilidad.
@@ -687,7 +687,7 @@ esperado por azar no es el mismo en una columna que en la otra, de modo que sus
 coeficientes no admiten comparación. El resultado no es uniforme entre variables, de
 ahí que convenga examinarlo una a una.
 
-\textbf{UCM3 marca sistemáticamente más que Indexa en las cinco variables}, y en
+\textbf{UC3M marca sistemáticamente más que Indexa en las cinco variables}, y en
 algunas la diferencia es muy significativa. En \texttt{sexismo\_discurso} el salto va del
 11,4\,\% al 65,2\,\%, casi seis veces, y en \texttt{asimetria\_mujer\_hombre} y
 \texttt{denominacion\_sexualizada} ronda el doble, 2,4 y 2,0 veces respectivamente.
@@ -698,10 +698,10 @@ diferencia de casi seis veces como la de \texttt{sexismo\_discurso} difícilment
 explica solo por el segundo. En el caso de las otras dos variables, este segundo factor sí podría explicar gran parte de la discrepancia puesto que al ser la prevalencia mucho más pequeña, la probabilidad de que a cada equipo le correspondieran más o menos muestras positivas puede tener mayor variabilidad.
 
 Lo relevante es qué le ocurre al sistema ante esa diferencia. \textbf{En las variables donde
-UCM3 marca más, el \textit{recall} de los modelos cae}, lo que podría indicar que son los casos
+UC3M marca más, el \textit{recall} de los modelos cae}, lo que podría indicar que son los casos
 adicionales señalados por ese equipo los que el sistema no ve. En
 \texttt{asimetria\_mujer\_hombre}, \texttt{gemini} pasa de un recall de 0,278 frente
-a Indexa a 0,016 frente a UCM3, y \texttt{gemma} de 0,278 a 0,127. En
+a Indexa a 0,016 frente a UC3M, y \texttt{gemma} de 0,278 a 0,127. En
 \texttt{sexismo\_discurso}, \texttt{gemini} baja de 0,066 a 0,014 y \texttt{gemma} de
 0,066 a 0,020. El efecto se repite, más atenuado, en
 \texttt{denominacion\_sexualizada}. Como ha de asumirse que el sistema detecta el
@@ -714,7 +714,7 @@ entre un equipo y otro superan al rango completo de \textit{recall} que separa a
 modelos en esa variable, de 0,160.
 
 Hay dos excepciones que conviene no olvidar. En \texttt{masc\_generico} el \textit{recall}
-apenas varía entre equipos, e incluso sube ligeramente frente a UCM3 en
+apenas varía entre equipos, e incluso sube ligeramente frente a UC3M en
 \texttt{gemini} (de 0,712 a 0,746) y en \texttt{gemma} (de 0,395 a 0,415), lo cual
 resulta coherente con que sea la variable de criterio más explícito y la única en la
 que algún modelo alcanza un acuerdo apreciable con la anotación de referencia. En \texttt{lenguaje\_sexista}, el recall es tan bajo frente a
@@ -731,7 +731,7 @@ anotadoras van del 3,9\,\% al 97,8\,\% de piezas marcadas.
 \input{chapters/5 results and discussion/tabla_heterogeneidad}
 
 Lo decisivo es que esa dispersión tampoco procede de comparar equipos distintos.
-Dentro del propio UCM3, \texttt{sexismo\_discurso} va del 28,3\,\% al 97,8\,\%, un
+Dentro del propio UC3M, \texttt{sexismo\_discurso} va del 28,3\,\% al 97,8\,\%, un
 rango de 69,5 puntos que por sí solo supera a la brecha entre los dos equipos. Dos
 personas con el mismo libro de códigos marcan, una, algo más de
 una de cada cuatro piezas, y la otra, casi todas. Con las precauciones derivadas del hecho de que no hay codificación múltiple y de que varias variables tienen prevalencias bajas podemos decir que \textbf{ningún sistema automático
@@ -853,7 +853,7 @@ anotadora más} dentro del espacio de criterios de las personas que codificaron 
 corpus. La cuestión deja de ser \textit{``¿acierta o no el modelo?''} y pasa a ser
 \textit{``¿dónde se sitúa su capacidad de detección respecto a la de las expertas?''}.
 Los modelos se tratan así formalmente como un tercer equipo de anotación, junto a
-Indexa y UCM3.
+Indexa y UC3M.
 
 Como cada noticia la codificó una sola persona, no hay solapamiento entre ellas. Lo que
 sí compara todos los criterios es la \textbf{prevalencia del \textit{Sí}}: la proporción de
@@ -886,11 +886,11 @@ cuatro modelos evaluados.
             \toprule
             \textbf{Anotador/a} & \boldmath$n$ & \textbf{V25} & \textbf{V26} & \textbf{V30} & \textbf{V33} & \textbf{V35} & \textbf{Media} \\
             \midrule
-            UCM3 3 & 363 & 0,986 & 0,975 & 0,978 & 0,041 & 0,215 & 0,639 \\
-            UCM3 4 & 166 & 0,831 & 0,855 & 0,283 & 0,271 & 0,084 & 0,465 \\
+            UC3M 3 & 363 & 0,986 & 0,975 & 0,978 & 0,041 & 0,215 & 0,639 \\
+            UC3M 4 & 166 & 0,831 & 0,855 & 0,283 & 0,271 & 0,084 & 0,465 \\
             Indexa 1 & 127 & 0,772 & 0,756 & 0,307 & 0,087 & 0,118 & 0,408 \\
             Indexa 5 & 50 & 0,940 & 0,920 & 0,100 & 0,020 & 0,000 & 0,396 \\
-            UCM3 5 & 235 & 0,668 & 0,753 & 0,409 & 0,013 & 0,013 & 0,371 \\
+            UC3M 5 & 235 & 0,668 & 0,753 & 0,409 & 0,013 & 0,013 & 0,371 \\
             Indexa 2 & 128 & 0,742 & 0,727 & 0,062 & 0,031 & 0,062 & 0,325 \\
             Indexa 3 & 231 & 0,701 & 0,649 & 0,039 & 0,009 & 0,048 & 0,289 \\
             \midrule[\heavyrulewidth]
@@ -914,7 +914,7 @@ Ese retrato, no obstante, es el del promedio. El desglose por variable matiza el
 cuadro, porque en algunas variables ciertos modelos son más sensibles que la mayoría
 de las personas. El caso más claro es \texttt{gpt-4o-mini} en
 \texttt{asimetria\_mujer\_hombre}, que marca el fenómeno en el 14,4\,\% de las piezas,
-por encima de todas las personas anotadoras salvo una (UCM3-4, con el 27,1\,\%). También
+por encima de todas las personas anotadoras salvo una (UC3M-4, con el 27,1\,\%). También
 \texttt{gemini} marca \texttt{masc\_generico} (66,9\,\%) dentro del rango humano. La ceguera global de los modelos convive, por tanto, con
 puntos de mayor sensibilidad en variables concretas, habitualmente las más explícitas y sencillas de definir.
 

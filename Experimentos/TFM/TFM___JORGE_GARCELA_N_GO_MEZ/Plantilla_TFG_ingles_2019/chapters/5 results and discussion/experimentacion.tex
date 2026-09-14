@@ -599,7 +599,7 @@ la propia tarea? Tres análisis complementarios apuntan en la misma dirección.
 \subsubsection{Heterogeneidad entre equipos de anotación}
 
 El corpus registra, para cada pieza, la persona que la codificó. Las 1.313
-noticias anotadas se reparten entre dos equipos: Indexa (548 piezas) y UCM3
+noticias anotadas se reparten entre dos equipos: Indexa (548 piezas) y UC3M
 (765). Aunque la ausencia de doble codificación
 (Sección~\ref{subsec:limitacion_fiabilidad}) impide calcular la fiabilidad
 intercodificadora, sí es posible medir el acuerdo del sistema con cada equipo
@@ -627,22 +627,22 @@ por separado, a modo de análisis de sensibilidad.
             \multirow{3}{*}{\texttt{gemini-3.1-flash-lite}}
               & Todas (1.313)   & 0,661 & 0,443 & 0,066 \\
               & \textbf{Solo Indexa (548)} & \textbf{0,741} & \textbf{0,503} & \textbf{0,118} \\
-              & Solo UCM3 (765)  & 0,604 & 0,398 & 0,043 \\
+              & Solo UC3M (765)  & 0,604 & 0,398 & 0,043 \\
             \midrule
             \multirow{3}{*}{\texttt{gpt-4o-mini}}
               & Todas           & 0,612 & 0,438 & 0,014 \\
               & \textbf{Solo Indexa}     & \textbf{0,693} & \textbf{0,482} & \textbf{0,042} \\
-              & Solo UCM3       & 0,554 & 0,398 & 0,001 \\
+              & Solo UC3M       & 0,554 & 0,398 & 0,001 \\
             \midrule
             \multirow{3}{*}{\texttt{gpt-5.4-nano}}
               & Todas           & 0,569 & 0,364 & 0,004 \\
               & \textbf{Solo Indexa}     & \textbf{0,661} & \textbf{0,406} & \textbf{0,014} \\
-              & Solo UCM3       & 0,502 & 0,323 & $-0,001$ \\
+              & Solo UC3M       & 0,502 & 0,323 & $-0,001$ \\
             \midrule
             \multirow{3}{*}{\texttt{gemma4:e4b}}
               & Todas           & 0,605 & 0,412 & 0,043 \\
               & \textbf{Solo Indexa}     & \textbf{0,695} & \textbf{0,461} & \textbf{0,068} \\
-              & Solo UCM3       & 0,541 & 0,369 & 0,032 \\
+              & Solo UC3M       & 0,541 & 0,369 & 0,032 \\
             \bottomrule
         \end{tabularx}
     }
@@ -650,15 +650,15 @@ por separado, a modo de análisis de sensibilidad.
 \end{table}
 
 La Tabla~\ref{tab:iris-sensibilidad} muestra un resultado nítido: el acuerdo con
-Indexa es sistemáticamente superior al obtenido con UCM3, en los cuatro modelos y en
+Indexa es sistemáticamente superior al obtenido con UC3M, en los cuatro modelos y en
 las tres métricas. En \texttt{gemini-3.1-flash-lite}, restringir la evaluación a
 Indexa casi duplica el coeficiente $\kappa$ (de 0,066 a 0,118) y sube la exactitud
-ocho puntos, mientras que contra UCM3 el $\kappa$ cae hacia el azar (llega a valores
+ocho puntos, mientras que contra UC3M el $\kappa$ cae hacia el azar (llega a valores
 negativos en \texttt{gpt-5.4-nano}).
 
 Lo interesante es la magnitud de ese efecto: \textbf{cambiar de equipo de anotación
 mueve el acuerdo tanto o más que cambiar de modelo.} En \texttt{gemini}, el salto de
-$\kappa$ entre evaluar contra Indexa y contra UCM3 (de 0,118 a 0,043, un rango de
+$\kappa$ entre evaluar contra Indexa y contra UC3M (de 0,118 a 0,043, un rango de
 0,075, Tabla~\ref{tab:iris-sensibilidad}) supera al rango completo de $\kappa$ entre
 los cuatro modelos, que va de 0,004 en \texttt{gpt-5.4-nano} a 0,066 en el propio
 \texttt{gemini} (un rango de 0,062, Tabla~\ref{tab:iris-b0b1}). Es decir, contra qué
@@ -671,7 +671,7 @@ que marca cada equipo. Esas proporciones son de la propia anotación humana y, p
 tanto, \textbf{no dependen de ningún modelo}: reflejan cómo codifica cada equipo, y
 dejan ver que la misma variable se entiende de forma muy distinta. El caso extremo es
 \texttt{sexismo\_discurso}: Indexa marca el fenómeno en el 11,5\,\% de las piezas y
-UCM3 en el 65,2\,\%, casi seis veces más. No es ruido del modelo, son dos criterios
+UC3M en el 65,2\,\%, casi seis veces más. No es ruido del modelo, son dos criterios
 humanos difícilmente conciliables sobre una misma variable. Las dos últimas columnas
 de la tabla añaden, a modo de ilustración, el $\kappa$ de \texttt{gemini} frente a
 cada equipo. El mismo patrón se da en los demás modelos, como ya recogía el análisis
@@ -700,7 +700,7 @@ constituye una evidencia del techo de la tarea, sin necesitar doble codificació
             \toprule
              & \multicolumn{2}{c}{\normalfont\% \textit{Sí}} & & \multicolumn{2}{c}{\normalfont$\kappa$} \\
             \cmidrule(lr){2-3}\cmidrule(lr){5-6}
-            \normalfont\textbf{Variable} & \textbf{Indexa} & \textbf{UCM3} & \textbf{Ratio} & \textbf{Indexa} & \textbf{UCM3} \\
+            \normalfont\textbf{Variable} & \textbf{Indexa} & \textbf{UC3M} & \textbf{Ratio} & \textbf{Indexa} & \textbf{UC3M} \\
             \midrule
             lenguaje\_sexista & 74,6 & 85,5 & 1,1$\times$ & 0,026 & 0,009 \\
             masc\_generico & 71,4 & 88,0 & 1,2$\times$ & 0,277 & 0,223 \\
@@ -785,7 +785,7 @@ cuánto se equivoca el modelo respecto al \textit{ground truth}, lo sitúa como 
 anotadora más} dentro del espacio de criterios de las personas que codificaron el
 corpus. La cuestión deja de ser \textit{``¿acierta o no el modelo?''} y pasa a ser \textit{``¿dónde se sitúa su
 habilidad de detección respecto al de las expertas?''}. Los modelos se tratan así formalmente como un tercer
-equipo de anotación, junto a Indexa y UCM3.
+equipo de anotación, junto a Indexa y UC3M.
 
 Como cada noticia la codificó una sola persona, no hay solapamiento entre anotadoras. Lo que
 sí compara todos los criterios es la \textbf{prevalencia del \textit{Sí}}: la proporción de
@@ -815,12 +815,12 @@ variables, a las nueve personas anotadoras y a los cuatro modelos evaluados.
             \toprule
             \textbf{Anotador/a} & \boldmath$n$ & \textbf{V25} & \textbf{V26} & \textbf{V30} & \textbf{V33} & \textbf{V35} & \textbf{Media} \\
             \midrule
-            UCM3 3 & 363 & 0,986 & 0,975 & 0,978 & 0,041 & 0,215 & 0,639 \\
-            UCM3 4 & 166 & 0,831 & 0,855 & 0,283 & 0,271 & 0,084 & 0,465 \\
+            UC3M 3 & 363 & 0,986 & 0,975 & 0,978 & 0,041 & 0,215 & 0,639 \\
+            UC3M 4 & 166 & 0,831 & 0,855 & 0,283 & 0,271 & 0,084 & 0,465 \\
             Indexa 1 & 127 & 0,772 & 0,756 & 0,307 & 0,087 & 0,118 & 0,408 \\
-            UCM3 6 & 1 & 1,000 & 0,000 & 1,000 & 0,000 & 0,000 & 0,400 \\
+            UC3M 6 & 1 & 1,000 & 0,000 & 1,000 & 0,000 & 0,000 & 0,400 \\
             Indexa 5 & 50 & 0,940 & 0,920 & 0,100 & 0,020 & 0,000 & 0,396 \\
-            UCM3 5 & 235 & 0,668 & 0,753 & 0,409 & 0,013 & 0,013 & 0,371 \\
+            UC3M 5 & 235 & 0,668 & 0,753 & 0,409 & 0,013 & 0,013 & 0,371 \\
             Indexa 2 & 128 & 0,742 & 0,727 & 0,062 & 0,031 & 0,062 & 0,325 \\
             Indexa 3 & 231 & 0,701 & 0,649 & 0,039 & 0,009 & 0,048 & 0,289 \\
             Indexa 4 & 12 & 0,583 & 0,500 & 0,167 & 0,000 & 0,167 & 0,283 \\
@@ -844,7 +844,7 @@ Ese retrato, no obstante, es el del promedio. El desglose por variable matiza el
 cuadro, porque en algunas variables ciertos modelos son más inclusivos que la mayoría
 de las personas. El caso más claro es \texttt{gpt-4o-mini} en
 \texttt{asimetria\_mujer\_hombre}, que marca el fenómeno en el 14,4\,\% de las piezas,
-por encima de todas las anotadoras salvo una (UCM3-4, con el 27,1\,\%). También
+por encima de todas las anotadoras salvo una (UC3M-4, con el 27,1\,\%). También
 \texttt{gemini} marca \texttt{masc\_generico} (66,9\,\%) dentro del rango humano. La ceguera global de los modelos convive, por tanto, con
 puntos de mayor sensibilidad en variables concretas, habitualmente las más explícitas y sencillas de definir.
 
