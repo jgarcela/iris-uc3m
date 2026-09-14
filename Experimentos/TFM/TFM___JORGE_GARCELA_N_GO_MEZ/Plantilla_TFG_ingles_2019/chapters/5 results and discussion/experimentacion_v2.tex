@@ -11,7 +11,7 @@
 % Corpus de evaluación: 1.313 noticias anotadas en las cinco variables
 % =====================================================================
 
-La experimentación se organiza en torno a tres preguntas. La primera es si aporta
+La experimentación se organiza en torno a tres preguntas de investigación. La primera es si aporta
 algo empaquetar la metodología experta como \textit{Agent Skills}, para lo cual se
 enfrenta la arquitectura propuesta (\textbf{nivel B1}) a una condición de control
 que recibe la misma metodología por la vía más simple, inyectada íntegramente en el
@@ -68,7 +68,7 @@ entre empresas proveedoras, se desactivó el razonamiento explícito en los mode
 admiten (Sección~\ref{genai_models}). La
 interpretación de las métricas exige tener presente la prevalencia de cada variable
 y la exactitud trivial asociada, recogidas en la
-Tabla~\ref{tab:iris-prevalencia-imp} del Capítulo~\ref{sec:methodology}.
+Tabla~\ref{tab:iris-prevalencia-imp} del Capítulo~\ref{sec:methodology}. Reproducimos esta tabla en la siguiente sección también por comodidad en la lectura.
 
 \subsection{Referencia de partida: prevalencia y clasificador trivial}
 \label{subsec:iris_referencia}
@@ -162,10 +162,10 @@ en otras celdas, de forma muy marcada en \texttt{gpt-5.4-nano} sobre
 \texttt{asimetria\_mujer\_hombre} (Tabla~\ref{tab:var-v33}), y se retoma como
 cuestión metodológica en la discusión
 (Sección~\ref{subsec:iris_tres_metricas}). Los otros tres modelos
-apenas se mueven, con recalls que siguen en el entorno de la centésima en los dos
+apenas se mueven, con \textit{recalls} que siguen en el entorno de la centésima en los dos
 niveles.
 
-\textbf{Nivel alcanzado.} El recall es prácticamente nulo en tres de los cuatro
+\textbf{Nivel alcanzado.} El \textit{recall} es prácticamente nulo en tres de los cuatro
 modelos (0,046 en \texttt{gemini}, 0,014 en \texttt{gemma} y 0,001 en
 \texttt{gpt-5.4-nano}), de modo que el sistema deja sin señalar casi todo el lenguaje
 sexista que las expertas identifican, 1.014 de las 1.063 piezas en el caso de
@@ -176,7 +176,7 @@ anotación humana, ya que los dos equipos marcan la variable en la mayoría de l
 piezas, Indexa en el 74,6\,\% y UCM3 en el 85,5\,\%
 (Tabla~\ref{tab:iris-equipos-recall}). Discrepan en la proporción, pero coinciden en
 que el fenómeno está presente. La única excepción es \texttt{gpt-4o-mini}, que sí marca de
-forma abundante (recall 0,450), pero su acuerdo sigue siendo negativo
+forma abundante (\textit{recall} 0,450), pero su acuerdo sigue siendo negativo
 ($\kappa = -0,037$), lo que indica que marca en piezas distintas de aquellas en que lo
 hacen las personas anotadoras. Ni detectar poco ni detectar mucho aproxima al modelo al criterio
 experto. Una posible explicación es que se trata de la variable más genérica del
@@ -202,28 +202,28 @@ de forma diferenciada.
 
 \input{chapters/5 results and discussion/tabla_var_v26}
 
-\textbf{Efecto del empaquetado.} \texttt{gemini} sube su recall de
+\textbf{Efecto del empaquetado.} \texttt{gemini} sube su \textit{recall} de
 0,287 a 0,733 y su F1 de la clase positiva de 0,435 a 0,803, esto es, pasa de detectar
 poco más de la cuarta parte del masculino genérico que marcan las expertas a detectar
 casi tres cuartas partes. La exactitud acompaña (de 0,397 a 0,708) y también lo hace el
 $\kappa$ (de 0,073 a 0,261), mientras que la precisión apenas cede (de 0,902 a 0,887).
-Que la precisión se mantenga mientras el recall se multiplica, y que el $\kappa$ suba
+Que la precisión se mantenga mientras el \textit{recall} se multiplica, y que el $\kappa$ suba
 en la misma dirección, apunta a una ganancia real antes que a un artefacto de la
 distribución. Los falsos positivos crecen de 33 a 99, pero lo hacen sobre un número de
 piezas marcadas que pasa de 338 a 879. \texttt{gemma} mejora de forma más
-modesta (recall de 0,359 a 0,408) y \texttt{gpt-4o-mini} apenas se mueve. En sentido
+modesta (\textit{recall} de 0,359 a 0,408) y \texttt{gpt-4o-mini} apenas se mueve. En sentido
 contrario, \texttt{gpt-5.4-nano} se vuelve mucho más conservador al recibir las
-\textit{skills}, ya que su recall cae de 0,582 a 0,104 y su F1 de 0,692 a 0,186. El
+\textit{skills}, ya que su \textit{recall} cae de 0,582 a 0,104 y su F1 de 0,692 a 0,186. El
 empaquetado, por tanto, desplaza el umbral de cada modelo, y no siempre en la misma
 dirección.
 
 \textbf{Nivel alcanzado.} Es la única variable en la que algún modelo alcanza una
-detección aprovechable.
+detección competitiva.
 \texttt{gemini} recupera el 73,3\,\% del masculino genérico que marcan las expertas,
 con una precisión de 0,887 y un F1 de 0,803, cifras que lo convierten en un detector
-utilizable. El local \texttt{gemma} queda en segundo lugar, con un recall de 0,408
+utilizable. El local \texttt{gemma} queda en segundo lugar, con un \textit{recall} de 0,408
 y un F1 de 0,561. Los dos modelos de OpenAI, en cambio, son mucho más conservadores
-(recall 0,206 y 0,104), es decir, marcan el masculino genérico en muy pocas piezas.
+(\textit{recall} 0,206 y 0,104), es decir, marcan el masculino genérico en muy pocas piezas.
 
 \textbf{Una particularidad, el umbral.} La variable es propensa a este desajuste,
 porque el español emplea el masculino genérico de forma generalizada
@@ -238,15 +238,15 @@ sitúa ese umbral en un punto distinto, y los de OpenAI más alto que \texttt{ge
 \input{chapters/5 results and discussion/tabla_var_v30}
 
 \textbf{Efecto del empaquetado.} Es la variable en que las \textit{skills} menos
-cambian las cosas, con un cambio medio en recall de 0,016 entre los cuatro modelos
-frente a los 0,247 de \texttt{masc\_generico}. Los recalls pasan de 0,018 a 0,020 en
+cambian las cosas, con un cambio medio en \textit{recall} de 0,016 entre los cuatro modelos
+frente a los 0,247 de \texttt{masc\_generico}. Los \textit{recalls} pasan de 0,018 a 0,020 en
 \texttt{gemini}, de 0,128 a 0,112 en \texttt{gpt-4o-mini}, de 0,146 a 0,114 en
 \texttt{gpt-5.4-nano} y de 0,039 a 0,025 en \texttt{gemma}, con movimientos
 equivalentes en F1 y variaciones de $\kappa$ inferiores a la centésima en los cuatro. Ni el
 empaquetado ni el acceso a las guías alteran de forma apreciable el comportamiento del
 sistema en esta variable.
 
-\textbf{Nivel alcanzado.} El recall se mueve entre 0,020 y 0,114, de manera que, pese a
+\textbf{Nivel alcanzado.} El \textit{recall} se mueve entre 0,020 y 0,114, de manera que, pese a
 una prevalencia anotada del 42,8\,\% (Tabla~\ref{tab:iris-referencia}), los modelos dejan sin señalar más del 88\,\% de
 los casos, y el F1 de la clase positiva no supera 0,181. El acuerdo ronda además el
 azar en los cuatro ($\kappa$ entre $-0,006$ y 0,011). La exactitud, en el entorno de
@@ -259,9 +259,9 @@ la de V25, pero su origen no es el mismo. Aquí la propia anotación humana est�
 profundamente dividida, ya que un equipo marca el fenómeno casi seis veces más que el
 otro (11,5\,\% frente a 65,2\,\%, Tabla~\ref{tab:iris-equipos-recall}), mientras que en
 V25 ambos equipos coincidían en marcar la mayoría de las piezas. En V25 los modelos no
-marcan lo que las personas marcan de forma concordante. En V30, en cambio, ni siquiera las
-personas convergen en qué debe marcarse, así que el bajo acuerdo del sistema refleja a
-la vez una detección insuficiente y un criterio humano poco estabilizado. Pesa además el tipo de
+marcan suficientemente bien lo que las personas marcan pero los niveles de prevalencia entre las personas sí son los mismos. En V30, en cambio, ni siquiera los niveles de prevalencia en los marcados de las
+personas se acercan entre sí, así que el bajo acuerdo del sistema refleja a
+la vez una detección insuficiente y un criterio humano poco estabilizado. Pesa, además, el tipo de
 juicio que exige, ya que atañe a lo que se cuenta y no solo a cómo se dice
 (Sección~\ref{sec:iris_variables}), de modo que su codificación depende en buena medida
 de la interpretación del contexto social de la pieza, tanto para quien anota como para
@@ -273,29 +273,28 @@ el sistema.
 
 \textbf{Efecto del empaquetado.} El modelo local (\texttt{gemma}) mejora con B1 en las
 seis métricas a
-la vez, con un recall que pasa de 0,136 a 0,160, una precisión de 0,107 a 0,143, un F1
+la vez, con un \textit{recall} que pasa de 0,136 a 0,160, una precisión de 0,107 a 0,143, un F1
 de la clase positiva de 0,120 a 0,151 y un $\kappa$ de 0,054 a 0,092. Es una de las tres
 celdas del capítulo en que ninguna métrica retrocede, junto con \texttt{gemini} en
 \texttt{lenguaje\_sexista} y \texttt{gpt-4o-mini} en \texttt{masc\_generico}, si bien
-la mejora parte de una base tan baja que no convierte al modelo en un detector
-utilizable. \texttt{gemini} acompaña la
-dirección (recall de 0,025 a 0,074). El caso de \texttt{gpt-5.4-nano} va en dirección contraria y merece un
-comentario, porque en B0 obtenía el mayor recall de la variable (0,457) marcando
+la mejora parte de una base tan baja que no convierte al modelo en un detector demasiado fiable. \texttt{gemini} acompaña la
+dirección (\textit{recall} de 0,025 a 0,074). El caso de \texttt{gpt-5.4-nano} va en dirección contraria y merece un
+comentario, porque en B0 obtenía el mayor \textit{recall} de la variable (0,457) marcando
 \textit{Sí} en el 37,5\,\% de las piezas, con una precisión de 0,075, apenas por encima
-del 6,2\,\% que obtendría marcando al azar (Tabla~\ref{tab:iris-referencia}). En B1 marca el 0,7\,\% y su recall cae a 0,000. Un recall alto
+del 6,2\,\% que obtendría marcando al azar (Tabla~\ref{tab:iris-referencia}). En B1 marca el 0,7\,\% y su \textit{recall} cae a 0,000. Un \textit{recall} alto
 obtenido marcando cuatro de cada diez piezas no es detección, y es otra razón para no
 leer ninguna métrica en solitario.
 
 \textbf{Nivel alcanzado.} Los valores son bajos en los cuatro modelos, con F1 de la
-clase positiva entre 0,000 y 0,151 y recalls que no superan 0,160, de manera que el
+clase positiva entre 0,000 y 0,151 y \textit{recalls} que no superan 0,160, de manera que el
 sistema deja sin señalar la mayor parte de los casos. El mejor de los cuatro es aquí el
-modelo local (\texttt{gemma}), que reúne el mayor recall (0,160), la mejor precisión
+modelo local (\texttt{gemma}), que reúne el mayor \textit{recall} (0,160), la mejor precisión
 (0,143) y el mayor $\kappa$ (0,092), un resultado que se retoma al tratar el coste y el
 modelo local (Sección~\ref{subsec:iris_coste}).
 
 \textbf{Una particularidad, los pocos casos positivos.} Las cifras de esta variable descansan
 sobre 81 piezas positivas en todo el corpus (Tabla~\ref{tab:iris-referencia}), de modo
-que cada una vale 0,012 de recall y las diferencias entre modelos se juegan en un puñado
+que cada una vale 0,012 de \textit{recall} y las diferencias entre modelos se juegan en un puñado
 de casos. La ventaja del modelo local sobre \texttt{gpt-4o-mini} es de una sola pieza,
 13 aciertos frente a 12. A ello se añade que los positivos no se reparten por igual
 entre los dos equipos, ya que 63 de los 81 proceden de UCM3 y 18 de Indexa
@@ -308,18 +307,18 @@ cautela que las demás.
 \input{chapters/5 results and discussion/tabla_var_v35}
 
 \textbf{Efecto del empaquetado.} Es la única variable en que ningún modelo mejora su
-detección al pasar a B1. El recall de \texttt{gemma} cae de 0,130 a 0,023 y el de
+detección al pasar a B1. El \textit{recall} de \texttt{gemma} cae de 0,130 a 0,023 y el de
 \texttt{gpt-4o-mini} de 0,107 a 0,046, con descensos paralelos en F1 y en $\kappa$
 (este último de 0,154 a 0,015 y de 0,136 a 0,061 respectivamente). \texttt{gpt-5.4-nano}
-pasa de un recall de 0,099 a 0,008 y \texttt{gemini} se mantiene en valores igual de
+pasa de un \textit{recall} de 0,099 a 0,008 y \texttt{gemini} se mantiene en valores igual de
 bajos. El empaquetado vuelve al sistema más restrictivo justo en la variable en la que
 ya marcaba poco.
 
 \textbf{Nivel alcanzado.} Los cuatro modelos marcan entre 1 y 19 piezas de las 1.313,
-frente a las 131 que señalan las expertas, de modo que ninguno supera un recall de
+frente a las 131 que señalan las expertas, de modo que ninguno supera un \textit{recall} de
 0,046 ni un F1 de la clase positiva de 0,082. La precisión de 1,000 que aparece en la
 tabla corresponde a \texttt{gpt-5.4-nano} y descansa sobre la única pieza que marca, en
-la que acierta.
+la que acierta, lo que no deja de ser notorio.
 
 \textbf{Una particularidad, dificultad de detección.} El libro de códigos define esta
 variable como la identificación de la mujer por su aspecto, su rol familiar o su
@@ -337,7 +336,7 @@ coincide con la de las expertas.
 
 \subsubsection{Cuánto marca cada modelo}
 
-Las tablas anteriores dan el recall variable a variable, y para interpretarlo conviene
+Las tablas anteriores dan el \textit{recall} variable a variable, y para interpretarlo conviene
 saber cuánto marca cada modelo en términos absolutos, ya que marcar poco impide
 detectar buena parte de lo que las expertas sí señalan. La
 Tabla~\ref{tab:iris-prev-modelo-var} recoge esa proporción en el nivel desplegado,
@@ -408,11 +407,11 @@ $\kappa$ ligeramente superior (0,266). En \texttt{sexismo\_discurso} (V30) la me
 combinación es \texttt{gpt-5.4-nano} con \textit{skills} y RAG (F1 de 0,270 frente
 al 0,181 de la completa). En \texttt{asimetria\_mujer\_hombre} (V33), donde importa
 no perder positivos, \texttt{gemma} con solo \textit{skills} alcanza el mejor
-equilibrio (recall 0,185 con precisión 0,174, $\kappa = 0,124$). En
+equilibrio (\textit{recall} 0,185 con precisión 0,174, $\kappa = 0,124$). En
 \texttt{denominacion\_sexualizada} (V35) es \texttt{gpt-4o-mini} con \textit{skills}
-y RAG (recall 0,115 con precisión 0,294). En \texttt{lenguaje\_sexista} (V25),
+y RAG (\textit{recall} 0,115 con precisión 0,294). En \texttt{lenguaje\_sexista} (V25),
 finalmente, ninguna configuración logra una detección aprovechable, ya que los
-valores de recall siguen siendo muy bajos salvo en el modelo que marca casi la mitad
+valores de \textit{recall} siguen siendo muy bajos salvo en el modelo que marca casi la mitad
 de las piezas sin coincidir con las personas anotadoras, y todos los $\kappa$ rondan el cero o
 son negativos.
 
@@ -500,7 +499,7 @@ variable.
     \small
     \ttabbox[\FBwidth]{
         \caption{Coste de inferencia por variable sobre las 1.313 piezas, sumados los
-        tres modelos accesibles por API, junto al mejor recall y al mejor F1 de la
+        tres modelos accesibles por API, junto al mejor \textit{recall} y al mejor F1 de la
         clase positiva que alcanza alguno de los cuatro modelos en el nivel B1.}
         \label{tab:iris-coste-var}
     }{
@@ -532,8 +531,8 @@ de decidirse.
 
 El contraste con las dos últimas columnas es el dato relevante para el proyecto.
 \texttt{masc\_generico} es la única variable en que el sistema alcanza una detección
-aprovechable, con un recall de 0,733 y un F1 de 0,803 (Tabla~\ref{tab:var-v26}), y
-cuesta 6,82 USD. \texttt{lenguaje\_sexista} cuesta más, 7,48 USD, y su mejor recall
+aprovechable, con un \textit{recall} de 0,733 y un F1 de 0,803 (Tabla~\ref{tab:var-v26}), y
+cuesta 6,82 USD. \texttt{lenguaje\_sexista} cuesta más, 7,48 USD, y su mejor \textit{recall}
 (0,450) procede del modelo que marca casi la mitad de las piezas sin coincidir con
 las personas anotadoras (Tabla~\ref{tab:var-v25}), de modo que ese número no se traduce en
 detección aprovechable. En \texttt{denominacion\_sexualizada} se gastan 5,42 USD
@@ -592,7 +591,7 @@ segunda es que su coste no se mide en dinero y hay que cuantificarlo por otra v�
 Este apartado atiende a ambas en ese orden.
 
 \texttt{gemma} es el mejor de los cuatro en \texttt{asimetria\_mujer\_hombre}, donde
-alcanza el mayor recall (0,160), la mejor
+alcanza el mayor \textit{recall} (0,160), la mejor
 precisión (0,143) y el mayor $\kappa$ (0,092) del conjunto, y queda segundo en
 \texttt{masc\_generico}, por detrás de \texttt{gemini} pero por delante de los dos
 modelos de OpenAI, con un recall de 0,408 frente a 0,206 y 0,104. En
@@ -675,7 +674,7 @@ por separado, a modo de análisis de sensibilidad.
 \input{chapters/5 results and discussion/tablas_equipos}
 
 La Tabla~\ref{tab:iris-equipos-recall} recoge, para cada variable, cuánto marca cada
-equipo y qué recall alcanza cada modelo frente a él. El acuerdo no se mide aquí con
+equipo y qué \textit{recall} alcanza cada modelo frente a él. El acuerdo no se mide aquí con
 $\kappa$, porque las prevalencias de los dos equipos son muy distintas y el acuerdo
 esperado por azar no es el mismo en una columna que en la otra, de modo que sus
 coeficientes no admiten comparación. El resultado no es uniforme entre variables, de
@@ -692,20 +691,20 @@ diferencia de casi seis veces como la de \texttt{sexismo\_discurso} difícilment
 explica solo por el segundo.
 
 Lo relevante es qué le ocurre al sistema ante esa diferencia. \textbf{Allí donde
-UCM3 marca más, el recall de los modelos cae}, que es tanto como decir que los casos
+UCM3 marca más, el \textit{recall} de los modelos cae}, que es tanto como decir que los casos
 adicionales señalados por ese equipo son precisamente los que el sistema no ve. En
 \texttt{asimetria\_mujer\_hombre}, \texttt{gemini} pasa de un recall de 0,278 frente
 a Indexa a 0,016 frente a UCM3, y \texttt{gemma} de 0,278 a 0,127. En
 \texttt{sexismo\_discurso}, \texttt{gemini} baja de 0,063 a 0,014 y \texttt{gemma} de
 0,063 a 0,020. El efecto se repite, más atenuado, en
 \texttt{denominacion\_sexualizada}. Si el sistema detectase el fenómeno con
-independencia de quién lo anote, el recall se mantendría al cambiar de referencia.
+independencia de quién lo anote, el \textit{recall} se mantendría al cambiar de referencia.
 No es lo que ocurre. En \texttt{asimetria\_mujer\_hombre} esa dependencia llega a
 pesar más que la elección del modelo, ya que los 0,262 que separan a \texttt{gemini}
 entre un equipo y otro superan al rango completo de recall que separa a los cuatro
 modelos en esa variable, de 0,160.
 
-Hay dos excepciones que conviene no ocultar. En \texttt{masc\_generico} el recall
+Hay dos excepciones que conviene no ocultar. En \texttt{masc\_generico} el \textit{recall}
 apenas varía entre equipos, e incluso sube ligeramente frente a UCM3 en
 \texttt{gemini} (de 0,711 a 0,746) y en \texttt{gemma} (de 0,396 a 0,415), lo cual
 resulta coherente con que sea la variable de criterio más explícito y la única con
@@ -749,7 +748,7 @@ Conviene precisar qué acredita exactamente ese recuento. Cada modelo deja sin m
 por su cuenta una proporción muy alta de los positivos, de manera que la coincidencia
 de los cuatro en el \textit{No} es en buena medida esperable sin necesidad de que
 compartan patrón alguno. De hecho, el número de celdas con consenso se aparta poco del
-que predicen los recalls individuales, salvo en \texttt{masc\_generico}, que es
+que predicen los \textit{recalls} individuales, salvo en \texttt{masc\_generico}, que es
 justamente la única variable con detección aprovechable. Lo que estas celdas
 establecen, por tanto, es que los cuatro modelos infradetectan a la vez, no que
 fallen en las mismas piezas, y su valor está en la dirección del error antes que en
@@ -968,14 +967,14 @@ forma natural si una decisión por mayoría mejoraría el resultado, ya que comb
 sistemas con errores poco correlacionados suele elevar el rendimiento. Se comprobó
 combinando las predicciones de los cuatro modelos en el nivel B1 por mayoría
 simple, con los empates a dos resueltos como positivo, criterio coherente con la
-prioridad del recall que exige el uso previsto del sistema
+prioridad del \textit{recall} que exige el uso previsto del sistema
 (Sección~\ref{sec:metricas_eval}). El resultado es negativo en las cinco variables,
 donde el voto queda por debajo del mejor F1 de la clase positiva individual y también
 por debajo del mejor $\kappa$ individual, sin que el mejor modelo en una métrica sea
 necesariamente el mejor en la otra. En \texttt{masc\_generico} obtiene un F1 de 0,605 frente
 al 0,803 de \texttt{gemini} y un $\kappa$ de 0,148 frente a 0,261, y en
 \texttt{asimetria\_mujer\_hombre} un F1 de 0,120 frente al 0,151 de
-\texttt{gemma}. Tampoco mejora el recall, que era el objetivo más plausible de
+\texttt{gemma}. Tampoco mejora el \textit{recall}, que era el objetivo más plausible de
 la combinación.
 
 La explicación es coherente con lo anterior. La mayoría solo marca allí donde
@@ -985,9 +984,9 @@ a unos sistemas que no coinciden.
 
 Cabe entonces probar lo contrario, esto es, una estrategia de unión que marque la pieza
 cuando lo haga cualquiera de los cuatro. Comprobada sobre el mismo nivel B1, eleva el
-recall en las cinco variables y el F1 de la clase positiva en cuatro de ellas, con una
+\textit{recall} en las cinco variables y el F1 de la clase positiva en cuatro de ellas, con una
 precisión que, frente a la del modelo de mejor F1 en cada variable, apenas cede en las
-tres de mayor prevalencia y cae de forma apreciable en \texttt{asimetria\_mujer\_hombre} y \texttt{denominacion\_sexualizada}. En \texttt{masc\_generico} alcanza un recall de
+tres de mayor prevalencia y cae de forma apreciable en \texttt{asimetria\_mujer\_hombre} y \texttt{denominacion\_sexualizada}. En \texttt{masc\_generico} alcanza un \textit{recall} de
 0,841 con una precisión de 0,861, cifras superiores a las del mejor modelo individual
 (0,733 y 0,887). Es un resultado que merece explorarse, si bien queda fuera de lo que
 este trabajo puede recomendar, por dos motivos. El primero es que obliga a ejecutar los
