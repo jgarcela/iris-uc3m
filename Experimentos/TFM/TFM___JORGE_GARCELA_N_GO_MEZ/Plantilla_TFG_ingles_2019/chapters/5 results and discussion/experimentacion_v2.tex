@@ -395,9 +395,8 @@ ganancia consistente. Sobre la configuración mínima, al pasar de solo \textit{
 \textit{skills} con RAG, mejora el F1 de la clase positiva en nueve de las veinte celdas,
 lo empeora en ocho y lo deja igual en tres. Sobre la variante con resúmenes, al pasar a la configuración
 completa, mejora en siete y empeora en trece. Dado que es además el componente más
-costoso en tiempo y en \textit{tokens}, como confirma el desglose por configuración
-del modelo local (Tabla~\ref{tab:iris-local-tiempo}), la evidencia no respalda
-mantenerlo, conclusión que ya apuntaba la implementación al describir las limitaciones
+costoso en tiempo, como confirma el desglose por configuración del modelo local
+(Tabla~\ref{tab:iris-local-tiempo}), la evidencia no respalda mantenerlo, conclusión que ya apuntaba la implementación al describir las limitaciones
 del índice léxico (Sección~\ref{rag}).
 
 La segunda lectura es menos cómoda y responde a una pregunta legítima, la de si
@@ -485,7 +484,9 @@ de ello se sigue para un despliegue en IRIS se retoma en la discusión
 
 El coste real de inferencia sobre las 1.313 noticias asciende a 30,91 USD en el
 sistema agéntico (B1), frente a los 13,83 USD del \textit{baseline} (B0) en los tres
-modelos de pago, un factor de 2,2. El aumento se
+modelos de pago, un factor de 2,2. Esas cifras corresponden a una pasada completa
+de cada nivel, de modo que no incluyen las ejecuciones adicionales de la ablación
+(Sección~\ref{subsec:iris_descomposicion}), cuyo gasto se recoge en el Apéndice~\ref{appendix_budget}. El aumento se
 explica por el número de llamadas al modelo, ya que B0 resuelve cada variable en una
 única llamada mientras que en B1 la agente encadena varias, las acciones de su bucle
 más el veredicto final. A ello se añade que cada iteración arrastra el historial
@@ -585,6 +586,17 @@ esfuerzo adicional se traduce en la única detección utilizable del capítulo, 
 \texttt{gpt-4o-mini} en un marcado abundante que, con un acuerdo negativo, no
 coincide con el criterio experto. Para un despliegue, esto refuerza la conveniencia de decidir modelo y variable a la
 vez, ya que el modelo más caro en una variable no lo es en la siguiente.
+
+Queda por situar en esta escala las tres configuraciones adicionales de la ablación
+(Sección~\ref{subsec:iris_descomposicion}), que también se ejecutaron sobre los tres
+modelos de pago. Sumados los tres, la configuración de solo \textit{skills} costó
+28,97 USD, la de \textit{skills} con resúmenes 31,16 USD, la de \textit{skills} con
+RAG 30,95 USD y la completa los 30,91 USD ya indicados. Entre la más barata y la más
+cara media un 7\,\%, de modo que la configuración apenas mueve el coste en los
+modelos accesibles por API, y la recuperación en vivo, que sí es el componente más
+caro en tiempo para el modelo local, no lo es en dólares. Es la misma conclusión de
+la Sección~\ref{subsec:iris_descomposicion} leída en términos de gasto: lo que fija
+el orden de magnitud, también en coste, es la elección del modelo.
 
 \subsection{El modelo local}
 
